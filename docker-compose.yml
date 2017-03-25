@@ -1,0 +1,27 @@
+version: '2'
+services:
+    web:
+        build: .
+        volumes:
+            - .:/var/www/html
+        ports:
+            - "21000:80"
+        links:
+            - db
+    db:
+        image: mysql:latest
+        environment:
+            - MYSQL_ROOT_PASSWORD=132vaslliwemvljm9
+            - MYSQL_DATABASE=Jokkebrok
+            - MYSQL_USER=Jokkebrok
+            - MYSQL_PASSWORD=secure
+    phpmyadmin:
+        image: phpmyadmin/phpmyadmin:latest
+        ports:
+            - "21001:80"
+        environment:
+            - PMA_HOST=db
+            - PMA_USER=Jokkebrok
+            - PMA_PASSWORD=secure
+        links:
+            - db
