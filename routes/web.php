@@ -21,3 +21,19 @@ Route::get('/age_groups', function(){
         'age_groups' => $age_groups
     ]);
 });
+
+Route::get('/dashboard', function(){
+    return view('dashboard');
+});
+
+Route::get('/children', function(){
+    return view('children');
+});
+
+Route::get('/registrations', function(){
+    return view('registrations');
+});
+
+Route::get('/settings', function(){
+    return view('settings');
+});
