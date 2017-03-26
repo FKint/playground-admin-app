@@ -9,7 +9,7 @@ services:
         links:
             - db
     db:
-        image: mysql:latest
+        image: mariadb:latest
         environment:
             - MYSQL_ROOT_PASSWORD=132vaslliwemvljm9
             - MYSQL_DATABASE=Jokkebrok

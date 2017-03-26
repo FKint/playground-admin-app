@@ -8,3 +8,7 @@ Homestead.json
 Homestead.yaml
 .env
 composer.phar
+.env.production
+.env.development
+migrations.sql
+raw-migrations
