@@ -11,7 +11,7 @@ class DayRegistration extends Model
      *
      * @var array
      */
-    protected $fillable = ['day_id', 'week_registration_id', 'day_part_id'];
+    protected $fillable = ['day_id', 'week_registration_id', 'day_part_id', 'checked_in'];
 
     /**
      * Get the corresponding day.
