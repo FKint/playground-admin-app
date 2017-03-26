@@ -12,28 +12,13 @@
 */
 
 Route::get('/', function () {
-    return view('age_groups');
+    return view('index');
 });
 
-Route::get('/age_groups', function(){
-    $age_groups = \App\AgeGroup::all();
-    return view('age_groups', [
-        'age_groups' => $age_groups
-    ]);
-});
+Route::get('/dashboard', 'DashboardController@show')->name('dashboard');
 
-Route::get('/dashboard', function(){
-    return view('dashboard');
-});
+Route::get('/children', 'ChildrenController@show')->name('children');
 
-Route::get('/children', function(){
-    return view('children');
-});
+Route::get('/registrations', 'RegistrationsController@show')->name('registrations');
 
-Route::get('/registrations', function(){
-    return view('registrations');
-});
-
-Route::get('/settings', function(){
-    return view('settings');
-});
+Route::get('/settings', 'SettingsController@show')->name('settings');
