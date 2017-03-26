@@ -16,5 +16,8 @@ Route::get('/', function () {
 });
 
 Route::get('/age_groups', function(){
-    return view('age_groups');
+    $age_groups = \App\AgeGroup::all();
+    return view('age_groups', [
+        'age_groups' => $age_groups
+    ]);
 });
