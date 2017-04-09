@@ -7,5 +7,10 @@
             <h2>Werkingen</h2>
             @include('settings.age_groups')
         </div>
+
+        <div class="col-md-6">
+            <h2>Extraatjes</h2>
+            @include('settings.supplements')
+        </div>
     </div>
 @stop
