@@ -2,11 +2,18 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use App\Child;
+use Yajra\Datatables\Datatables;
 
 class ChildrenController extends Controller
 {
-    public function show(){
+    public function show()
+    {
         return view('children.index');
+    }
+
+    public function getChildren()
+    {
+        return Datatables::of(Child::query())->make(true);
     }
 }

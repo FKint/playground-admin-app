@@ -20,4 +20,13 @@ class Child extends Model
     {
         return $this->belongsTo(AgeGroup::class);
     }
+
+    /**
+     * Ge the child families this child belongs to.
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function child_families()
+    {
+        return $this->hasMany(ChildFamily::class);
+    }
 }

@@ -21,3 +21,4 @@ Route::get('/age_groups', 'AgeGroupsController@getAgeGroups')->name('getAgeGroup
 Route::get('/supplements', 'SupplementsController@getSupplements')->name('getSupplements');
 Route::get('/day_parts', 'DayPartsController@getDayParts')->name('getDayParts');
 Route::get('/tariffs', 'TariffsController@getTariffs')->name('getTariffs');
+Route::get('/children', 'ChildrenController@getChildren')->name('getChildren');
