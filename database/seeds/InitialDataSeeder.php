@@ -16,6 +16,7 @@ class InitialDataSeeder extends Seeder
         $this->seed_day_parts();
         $this->seed_supplements();
         $this->seed_dates();
+        $this->seed_tariffs();
     }
 
     private function seed_age_groups()
@@ -50,9 +51,11 @@ class InitialDataSeeder extends Seeder
     {
         DB::table('day_parts')->insert([
             'name' => "Lunch",
+            'order' => 1
         ]);
         DB::table('day_parts')->insert([
-            'name' => "Thuis"
+            'name' => "Thuis",
+            'order' => 2
         ]);
     }
 
@@ -87,6 +90,25 @@ class InitialDataSeeder extends Seeder
             }
             $monday = $monday->add($week);
         }
+    }
 
+    private function seed_tariffs()
+    {
+        DB::table('tariffs')->insert([
+            "name" => "Normaal",
+            "abbreviation" => "NRML",
+            "day_first_child" => 5.00,
+            "day_later_children" => 4.00,
+            "week_first_child" => 22.5,
+            "week_later_children" => 18.5
+        ]);
+        DB::table('tariffs')->insert([
+            "name" => "Sociaal",
+            "abbreviation" => "SCL",
+            "day_first_child" => 2.5,
+            "day_later_children" => 2,
+            "week_first_child" => 12,
+            "week_later_children" => 9.5
+        ]);
     }
 }

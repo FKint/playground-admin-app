@@ -23,7 +23,6 @@
                 {data: 'start_date', name: 'start_date'},
                 {data: 'end_date', name: 'end_date'}
             ],
-
         });
     });
 </script>

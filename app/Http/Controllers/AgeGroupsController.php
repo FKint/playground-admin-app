@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\AgeGroup;
-use Illuminate\Http\Request;
 use Yajra\Datatables\Datatables;
 
 class AgeGroupsController extends Controller

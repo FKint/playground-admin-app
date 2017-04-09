@@ -1,8 +1,8 @@
-<table class="table table-bordered" id="supplements-table">
+<table class="table table-bordered" id="day-parts-table">
     <thead>
     <tr>
         <th>Omschrijving</th>
-        <th>Prijs</th>
+        <th>Volgorde</th>
     </tr>
     </thead>
 </table>
@@ -11,13 +11,13 @@
 @push('scripts')
 <script>
     $(function () {
-        $('#supplements-table').DataTable({
+        $('#day-parts-table').DataTable({
             processing: true,
             serverSide: true,
-            ajax: '{!! route('getSupplements') !!}',
+            ajax: '{!! route('getDayParts') !!}',
             columns: [
                 {data: 'name', name: 'name'},
-                {data: 'price', name: 'price'}
+                {data: 'order', name: 'order'}
             ],
         });
     });

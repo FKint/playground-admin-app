@@ -19,3 +19,5 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 Route::get('/age_groups', 'AgeGroupsController@getAgeGroups')->name('getAgeGroups');
 Route::get('/supplements', 'SupplementsController@getSupplements')->name('getSupplements');
+Route::get('/day_parts', 'DayPartsController@getDayParts')->name('getDayParts');
+Route::get('/tariffs', 'TariffsController@getTariffs')->name('getTariffs');
