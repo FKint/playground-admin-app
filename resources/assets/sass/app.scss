@@ -6,5 +6,7 @@
 @import "variables";
 
 // Bootstrap
-@import "node_modules/bootstrap-sass/assets/stylesheets/bootstrap";
-@import "node_modules/bootstrap-sass/assets/stylesheets/bootstrap/theme";
+@import "~bootstrap-sass/assets/stylesheets/bootstrap";
+
+// Datatables
+@import "~datatables.net-bs/css/dataTables.bootstrap";

@@ -12,3 +12,4 @@ composer.phar
 .env.development
 migrations.sql
 raw-migrations
+npm-debug.log

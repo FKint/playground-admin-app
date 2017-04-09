@@ -59,8 +59,14 @@
     @yield('content')
 
 </div> <!-- /container -->
+<script>
+    window.Laravel = <?php echo json_encode([
+        'csrfToken' => csrf_token(),
+    ]); ?>
+</script>
 <script src="{{mix('/js/manifest.js')}}"></script>
 <script src="{{mix('/js/vendor.js')}}"></script>
 <script src="{{mix('/js/app.js')}}"></script>
+@stack('scripts')
 </body>
 </html>
