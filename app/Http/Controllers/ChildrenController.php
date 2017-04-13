@@ -23,19 +23,21 @@ class ChildrenController extends Controller
         return Datatables::of(Child::query())->make(true);
     }
 
-    public function showEditChildForm(Request $request)
+    public function loadEditChildForm(Request $request)
     {
         $child = Child::findOrFail($request->input('child_id'));
-        return $this->showEditChildFormForChild($child);
+        return $this->loadEditChildFormForChild($child);
     }
 
-    public function submitEditChildForm(Request $request, $child_id){
+    public function submitEditChildForm(Request $request, $child_id)
+    {
         $child = Child::findOrFail($child_id);
         $child->update($request->all());
-        return $this->showEditChildFormForChild($child);
+        return $this->loadEditChildFormForChild($child);
     }
 
-    protected function showEditChildFormForChild($child){
+    protected function loadEditChildFormForChild($child)
+    {
         $all_age_groups = [];
         foreach (AgeGroup::all() as $age_group) {
             $all_age_groups[$age_group->id] = $age_group->abbreviation . " - " . $age_group->name;
@@ -44,16 +46,33 @@ class ChildrenController extends Controller
             ->with('child', $child)
             ->with('all_age_groups', $all_age_groups);
     }
-    public function showEditFamiliesForm(Request $request)
+
+    public function loadEditFamiliesForm(Request $request)
     {
         $child = Child::findOrFail($request->input('child_id'));
+        return view('children.edit_child.families_form')
+            ->with('child', $child);
+    }
+
+    public function loadLinkNewChildFamilyForm(Request $request, $child_id)
+    {
+        $child = Child::findOrFail($child_id);
         $all_tariffs = [];
         foreach (Tariff::all() as $tariff) {
             $all_tariffs[$tariff->id] = $tariff->abbreviation . " - " . $tariff->name;
         }
-        return view('children.edit_child.families_form')
+        return view('children.edit_child.new_family.form')
             ->with('child', $child)
             ->with('all_tariffs', $all_tariffs);
+    }
+
+    public function submitLinkNewChildFamilyForm(Request $request, $child_id)
+    {
+        $family = new Family($request->all());
+        $family->save();
+        $child_family = new ChildFamily(['child_id' => $child_id, 'family_id' => $family->id]);
+        $child_family->save();
+        return view('children.edit_child.new_family.succeeded');
     }
 
     public function getChildFamilySuggestions(Request $request, $child_id)

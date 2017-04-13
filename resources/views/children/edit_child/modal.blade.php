@@ -8,7 +8,7 @@
                 <h4 class="modal-title">Kind wijzigen</h4>
             </div>
             <div class="modal-body" id="edit-child-modal-body">
-                <div id="edit-form-div"></div>
+                <div id="edit-child-div"></div>
                 <div id="edit-families-div"></div>
             </div>
             <div class="modal-footer">
@@ -28,7 +28,7 @@
         const child_id = $(this).attr('data-child-id');
 
         const edit_child_form_url = '{!! route('edit_child_form') !!}' + '?child_id=' + child_id;
-        $('#edit-form-div')
+        $('#edit-child-div')
             .data('url', edit_child_form_url)
             .load(edit_child_form_url);
 

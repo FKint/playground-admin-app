@@ -14,7 +14,7 @@ class Family extends Model
      *
      * @var array
      */
-    protected $fillable = ['guardian_first_name', 'guardian_last_name', 'tariff', 'remarks', 'contact'];
+    protected $fillable = ['guardian_first_name', 'guardian_last_name', 'tariff_id', 'remarks', 'contact'];
 
     protected $searchable = [
         'columns' => [
