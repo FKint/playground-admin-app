@@ -1,12 +1,14 @@
 <h3 id="edit-child-families-form-title">Voogden</h3>
-<table class="table">
+<table class="table" id="child-families-table">
     @foreach($child->child_families as $child_family)
         <tr>
             <td>{{ $child_family->family->id }}</td>
             <td>{{ $child_family->family->guardian_full_name() }}</td>
             <td>
-                <button class="btn btn-xs">Wijzigen</button>
-                <button class="btn btn-xs">Verwijderen</button>
+                <button class="btn btn-xs btn-edit-family">Wijzigen</button>
+                <button class="btn btn-xs btn-remove-family" data-child-family-id="{{$child_family->id}}">
+                    Verwijderen
+                </button>
             </td>
         </tr>
     @endforeach
@@ -19,7 +21,19 @@
 </form>
 <script>
     $(document).ready(function () {
-        var engine = new Bloodhound({
+        function reloadEditChildFamiliesForm() {
+            let container = $('#edit-child-families-form-title').parent();
+            container.load(container.data('url'));
+        }
+
+        $('#child-families-table').on('click', '.btn-remove-family', function () {
+            $.post('{!! route('removeChildFamily', ['child_id' => $child->id]) !!}', {
+                child_family_id: $(this).data('child-family-id')
+            }, function (result) {
+                reloadEditChildFamiliesForm();
+            });
+        });
+        let engine = new Bloodhound({
             remote: {
                 url: '{!! route('getChildFamilySuggestions', ['child_id' => $child->id]) !!}?q=%QUERY%',
                 wildcard: '%QUERY%'
@@ -51,8 +65,7 @@
             $.post('{!! route('addChildFamily', ['child_id' => $child->id]) !!}', {
                 family_id: suggestion.id
             }, function (result) {
-                let container = $('#edit-child-families-form-title').parent();
-                container.load(container.data('url'));
+                reloadEditChildFamiliesForm();
             }).fail(function () {
                 alert('Adding family failed!');
                 console.log('failed!');

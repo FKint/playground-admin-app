@@ -28,3 +28,4 @@ Route::get('/typeahead/child/{child_id}/families/suggestions', 'ChildrenControll
 
 // Ajax
 Route::post('/child/{child_id}/families/add', 'ChildrenController@addChildFamily')->name('addChildFamily');
+Route::post('/child/{child_id}/families/remove', 'ChildrenController@removeChildFamily')->name('removeChildFamily');

@@ -60,4 +60,12 @@ class ChildrenController extends Controller
         $child_family->save();
         return $child_family;
     }
+
+    public function removeChildFamily(Request $request, $child_id)
+    {
+        $child_family_id = $request->input('child_family_id');
+        $child_family = ChildFamily::find($child_family_id);
+        $child_family->delete();
+        return response()->json(['success' => true]);
+    }
 }
