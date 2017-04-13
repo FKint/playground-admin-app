@@ -75,4 +75,4 @@
 </script>
 
 <h4>Nieuwe voogd toevoegen</h4>
-<input title="Voogdnaam" type="text"/>
+@include('children.edit_child.new_family_form')

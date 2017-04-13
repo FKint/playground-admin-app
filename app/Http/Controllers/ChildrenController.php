@@ -6,6 +6,7 @@ use App\AgeGroup;
 use App\Child;
 use App\Family;
 use App\ChildFamily;
+use App\Tariff;
 use Illuminate\Support\Facades\Log;
 use Yajra\Datatables\Datatables;
 use Illuminate\Http\Request;
@@ -24,20 +25,35 @@ class ChildrenController extends Controller
 
     public function showEditChildForm(Request $request)
     {
+        $child = Child::findOrFail($request->input('child_id'));
+        return $this->showEditChildFormForChild($child);
+    }
+
+    public function submitEditChildForm(Request $request, $child_id){
+        $child = Child::findOrFail($child_id);
+        $child->update($request->all());
+        return $this->showEditChildFormForChild($child);
+    }
+
+    protected function showEditChildFormForChild($child){
         $all_age_groups = [];
         foreach (AgeGroup::all() as $age_group) {
             $all_age_groups[$age_group->id] = $age_group->abbreviation . " - " . $age_group->name;
         }
-        return view('children.edit_child_form')
-            ->with('child', Child::findOrFail($request->input('child_id')))
+        return view('children.edit_child.child_form')
+            ->with('child', $child)
             ->with('all_age_groups', $all_age_groups);
     }
-
     public function showEditFamiliesForm(Request $request)
     {
         $child = Child::findOrFail($request->input('child_id'));
-        return view('children.edit_child_families_form')
-            ->with('child', $child);
+        $all_tariffs = [];
+        foreach (Tariff::all() as $tariff) {
+            $all_tariffs[$tariff->id] = $tariff->abbreviation . " - " . $tariff->name;
+        }
+        return view('children.edit_child.families_form')
+            ->with('child', $child)
+            ->with('all_tariffs', $all_tariffs);
     }
 
     public function getChildFamilySuggestions(Request $request, $child_id)

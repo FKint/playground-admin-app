@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@include('children.edit_child_modal')
+@include('children.edit_child.modal')
 
 @section('content')
     <table class="table table-bordered" id="children-table">

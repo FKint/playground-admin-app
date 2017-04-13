@@ -25,4 +25,5 @@ Route::get('/settings', 'SettingsController@show')->name('settings');
 
 
 Route::get('/child/edit/form', 'ChildrenController@showEditChildForm')->name('edit_child_form');
+Route::post('/child/{child_id}/edit/form', 'ChildrenController@submitEditChildForm')->name('update_child_details');
 Route::get('/child/families/edit/form', 'ChildrenController@showEditFamiliesForm')->name('edit_child_families_form');
