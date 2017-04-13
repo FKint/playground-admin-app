@@ -23,7 +23,9 @@ Route::get('/registrations', 'RegistrationsController@show')->name('registration
 
 Route::get('/settings', 'SettingsController@show')->name('settings');
 
-
+// Edit child
+Route::get('/child/{child_id}/edit', 'ChildrenController@showEditChild')
+    ->name('show_edit_child');
 Route::get('/child/edit/form', 'ChildrenController@loadEditChildForm')
     ->name('edit_child_form');
 Route::post('/child/{child_id}/edit/form', 'ChildrenController@submitEditChildForm')
@@ -34,3 +36,9 @@ Route::get('/child/{child_id}/families/link/new/form', 'ChildrenController@loadL
     ->name('show_link_new_child_family_form');
 Route::post('/child/{child_id}/families/link/new/form', 'ChildrenController@submitLinkNewChildFamilyForm')
     ->name('submit_link_new_child_family_form');
+
+// New child
+Route::get('/children/new', 'ChildrenController@showNewChild')
+    ->name('show_new_child');
+Route::post('/children/new', 'ChildrenController@showSubmitNewChild')
+    ->name('show_submit_new_child');

@@ -3,18 +3,26 @@
 @include('children.edit_child.modal')
 
 @section('content')
-    <table class="table table-bordered" id="children-table">
-        <thead>
-        <tr>
-            <th>Voornaam</th>
-            <th>Naam</th>
-            <th>Geboortejaar</th>
-            <th>Werking</th>
-            <th>Belangrijk</th>
-            <th>Wijzigen</th>
-        </tr>
-        </thead>
-    </table>
+    <div class="row">
+        <div class="col-xs-12">
+            <a href="{!! route('show_new_child') !!}" class="btn btn-primary">Nieuw kind toevoegen</a>
+        </div>
+    </div>
+    <div class="row">&nbsp;</div>
+    <div class="row">
+        <table class="table table-bordered" id="children-table">
+            <thead>
+            <tr>
+                <th>Voornaam</th>
+                <th>Naam</th>
+                <th>Geboortejaar</th>
+                <th>Werking</th>
+                <th>Belangrijk</th>
+                <th>Wijzigen</th>
+            </tr>
+            </thead>
+        </table>
+    </div>
 @endsection
 
 @push('scripts')

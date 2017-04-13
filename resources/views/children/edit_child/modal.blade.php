@@ -8,8 +8,7 @@
                 <h4 class="modal-title">Kind wijzigen</h4>
             </div>
             <div class="modal-body" id="edit-child-modal-body">
-                <div id="edit-child-div"></div>
-                <div id="edit-families-div"></div>
+                @include('children.edit_child.content')
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Annuleren</button>

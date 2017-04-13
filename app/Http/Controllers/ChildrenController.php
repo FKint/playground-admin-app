@@ -23,6 +23,27 @@ class ChildrenController extends Controller
         return Datatables::of(Child::query())->make(true);
     }
 
+    public function showNewChild()
+    {
+        return view('children.new_child.index')
+            ->with('all_age_groups', $this->getAllAgeGroups());
+    }
+
+    public function showSubmitNewChild(Request $request)
+    {
+        Log::debug('$_POST: '.json_encode($_POST));
+        Log::debug('$request->all(): '.json_encode($request->all()));
+        $child = new Child($request->all());
+        $child->save();
+        return redirect()->action('ChildrenController@showEditChild', ['child_id' => $child->id]);
+    }
+
+    public function showEditChild($child_id)
+    {
+        $child = Child::findOrFail($child_id);
+        return view('children.edit_child.index')->with('child', $child);
+    }
+
     public function loadEditChildForm(Request $request)
     {
         $child = Child::findOrFail($request->input('child_id'));
@@ -36,15 +57,20 @@ class ChildrenController extends Controller
         return $this->loadEditChildFormForChild($child);
     }
 
-    protected function loadEditChildFormForChild($child)
+    protected function getAllAgeGroups()
     {
         $all_age_groups = [];
         foreach (AgeGroup::all() as $age_group) {
             $all_age_groups[$age_group->id] = $age_group->abbreviation . " - " . $age_group->name;
         }
+        return $all_age_groups;
+    }
+
+    protected function loadEditChildFormForChild($child)
+    {
         return view('children.edit_child.child_form')
             ->with('child', $child)
-            ->with('all_age_groups', $all_age_groups);
+            ->with('all_age_groups', $this->getAllAgeGroups());
     }
 
     public function loadEditFamiliesForm(Request $request)
