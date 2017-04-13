@@ -19,6 +19,8 @@ Route::get('/dashboard', 'DashboardController@show')->name('dashboard');
 
 Route::get('/children', 'ChildrenController@show')->name('children');
 
+Route::get('/families', 'FamiliesController@show')->name('families');
+
 Route::get('/registrations', 'RegistrationsController@show')->name('registrations');
 
 Route::get('/settings', 'SettingsController@show')->name('settings');
@@ -42,3 +44,11 @@ Route::get('/children/new', 'ChildrenController@showNewChild')
     ->name('show_new_child');
 Route::post('/children/new', 'ChildrenController@showSubmitNewChild')
     ->name('show_submit_new_child');
+
+// Families
+Route::get('/family/children/form', 'FamiliesController@loadFamilyChildrenForm')
+    ->name('load_family_children');
+Route::get('/family/edit/form', 'FamiliesController@loadEditFamilyForm')
+    ->name('load_edit_family_form');
+Route::post('/family/{family_id}/edit/form', 'FamiliesController@submitEditFamilyForm')
+    ->name('submit_edit_family_form');

@@ -1,11 +1,6 @@
 <h4>Nieuwe voogd toevoegen</h4>
 {{ Form::open(['class' => 'form-horizontal', 'id' => 'link-new-family']) }}
-{{ Form::bsText('guardian_first_name') }}
-{{ Form::bsText('guardian_last_name') }}
-{{ Form::bsDropdown('tariff_id', $all_tariffs) }}
-{{ Form::bsText('remarks') }}
-{{ Form::bsText('contact') }}
-{{ Form::bsSubmit() }}
+@include('families.forms.family')
 {{ Form::close() }}
 
 <script>

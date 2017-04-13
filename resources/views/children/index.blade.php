@@ -39,6 +39,7 @@
                 {data: 'age_group_id', name: 'age_group_id'},
                 {data: 'remarks', name: 'remarks'},
                 {
+                    searchable: false,
                     name: 'edit',
                     data: 'id',
                     render: function (data, type, full, meta) {
