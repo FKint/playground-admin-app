@@ -14,6 +14,8 @@ require('datatables.net-bs');
 $.extend(true, $.fn.dataTable.defaults, {
     "language": {"url": "//cdn.datatables.net/plug-ins/1.10.13/i18n/Dutch.json"}
 });
+window.Bloodhound = require('bloodhound-js');
+require('typeahead.js');
 
 /**
  * Vue is a modern JavaScript library for building interactive web interfaces

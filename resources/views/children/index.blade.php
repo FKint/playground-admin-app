@@ -1,5 +1,7 @@
 @extends('layouts.app')
 
+@include('children.edit_child_modal')
+
 @section('content')
     <table class="table table-bordered" id="children-table">
         <thead>
@@ -9,6 +11,7 @@
             <th>Geboortejaar</th>
             <th>Werking</th>
             <th>Belangrijk</th>
+            <th>Wijzigen</th>
         </tr>
         </thead>
     </table>
@@ -27,7 +30,14 @@
                 {data: 'birth_year', name: 'birth_year'},
                 {data: 'age_group_id', name: 'age_group_id'},
                 {data: 'remarks', name: 'remarks'},
-            ],
+                {
+                    name: 'edit',
+                    data: 'id',
+                    render: function (data, type, full, meta) {
+                        return '<a class="btn btn-xs btn-edit-child" data-child-id="' + data + '">Wijzig</a>';
+                    }
+                }
+            ]
         });
     });
 </script>

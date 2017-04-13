@@ -17,7 +17,9 @@ class InitialDataSeeder extends Seeder
         $this->seed_supplements();
         $this->seed_dates();
         $this->seed_tariffs();
+        $this->seed_child_families();
     }
+
 
     private function seed_age_groups()
     {
@@ -38,12 +40,49 @@ class InitialDataSeeder extends Seeder
     private function seed_children()
     {
         $kleuters = \App\AgeGroup::where('abbreviation', '=', 'KLS')->firstOrFail();
+        $middle_group = \App\AgeGroup::where('abbreviation', '=', '6-12')->firstOrFail();
+        $teenagers = \App\AgeGroup::where('abbreviation', '=', '12+')->firstOrFail();
         DB::table('children')->insert([
             'first_name' => 'Josephine',
             'last_name' => 'Janssens',
             'birth_year' => 2013,
             'age_group_id' => $kleuters->id,
             'remarks' => 'First kid in the DB!'
+        ]);
+        DB::table('children')->insert([
+            'first_name' => 'Eefje',
+            'last_name' => 'Janssens',
+            'birth_year' => 2013,
+            'age_group_id' => $kleuters->id,
+            'remarks' => '!'
+        ]);
+        DB::table('children')->insert([
+            'first_name' => 'Karen',
+            'last_name' => 'Duyck',
+            'birth_year' => 2008,
+            'age_group_id' => $middle_group->id,
+            'remarks' => ''
+        ]);
+        DB::table('children')->insert([
+            'first_name' => 'Tom',
+            'last_name' => 'Maes',
+            'birth_year' => 2006,
+            'age_group_id' => $teenagers->id,
+            'remarks' => ''
+        ]);
+        DB::table('children')->insert([
+            'first_name' => 'Erika',
+            'last_name' => 'Van Leemhuyzen',
+            'birth_year' => 2009,
+            'age_group_id' => $middle_group->id,
+            'remarks' => ''
+        ]);
+        DB::table('children')->insert([
+            'first_name' => 'Tim',
+            'last_name' => 'Beert',
+            'birth_year' => 2010,
+            'age_group_id' => $middle_group->id,
+            'remarks' => ''
         ]);
     }
 
@@ -111,4 +150,58 @@ class InitialDataSeeder extends Seeder
             "week_later_children" => 9.5
         ]);
     }
+
+    private function seed_child_families()
+    {
+        $normal_tariff = \App\Tariff::where('name', '=', 'Normaal')->firstOrFail();
+        $social_tariff = \App\Tariff::where('name', '=', 'Sociaal')->firstOrFail();
+        $family_id = DB::table('families')->insertGetId([
+            "guardian_first_name" => "Jozef",
+            "guardian_last_name" => "De Backer",
+            "tariff_id" => $normal_tariff->id,
+            "remarks" => "First family",
+            "contact" => "1207"
+        ]);
+        $child = \App\Child::where('first_name', '=', 'Josephine')->firstOrFail();
+        DB::table('child_families')->insert([
+            "family_id" => $family_id,
+            "child_id" => $child->id
+        ]);
+        DB::table('families')->insert([
+            "guardian_first_name" => "Heidi",
+            "guardian_last_name" => "De Vriendt",
+            "tariff_id" => $normal_tariff->id,
+            "remarks" => "Second family",
+            "contact" => "999"
+        ]);
+        DB::table('families')->insert([
+            "guardian_first_name" => "Jonas",
+            "guardian_last_name" => "De Keukeleire",
+            "tariff_id" => $normal_tariff->id,
+            "remarks" => "",
+            "contact" => "112"
+        ]);
+        DB::table('families')->insert([
+            "guardian_first_name" => "Erik",
+            "guardian_last_name" => "Anthonissen",
+            "tariff_id" => $normal_tariff->id,
+            "remarks" => "",
+            "contact" => ""
+        ]);
+        DB::table('families')->insert([
+            "guardian_first_name" => "Lieve",
+            "guardian_last_name" => "Bouckaert",
+            "tariff_id" => $normal_tariff->id,
+            "remarks" => "",
+            "contact" => ""
+        ]);
+        DB::table('families')->insert([
+            "guardian_first_name" => "Ann",
+            "guardian_last_name" => "Meert",
+            "tariff_id" => $social_tariff->id,
+            "remarks" => "",
+            "contact" => ""
+        ]);
+    }
+
 }

@@ -16,7 +16,8 @@
     "lodash": "^4.17.4",
     "vue": "^2.1.10",
     "datatables.net": "1.10.13",
-    "datatables.net-bs": "1.10.13"
-  },
-  "dependencies": {}
+    "datatables.net-bs": "1.10.13",
+    "typeahead.js": "0.11.1",
+    "bloodhound-js": "^1.2.1"
+  }
 }

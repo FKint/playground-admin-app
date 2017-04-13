@@ -22,3 +22,7 @@ Route::get('/children', 'ChildrenController@show')->name('children');
 Route::get('/registrations', 'RegistrationsController@show')->name('registrations');
 
 Route::get('/settings', 'SettingsController@show')->name('settings');
+
+
+Route::get('/child/edit/form', 'ChildrenController@showEditChildForm')->name('edit_child_form');
+Route::get('/child/families/edit/form', 'ChildrenController@showEditFamiliesForm')->name('edit_child_families_form');

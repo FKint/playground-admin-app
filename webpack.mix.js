@@ -12,7 +12,7 @@ const {mix} = require('laravel-mix');
  */
 
 mix.js('resources/assets/js/app.js', 'public/js')
-    .extract(['vue', 'jquery', 'bootstrap-sass', 'axios', 'lodash'])
+    .extract(['vue', 'jquery', 'bootstrap-sass', 'axios', 'lodash', 'typeahead.js'])
     .version();
 mix.sass('resources/assets/sass/app.scss', 'public/css')
     .version();

@@ -53,6 +53,7 @@
         </div><!--/.nav-collapse -->
     </div>
 </nav>
+@stack('modals')
 
 <div class="container" role="main">
 
@@ -60,13 +61,20 @@
 
 </div> <!-- /container -->
 <script>
-    window.Laravel = <?php echo json_encode([
+    window.Laravel = {!!  json_encode([
         'csrfToken' => csrf_token(),
-    ]); ?>
+    ])  !!};
 </script>
 <script src="{{mix('/js/manifest.js')}}"></script>
 <script src="{{mix('/js/vendor.js')}}"></script>
 <script src="{{mix('/js/app.js')}}"></script>
+<script>
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
+</script>
 @stack('scripts')
 </body>
 </html>
