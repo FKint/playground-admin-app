@@ -31,8 +31,6 @@ class ChildrenController extends Controller
 
     public function showSubmitNewChild(Request $request)
     {
-        Log::debug('$_POST: '.json_encode($_POST));
-        Log::debug('$request->all(): '.json_encode($request->all()));
         $child = new Child($request->all());
         $child->save();
         return redirect()->action('ChildrenController@showEditChild', ['child_id' => $child->id]);

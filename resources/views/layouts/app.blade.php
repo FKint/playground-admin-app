@@ -38,6 +38,7 @@
             <ul class="nav navbar-nav">
                 <li class="active"><a href="{{route('dashboard')}}">Dashboard</a></li>
                 <li><a href="{{route('children')}}">Kinderen</a></li>
+                <li><a href="{{route('families')}}">Gezinnen</a></li>
                 <li><a href="{{route('registrations')}}">Registraties</a></li>
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"

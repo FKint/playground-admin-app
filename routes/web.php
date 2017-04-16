@@ -12,7 +12,7 @@
 */
 
 Route::get('/', function () {
-    return view('index');
+    return redirect()->route('dashboard');
 });
 
 Route::get('/dashboard', 'DashboardController@show')->name('dashboard');
@@ -44,6 +44,19 @@ Route::get('/children/new', 'ChildrenController@showNewChild')
     ->name('show_new_child');
 Route::post('/children/new', 'ChildrenController@showSubmitNewChild')
     ->name('show_submit_new_child');
+
+// New family with children
+Route::get('/families/new/with_children', 'FamiliesController@showNewFamilyWithChildren')
+    ->name('show_new_family_with_children');
+Route::post('/families/new/with_children', 'FamiliesController@showSubmitNewFamilyWithChildren')
+    ->name('show_submit_new_family_with_children');
+Route::get('/family/{family_id}/children/add', 'FamiliesController@showAddChildrenToFamily')
+    ->name('show_add_child_to_family');
+Route::post('/family/{family_id}/children/add', 'FamiliesController@showSubmitAddChildrenToFamily')
+    ->name('show_submit_add_child_to_family');
+Route::get('/family/{family_id}/child/{child_id}/remove', 'FamiliesController@showRemoveChildFromNewFamilyWithChildren')
+    ->name('show_remove_child_from_new_family_with_children');
+
 
 // Families
 Route::get('/family/children/form', 'FamiliesController@loadFamilyChildrenForm')

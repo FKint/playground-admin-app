@@ -26,8 +26,15 @@ Route::get('/families', 'FamiliesController@getFamilies')->name('getFamilies');
 Route::get('/family/{family_id}/children', 'FamiliesController@getFamilyChildren')->name('getFamilyChildren');
 
 // Typeahead.js
-Route::get('/typeahead/child/{child_id}/families/suggestions', 'ChildrenController@getChildFamilySuggestions')->name('getChildFamilySuggestions');
+Route::get('/typeahead/child/{child_id}/families/suggestions', 'ChildrenController@getChildFamilySuggestions')
+    ->name('getChildFamilySuggestions');
+Route::get('/typeahead/family/{family_id}/children/suggestions', 'FamiliesController@getChildSuggestionsForFamily')
+    ->name('getChildSuggestionsForFamily');
 
 // Ajax
-Route::post('/child/{child_id}/families/add', 'ChildrenController@addChildFamily')->name('addChildFamily');
-Route::post('/child/{child_id}/families/remove', 'ChildrenController@removeChildFamily')->name('removeChildFamily');
+Route::post('/child/{child_id}/families/add', 'ChildrenController@addChildFamily')
+    ->name('addChildFamily');
+Route::post('/child/{child_id}/families/remove', 'ChildrenController@removeChildFamily')
+    ->name('removeChildFamily');
+Route::post('/family/{family_id}/children/add', 'FamiliesController@addChildToFamily')
+    ->name('addChildToFamily');

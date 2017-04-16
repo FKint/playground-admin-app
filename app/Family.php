@@ -19,7 +19,7 @@ class Family extends Model
     protected $searchable = [
         'columns' => [
             'families.id' => 10,
-            'families.guardian_first_name' => 8,
+            'families.guardian_first_name' => 10,
             'families.guardian_last_name' => 10,
             'children.first_name' => 5,
             'children.last_name' => 5
