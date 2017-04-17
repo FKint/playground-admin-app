@@ -21,7 +21,10 @@ Route::get('/children', 'ChildrenController@show')->name('children');
 
 Route::get('/families', 'FamiliesController@show')->name('families');
 
-Route::get('/registrations', 'RegistrationsController@show')->name('registrations');
+Route::get('/registrations', 'RegistrationsController@show')
+    ->name('registrations');
+Route::get('/registrations/{date}', 'RegistrationsController@showDate')
+    ->name('registrations_for_day');
 
 Route::get('/settings', 'SettingsController@show')->name('settings');
 
