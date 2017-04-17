@@ -8,7 +8,6 @@ use App\Family;
 use App\Tariff;
 use App\AgeGroup;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 use Yajra\Datatables\Datatables;
 
 class FamiliesController extends Controller
@@ -26,7 +25,6 @@ class FamiliesController extends Controller
 
     public function showSubmitNewFamilyWithChildren(Request $request)
     {
-        Log::debug('$request->all(): ' . json_encode($request->all()));
         $family = new Family($request->all());
         $family->save();
         return redirect()->action('FamiliesController@showAddChildrenToFamily', ['family_id' => $family->id]);

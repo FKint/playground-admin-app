@@ -7,7 +7,6 @@ use App\Child;
 use App\Family;
 use App\ChildFamily;
 use App\Tariff;
-use Illuminate\Support\Facades\Log;
 use Yajra\Datatables\Datatables;
 use Illuminate\Http\Request;
 
