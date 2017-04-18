@@ -28,6 +28,7 @@ class Child extends Model
             'families' => ['child_families.family_id', 'families.id']
         ]
     ];
+
     /**
      * Get the age group this child belongs to.
      */

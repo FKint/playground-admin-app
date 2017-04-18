@@ -12,4 +12,9 @@ class DayPart extends Model
      * @var array
      */
     protected $fillable = ['name', 'order'];
+
+    public static function getDefaultDayPart()
+    {
+        return DayPart::where('default', '=', true)->firstOrFail();
+    }
 }

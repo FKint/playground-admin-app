@@ -24,8 +24,12 @@ class Week extends Model
     /**
      * Get all days in this week.
      */
-    public function days()
+    public function playground_days()
     {
-        return $this->hasMany(Day::class);
+        return $this->hasMany(PlaygroundDay::class);
+    }
+
+    public function family_week_registrations(){
+        return $this->hasMany(FamilyWeekRegistration::class);
     }
 }

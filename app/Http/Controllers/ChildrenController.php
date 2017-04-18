@@ -25,7 +25,7 @@ class ChildrenController extends Controller
     public function showNewChild()
     {
         return view('children.new_child.index')
-            ->with('all_age_groups', $this->getAllAgeGroups());
+            ->with('all_age_groups_by_id', AgeGroup::getAllAgeGroupsById());
     }
 
     public function showSubmitNewChild(Request $request)
@@ -54,20 +54,11 @@ class ChildrenController extends Controller
         return $this->loadEditChildFormForChild($child);
     }
 
-    protected function getAllAgeGroups()
-    {
-        $all_age_groups = [];
-        foreach (AgeGroup::all() as $age_group) {
-            $all_age_groups[$age_group->id] = $age_group->abbreviation . " - " . $age_group->name;
-        }
-        return $all_age_groups;
-    }
-
     protected function loadEditChildFormForChild($child)
     {
         return view('children.edit_child.child_form')
             ->with('child', $child)
-            ->with('all_age_groups', $this->getAllAgeGroups());
+            ->with('all_age_groups_by_id', AgeGroup::getAllAgeGroupsById());
     }
 
     public function loadEditFamiliesForm(Request $request)
@@ -80,13 +71,9 @@ class ChildrenController extends Controller
     public function loadLinkNewChildFamilyForm(Request $request, $child_id)
     {
         $child = Child::findOrFail($child_id);
-        $all_tariffs = [];
-        foreach (Tariff::all() as $tariff) {
-            $all_tariffs[$tariff->id] = $tariff->abbreviation . " - " . $tariff->name;
-        }
         return view('children.edit_child.new_family.form')
             ->with('child', $child)
-            ->with('all_tariffs', $all_tariffs);
+            ->with('all_tariffs_by_id', Tariff::getAllTariffsById());
     }
 
     public function submitLinkNewChildFamilyForm(Request $request, $child_id)
@@ -102,6 +89,7 @@ class ChildrenController extends Controller
     {
         $query = $request->input('q');
         $families = Family::search($query)
+            ->groupBy('families.id')
             ->with('child_families')
             ->with('children')
             ->whereDoesntHave("children", function ($query) use ($child_id) {

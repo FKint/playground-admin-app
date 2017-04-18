@@ -30,6 +30,8 @@ Route::get('/typeahead/child/{child_id}/families/suggestions', 'ChildrenControll
     ->name('getChildFamilySuggestions');
 Route::get('/typeahead/family/{family_id}/children/suggestions', 'FamiliesController@getChildSuggestionsForFamily')
     ->name('getChildSuggestionsForFamily');
+Route::get('/typeahead/families/suggestions', 'FamiliesController@getFamilySuggestions')
+    ->name('getFamilySuggestions');
 
 // Ajax
 Route::post('/child/{child_id}/families/add', 'ChildrenController@addChildFamily')
@@ -38,3 +40,6 @@ Route::post('/child/{child_id}/families/remove', 'ChildrenController@removeChild
     ->name('removeChildFamily');
 Route::post('/family/{family_id}/children/add', 'FamiliesController@addChildToFamily')
     ->name('addChildToFamily');
+
+Route::get('/registration/week/{week_id}/family/{family_id}', 'RegistrationsController@getRegistrationData')
+    ->name('getRegistrationData');

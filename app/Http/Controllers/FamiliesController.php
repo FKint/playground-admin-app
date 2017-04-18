@@ -20,7 +20,7 @@ class FamiliesController extends Controller
     public function showNewFamilyWithChildren()
     {
         return view('families.new_family_with_children.index')
-            ->with('all_tariffs', $this->getAllTariffs());
+            ->with('all_tariffs_by_id', Tariff::getAllTariffsById());
     }
 
     public function showSubmitNewFamilyWithChildren(Request $request)
@@ -35,7 +35,7 @@ class FamiliesController extends Controller
         $family = Family::findOrFail($family_id);
         return view('families.new_family_with_children.add_child')
             ->with('family', $family)
-            ->with('all_age_groups', $this->getAllAgeGroups());
+            ->with('all_age_groups_by_id', AgeGroup::getAllAgeGroupsById());
     }
 
     public function showSubmitAddChildrenToFamily(Request $request, $family_id)
@@ -72,32 +72,13 @@ class FamiliesController extends Controller
     {
         return $this->loadEditFamilyFormForFamily($request->input('family_id'));
     }
-
-    protected function getAllTariffs()
-    {
-        $all_tariffs = [];
-        foreach (Tariff::all() as $tariff) {
-            $all_tariffs[$tariff->id] = $tariff->abbreviation . " - " . $tariff->name;
-        }
-        return $all_tariffs;
-    }
-
-    protected function getAllAgeGroups()
-    {
-        $all_age_groups = [];
-        foreach (AgeGroup::all() as $age_group) {
-            $all_age_groups[$age_group->id] = $age_group->abbreviation . " - " . $age_group->name;
-        }
-        return $all_age_groups;
-    }
-
     protected function loadEditFamilyFormForFamily($family_id)
     {
 
         $family = Family::findOrFail($family_id);
         return view('families.edit_family.form')
             ->with('family', $family)
-            ->with('all_tariffs', $this->getAllTariffs());
+            ->with('all_tariffs_by_id', Tariff::getAllTariffsById());
     }
 
     public function submitEditFamilyForm(Request $request, $family_id)
@@ -123,6 +104,16 @@ class FamiliesController extends Controller
             })
             ->get();
         return $children;
+    }
+
+    public function getFamilySuggestions(Request $request)
+    {
+        $query = $request->input('q');
+        $families = Family::search($query)
+            ->groupBy('families.id')
+            ->with('children')
+            ->get();
+        return $families;
     }
 
     public function addChildToFamily(Request $request, $family_id)

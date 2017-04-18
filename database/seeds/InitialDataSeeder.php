@@ -18,6 +18,7 @@ class InitialDataSeeder extends Seeder
         $this->seed_dates();
         $this->seed_tariffs();
         $this->seed_child_families();
+        $this->seed_activity_lists();
     }
 
 
@@ -90,7 +91,8 @@ class InitialDataSeeder extends Seeder
     {
         DB::table('day_parts')->insert([
             'name' => "Lunch",
-            'order' => 1
+            'order' => 1,
+            'default' => true
         ]);
         DB::table('day_parts')->insert([
             'name' => "Thuis",
@@ -114,7 +116,7 @@ class InitialDataSeeder extends Seeder
         $week_day_ids = [];
         $week_day_names = ["Maandag", "Dinsdag", "Woensdag", "Donderdag", "Vrijdag"];
         $holidays = ["2017-07-21"];
-        for ($i = 0; $i < 5; ++$i){
+        for ($i = 0; $i < 5; ++$i) {
             $week_day_ids[] = DB::table('week_days')->insertGetId([
                 'days_offset' => $i,
                 'name' => $week_day_names[$i]
@@ -130,8 +132,8 @@ class InitialDataSeeder extends Seeder
                 'first_day_of_week' => $monday
             ]);
             $week_day = $monday;
-            for($j = 0; $j < count($week_day_ids); ++$j){
-                if(!in_array($week_day->format("Y-m-d"), $holidays)){
+            for ($j = 0; $j < count($week_day_ids); ++$j) {
+                if (!in_array($week_day->format("Y-m-d"), $holidays)) {
                     DB::table('playground_days')->insert([
                         'week_id' => $week_id,
                         'week_day_id' => $week_day_ids[$j]
@@ -179,6 +181,11 @@ class InitialDataSeeder extends Seeder
             "family_id" => $family_id,
             "child_id" => $child->id
         ]);
+        $child = \App\Child::where('first_name', '=', 'Eefje')->firstOrFail();
+        DB::table('child_families')->insert([
+            "family_id" => $family_id,
+            "child_id" => $child->id
+        ]);
         DB::table('families')->insert([
             "guardian_first_name" => "Heidi",
             "guardian_last_name" => "De Vriendt",
@@ -213,6 +220,17 @@ class InitialDataSeeder extends Seeder
             "tariff_id" => $social_tariff->id,
             "remarks" => "",
             "contact" => ""
+        ]);
+    }
+
+    private function seed_activity_lists()
+    {
+        DB::table('activity_lists')->insert([
+            "name" => "Zwembad O'Town",
+            "date" => "2017-07-06",
+            "show_on_attendance_form" => true,
+            "show_on_dashboard" => true,
+            "price" => "1.75"
         ]);
     }
 

@@ -68,3 +68,9 @@ Route::get('/family/edit/form', 'FamiliesController@loadEditFamilyForm')
     ->name('load_edit_family_form');
 Route::post('/family/{family_id}/edit/form', 'FamiliesController@submitEditFamilyForm')
     ->name('submit_edit_family_form');
+
+// Edit registrations
+Route::get('/registrations/week/{week_id}/families/find', 'RegistrationsController@showFindFamily')
+    ->name('show_find_family_registration');
+Route::get('/registrations/week/{week_id}/edit', 'RegistrationsController@showEditRegistration')
+    ->name('show_edit_registration');

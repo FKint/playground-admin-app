@@ -34,6 +34,10 @@ class ChildFamily extends Model
      */
     public function activity_lists()
     {
-        return $this->hasMany(ActivityList::class);
+        return $this->belongsToMany(
+            ActivityList::class,
+            'activity_list_child_families',
+            'child_family_id',
+            'activity_list_id');
     }
 }
