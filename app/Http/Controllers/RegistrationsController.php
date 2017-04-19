@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\ActivityList;
 use App\AgeGroup;
+use App\ChildFamilyDayRegistration;
+use App\ChildFamilyWeekRegistration;
 use App\Day;
 use App\DayPart;
 use App\Family;
@@ -59,6 +61,115 @@ class RegistrationsController extends Controller
             'all_age_groups' => AgeGroup::all(),
             'all_day_parts' => DayPart::all()
         ]);
+    }
+
+    public function submitRegistrationData(Request $request, $week_id, $family_id)
+    {
+        $week = Week::findOrFail($week_id);
+        $family = Family::findOrFail($family_id);
+        $family_week_registration = $week->family_week_registrations()
+            ->where('family_id', '=', $family_id)->first();
+
+        $tariff = Tariff::findOrFail($request->input('tariff_id'));
+        if (!$family_week_registration) {
+            $family_week_registration = new FamilyWeekRegistration([
+                'family_id' => $family->id,
+                'week_id' => $week->id,
+                'tariff_id' => $tariff->id
+            ]);
+        } else {
+            $family_week_registration->tariff()->associate($tariff);
+        }
+        $family_week_registration->save();
+        $children_data = $request->input('children');
+        $default_day_part = DayPart::getDefaultDayPart();
+
+        foreach ($family->child_families as $child_family) {
+            $child = $child_family->child;
+            $child_family_week_registration = $family_week_registration
+                ->child_family_week_registrations()
+                ->where('child_id', '=', $child->id)
+                ->first();
+            if (!$child_family_week_registration) {
+                $child_family_week_registration = new ChildFamilyWeekRegistration([
+                    'child_id' => $child->id,
+                    'family_id' => $family->id,
+                    'week_id' => $week->id
+                ]);
+            }
+            $child_data = $children_data[$child->id];
+            if (!$child_data) {
+                $child_family_week_registration->whole_week_price = false;
+            } else {
+                $child_family_week_registration->whole_week_price =
+                    filter_var($child_data['whole_week_registered'], FILTER_VALIDATE_BOOLEAN);
+            }
+            $child_family_week_registration->save();
+            foreach ($week->playground_days as $playground_day) {
+                $day_data = ($child_data && $child_data['days']) ? $child_data['days'][$playground_day->week_day_id] : null;
+                $child_family_day_registration = $child_family_week_registration
+                    ->child_family_day_registrations()
+                    ->where('week_day_id', '=', $playground_day->week_day_id)
+                    ->first();
+                if ($child_family_week_registration->whole_week_price ||
+                    ($day_data && filter_var($day_data['registered'], FILTER_VALIDATE_BOOLEAN))
+                ) {
+                    if (!$child_family_day_registration) {
+                        $child_family_day_registration = new ChildFamilyDayRegistration([
+                            'child_id' => $child->id,
+                            'family_id' => $family->id,
+                            'week_id' => $week->id,
+                            'week_day_id' => $playground_day->week_day_id,
+                        ]);
+                    }
+                    $day_part = null;
+                    $age_group = null;
+                    $attended = false;
+                    if ($day_data) {
+                        $day_part = DayPart::find($day_data['day_part_id']);
+                        $age_group = AgeGroup::find($day_data['age_group_id']);
+                        if (filter_var($day_data['attended'], FILTER_VALIDATE_BOOLEAN)) {
+                            $attended = true;
+                        }
+                    }
+                    $child_family_day_registration->day_part()->associate($day_part ? $day_part : $default_day_part);
+                    $child_family_day_registration->age_group()->associate($age_group ? $age_group : $child->age_group());
+                    $child_family_day_registration->attended = $attended;
+
+                    $child_family_day_registration->save();
+
+                    $supplements_data = $day_data ? $day_data['supplements'] : [];
+                    foreach (Supplement::all() as $supplement) {
+                        if (key_exists($supplement->id, $supplements_data) && filter_var($supplements_data[$supplement->id]['ordered'], FILTER_VALIDATE_BOOLEAN)) {
+                            if (!$child_family_day_registration->supplements->contains($supplement)) {
+                                $child_family_day_registration->supplements()->attach($supplement);
+                            }
+                        } else {
+                            if ($child_family_day_registration->supplements->contains($supplement)) {
+                                $child_family_day_registration->supplements()->detach($supplement);
+                            }
+                        }
+                    }
+                } elseif ($child_family_day_registration) {
+                    $child_family_day_registration->delete();
+                }
+            }
+
+            $activity_lists = $child_data ? $child_data['activity_lists'] : [];
+            foreach ($activity_lists as $activity_list_id => $activity_list_data) {
+                $activity_list = ActivityList::findOrFail($activity_list_id);
+                if (filter_var($activity_list_data['registered'], FILTER_VALIDATE_BOOLEAN)) {
+                    if (!$child_family->activity_lists->contains($activity_list_id)) {
+                        $child_family->activity_lists()->attach($activity_list);
+                    }
+                } else {
+                    if ($child_family->activity_lists->contains($activity_list_id)) {
+                        $child_family->activity_lists()->detach($activity_list);
+                    }
+                }
+            }
+
+        }
     }
 
     public function getRegistrationData(Request $request, $week_id, $family_id)

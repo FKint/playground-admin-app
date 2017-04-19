@@ -43,3 +43,5 @@ Route::post('/family/{family_id}/children/add', 'FamiliesController@addChildToFa
 
 Route::get('/registration/week/{week_id}/family/{family_id}', 'RegistrationsController@getRegistrationData')
     ->name('getRegistrationData');
+Route::post('/registration/week/{week_id}/family/{family_id}', 'RegistrationsController@submitRegistrationData')
+    ->name('submitRegistrationData');
