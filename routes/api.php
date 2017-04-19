@@ -45,3 +45,5 @@ Route::get('/registration/week/{week_id}/family/{family_id}', 'RegistrationsCont
     ->name('getRegistrationData');
 Route::post('/registration/week/{week_id}/family/{family_id}', 'RegistrationsController@submitRegistrationData')
     ->name('submitRegistrationData');
+Route::post('/registration/week/{week_id}/family/{family_id}/prices', 'RegistrationsController@submitRegistrationDataForPrices')
+    ->name('submitRegistrationDataForPrices');

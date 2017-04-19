@@ -16,7 +16,7 @@
     <h1>Wijzig registratie voor familie {{$family->guardian_first_name}} {{$family->guardian_last_name}}</h1>
     <div class="row">
         <div class="col-xs-9" id="registration-table-div">
-            <table id="registration-table" class="table table-condensed">
+            <table id="registration-table" class="table table-condensed" data-populating="0">
                 <tr>
                     <th colspan="2">Kind</th>
                     @foreach($family->children as $child)
@@ -37,7 +37,8 @@
                     <th colspan="2">Week</th>
                     @foreach($family->children as $child)
                         <td colspan="4" data-child-id="{{$child->id}}" class="whole-week">
-                            <input class="registered-checkbox" title="Registreer voor volledige week" type="checkbox"/>
+                            <input class="registration-checkbox" title="Registreer voor volledige week"
+                                   type="checkbox"/>
                             <span class="price">€ 0.00</span>
                         </td>
                     @endforeach
@@ -48,7 +49,7 @@
                         <td>{{ $playground_day->date()->format('Y-m-d') }}</td>
                         @foreach($family->children as $child)
                             <td class="day-registration" data-child-id="{{$child->id}}">
-                                <input class="registered-checkbox" title="Registreer voor deze dag" type="checkbox"/>
+                                <input class="registration-checkbox" title="Registreer voor deze dag" type="checkbox"/>
                                 <span class="price">€ 0.00</span>
                             </td>
                             <td class="day-age-group" data-child-id="{{$child->id}}">
@@ -86,7 +87,7 @@
                             <td>{{ $supplement->name }}</td>
                             @foreach($family->children as $child)
                                 <td class="day-supplement" data-child-id="{{ $child->id }}">
-                                    <input class="supplement-checkbox" title="Extraatje bestellen" type="checkbox"/>
+                                    <input class="registration-checkbox" title="Extraatje bestellen" type="checkbox"/>
                                     <span class="price">€ 0.00</span>
                                 </td>
                                 <td colspan="3"></td>
@@ -149,11 +150,13 @@
         }
 
         function clearRegistrationData() {
+            table.data('populating', parseInt(table.data('populating')) + 1);
             table.find('input[type=checkbox]').prop('checked', false);
             table.find('select').each(function () {
                 this.selectedIndex = 0;
             });
             table.find('span.price').text(formatPrice(0));
+            table.data('populating', parseInt(table.data('populating')) - 1);
         }
 
         function showEditRegistrations() {
@@ -164,74 +167,7 @@
 
         }
 
-        function loadRegistrationData() {
-            clearRegistrationData();
-            $.get('{{ route('getRegistrationData', ['week_id'=>$week->id, 'family_id'=>$family->id]) }}',
-                function (data) {
-                    console.log(data);
-                    // TODO: assert that the children linked to this family have not been changed in the meantime
-                    form.find('select[name=tariff_id]').val(data.tariff_id);
-                    table.find('td.whole-week').each(function () {
-                        const child_id = $(this).data('child-id');
-                        $(this).find('.registered-checkbox').prop('checked', data.children[child_id].whole_week_registered);
-                        $(this).find('.price').text(formatPrice(data.children[child_id].whole_week_price))
-                    });
-                    table.find('td.day-registration').each(function () {
-                        const child_id = $(this).data('child-id');
-                        const week_day_id = $(this).parent('tr').data('week-day-id');
-                        const child_day_data = data.children[child_id].days[week_day_id];
-                        $(this).find('.registered-checkbox').prop('checked', child_day_data.registered);
-                        $(this).find('.price').text(formatPrice(child_day_data.day_price));
-                    });
-                    table.find('td.day-age-group').each(function () {
-                        const child_id = $(this).data('child-id');
-                        const week_day_id = $(this).parent('tr').data('week-day-id');
-                        const child_day_data = data.children[child_id].days[week_day_id];
-                        $(this).find('.age-group').val(child_day_data.age_group_id);
-                    });
-                    table.find('td.day-day-part').each(function () {
-                        const child_id = $(this).data('child-id');
-                        const week_day_id = $(this).parent('tr').data('week-day-id');
-                        const child_day_data = data.children[child_id].days[week_day_id];
-                        $(this).find('.day-part').val(child_day_data.day_part_id);
-                    });
-                    table.find('td.day-attendance').each(function () {
-                        const child_id = $(this).data('child-id');
-                        const week_day_id = $(this).parent('tr').data('week-day-id');
-                        const child_day_data = data.children[child_id].days[week_day_id];
-                        $(this).find('.attendance-checkbox').prop('checked', child_day_data.attended);
-                    });
-                    table.find('td.day-supplement').each(function () {
-                        const child_id = $(this).data('child-id');
-                        const week_day_id = $(this).parent('tr').data('week-day-id');
-                        const supplement_id = $(this).parent('tr').data('supplement-id');
-                        if (!(supplement_id in data.children[child_id].days[week_day_id].supplements)) {
-                            return;
-                        }
-                        const child_day_supplement_data = data.children[child_id].days[week_day_id].supplements[supplement_id];
-                        $(this).find('.supplement-checkbox').prop('checked', child_day_supplement_data.ordered);
-                        $(this).find('.price').text(formatPrice(child_day_supplement_data.price));
-                    });
-                    table.find('td.activity-list-registration').each(function () {
-                        const child_id = $(this).data('child-id');
-                        const activity_list_id = $(this).parent('tr').data('activity-list-id');
-                        if (!(activity_list_id in data.children[child_id].activity_lists)) {
-                            return;
-                        }
-                        const activity_list_data = data.children[child_id].activity_lists[activity_list_id];
-                        $(this).find('.registration-checkbox').prop('checked', activity_list_data.registered);
-                        $(this).find('.price').text(formatPrice(activity_list_data.price));
-                    });
-                },
-                "json"
-            );
-        }
-
-        function loadRegistrationPrices() {
-
-        }
-
-        function submitRegistrationData() {
+        function getRegistrationFormData() {
             const data = {};
             data.tariff_id = $('select[name=tariff_id]').val();
             data.children = {};
@@ -243,12 +179,12 @@
             @endforeach
             table.find('td.whole-week').each(function () {
                 const child_id = $(this).data('child-id');
-                data.children[child_id].whole_week_registered = $(this).find('.registered-checkbox').is(':checked');
+                data.children[child_id].whole_week_registered = $(this).find('.registration-checkbox').is(':checked');
             });
             table.find('td.day-registration').each(function () {
                 const child_id = $(this).data('child-id');
                 const week_day_id = $(this).parent('tr').data('week-day-id');
-                data.children[child_id].days[week_day_id].registered = $(this).find('.registered-checkbox').is(':checked');
+                data.children[child_id].days[week_day_id].registered = $(this).find('.registration-checkbox').is(':checked');
             });
             table.find('td.day-age-group').each(function () {
                 const child_id = $(this).data('child-id');
@@ -271,7 +207,7 @@
                 const week_day_id = $(this).parent('tr').data('week-day-id');
                 const supplement_id = $(this).parent('tr').data('supplement-id');
                 data.children[child_id].days[week_day_id].supplements[supplement_id] = {
-                    ordered: $(this).find('.supplement-checkbox').is(':checked')
+                    ordered: $(this).find('.registration-checkbox').is(':checked')
                 };
             });
             table.find('td.activity-list-registration').each(function () {
@@ -281,17 +217,114 @@
                     registered: $(this).find('.registration-checkbox').is(':checked')
                 };
             });
+            return data;
+        }
+
+        function loadCurrentRegistrationData(callback) {
+            $.get('{{ route('getRegistrationData', ['week_id'=>$week->id, 'family_id'=>$family->id]) }}',
+                callback,
+                "json");
+        }
+
+        function populateRegistrationData(data) {
+            table.data('populating', parseInt(table.data('populating')) + 1);
+            clearRegistrationData();
+            console.log(data);
+            // TODO: assert that the children linked to this family have not been changed in the meantime
+            form.find('select[name=tariff_id]').val(data.tariff_id);
+            table.find('td.whole-week').each(function () {
+                const child_id = $(this).data('child-id');
+                console.log('whole_week_registered: ' + data.children[child_id].whole_week_registered);
+                $(this).find('.registration-checkbox').prop('checked', data.children[child_id].whole_week_registered);
+                $(this).find('.price').text(formatPrice(data.children[child_id].whole_week_price))
+            });
+            table.find('td.day-registration').each(function () {
+                const child_id = $(this).data('child-id');
+                const week_day_id = $(this).parent('tr').data('week-day-id');
+                const child_day_data = data.children[child_id].days[week_day_id];
+                $(this).find('.registration-checkbox').prop('checked', child_day_data.registered);
+                $(this).find('.price').text(formatPrice(child_day_data.day_price));
+            });
+            table.find('td.day-age-group').each(function () {
+                const child_id = $(this).data('child-id');
+                const week_day_id = $(this).parent('tr').data('week-day-id');
+                const child_day_data = data.children[child_id].days[week_day_id];
+                $(this).find('.age-group').val(child_day_data.age_group_id);
+            });
+            table.find('td.day-day-part').each(function () {
+                const child_id = $(this).data('child-id');
+                const week_day_id = $(this).parent('tr').data('week-day-id');
+                const child_day_data = data.children[child_id].days[week_day_id];
+                $(this).find('.day-part').val(child_day_data.day_part_id);
+            });
+            table.find('td.day-attendance').each(function () {
+                const child_id = $(this).data('child-id');
+                const week_day_id = $(this).parent('tr').data('week-day-id');
+                const child_day_data = data.children[child_id].days[week_day_id];
+                $(this).find('.attendance-checkbox').prop('checked', child_day_data.attended);
+            });
+            table.find('td.day-supplement').each(function () {
+                const child_id = $(this).data('child-id');
+                const week_day_id = $(this).parent('tr').data('week-day-id');
+                const supplement_id = $(this).parent('tr').data('supplement-id');
+                if (!(supplement_id in data.children[child_id].days[week_day_id].supplements)) {
+                    return;
+                }
+                const child_day_supplement_data = data.children[child_id].days[week_day_id].supplements[supplement_id];
+                $(this).find('.registration-checkbox').prop('checked', child_day_supplement_data.ordered);
+                $(this).find('.price').text(formatPrice(child_day_supplement_data.price));
+            });
+            table.find('td.activity-list-registration').each(function () {
+                const child_id = $(this).data('child-id');
+                const activity_list_id = $(this).parent('tr').data('activity-list-id');
+                if (!(activity_list_id in data.children[child_id].activity_lists)) {
+                    return;
+                }
+                const activity_list_data = data.children[child_id].activity_lists[activity_list_id];
+                $(this).find('.registration-checkbox').prop('checked', activity_list_data.registered);
+                $(this).find('.price').text(formatPrice(activity_list_data.price));
+            });
+            table.data('populating', parseInt(table.data('populating')) - 1);
+        }
+
+        function populateCurrentRegistrationData() {
+            loadCurrentRegistrationData(populateRegistrationData);
+        }
+
+        function populateUpdatedRegistrationPrices() {
+            loadRegistrationPrices(populateRegistrationData);
+        }
+
+        function loadRegistrationPrices(callback) {
+            const data = getRegistrationFormData();
+            console.log("sending registration data (no submit)");
+            console.log(data);
+            $.post('{{ route('submitRegistrationDataForPrices', [
+            'week_id' => $week->id, 'family_id' => $family->id]) }}',
+                data, callback);
+        }
+
+        function submitRegistrationData() {
+            const data = getRegistrationFormData();
             console.log("sending registration data: ");
             console.log(data);
             $.post('{{ route('submitRegistrationData',
             ['week_id' => $week->id, 'family_id' => $family->id]) }}',
                 data, function (response) {
-                    loadRegistrationData();
+                    loadCurrentRegistrationData();
                 });
         }
 
         $('#submit-registration-data').click(function () {
             submitRegistrationData();
+        });
+
+        table.find('.registration-checkbox').change(function () {
+            console.log('change detected!');
+            if (parseInt(table.data('populating')) === 0) {
+                console.log('not populating -> updating prices');
+                populateUpdatedRegistrationPrices();
+            }
         });
 
         function loadTransactionData() {
@@ -313,7 +346,7 @@
             window.location.href = '{!! route('show_find_family_registration', ['week_id' => $week->id]) !!}'
         });
 
-        loadRegistrationData();
+        populateCurrentRegistrationData();
     });
 </script>
 @endpush

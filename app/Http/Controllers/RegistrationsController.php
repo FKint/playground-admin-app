@@ -70,7 +70,9 @@ class RegistrationsController extends Controller
         $family_week_registration = $week->family_week_registrations()
             ->where('family_id', '=', $family_id)->first();
 
-        $tariff = Tariff::findOrFail($request->input('tariff_id'));
+        $data = $request->all();
+        RegistrationsController::cleanRegistrationData($data);
+        $tariff = Tariff::findOrFail($data['tariff_id']);
         if (!$family_week_registration) {
             $family_week_registration = new FamilyWeekRegistration([
                 'family_id' => $family->id,
@@ -81,10 +83,11 @@ class RegistrationsController extends Controller
             $family_week_registration->tariff()->associate($tariff);
         }
         $family_week_registration->save();
-        $children_data = $request->input('children');
+        $children_data = $data['children'];
         $default_day_part = DayPart::getDefaultDayPart();
 
         foreach ($family->child_families as $child_family) {
+            // TODO: check other registrations for $child in $week (e.g. through other families)
             $child = $child_family->child;
             $child_family_week_registration = $family_week_registration
                 ->child_family_week_registrations()
@@ -101,8 +104,7 @@ class RegistrationsController extends Controller
             if (!$child_data) {
                 $child_family_week_registration->whole_week_price = false;
             } else {
-                $child_family_week_registration->whole_week_price =
-                    filter_var($child_data['whole_week_registered'], FILTER_VALIDATE_BOOLEAN);
+                $child_family_week_registration->whole_week_price = $child_data['whole_week_registered'];
             }
             $child_family_week_registration->save();
             foreach ($week->playground_days as $playground_day) {
@@ -111,9 +113,7 @@ class RegistrationsController extends Controller
                     ->child_family_day_registrations()
                     ->where('week_day_id', '=', $playground_day->week_day_id)
                     ->first();
-                if ($child_family_week_registration->whole_week_price ||
-                    ($day_data && filter_var($day_data['registered'], FILTER_VALIDATE_BOOLEAN))
-                ) {
+                if ($child_family_week_registration->whole_week_price || ($day_data && $day_data['registered'])) {
                     if (!$child_family_day_registration) {
                         $child_family_day_registration = new ChildFamilyDayRegistration([
                             'child_id' => $child->id,
@@ -128,7 +128,7 @@ class RegistrationsController extends Controller
                     if ($day_data) {
                         $day_part = DayPart::find($day_data['day_part_id']);
                         $age_group = AgeGroup::find($day_data['age_group_id']);
-                        if (filter_var($day_data['attended'], FILTER_VALIDATE_BOOLEAN)) {
+                        if ($day_data['attended']) {
                             $attended = true;
                         }
                     }
@@ -140,7 +140,7 @@ class RegistrationsController extends Controller
 
                     $supplements_data = $day_data ? $day_data['supplements'] : [];
                     foreach (Supplement::all() as $supplement) {
-                        if (key_exists($supplement->id, $supplements_data) && filter_var($supplements_data[$supplement->id]['ordered'], FILTER_VALIDATE_BOOLEAN)) {
+                        if (key_exists($supplement->id, $supplements_data) && $supplements_data[$supplement->id]['ordered']) {
                             if (!$child_family_day_registration->supplements->contains($supplement)) {
                                 $child_family_day_registration->supplements()->attach($supplement);
                             }
@@ -158,7 +158,7 @@ class RegistrationsController extends Controller
             $activity_lists = $child_data ? $child_data['activity_lists'] : [];
             foreach ($activity_lists as $activity_list_id => $activity_list_data) {
                 $activity_list = ActivityList::findOrFail($activity_list_id);
-                if (filter_var($activity_list_data['registered'], FILTER_VALIDATE_BOOLEAN)) {
+                if ($activity_list_data['registered']) {
                     if (!$child_family->activity_lists->contains($activity_list_id)) {
                         $child_family->activity_lists()->attach($activity_list);
                     }
@@ -195,7 +195,7 @@ class RegistrationsController extends Controller
                     ->where('child_id', '=', $child->id)
                     ->first()
                 : null;
-            $child_data['whole_week_registered'] = $child_family_week_registration && $child_family_week_registration->whole_week_price;
+            $child_data['whole_week_registered'] = (bool)$child_family_week_registration && $child_family_week_registration->whole_week_price;
             foreach ($week->playground_days as $playground_day) {
                 $day_data = ['supplements' => []];
                 $child_family_day_registration = $child_family_week_registration
@@ -211,7 +211,6 @@ class RegistrationsController extends Controller
                     foreach ($child_family_day_registration->supplements as $supplement) {
                         $day_data['supplements'][$supplement->id] = [
                             'ordered' => true,
-                            'price' => $supplement->price
                         ];
                     }
                 } else {
@@ -223,14 +222,83 @@ class RegistrationsController extends Controller
             }
             foreach ($child_family->activity_lists as $activity_list) {
                 $child_data['activity_lists'][$activity_list->id] = [
-                    'price' => $activity_list->price,
                     'registered' => true
                 ];
             }
             $result['children'][$child->id] = $child_data;
         }
-        $this->computeWeekRegistrationPrices($week, $result);
+        $this->computeRegistrationPrices($week, $result);
         return $result;
+    }
+
+    public function submitRegistrationDataForPrices(Request $request, $week_id, $family_id)
+    {
+        $week = Week::findOrFail($week_id);
+        Family::findOrFail($family_id);
+        $data = $request->all();
+        RegistrationsController::cleanRegistrationData($data);
+        $this->computeRegistrationPrices($week, $data);
+        return $data;
+    }
+
+    protected static function setToBoolean(&$value)
+    {
+        $value = filter_var($value, FILTER_VALIDATE_BOOLEAN);
+    }
+
+    protected static function cleanRegistrationData(&$data)
+    {
+        foreach ($data['children'] as &$child_data) {
+            RegistrationsController::setToBoolean($child_data['whole_week_registered']);
+            foreach ($child_data['days'] as &$day_data) {
+                RegistrationsController::setToBoolean($day_data['registered']);
+                RegistrationsController::setToBoolean($day_data['attended']);
+                foreach ($day_data['supplements'] as &$supplement) {
+                    RegistrationsController::setToBoolean($supplement['ordered']);
+                }
+            }
+            foreach ($child_data['activity_lists'] as &$activity_list_data) {
+                RegistrationsController::setToBoolean($activity_list_data['registered']);
+            }
+        }
+    }
+
+
+    protected function computeRegistrationPrices($week, &$week_registration_data)
+    {
+        $this->computeWeekRegistrationPrices($week, $week_registration_data);
+        $this->computeSupplementPrices($week_registration_data);
+        $this->computeActivityListPrices($week_registration_data);
+    }
+
+    protected function computeSupplementPrices(&$week_registration_data)
+    {
+        foreach ($week_registration_data['children'] as $child_id => &$child_data) {
+            foreach ($child_data['days'] as $day_id => &$day_data) {
+                foreach ($day_data['supplements'] as $supplement_id => &$supplement_data) {
+                    $supplement = Supplement::findOrFail($supplement_id);
+                    $price = 0;
+                    if ($supplement_data['ordered']) {
+                        $price = $supplement->price;
+                    }
+                    $supplement_data['price'] = $price;
+                }
+            }
+        }
+    }
+
+    protected function computeActivityListPrices(&$week_registration_data)
+    {
+        foreach ($week_registration_data['children'] as $child_id => &$child_data) {
+            foreach ($child_data['activity_lists'] as $activity_list_id => &$activity_list_data) {
+                $activity_list = ActivityList::findOrFail($activity_list_id);
+                $price = 0;
+                if ($activity_list_data['registered']) {
+                    $price = $activity_list->price;
+                }
+                $activity_list_data['price'] = $price;
+            }
+        }
     }
 
     protected function computeWeekRegistrationPrices($week, &$week_registration_data)
@@ -273,6 +341,7 @@ class RegistrationsController extends Controller
             $first_week_child = false;
             foreach ($week->playground_days as $playground_day) {
                 $week_registration_data['children'][$child_id]['days'][$playground_day->week_day_id]['day_price'] = 0;
+                $week_registration_data['children'][$child_id]['days'][$playground_day->week_day_id]['registered'] = false;
             }
         }
 
