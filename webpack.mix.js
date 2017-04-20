@@ -12,7 +12,16 @@ const {mix} = require('laravel-mix');
  */
 
 mix.js('resources/assets/js/app.js', 'public/js')
-    .extract(['jquery', 'bootstrap-sass', 'axios', 'lodash', 'typeahead.js'])
+    .extract([
+        'lodash',
+        'jquery',
+        'bootstrap-sass',
+        'datatables.net',
+        'datatables.net-bs',
+        'bloodhound-js',
+        'typeahead.js'
+    ])
     .version();
+
 mix.sass('resources/assets/sass/app.scss', 'public/css')
     .version();

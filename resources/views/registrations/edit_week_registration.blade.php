@@ -234,7 +234,6 @@
             form.find('select[name=tariff_id]').val(data.tariff_id);
             table.find('td.whole-week').each(function () {
                 const child_id = $(this).data('child-id');
-                console.log('whole_week_registered: ' + data.children[child_id].whole_week_registered);
                 $(this).find('.registration-checkbox').prop('checked', data.children[child_id].whole_week_registered);
                 $(this).find('.price').text(formatPrice(data.children[child_id].whole_week_price))
             });
