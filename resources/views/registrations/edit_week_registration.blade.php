@@ -116,7 +116,6 @@
                 @endforeach
             </table>
             <button class="btn btn-default">Inchecken</button>
-            <button class="btn btn-primary" id="submit-registration-data">Wijzigingen opslaan</button>
         </div>
         <div class="col-xs-3">
             {{ Form::open(['class' => 'form-horizontal', 'id' => 'register-payment-form']) }}
@@ -131,9 +130,9 @@
             ['id' => 'new-saldo', 'pattern'=>"[0-9]+([\\.,][0-9]+)?", 'step'=>'0.01', 'readonly' => true]) }}
             {{ Form::close() }}
 
-            <button class="btn btn-default" id="btn-cancel-transaction">Annuleren</button>
-            <button class="btn btn-default" id="btn-submit-transaction">Opslaan</button>
-            <button class="btn btn-primary" id="btn-submit-transaction-and-next">Opslaan en volgende</button>
+            <button class="btn btn-default" id="btn-cancel">Annuleren</button>
+            <button class="btn btn-primary" id="submit-registration-data">Opslaan</button>
+            <button class="btn btn-primary" id="submit-registration-data-and-next">Opslaan en volgende</button>
         </div>
     </div>
 @endsection
@@ -145,8 +144,12 @@
         let form = $('#register-payment-form');
         let table = $('#registration-table');
 
+        function formatPriceWithoutSign(val) {
+            return parseFloat(val).toFixed(2);
+        }
+
         function formatPrice(val) {
-            return "€ " + parseFloat(val).toFixed(2);
+            return "€ " + formatPriceWithoutSign(val);
         }
 
         function clearRegistrationData() {
@@ -157,14 +160,6 @@
             });
             table.find('span.price').text(formatPrice(0));
             table.data('populating', parseInt(table.data('populating')) - 1);
-        }
-
-        function showEditRegistrations() {
-
-        }
-
-        function showTransaction() {
-
         }
 
         function getRegistrationFormData() {
@@ -217,6 +212,8 @@
                     registered: $(this).find('.registration-checkbox').is(':checked')
                 };
             });
+
+            data.received_money = form.find('#received-money').val();
             return data;
         }
 
@@ -251,7 +248,7 @@
             }
             table.data('populating', parseInt(table.data('populating')) + 1);
             clearRegistrationData();
-            console.log(data);
+            console.log("Populating: ", data);
             // TODO: assert that the children linked to this family have not been changed in the meantime
             form.find('select[name=tariff_id]').val(data.tariff_id);
             table.find('td.whole-week').each(function () {
@@ -306,6 +303,10 @@
                 $(this).find('.price').text(formatPrice(activity_list_data.price));
             });
             table.data('populating', parseInt(table.data('populating')) - 1);
+
+
+            form.find("#saldo-difference").val(formatPriceWithoutSign(data.price_difference));
+            form.find("#previous-saldo").val(formatPriceWithoutSign(data.saldo));
         }
 
         function populateCurrentRegistrationData() {
@@ -313,10 +314,6 @@
         }
 
         function populateUpdatedRegistrationPrices() {
-            loadRegistrationPrices(populateRegistrationData);
-        }
-
-        function loadRegistrationPrices(callback) {
             const data = getRegistrationFormData();
             console.log("sending registration data (no submit)", data);
             increaseNbRequests();
@@ -325,7 +322,7 @@
                 data, function (response) {
                     console.log("got prices data back", response);
                     decreaseNbRequests();
-                    callback(response);
+                    populateRegistrationData(response);
                 }
             );
         }
@@ -346,6 +343,13 @@
         $('#submit-registration-data').click(function () {
             submitRegistrationData();
         });
+        $('#submit-registration-data-and-next').click(function () {
+            submitRegistrationData();
+            window.location.href = '{!! route('show_find_family_registration', ['week_id' => $week->id]) !!}';
+        });
+        $('#btn-cancel').click(function(){
+            populateCurrentRegistrationData();
+        });
 
         table.find('.registration-checkbox').change(function () {
             if (parseInt(table.data('populating')) === 0) {
@@ -353,27 +357,7 @@
             }
         });
 
-        function loadTransactionData() {
-
-        }
-
-        function submitTransactionData() {
-
-        }
-
-        $('#btn-cancel-transaction').click(function () {
-            showEditRegistrations();
-        });
-        $('#btn-submit-transaction').click(function () {
-            submitTransactionData();
-        });
-        $('#btn-submit-transaction-and-next').click(function () {
-            submitTransactionData();
-            window.location.href = '{!! route('show_find_family_registration', ['week_id' => $week->id]) !!}'
-        });
-
         populateCurrentRegistrationData();
-    })
-    ;
+    });
 </script>
 @endpush

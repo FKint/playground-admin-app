@@ -59,11 +59,10 @@ class Family extends Model
         return $this->hasMany(FamilyWeekRegistration::class);
     }
 
-    public function getCurrentSaldo()
+    public function getTotalCosts()
     {
         $total_week_registrations_cost = 0;
         foreach ($this->family_week_registrations as $week_registration) {
-            Log::info("Week registration: ".json_encode($week_registration));
             $total_week_registrations_cost += $week_registration->getTotalWeekPrice();
         }
         foreach ($this->child_families as $child_family) {
@@ -72,5 +71,20 @@ class Family extends Model
             }
         }
         return $total_week_registrations_cost;
+    }
+
+    public function getTotalPayments()
+    {
+        return $this->transactions->sum('amount_paid');
+    }
+
+    public function getCurrentSaldo()
+    {
+        return $this->getTotalCosts() - $this->getTotalPayments();
+    }
+
+    public function transactions()
+    {
+        return $this->hasMany(Transaction::class);
     }
 }

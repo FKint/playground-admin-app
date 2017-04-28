@@ -11,13 +11,14 @@ class Transaction extends Model
      *
      * @var array
      */
-    protected $fillable = ['child_family_id', 'amount_paid', 'amount_expected', 'remarks'];
+    protected $fillable = ['family_id', 'amount_paid', 'amount_expected', 'remarks'];
 
     /**
      * Get the default tariff for this family.
      */
-    public function child_family()
+    public function family()
     {
-        return $this->belongsTo(ChildFamily::class);
+        return $this->belongsTo(Family::class);
     }
+
 }

@@ -12,6 +12,7 @@ use App\FamilyWeekRegistration;
 use App\PlaygroundDay;
 use App\Supplement;
 use App\Tariff;
+use App\Transaction;
 use App\Week;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -63,26 +64,21 @@ class RegistrationsController extends Controller
         ]);
     }
 
-    public function submitRegistrationData(Request $request, $week_id, $family_id)
+    private function updateFamilyWeekRegistration($week, $family, $data)
     {
-        $week = Week::findOrFail($week_id);
-        $family = Family::findOrFail($family_id);
-        $family_week_registration = $week->family_week_registrations()
-            ->where('family_id', '=', $family_id)->first();
-
-        $data = $request->all();
-        $data = FamilyWeekRegistration::cleanRegistrationData($data);
-        $tariff = Tariff::findOrFail($data['tariff_id']);
+        $family_week_registration = $family->family_week_registrations()
+            ->where('week_id', '=', $week->id)->first();
         if (!$family_week_registration) {
             $family_week_registration = new FamilyWeekRegistration([
                 'family_id' => $family->id,
-                'week_id' => $week->id,
-                'tariff_id' => $tariff->id
+                'week_id' => $week->id
             ]);
-        } else {
-            $family_week_registration->tariff()->associate($tariff);
         }
+
+        $tariff = Tariff::findOrFail($data['tariff_id']);
+        $family_week_registration->tariff()->associate($tariff);
         $family_week_registration->save();
+
         $children_data = $data['children'];
         $default_day_part = DayPart::getDefaultDayPart();
 
@@ -125,7 +121,6 @@ class RegistrationsController extends Controller
                     $day_part = null;
                     $age_group = null;
                     $attended = false;
-                    Log::debug("Attended: ".json_encode($day_data));
                     if ($day_data) {
                         $day_part = DayPart::find($day_data['day_part_id']);
                         $age_group = AgeGroup::find($day_data['age_group_id']);
@@ -170,6 +165,34 @@ class RegistrationsController extends Controller
                 }
             }
         }
+    }
+
+    private function updateTransaction($family, $data, $expected_money)
+    {
+        $received_money = $data['received_money'];
+        $transaction = new Transaction(array(
+            'amount_paid' => $received_money,
+            'amount_expected' => $expected_money
+        ));
+        $transaction->family()->associate($family);
+        $transaction->save();
+    }
+
+    public function submitRegistrationData(Request $request, $week_id, $family_id)
+    {
+        $week = Week::findOrFail($week_id);
+        $family = Family::findOrFail($family_id);
+        $data = $request->all();
+        $data = FamilyWeekRegistration::cleanRegistrationData($data);
+
+        $old_saldo = $family->getCurrentSaldo();
+
+        $this->updateFamilyWeekRegistration($week, $family, $data);
+
+        $new_saldo = $family->getCurrentSaldo();
+
+        $this->updateTransaction($family, $data, $new_saldo - $old_saldo);
+
         return $this->getRegistrationData($week_id, $family_id);
     }
 
@@ -178,8 +201,12 @@ class RegistrationsController extends Controller
     {
         $week = Week::findOrFail($week_id);
         $family = Family::findOrFail($family_id);
-        return FamilyWeekRegistration::getRegistrationDataArray($week, $family);
+        $data = FamilyWeekRegistration::getRegistrationDataArray($week, $family);
+        $data['price_difference'] = 0;
+        $data['saldo'] = $family->getCurrentSaldo();
+        return $data;
     }
+
 
     public function submitRegistrationDataForPrices(Request $request, $week_id, $family_id)
     {
@@ -188,12 +215,9 @@ class RegistrationsController extends Controller
         $data = $request->all();
         $data = FamilyWeekRegistration::cleanRegistrationData($data);
         $data = FamilyWeekRegistration::computeRegistrationPrices($week, $data);
-        Log::info("Data children length after computing prices: " . count($data['children']));
-        Log::info("Data with prices: " . json_encode($data['children'][1]));
         $data['price_difference'] = FamilyWeekRegistration::computeTotalPriceDifference($family, $week, $data);
         $data['saldo'] = $family->getCurrentSaldo();
         return $data;
     }
-
 
 }
