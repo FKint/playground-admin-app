@@ -16,7 +16,7 @@
     <h1>Wijzig registratie voor familie {{$family->guardian_first_name}} {{$family->guardian_last_name}}</h1>
     <div class="row">
         <div class="col-xs-9" id="registration-table-div">
-            <table id="registration-table" class="table table-condensed" data-populating="0">
+            <table id="registration-table" class="table table-condensed" data-populating="0" data-nb-requests="0">
                 <tr>
                     <th colspan="2">Kind</th>
                     @foreach($family->children as $child)
@@ -67,7 +67,7 @@
                                 </select>
                             </td>
                             <td class="day-attendance" data-child-id="{{$child->id}}">
-                                <input type="checkbox" title="Aanwezig"/>
+                                <input type="checkbox" title="Aanwezig" class="attendance-checkbox"/>
                             </td>
                         @endforeach
                     </tr>
@@ -122,13 +122,13 @@
             {{ Form::open(['class' => 'form-horizontal', 'id' => 'register-payment-form']) }}
             {{ Form::bsDropdown('tariff_id', $all_tariffs_by_id) }}
             {{ Form::bsNumber('saldo_difference',
-            ['id' => 'saldo-difference', 'pattern'=>"[0-9]+([\\.,][0-9]+)?", 'step'=>'0.01']) }}
+            ['id' => 'saldo-difference', 'pattern'=>"[0-9]+([\\.,][0-9]+)?", 'step'=>'0.01', 'readonly' => true]) }}
             {{ Form::bsNumber('received_money',
             ['id' => 'received-money', 'pattern'=>"[0-9]+([\\.,][0-9]+)?", 'step'=>'0.01']) }}
             {{ Form::bsNumber('previous_saldo',
-            ['id' => 'previous-saldo', 'pattern'=>"[0-9]+([\\.,][0-9]+)?", 'step'=>'0.01']) }}
+            ['id' => 'previous-saldo', 'pattern'=>"[0-9]+([\\.,][0-9]+)?", 'step'=>'0.01', 'readonly' => true]) }}
             {{ Form::bsNumber('new_saldo',
-            ['id' => 'new-saldo', 'pattern'=>"[0-9]+([\\.,][0-9]+)?", 'step'=>'0.01']) }}
+            ['id' => 'new-saldo', 'pattern'=>"[0-9]+([\\.,][0-9]+)?", 'step'=>'0.01', 'readonly' => true]) }}
             {{ Form::close() }}
 
             <button class="btn btn-default" id="btn-cancel-transaction">Annuleren</button>
@@ -220,13 +220,35 @@
             return data;
         }
 
+        function increaseNbRequests() {
+            table.data('nb-requests', parseInt(table.data('nb-requests')) + 1);
+        }
+
+        function decreaseNbRequests() {
+            table.data('nb-requests', parseInt(table.data('nb-requests')) - 1);
+        }
+
+        function requestsOutstanding() {
+            const nb_requests = parseInt(table.data('nb-requests'));
+            return nb_requests > 0;
+        }
+
         function loadCurrentRegistrationData(callback) {
+            increaseNbRequests();
             $.get('{{ route('getRegistrationData', ['week_id'=>$week->id, 'family_id'=>$family->id]) }}',
-                callback,
-                "json");
+                function (result) {
+                    decreaseNbRequests();
+                    callback(result);
+                },
+                "json"
+            );
         }
 
         function populateRegistrationData(data) {
+            if (requestsOutstanding()) {
+                console.log('requests outstanding');
+                return;
+            }
             table.data('populating', parseInt(table.data('populating')) + 1);
             clearRegistrationData();
             console.log(data);
@@ -296,21 +318,28 @@
 
         function loadRegistrationPrices(callback) {
             const data = getRegistrationFormData();
-            console.log("sending registration data (no submit)");
-            console.log(data);
+            console.log("sending registration data (no submit)", data);
+            increaseNbRequests();
             $.post('{{ route('submitRegistrationDataForPrices', [
             'week_id' => $week->id, 'family_id' => $family->id]) }}',
-                data, callback);
+                data, function (response) {
+                    console.log("got prices data back", response);
+                    decreaseNbRequests();
+                    callback(response);
+                }
+            );
         }
 
         function submitRegistrationData() {
             const data = getRegistrationFormData();
-            console.log("sending registration data: ");
-            console.log(data);
+            console.log("sending registration data: ", data);
+            increaseNbRequests();
             $.post('{{ route('submitRegistrationData',
             ['week_id' => $week->id, 'family_id' => $family->id]) }}',
                 data, function (response) {
-                    loadCurrentRegistrationData();
+                    console.log('Submitted registration data, got following back: ', response);
+                    decreaseNbRequests();
+                    populateRegistrationData(response);
                 });
         }
 
@@ -319,9 +348,7 @@
         });
 
         table.find('.registration-checkbox').change(function () {
-            console.log('change detected!');
             if (parseInt(table.data('populating')) === 0) {
-                console.log('not populating -> updating prices');
                 populateUpdatedRegistrationPrices();
             }
         });
@@ -346,6 +373,7 @@
         });
 
         populateCurrentRegistrationData();
-    });
+    })
+    ;
 </script>
 @endpush

@@ -6,7 +6,6 @@ use App\ActivityList;
 use App\AgeGroup;
 use App\ChildFamilyDayRegistration;
 use App\ChildFamilyWeekRegistration;
-use App\Day;
 use App\DayPart;
 use App\Family;
 use App\FamilyWeekRegistration;
@@ -15,6 +14,7 @@ use App\Supplement;
 use App\Tariff;
 use App\Week;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class RegistrationsController extends Controller
 {
@@ -71,7 +71,7 @@ class RegistrationsController extends Controller
             ->where('family_id', '=', $family_id)->first();
 
         $data = $request->all();
-        RegistrationsController::cleanRegistrationData($data);
+        $data = FamilyWeekRegistration::cleanRegistrationData($data);
         $tariff = Tariff::findOrFail($data['tariff_id']);
         if (!$family_week_registration) {
             $family_week_registration = new FamilyWeekRegistration([
@@ -119,12 +119,13 @@ class RegistrationsController extends Controller
                             'child_id' => $child->id,
                             'family_id' => $family->id,
                             'week_id' => $week->id,
-                            'week_day_id' => $playground_day->week_day_id,
+                            'week_day_id' => $playground_day->week_day_id
                         ]);
                     }
                     $day_part = null;
                     $age_group = null;
                     $attended = false;
+                    Log::debug("Attended: ".json_encode($day_data));
                     if ($day_data) {
                         $day_part = DayPart::find($day_data['day_part_id']);
                         $age_group = AgeGroup::find($day_data['age_group_id']);
@@ -168,200 +169,31 @@ class RegistrationsController extends Controller
                     }
                 }
             }
-
         }
+        return $this->getRegistrationData($week_id, $family_id);
     }
 
-    public function getRegistrationData(Request $request, $week_id, $family_id)
+
+    public function getRegistrationData($week_id, $family_id)
     {
         $week = Week::findOrFail($week_id);
         $family = Family::findOrFail($family_id);
-        $family_week_registration = $week->family_week_registrations()
-            ->where('family_id', '=', $family_id)->first();
-        $result = [
-            'children' => []
-        ];
-        $default_day_part = DayPart::getDefaultDayPart();
-        $result['tariff_id'] = $family_week_registration ? $family_week_registration->tariff_id : $family->tariff_id;
-        foreach ($family->child_families as $child_family) {
-            $child = $child_family->child;
-            $child_data = [
-                'days' => [],
-                'activity_lists' => []
-            ];
-            $child_family_week_registration = $family_week_registration ?
-                $family_week_registration
-                    ->child_family_week_registrations()
-                    ->where('child_id', '=', $child->id)
-                    ->first()
-                : null;
-            $child_data['whole_week_registered'] = (bool)$child_family_week_registration && $child_family_week_registration->whole_week_price;
-            foreach ($week->playground_days as $playground_day) {
-                $day_data = ['supplements' => []];
-                $child_family_day_registration = $child_family_week_registration
-                    ? $child_family_week_registration
-                        ->child_family_day_registrations()
-                        ->where('week_day_id', '=', $playground_day->week_day_id)
-                        ->first()
-                    : null;
-                if ($child_family_day_registration) {
-                    $day_data['registered'] = !$child_data['whole_week_registered'];
-                    $day_data['age_group_id'] = $child_family_day_registration->age_group_id;
-                    $day_data['day_part_id'] = $child_family_day_registration->day_part_id;
-                    foreach ($child_family_day_registration->supplements as $supplement) {
-                        $day_data['supplements'][$supplement->id] = [
-                            'ordered' => true,
-                        ];
-                    }
-                } else {
-                    $day_data['registered'] = false;
-                    $day_data['age_group_id'] = $child->age_group_id;
-                    $day_data['day_part_id'] = $default_day_part->id;
-                }
-                $child_data['days'][$playground_day->week_day_id] = $day_data;
-            }
-            foreach ($child_family->activity_lists as $activity_list) {
-                $child_data['activity_lists'][$activity_list->id] = [
-                    'registered' => true
-                ];
-            }
-            $result['children'][$child->id] = $child_data;
-        }
-        $this->computeRegistrationPrices($week, $result);
-        return $result;
+        return FamilyWeekRegistration::getRegistrationDataArray($week, $family);
     }
 
     public function submitRegistrationDataForPrices(Request $request, $week_id, $family_id)
     {
         $week = Week::findOrFail($week_id);
-        Family::findOrFail($family_id);
+        $family = Family::findOrFail($family_id);
         $data = $request->all();
-        RegistrationsController::cleanRegistrationData($data);
-        $this->computeRegistrationPrices($week, $data);
+        $data = FamilyWeekRegistration::cleanRegistrationData($data);
+        $data = FamilyWeekRegistration::computeRegistrationPrices($week, $data);
+        Log::info("Data children length after computing prices: " . count($data['children']));
+        Log::info("Data with prices: " . json_encode($data['children'][1]));
+        $data['price_difference'] = FamilyWeekRegistration::computeTotalPriceDifference($family, $week, $data);
+        $data['saldo'] = $family->getCurrentSaldo();
         return $data;
     }
 
-    protected static function setToBoolean(&$value)
-    {
-        $value = filter_var($value, FILTER_VALIDATE_BOOLEAN);
-    }
 
-    protected static function cleanRegistrationData(&$data)
-    {
-        foreach ($data['children'] as &$child_data) {
-            RegistrationsController::setToBoolean($child_data['whole_week_registered']);
-            foreach ($child_data['days'] as &$day_data) {
-                RegistrationsController::setToBoolean($day_data['registered']);
-                RegistrationsController::setToBoolean($day_data['attended']);
-                foreach ($day_data['supplements'] as &$supplement) {
-                    RegistrationsController::setToBoolean($supplement['ordered']);
-                }
-            }
-            foreach ($child_data['activity_lists'] as &$activity_list_data) {
-                RegistrationsController::setToBoolean($activity_list_data['registered']);
-            }
-        }
-    }
-
-
-    protected function computeRegistrationPrices($week, &$week_registration_data)
-    {
-        $this->computeWeekRegistrationPrices($week, $week_registration_data);
-        $this->computeSupplementPrices($week_registration_data);
-        $this->computeActivityListPrices($week_registration_data);
-    }
-
-    protected function computeSupplementPrices(&$week_registration_data)
-    {
-        foreach ($week_registration_data['children'] as $child_id => &$child_data) {
-            foreach ($child_data['days'] as $day_id => &$day_data) {
-                foreach ($day_data['supplements'] as $supplement_id => &$supplement_data) {
-                    $supplement = Supplement::findOrFail($supplement_id);
-                    $price = 0;
-                    if ($supplement_data['ordered']) {
-                        $price = $supplement->price;
-                    }
-                    $supplement_data['price'] = $price;
-                }
-            }
-        }
-    }
-
-    protected function computeActivityListPrices(&$week_registration_data)
-    {
-        foreach ($week_registration_data['children'] as $child_id => &$child_data) {
-            foreach ($child_data['activity_lists'] as $activity_list_id => &$activity_list_data) {
-                $activity_list = ActivityList::findOrFail($activity_list_id);
-                $price = 0;
-                if ($activity_list_data['registered']) {
-                    $price = $activity_list->price;
-                }
-                $activity_list_data['price'] = $price;
-            }
-        }
-    }
-
-    protected function computeWeekRegistrationPrices($week, &$week_registration_data)
-    {
-        $tariff = Tariff::findOrFail($week_registration_data['tariff_id']);
-        $week_children = [];
-        $not_week_children = [];
-        foreach ($week_registration_data['children'] as $child_id => $child_data) {
-            if ($child_data['whole_week_registered']) {
-                $week_children[] = $child_id;
-            } else {
-                $nb_days = 0;
-                foreach ($child_data['days'] as $day_data) {
-                    if ($day_data['registered']) {
-                        $nb_days++;
-                    }
-                }
-                if (!array_key_exists($nb_days, $not_week_children)) {
-                    $not_week_children[$nb_days] = [$child_id];
-                } else {
-                    $not_week_children[$nb_days][] = $child_id;
-                }
-            }
-        }
-        krsort($not_week_children);
-
-        $registered_for_day = [];
-        foreach ($week->playground_days as $playground_day) {
-            $registered_for_day[$playground_day->week_day_id] = count($week_children) > 0;
-        }
-
-        $first_week_child = true;
-        foreach ($week_children as $child_id) {
-            if ($first_week_child) {
-                $price = $tariff->week_first_child;
-            } else {
-                $price = $tariff->week_later_children;
-            }
-            $week_registration_data['children'][$child_id]['whole_week_price'] = $price;
-            $first_week_child = false;
-            foreach ($week->playground_days as $playground_day) {
-                $week_registration_data['children'][$child_id]['days'][$playground_day->week_day_id]['day_price'] = 0;
-                $week_registration_data['children'][$child_id]['days'][$playground_day->week_day_id]['registered'] = false;
-            }
-        }
-
-        foreach ($not_week_children as $nb_days => $child_ids) {
-            foreach ($child_ids as $child_id) {
-                $week_registration_data['children'][$child_id]['whole_week_price'] = 0;
-                foreach ($week->playground_days as $playground_day) {
-                    if ($week_registration_data['children'][$child_id]['days'][$playground_day->week_day_id]['registered']) {
-                        if (!$registered_for_day[$playground_day->week_day_id]) {
-                            $price = $tariff->day_first_child;
-                        } else {
-                            $price = $tariff->day_later_children;
-                        }
-                        $registered_for_day[$playground_day->week_day_id] = true;
-                    } else {
-                        $price = 0;
-                    }
-                    $week_registration_data['children'][$child_id]['days'][$playground_day->week_day_id]['day_price'] = $price;
-                }
-            }
-        }
-    }
 }

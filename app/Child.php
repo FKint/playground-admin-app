@@ -50,4 +50,5 @@ class Child extends Model
     {
         return $this->belongsToMany(Family::class, 'child_families', 'child_id', 'family_id');
     }
+
 }
