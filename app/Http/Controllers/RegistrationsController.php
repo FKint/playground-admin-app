@@ -14,6 +14,7 @@ use App\Supplement;
 use App\Tariff;
 use App\Transaction;
 use App\Week;
+use App\WeekDay;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Yajra\Datatables\Datatables;
@@ -23,20 +24,43 @@ class RegistrationsController extends Controller
     protected function getLastPlaygroundDayUntil($upper_bound_date)
     {
         // TODO: find correct date
-        return PlaygroundDay::find(1);
+        $week = Week::query()
+            ->whereDate('first_day_of_week', '<=', $upper_bound_date->format('Y-m-d'))
+            ->orderByDesc('first_day_of_week')
+            ->first();
+        if (!$week)
+            return PlaygroundDay::first();
+        $interval = $upper_bound_date->diff(\DateTime::createFromFormat('Y-m-d', $week->first_day_of_week));
+        Log::info("Interval days: " . $interval->days);
+        $week_days = WeekDay::query()
+            ->where('days_offset', '<=', $interval->days)
+            ->orderByDesc('days_offset')
+            ->get();
+        foreach ($week_days as $week_day) {
+            Log::info("Considering week day: " . $week_day->id);
+            $playground_day = $week->playground_days()->where('playground_days.week_day_id', '=', $week_day->id)->first();
+            if ($playground_day)
+                return $playground_day;
+        }
+        return $week->playground_days()->first();
     }
 
     public function show()
     {
-        return redirect()->route('registrations_for_day',
-            ['date' => (new \DateTimeImmutable())->format('Y-m-d')]);
+        $playground_day = $this->getLastPlaygroundDayUntil(new \DateTimeImmutable());
+        return redirect()->route('registrations_for_date', ['date' => $playground_day->date()->format('Y-m-d')]);
     }
 
-    public function showDate(Request $request, $date)
+    public function showDate(Request $request, $date_str)
     {
-        if (date_parse($date) === FALSE)
+        $date = \DateTime::createFromFormat('Y-m-d', $date_str);
+        if (!$date)
             return $this->show();
         $playground_day = $this->getLastPlaygroundDayUntil($date);
+        if ($playground_day->date()->format('Y-m-d') != $date->format('Y-m-d')) {
+            Log::info("Redirecting to: ".$playground_day->date()->format('Y-m-d'));
+            return redirect()->route('registrations_for_date', ['date' => $playground_day->date()->format('Y-m-d')]);
+        }
 
         return view('registrations.index', ['playground_day' => $playground_day]);
     }
