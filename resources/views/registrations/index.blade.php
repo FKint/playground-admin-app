@@ -32,8 +32,10 @@
         const table_element = $('#registrations-table');
         const table = table_element.DataTable({
             processing: true,
-            serverSide: true,
+            serverSide: false,
             ajax: '{!! route('getRegistrations', array('playground_day_id'=> $playground_day->id)) !!}',
+            dom: 'Blfrtip',
+            buttons: [ 'pdfHtml5' ],
             columns: [
                 {data: 'child.first_name', name: 'child.first_name'},
                 {data: 'child.last_name', name: 'child.last_name'},
@@ -68,6 +70,8 @@
                 }
             ]
         });
+//        new $.fn.dataTable.Buttons(table, {
+//        });
     });
 
 </script>

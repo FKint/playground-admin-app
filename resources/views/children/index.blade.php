@@ -30,8 +30,10 @@
     $(function () {
         $('#children-table').DataTable({
             processing: true,
-            serverSide: true,
+            serverSide: false,
             ajax: '{!! route('getChildren') !!}',
+            dom: 'Blfrtip',
+            buttons: [ 'pdfHtml5' ],
             columns: [
                 {data: 'first_name', name: 'first_name'},
                 {data: 'last_name', name: 'last_name'},

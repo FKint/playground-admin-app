@@ -1,5 +1,19 @@
 const {mix} = require('laravel-mix');
-
+//
+// mix.webpackConfig({
+//     resolve: {
+//         alias: {
+//             'is-array': require.resolve('node_modules/node-libs-browser/node_modules/buffer/node_modules/is-array'),
+//             'ieee754': require.resolve('node_modules/node-libs-browser/node_modules/buffer/node_modules/ieee754'),
+//             'base64-js': require.resolve('node_modules/node-libs-browser/node_modules/buffer/node_modules/base64-js')
+//         }
+//     }
+// })
+mix.webpackConfig({
+    //node: {
+    //    fs: "empty"
+    //}
+});
 /*
  |--------------------------------------------------------------------------
  | Mix Asset Management

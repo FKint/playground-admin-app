@@ -85,6 +85,55 @@ class InitialDataSeeder extends Seeder
             'age_group_id' => $middle_group->id,
             'remarks' => ''
         ]);
+        DB::table('children')->insert([
+            'first_name' => 'Tom',
+            'last_name' => 'Beert',
+            'birth_year' => 2011,
+            'age_group_id' => $middle_group->id,
+            'remarks' => ''
+        ]);
+        DB::table('children')->insert([
+            'first_name' => 'Jonas',
+            'last_name' => 'Beert',
+            'birth_year' => 2007,
+            'age_group_id' => $middle_group->id,
+            'remarks' => ''
+        ]);
+        DB::table('children')->insert([
+            'first_name' => 'Lieven',
+            'last_name' => 'Devriendt',
+            'birth_year' => 2006,
+            'age_group_id' => $middle_group->id,
+            'remarks' => ''
+        ]);
+        DB::table('children')->insert([
+            'first_name' => 'Ann',
+            'last_name' => 'Vanovertveldt',
+            'birth_year' => 2011,
+            'age_group_id' => $middle_group->id,
+            'remarks' => ''
+        ]);
+        DB::table('children')->insert([
+            'first_name' => 'Johan',
+            'last_name' => 'Claeys',
+            'birth_year' => 2013,
+            'age_group_id' => $kleuters->id,
+            'remarks' => ''
+        ]);
+        DB::table('children')->insert([
+            'first_name' => 'Driss',
+            'last_name' => 'De Koninck',
+            'birth_year' => 2012,
+            'age_group_id' => $kleuters->id,
+            'remarks' => ''
+        ]);
+        DB::table('children')->insert([
+            'first_name' => 'Veerle',
+            'last_name' => 'Christy',
+            'birth_year' => 2010,
+            'age_group_id' => $middle_group->id,
+            'remarks' => ''
+        ]);
     }
 
     private function seed_day_parts()

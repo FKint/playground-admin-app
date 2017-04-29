@@ -34,8 +34,9 @@
         const table_element = $('#families-table');
         const table = table_element.DataTable({
             processing: true,
-            serverSide: true,
+            serverSide: false,
             ajax: '{!! route('getFamilies') !!}',
+            buttons: [ 'pdfHtml5' ],
             columns: [
                 {data: 'guardian_first_name', name: 'guardian_first_name'},
                 {data: 'guardian_last_name', name: 'guardian_last_name'},
