@@ -16,6 +16,7 @@ use App\Transaction;
 use App\Week;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Yajra\Datatables\Datatables;
 
 class RegistrationsController extends Controller
 {
@@ -38,6 +39,20 @@ class RegistrationsController extends Controller
         $playground_day = $this->getLastPlaygroundDayUntil($date);
 
         return view('registrations.index', ['playground_day' => $playground_day]);
+    }
+
+    public function getRegistrations($playground_day_id)
+    {
+        $playground_day = PlaygroundDay::findOrFail($playground_day_id);
+        return Datatables::of(
+            ChildFamilyDayRegistration::query()
+                ->where([
+                    ['week_id', '=', $playground_day->week_id],
+                    ['week_day_id', '=', $playground_day->week_day_id]
+                ])
+                ->with('child')
+                ->with('age_group')
+        )->make(true);
     }
 
     public function showFindFamily(Request $request, $week_id)

@@ -17,13 +17,22 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 // Datatables
-Route::get('/age_groups', 'AgeGroupsController@getAgeGroups')->name('getAgeGroups');
-Route::get('/supplements', 'SupplementsController@getSupplements')->name('getSupplements');
-Route::get('/day_parts', 'DayPartsController@getDayParts')->name('getDayParts');
-Route::get('/tariffs', 'TariffsController@getTariffs')->name('getTariffs');
-Route::get('/children', 'ChildrenController@getChildren')->name('getChildren');
-Route::get('/families', 'FamiliesController@getFamilies')->name('getFamilies');
-Route::get('/family/{family_id}/children', 'FamiliesController@getFamilyChildren')->name('getFamilyChildren');
+Route::get('/age_groups', 'AgeGroupsController@getAgeGroups')
+    ->name('getAgeGroups');
+Route::get('/supplements', 'SupplementsController@getSupplements')
+    ->name('getSupplements');
+Route::get('/day_parts', 'DayPartsController@getDayParts')
+    ->name('getDayParts');
+Route::get('/tariffs', 'TariffsController@getTariffs')
+    ->name('getTariffs');
+Route::get('/children', 'ChildrenController@getChildren')
+    ->name('getChildren');
+Route::get('/families', 'FamiliesController@getFamilies')
+    ->name('getFamilies');
+Route::get('/family/{family_id}/children', 'FamiliesController@getFamilyChildren')
+    ->name('getFamilyChildren');
+Route::get('/registrations/playground_day/{playground_day_id}', 'RegistrationsController@getRegistrations')
+    ->name('getRegistrations');
 
 // Typeahead.js
 Route::get('/typeahead/child/{child_id}/families/suggestions', 'ChildrenController@getChildFamilySuggestions')

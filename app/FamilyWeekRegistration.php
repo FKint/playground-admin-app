@@ -187,11 +187,9 @@ class FamilyWeekRegistration extends Model
 
     protected static function computeRegistrationPrices($week, &$week_registration_data)
     {
-        Log::info("computeRegistrationPrices data: " . json_encode($week_registration_data));
         FamilyWeekRegistration::computeWeekRegistrationPrices($week, $week_registration_data);
         FamilyWeekRegistration::computeSupplementPrices($week_registration_data);
         FamilyWeekRegistration::computeActivityListPrices($week_registration_data);
-        Log::info("After computeRegistrationPrices (inside): " . json_encode($week_registration_data));
         return $week_registration_data;
     }
 
@@ -260,6 +258,7 @@ class FamilyWeekRegistration extends Model
 
     protected static function computeActivityListPriceDifference($family, $week_registration_data_with_prices)
     {
+        // Positive if price is higher for $week_registration_data_with_prices than the data
         $total_difference = 0;
         foreach ($week_registration_data_with_prices['children'] as $child_id => $child_data) {
             $child = Child::findOrFail($child_id);

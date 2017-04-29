@@ -3,10 +3,10 @@
 @section('content')
     <h1>Zoek familie</h1>
     <ul>
-        @foreach($all_weeks as $week)
+        @foreach($all_weeks as $w)
             <li>
-                <a href="{!! route('show_find_family_registration', ['week_id'=>$week->id]) !!}">
-                    {{ $week->first_day_of_week }}
+                <a href="{!! route('show_find_family_registration', ['week_id'=>$w->id]) !!}">
+                    {{ $w->first_day_of_week }}
                 </a>
             </li>
         @endforeach

@@ -80,6 +80,8 @@ class Family extends Model
 
     public function getCurrentSaldo()
     {
+        // The saldo of the organisation's relationship with the family.
+        // Positive if the family has debts.
         return $this->getTotalCosts() - $this->getTotalPayments();
     }
 

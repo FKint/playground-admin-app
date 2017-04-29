@@ -17,6 +17,11 @@ class ChildFamilyDayRegistration extends Model
             'supplement_id');
     }
 
+    public function child()
+    {
+        return $this->belongsTo(Child::class);
+    }
+
     public function day_part()
     {
         return $this->belongsTo(DayPart::class);
