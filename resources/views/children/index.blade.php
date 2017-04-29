@@ -20,6 +20,14 @@
                 <th>Belangrijk</th>
                 <th>Wijzigen</th>
             </tr>
+            <tr>
+                <td>Voornaam filter</td>
+                <td>Naam filter</td>
+                <td>Geboortejaar filter</td>
+                <td>Werking filter</td>
+                <td>Belangrijk filter</td>
+                <td>Wijzigen filter</td>
+            </tr>
             </thead>
         </table>
     </div>
@@ -34,11 +42,12 @@
             ajax: '{!! route('getChildren') !!}',
             dom: 'Blfrtip',
             buttons: [ 'pdfHtml5' ],
+            orderCellsTop: true,
             columns: [
                 {data: 'first_name', name: 'first_name'},
                 {data: 'last_name', name: 'last_name'},
                 {data: 'birth_year', name: 'birth_year'},
-                {data: 'age_group_id', name: 'age_group_id'},
+                {data: 'age_group.name', name: 'age_group.name', sortable: false},
                 {data: 'remarks', name: 'remarks'},
                 {
                     searchable: false,

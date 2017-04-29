@@ -19,7 +19,7 @@ class ChildrenController extends Controller
 
     public function getChildren()
     {
-        return Datatables::of(Child::query())->make(true);
+        return Datatables::of(Child::query()->with('age_group'))->make(true);
     }
 
     public function showNewChild()
