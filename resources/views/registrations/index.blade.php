@@ -154,7 +154,7 @@
                     name: 'family_week_registration',
                     data: 'family_id',
                     render: function (data, type, full, meta) {
-                        return '<a class="btn btn-xs btn-family-week-registration" href="#" data-family-id="' + data + '">Registratie</a>';
+                        return '<a class="btn btn-xs btn-family-week-registration" href="{{ route('show_edit_registration', ['week_id'=>$playground_day->week->id]) }}?family_id=' + data + '" data-family-id="' + data + '">Registratie</a>';
                     }
                 }
             ]
@@ -171,7 +171,6 @@
         );
         $.fn.dataTable.ext.search.push(
             function (settings, data, dataIndex) {
-                console.log(data);
                 const selected_day_part = $('#select-daypart').val();
                 if (selected_day_part == 'all') {
                     return true;
