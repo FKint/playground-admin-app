@@ -58,11 +58,16 @@ class RegistrationsController extends Controller
             return $this->show();
         $playground_day = $this->getLastPlaygroundDayUntil($date);
         if ($playground_day->date()->format('Y-m-d') != $date->format('Y-m-d')) {
-            Log::info("Redirecting to: ".$playground_day->date()->format('Y-m-d'));
+            Log::info("Redirecting to: " . $playground_day->date()->format('Y-m-d'));
             return redirect()->route('registrations_for_date', ['date' => $playground_day->date()->format('Y-m-d')]);
         }
 
-        return view('registrations.index', ['playground_day' => $playground_day]);
+        return view('registrations.index', [
+            'playground_day' => $playground_day,
+            'all_age_groups' => AgeGroup::all(),
+            'all_day_parts' => DayPart::all(),
+            'all_supplements' => Supplement::all()
+        ]);
     }
 
     public function getRegistrations($playground_day_id)
@@ -76,6 +81,8 @@ class RegistrationsController extends Controller
                 ])
                 ->with('child')
                 ->with('age_group')
+                ->with('day_part')
+                ->with('supplements')
         )->make(true);
     }
 
