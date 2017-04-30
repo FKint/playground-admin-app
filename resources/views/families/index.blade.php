@@ -14,6 +14,7 @@
         <table class="table table-bordered" id="families-table">
             <thead>
             <tr>
+                <th>ID</th>
                 <th>Voornaam</th>
                 <th>Naam</th>
                 <th>Tarief</th>
@@ -38,6 +39,7 @@
             ajax: '{!! route('getFamilies') !!}',
             buttons: [ 'pdfHtml5' ],
             columns: [
+                {data: 'id', name: 'id'},
                 {data: 'guardian_first_name', name: 'guardian_first_name'},
                 {data: 'guardian_last_name', name: 'guardian_last_name'},
                 {data: 'tariff_id', name: 'tariff_id'},
