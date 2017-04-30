@@ -245,7 +245,6 @@
 
         function clearTransactionData() {
             form.find('#remarks').val('');
-            form.find('#received-money').val('0');
         }
 
         function populateRegistrationData(data) {
@@ -314,7 +313,19 @@
 
             form.find("#saldo-difference").val(formatPriceWithoutSign(data.price_difference));
             form.find("#previous-saldo").val(formatPriceWithoutSign(data.saldo));
+            form.find('#received-money').val(formatPriceWithoutSign(data.price_difference));
+            updateNewSaldo();
         }
+
+        function updateNewSaldo() {
+            const received_money = parseFloat(form.find('#received-money').val());
+            const previous_saldo = parseFloat(form.find('#previous-saldo').val());
+            form.find('#new-saldo').val(formatPriceWithoutSign(previous_saldo - received_money));
+        }
+
+        $('#previous-saldo, #received-money').change(function () {
+            updateNewSaldo();
+        });
 
         function populateCurrentRegistrationData() {
             loadCurrentRegistrationData(populateRegistrationData);
