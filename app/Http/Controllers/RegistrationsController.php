@@ -24,7 +24,6 @@ class RegistrationsController extends Controller
 {
     protected function getLastPlaygroundDayUntil($upper_bound_date)
     {
-        // TODO: find correct date
         $week = Week::query()
             ->whereDate('first_day_of_week', '<=', $upper_bound_date->format('Y-m-d'))
             ->orderByDesc('first_day_of_week')
@@ -57,11 +56,12 @@ class RegistrationsController extends Controller
         $date = \DateTime::createFromFormat('Y-m-d', $date_str);
         if (!$date)
             return $this->show();
-        $playground_day = $this->getLastPlaygroundDayUntil($date);
-        if ($playground_day->date()->format('Y-m-d') != $date->format('Y-m-d')) {
-            Log::info("Redirecting to: " . $playground_day->date()->format('Y-m-d'));
-            return redirect()->route('registrations_for_date', ['date' => $playground_day->date()->format('Y-m-d')]);
-        }
+        $playground_day = PlaygroundDay::getPlaygroundDayForDate($date);
+//        $playground_day = $this->getLastPlaygroundDayUntil($date);
+//        if ($playground_day->date()->format('Y-m-d') != $date->format('Y-m-d')) {
+//            Log::info("Redirecting to: " . $playground_day->date()->format('Y-m-d'));
+//            return redirect()->route('registrations_for_date', ['date' => $playground_day->date()->format('Y-m-d')]);
+//        }
 
         return view('registrations.index', [
             'playground_day' => $playground_day,

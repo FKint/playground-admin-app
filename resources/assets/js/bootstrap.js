@@ -18,3 +18,7 @@ window.pdfMake = {createPdf: require('pdfmake-browserified')};
 
 window.Bloodhound = require('bloodhound-js');
 require('typeahead.js');
+
+require('bootstrap-datepicker');
+
+window.moment = require('moment');

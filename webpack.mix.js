@@ -27,5 +27,8 @@ mix.js('resources/assets/js/app.js', 'public/js')
     ])
     .version();
 
-mix.sass('resources/assets/sass/app.scss', 'public/css')
+//mix.sass('resources/assets/sass/app.scss', 'public/css')
+//    .version();
+
+mix.less('resources/assets/less/app.less', 'public/css')
     .version();
