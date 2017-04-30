@@ -33,6 +33,8 @@ Route::get('/family/{family_id}/children', 'FamiliesController@getFamilyChildren
     ->name('getFamilyChildren');
 Route::get('/registrations/playground_day/{playground_day_id}', 'RegistrationsController@getRegistrations')
     ->name('getRegistrations');
+Route::get('/admin_sessions', 'AdminSessionsController@getAdminSessions')
+    ->name('getAdminSessions');
 
 // Typeahead.js
 Route::get('/typeahead/child/{child_id}/families/suggestions', 'ChildrenController@getChildFamilySuggestions')

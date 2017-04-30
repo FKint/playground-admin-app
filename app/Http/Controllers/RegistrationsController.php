@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\ActivityList;
+use App\AdminSession;
 use App\AgeGroup;
 use App\ChildFamilyDayRegistration;
 use App\ChildFamilyWeekRegistration;
@@ -218,8 +219,10 @@ class RegistrationsController extends Controller
         $received_money = $data['received_money'];
         $transaction = new Transaction(array(
             'amount_paid' => $received_money,
-            'amount_expected' => $expected_money
+            'amount_expected' => $expected_money,
         ));
+        $admin_session = AdminSession::getActiveAdminSession();
+        $transaction->admin_session()->associate($admin_session);
         $transaction->family()->associate($family);
         $transaction->save();
     }

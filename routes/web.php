@@ -74,3 +74,9 @@ Route::get('/registrations/week/{week_id}/families/find', 'RegistrationsControll
     ->name('show_find_family_registration');
 Route::get('/registrations/week/{week_id}/edit', 'RegistrationsController@showEditRegistration')
     ->name('show_edit_registration');
+
+// Admin sessions
+Route::get('/admin_sessions/close', 'AdminSessionsController@showCloseAdminSession')
+    ->name('close_admin_session');
+Route::post('/admin_sessions/close', 'AdminSessionsController@showSubmitCloseAdminSession')
+    ->name('submit_close_admin_session');

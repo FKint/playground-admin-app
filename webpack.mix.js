@@ -1,19 +1,5 @@
 const {mix} = require('laravel-mix');
-//
-// mix.webpackConfig({
-//     resolve: {
-//         alias: {
-//             'is-array': require.resolve('node_modules/node-libs-browser/node_modules/buffer/node_modules/is-array'),
-//             'ieee754': require.resolve('node_modules/node-libs-browser/node_modules/buffer/node_modules/ieee754'),
-//             'base64-js': require.resolve('node_modules/node-libs-browser/node_modules/buffer/node_modules/base64-js')
-//         }
-//     }
-// })
-mix.webpackConfig({
-    //node: {
-    //    fs: "empty"
-    //}
-});
+
 /*
  |--------------------------------------------------------------------------
  | Mix Asset Management
@@ -31,9 +17,13 @@ mix.js('resources/assets/js/app.js', 'public/js')
         'jquery',
         'bootstrap-sass',
         'datatables.net',
+        'datatables.net-buttons',
+        'datatables.net-buttons/js/buttons.html5',
         'datatables.net-bs',
         'bloodhound-js',
-        'typeahead.js'
+        'typeahead.js',
+        'datatables.net-buttons-bs',
+        'pdfmake-browserified',
     ])
     .version();
 

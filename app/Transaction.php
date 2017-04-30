@@ -11,7 +11,7 @@ class Transaction extends Model
      *
      * @var array
      */
-    protected $fillable = ['family_id', 'amount_paid', 'amount_expected', 'remarks'];
+    protected $fillable = ['family_id', 'amount_paid', 'amount_expected', 'remarks', 'admin_session_id'];
 
     /**
      * Get the default tariff for this family.
@@ -21,4 +21,8 @@ class Transaction extends Model
         return $this->belongsTo(Family::class);
     }
 
+    public function admin_session()
+    {
+        return $this->belongsTo(AdminSession::class);
+    }
 }

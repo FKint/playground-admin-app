@@ -2,4 +2,5 @@
 
 @section('content')
     <h1>Dashboard</h1>
+    @include('dashboard.admin_sessions')
 @endsection

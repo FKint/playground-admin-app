@@ -11,6 +11,7 @@ class InitialDataSeeder extends Seeder
      */
     public function run()
     {
+        $this->seed_admin_sessions();
         $this->seed_age_groups();
         $this->seed_children();
         $this->seed_day_parts();
@@ -34,6 +35,7 @@ class InitialDataSeeder extends Seeder
     private $teenagers_id = null;
     private $home_id;
     private $whole_day_id;
+    private $first_admin_session_id;
 
     private function families($family_id)
     {
@@ -53,6 +55,11 @@ class InitialDataSeeder extends Seeder
     private function week_days($week_day_id)
     {
         return \App\WeekDay::findOrFail($this->week_day_ids[$week_day_id]);
+    }
+
+    private function seed_admin_sessions()
+    {
+        $this->first_admin_session_id = DB::table('admin_sessions')->insertGetId([]);
     }
 
     private function seed_age_groups()
@@ -204,7 +211,7 @@ class InitialDataSeeder extends Seeder
         $day = new DateInterval('P1D');
         $week = new DateInterval('P1W');
         for ($i = 0; $i < 6; ++$i) {
-            $this->week_ids[$i]  = DB::table('weeks')->insertGetId([
+            $this->week_ids[$i] = DB::table('weeks')->insertGetId([
                 'year_id' => $year_2017_id,
                 'week_number' => 1 + $i,
                 'first_day_of_week' => $monday
@@ -366,6 +373,14 @@ class InitialDataSeeder extends Seeder
                 "age_group_id" => $this->toddlers_id
             ]);
         }
+
+        DB::table('transactions')->insertGetId([
+            'amount_paid' => 30.5,
+            'amount_expected' => 30.5,
+            'family_id' => $family_jozef_de_backer->id,
+            'admin_session_id' => $this->first_admin_session_id,
+            'created_at' => \Carbon\Carbon::now()
+        ]);
     }
 
 }

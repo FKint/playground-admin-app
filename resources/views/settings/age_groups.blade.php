@@ -15,7 +15,7 @@
     $(function () {
         $('#age-groups-table').DataTable({
             processing: true,
-            serverSide: true,
+            serverSide: false,
             ajax: '{!! route('getAgeGroups') !!}',
             columns: [
                 {data: 'abbreviation', name: 'abbreviation'},
