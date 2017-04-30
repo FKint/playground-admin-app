@@ -320,7 +320,8 @@
         function updateNewSaldo() {
             const received_money = parseFloat(form.find('#received-money').val());
             const previous_saldo = parseFloat(form.find('#previous-saldo').val());
-            form.find('#new-saldo').val(formatPriceWithoutSign(previous_saldo - received_money));
+            const saldo_difference = parseFloat(form.find('#saldo-difference').val());
+            form.find('#new-saldo').val(formatPriceWithoutSign(previous_saldo + saldo_difference - received_money));
         }
 
         $('#previous-saldo, #received-money').change(function () {
