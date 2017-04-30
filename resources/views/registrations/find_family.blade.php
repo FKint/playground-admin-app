@@ -47,7 +47,7 @@
                     suggestion: function (data) {
                         console.log(data);
                         return '<a href="{!! route('show_edit_registration',
-                        ['week_id' => $week->id]) !!}?family_id=' + data.id + '" class="list-group-item">' + data.guardian_first_name + ' '
+                        ['week_id' => $week->id]) !!}?family_id=' + data.id + '" class="list-group-item">' + data.id + " - " + data.guardian_first_name + ' '
                             + data.guardian_last_name + '</a>';
                     }
                 }
