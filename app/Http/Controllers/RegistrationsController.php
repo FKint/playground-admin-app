@@ -223,6 +223,7 @@ class RegistrationsController extends Controller
         $transaction = new Transaction(array(
             'amount_paid' => $received_money,
             'amount_expected' => $expected_money,
+            'remarks' => $data['transaction_remarks']
         ));
         $admin_session = AdminSession::getActiveAdminSession();
         $transaction->admin_session()->associate($admin_session);

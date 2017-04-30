@@ -124,6 +124,7 @@
             ['id' => 'saldo-difference', 'pattern'=>"[0-9]+([\\.,][0-9]+)?", 'step'=>'0.01', 'readonly' => true]) }}
             {{ Form::bsNumber('received_money',
             ['id' => 'received-money', 'pattern'=>"[0-9]+([\\.,][0-9]+)?", 'step'=>'0.01']) }}
+            {{ Form::bsText('remarks', ['id' => 'remarks']) }}
             {{ Form::bsNumber('previous_saldo',
             ['id' => 'previous-saldo', 'pattern'=>"[0-9]+([\\.,][0-9]+)?", 'step'=>'0.01', 'readonly' => true]) }}
             {{ Form::bsNumber('new_saldo',
@@ -214,6 +215,7 @@
             });
 
             data.received_money = form.find('#received-money').val();
+            data.transaction_remarks = form.find('#remarks').val();
             return data;
         }
 
@@ -239,6 +241,11 @@
                 },
                 "json"
             );
+        }
+
+        function clearTransactionData() {
+            form.find('#remarks').val('');
+            form.find('#received-money').val('0');
         }
 
         function populateRegistrationData(data) {
@@ -337,6 +344,7 @@
                     console.log('Submitted registration data, got following back: ', response);
                     decreaseNbRequests();
                     populateRegistrationData(response);
+                    clearTransactionData();
                 });
         }
 
@@ -347,7 +355,7 @@
             submitRegistrationData();
             window.location.href = '{!! route('show_find_family_registration', ['week_id' => $week->id]) !!}';
         });
-        $('#btn-cancel').click(function(){
+        $('#btn-cancel').click(function () {
             populateCurrentRegistrationData();
         });
 
