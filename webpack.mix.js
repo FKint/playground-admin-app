@@ -15,7 +15,7 @@ mix.js('resources/assets/js/app.js', 'public/js')
     .extract([
         'lodash',
         'jquery',
-        'bootstrap-sass',
+        'bootstrap-less',
         'datatables.net',
         'datatables.net-buttons',
         'datatables.net-buttons/js/buttons.html5',
