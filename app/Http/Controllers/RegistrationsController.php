@@ -217,6 +217,9 @@ class RegistrationsController extends Controller
     private function updateTransaction($family, $data, $expected_money)
     {
         $received_money = $data['received_money'];
+        if (!$received_money) {
+            $received_money = 0;
+        }
         $transaction = new Transaction(array(
             'amount_paid' => $received_money,
             'amount_expected' => $expected_money,
@@ -238,6 +241,7 @@ class RegistrationsController extends Controller
 
         $this->updateFamilyWeekRegistration($week, $family, $data);
 
+        $family = Family::findOrFail($family_id);
         $new_saldo = $family->getCurrentSaldo();
 
         $this->updateTransaction($family, $data, $new_saldo - $old_saldo);
