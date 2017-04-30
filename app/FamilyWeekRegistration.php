@@ -199,6 +199,9 @@ class FamilyWeekRegistration extends Model
         foreach ($week_registration_data['children'] as $child_id => &$child_data) {
             foreach ($child_data['days'] as $day_id => &$day_data) {
                 foreach ($day_data['supplements'] as $supplement_id => &$supplement_data) {
+                    if (!$child_data['whole_week_registered'] && !$day_data['registered']) {
+                        $supplement_data['ordered'] = false;
+                    }
                     $supplement = Supplement::findOrFail($supplement_id);
                     $price = 0;
                     if ($supplement_data['ordered']) {
