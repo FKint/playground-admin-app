@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Log;
 
 class Week extends Model
 {
@@ -29,7 +30,17 @@ class Week extends Model
         return $this->hasMany(PlaygroundDay::class);
     }
 
-    public function family_week_registrations(){
+    public function last_day()
+    {
+        $playground_day = $this->playground_days()
+            ->join('week_days', 'playground_days.week_day_id', '=', 'week_days.id')
+            ->orderBy('week_days.days_offset', -1)->first();
+        $playground_day = PlaygroundDay::findOrFail($playground_day->id);
+        return $playground_day;
+    }
+
+    public function family_week_registrations()
+    {
         return $this->hasMany(FamilyWeekRegistration::class);
     }
 }

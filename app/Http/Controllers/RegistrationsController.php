@@ -95,8 +95,9 @@ class RegistrationsController extends Controller
         ]);
     }
 
-    public function showEditRegistration(Request $request, $week_id)
+    public function showEditRegistration(Request $request)
     {
+        $week_id = $request->input('week_id');
         $family_id = $request->input('family_id');
         $family = Family::findOrFail($family_id);
         $week = Week::findOrFail($week_id);

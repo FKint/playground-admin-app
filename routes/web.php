@@ -23,7 +23,7 @@ Route::get('/families', 'FamiliesController@show')->name('families');
 
 Route::get('/registrations', 'RegistrationsController@show')
     ->name('registrations');
-Route::get('/registrations/{date}', 'RegistrationsController@showDate')
+Route::get('/registrations/date/{date}', 'RegistrationsController@showDate')
     ->name('registrations_for_date');
 
 Route::get('/settings', 'SettingsController@show')->name('settings');
@@ -72,7 +72,7 @@ Route::post('/family/{family_id}/edit/form', 'FamiliesController@submitEditFamil
 // Edit registrations
 Route::get('/registrations/week/{week_id}/families/find', 'RegistrationsController@showFindFamily')
     ->name('show_find_family_registration');
-Route::get('/registrations/week/{week_id}/edit', 'RegistrationsController@showEditRegistration')
+Route::get('/registrations/edit', 'RegistrationsController@showEditRegistration')
     ->name('show_edit_registration');
 
 // Admin sessions
