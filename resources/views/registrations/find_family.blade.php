@@ -1,12 +1,5 @@
 @extends('layouts.app')
 
-@push('styles')
-<style>
-    .twitter-typeahead {
-        width: 100%;
-    }
-</style>
-@endpush
 @section('content')
     <h1>Registreren</h1>
 
@@ -66,7 +59,7 @@
                             }).join(", ");
                             label += " (Kinderen: " + children_names + ")";
                         }
-                        return '<div class="list-group-item"><a href="#">' + label + '</a></div>';
+                        return '<a class="list-group-item" href="#">' + label + '</a>';
                     }
                 }
             }).on('typeahead:selected', function (ev, suggestion) {

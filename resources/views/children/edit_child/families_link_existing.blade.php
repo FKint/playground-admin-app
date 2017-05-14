@@ -44,11 +44,17 @@
                 ],
                 suggestion: function (data) {
                     console.log(data);
-                    return '<a href="#" class="list-group-item">' + data.guardian_first_name + ' '
-                        + data.guardian_last_name + '</a>';
+                    let label = "Familie " + data.id + ": " + data.guardian_first_name + " " + data.guardian_last_name;
+                    if (data.children.length > 0) {
+                        const children_names = _.map(data.children, function (c) {
+                            return c.first_name + " " + c.last_name;
+                        }).join(", ");
+                        label += " (Kinderen: " + children_names + ")";
+                    }
+                    return '<a class="list-group-item" href="#">' + label + '</a>';
                 }
             }
-        }).on('typeahead:select', function (event, suggestion) {
+        }).on('typeahead:selected', function (event, suggestion) {
             $.post('{!! route('addChildFamily', ['child_id' => $child->id]) !!}', {
                 family_id: suggestion.id
             }, function (result) {
@@ -59,7 +65,7 @@
                 alert('Adding family failed!');
                 console.log('failed!');
             });
-
         });
+        $(".tt-hint").addClass("form-control");
     });
 </script>

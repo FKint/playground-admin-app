@@ -16,6 +16,10 @@
         body {
             padding-top: 60px;
         }
+
+        .twitter-typeahead {
+            width: 100%;
+        }
     </style>
     @stack('styles')
 
