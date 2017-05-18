@@ -42,6 +42,10 @@ Route::get('/child/{child_id}/families/link/new/form', 'ChildrenController@loadL
 Route::post('/child/{child_id}/families/link/new/form', 'ChildrenController@submitLinkNewChildFamilyForm')
     ->name('submit_link_new_child_family_form');
 
+// Child info
+Route::get('/child/info', 'ChildrenController@loadChildInfoForm')
+    ->name('info_child');
+
 // New child
 Route::get('/children/new', 'ChildrenController@showNewChild')
     ->name('show_new_child');

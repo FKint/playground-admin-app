@@ -41,6 +41,15 @@ class ChildrenController extends Controller
         return view('children.edit_child.index')->with('child', $child);
     }
 
+    public function loadChildInfoForm(Request $request)
+    {
+        $child = Child::findOrFail($request->input('child_id'));
+        return view('children.info_child.modal_content')
+            ->with('child', $child)
+            ->with('all_age_groups_by_id', AgeGroup::getAllAgeGroupsById())
+            ->with('all_tariffs_by_id', Tariff::getAllTariffsById());
+    }
+
     public function loadEditChildForm(Request $request)
     {
         $child = Child::findOrFail($request->input('child_id'));

@@ -1,6 +1,7 @@
 @extends('layouts.app')
 
 @include('children.edit_child.modal')
+@include('children.info_child.modal')
 
 @section('content')
     <div class="row">
@@ -18,6 +19,7 @@
                 <th>Geboortejaar</th>
                 <th>Werking</th>
                 <th>Belangrijk</th>
+                <th>Info</th>
                 <th>Wijzigen</th>
             </tr>
             <tr>
@@ -26,6 +28,7 @@
                 <td>Geboortejaar filter</td>
                 <td>Werking filter</td>
                 <td>Belangrijk filter</td>
+                <td></td>
                 <td>Wijzigen filter</td>
             </tr>
             </thead>
@@ -41,7 +44,7 @@
             serverSide: false,
             ajax: '{!! route('getChildren') !!}',
             dom: 'Blfrtip',
-            buttons: [ 'pdfHtml5' ],
+            buttons: ['pdfHtml5'],
             orderCellsTop: true,
             columns: [
                 {data: 'first_name', name: 'first_name'},
@@ -49,6 +52,12 @@
                 {data: 'birth_year', name: 'birth_year'},
                 {data: 'age_group.name', name: 'age_group.name', sortable: false},
                 {data: 'remarks', name: 'remarks'},
+                {
+                    data: 'id',
+                    render: function (data) {
+                        return '<a class="btn btn-xs btn-show-child-info" data-child-id="' + data + '">Info</a>';
+                    }
+                },
                 {
                     searchable: false,
                     name: 'edit',
@@ -60,5 +69,6 @@
             ]
         });
     });
+
 </script>
 @endpush
