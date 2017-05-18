@@ -65,7 +65,7 @@
                 alert('Adding family failed!');
                 console.log('failed!');
             });
-        });
+        }).focus();
         $(".tt-hint").addClass("form-control");
     });
 </script>
