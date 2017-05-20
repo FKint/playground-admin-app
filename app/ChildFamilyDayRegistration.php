@@ -32,4 +32,9 @@ class ChildFamilyDayRegistration extends Model
         return $this->belongsTo(AgeGroup::class);
     }
 
+    public function child_family_day_registration_supplements()
+    {
+        return $this->hasMany(ChildFamilyDayRegistrationSupplement::class);
+    }
+
 }

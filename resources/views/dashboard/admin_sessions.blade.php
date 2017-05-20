@@ -1,5 +1,3 @@
-<h2>Kassa</h2>
-
 @if(!$active_admin_session)
     <div class="alert alert-danger">Geen kassa actief!</div>
 @endif
