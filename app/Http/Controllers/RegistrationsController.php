@@ -22,7 +22,7 @@ use Yajra\Datatables\Datatables;
 
 class RegistrationsController extends Controller
 {
-    protected function getLastPlaygroundDayUntil($upper_bound_date)
+    public static function getLastPlaygroundDayUntil($upper_bound_date)
     {
         $week = Week::query()
             ->whereDate('first_day_of_week', '<=', $upper_bound_date->format('Y-m-d'))
@@ -47,7 +47,7 @@ class RegistrationsController extends Controller
 
     public function show()
     {
-        $playground_day = $this->getLastPlaygroundDayUntil(new \DateTimeImmutable());
+        $playground_day = RegistrationsController::getLastPlaygroundDayUntil(new \DateTimeImmutable());
         return redirect()->route('registrations_for_date', ['date' => $playground_day->date()->format('Y-m-d')]);
     }
 
