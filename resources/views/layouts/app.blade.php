@@ -42,11 +42,11 @@
         </div>
         <div id="navbar" class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
-                <li id="nav-dashboard"><a href="{{route('dashboard')}}">Dashboard</a></li>
-                <li id="nav-children"><a href="{{route('children')}}">Kinderen</a></li>
-                <li id="nav-families"><a href="{{route('families')}}">Gezinnen</a></li>
-                <li id="nav-registrations"><a href="{{route('registrations')}}">Registraties</a></li>
-                <li id="nav-lists"><a href="#">Lijsten</a></li>
+                <li @if(!empty($selected_menu_item) && $selected_menu_item == 'dashboard')class="active"@endif><a href="{{route('dashboard')}}">Dashboard</a></li>
+                <li @if(!empty($selected_menu_item) && $selected_menu_item == 'children')class="active"@endif><a href="{{route('children')}}">Kinderen</a></li>
+                <li @if(!empty($selected_menu_item) && $selected_menu_item == 'families')class="active"@endif><a href="{{route('families')}}">Gezinnen</a></li>
+                <li @if(!empty($selected_menu_item) && $selected_menu_item == 'registrations')class="active"@endif><a href="{{route('registrations')}}">Registraties</a></li>
+                <li @if(!empty($selected_menu_item) && $selected_menu_item == 'lists')class="active"@endif><a href="#">Lijsten</a></li>
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
                        aria-expanded="false">Extra<span class="caret"></span></a>
@@ -80,11 +80,6 @@
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         }
     });
-    @if(!empty($selected_menu_item))
-    $(function () {
-        $('#nav-{{ $selected_menu_item }}').addClass('active');
-    });
-    @endif
 
     function formatPriceWithoutSign(val) {
         return parseFloat(val).toFixed(2);
