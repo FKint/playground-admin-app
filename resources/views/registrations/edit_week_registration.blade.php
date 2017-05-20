@@ -145,14 +145,6 @@
         let form = $('#register-payment-form');
         let table = $('#registration-table');
 
-        function formatPriceWithoutSign(val) {
-            return parseFloat(val).toFixed(2);
-        }
-
-        function formatPrice(val) {
-            return "€ " + formatPriceWithoutSign(val);
-        }
-
         function clearRegistrationData() {
             table.data('populating', parseInt(table.data('populating')) + 1);
             table.find('input[type=checkbox]').prop('checked', false);

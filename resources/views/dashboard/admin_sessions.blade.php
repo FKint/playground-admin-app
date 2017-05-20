@@ -36,9 +36,27 @@
                 {data: 'session_start', name: 'session_start'},
                 {data: 'session_end', name: 'session_end'},
                 {data: 'nb_transactions', name: 'nb_transactions'},
-                {data: 'expected_cash', name: 'expected_cash'},
-                {data: 'counted_cash', name: 'counted_cash'},
-                {data: 'error', name: 'error'},
+                {
+                    data: 'expected_cash',
+                    name: 'expected_cash',
+                    render: function (data) {
+                        return formatPrice(data);
+                    }
+                },
+                {
+                    data: 'counted_cash',
+                    name: 'counted_cash',
+                    render: function (data) {
+                        return formatPrice(data);
+                    }
+                },
+                {
+                    data: 'error',
+                    name: 'error',
+                    render: function (data) {
+                        return formatPrice(data);
+                    }
+                },
                 {data: 'remarks', name: 'remarks'}
             ],
         });
