@@ -1,3 +1,2 @@
-php /opt/composer.phar install
-npm install
-npm run dev
+#!/bin/bash
+php /opt/composer.phar install && npm install --no-bin-links && npm run dev
