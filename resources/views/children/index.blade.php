@@ -6,7 +6,7 @@
 @section('content')
     <div class="row">
         <div class="col-xs-12">
-            <a href="{!! route('show_new_child') !!}" class="btn btn-primary">Nieuw kind toevoegen</a>
+            <a href="{!! route('show_new_child') !!}" class="btn btn-primary" id="btn-new-child">Nieuw kind toevoegen</a>
         </div>
     </div>
     <div class="row">&nbsp;</div>
@@ -68,6 +68,7 @@
                 }
             ]
         });
+        $('#btn-new-child').focus();
     });
 
 </script>
