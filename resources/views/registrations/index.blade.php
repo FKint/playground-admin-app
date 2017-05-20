@@ -45,7 +45,7 @@
 <script>
     $(function () {
         function goToMoment(m) {
-            window.location.href = "/registrations/" + m.format('YYYY-MM-DD');
+            window.location.href = "/registrations/date/" + m.format('YYYY-MM-DD');
         }
 
         const default_date = new Date("{{ $playground_day->date()->format('Y-m-d') }}");
