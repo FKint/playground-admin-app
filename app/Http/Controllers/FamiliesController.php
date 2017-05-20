@@ -14,7 +14,8 @@ class FamiliesController extends Controller
 {
     public function show()
     {
-        return view('families.index');
+        return view('families.index')
+            ->with('selected_menu_item', 'families');
     }
 
     public function showNewFamilyWithChildren()

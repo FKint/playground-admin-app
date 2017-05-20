@@ -42,18 +42,17 @@
         </div>
         <div id="navbar" class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
-                <li class="active"><a href="{{route('dashboard')}}">Dashboard</a></li>
-                <li><a href="{{route('children')}}">Kinderen</a></li>
-                <li><a href="{{route('families')}}">Gezinnen</a></li>
-                <li><a href="{{route('registrations')}}">Registraties</a></li>
+                <li id="nav-dashboard"><a href="{{route('dashboard')}}">Dashboard</a></li>
+                <li id="nav-children"><a href="{{route('children')}}">Kinderen</a></li>
+                <li id="nav-families"><a href="{{route('families')}}">Gezinnen</a></li>
+                <li id="nav-registrations"><a href="{{route('registrations')}}">Registraties</a></li>
+                <li id="nav-lists"><a href="#">Lijsten</a></li>
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
-                       aria-expanded="false">Geavanceerd<span class="caret"></span></a>
+                       aria-expanded="false">Extra<span class="caret"></span></a>
                     <ul class="dropdown-menu">
                         <li><a href="{{route('settings')}}">Instellingen</a></li>
-                        <li role="separator" class="divider"></li>
-                        <li class="dropdown-header">Nav header</li>
-                        <li><a href="#">B</a></li>
+                        <li><a href="#">Uitloggen</a></li>
                     </ul>
                 </li>
             </ul>
@@ -81,6 +80,18 @@
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         }
     });
+    @if(!empty($selected_menu_item))
+    $(function () {
+        $('#nav-{{ $selected_menu_item }}').addClass('active');
+    });
+    @endif
+
+    function formatPriceWithoutSign(val) {
+        return parseFloat(val).toFixed(2);
+    }
+    function formatPrice(val) {
+        return "€ " + formatPriceWithoutSign(val);
+    }
 </script>
 @stack('scripts')
 </body>

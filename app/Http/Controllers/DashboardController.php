@@ -9,6 +9,8 @@ class DashboardController extends Controller
 {
     public function show()
     {
-        return view('dashboard.index', ["active_admin_session" => AdminSession::getActiveAdminSession()]);
+        return view('dashboard.index')
+            ->with("active_admin_session", AdminSession::getActiveAdminSession())
+            ->with("selected_menu_item", "dashboard");
     }
 }

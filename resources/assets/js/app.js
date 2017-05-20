@@ -5,11 +5,3 @@
  */
 
 require('./bootstrap');
-
-
-window.formatPriceWithoutSign = function (val) {
-    return parseFloat(val).toFixed(2);
-};
-window.formatPrice = function (val) {
-    return "€ " + formatPriceWithoutSign(val);
-};

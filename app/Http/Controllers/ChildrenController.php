@@ -14,7 +14,8 @@ class ChildrenController extends Controller
 {
     public function show()
     {
-        return view('children.index');
+        return view('children.index')
+            ->with('selected_menu_item', 'children');
     }
 
     public function getChildren()
