@@ -13,7 +13,7 @@
 @endpush
 
 @section('content')
-    <h1>Wijzig registratie voor familie {{$family->guardian_first_name}} {{$family->guardian_last_name}}</h1>
+    <h1>Wijzig registratie voor familie {{ $family->id }}: {{$family->guardian_first_name}} {{$family->guardian_last_name}}</h1>
     <div class="row">
         <div class="col-xs-9" id="registration-table-div">
             <table id="registration-table" class="table table-condensed" data-populating="0" data-nb-requests="0">
