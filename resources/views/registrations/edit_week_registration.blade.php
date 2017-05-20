@@ -346,7 +346,7 @@
             );
         }
 
-        function submitRegistrationData() {
+        function submitRegistrationData(done) {
             const data = getRegistrationFormData();
             console.log("sending registration data: ", data);
             increaseNbRequests();
@@ -357,18 +357,23 @@
                     decreaseNbRequests();
                     populateRegistrationData(response);
                     clearTransactionData();
+                    if(done !== null){
+                        done();
+                    }
                 });
         }
 
         $('#submit-registration-data').click(function () {
-            submitRegistrationData();
+            submitRegistrationData(function(){
+                window.location.href = '{!! route('registrations') !!}';
+            });
         });
         $('#submit-registration-data-and-next').click(function () {
             submitRegistrationData();
             window.location.href = '{!! route('show_find_family_registration', ['week_id' => $week->id]) !!}';
         });
         $('#btn-cancel').click(function () {
-            populateCurrentRegistrationData();
+            window.location.href = '{!! route('registrations') !!}';
         });
 
         table.find('.registration-checkbox').change(function () {
