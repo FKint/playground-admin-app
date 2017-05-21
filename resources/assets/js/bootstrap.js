@@ -20,5 +20,12 @@ window.Bloodhound = require('bloodhound-js');
 require('typeahead.js');
 
 require('bootstrap-datepicker');
+require('bootstrap-datepicker/js/locales/bootstrap-datepicker.nl-BE.js');
+$.fn.datepicker.defaults.language = "nl-BE";
+$.fn.datepicker.defaults.format = "yyyy-mm-dd";
+$.fn.datepicker.defaults.autoclose = true;
+$.fn.datepicker.defaults.todayBtn = "linked";
+$.fn.datepicker.defaults.todayHighlight = true;
+$.fn.datepicker.defaults.weekStart = 1;
 
 window.moment = require('moment');

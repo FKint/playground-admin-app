@@ -50,13 +50,7 @@
 
         const default_date = new Date("{{ $playground_day->date()->format('Y-m-d') }}");
         console.log('default_date', default_date);
-        $('#registration-datepicker').datepicker({
-            language: 'nl-BE',
-            autoclose: true,
-            format: "yyyy-mm-dd",
-            todayBtn: 'linked',
-            todayHighlight: true
-        })
+        $('#registration-datepicker').datepicker()
             .datepicker('update', default_date)
             .on('changeDate', function (event) {
                 console.log(event.date);
