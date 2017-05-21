@@ -25,7 +25,7 @@
         </div>
     </div>
     <div class="row">&nbsp;</div>
-    @if($playground_day)
+    @if(!empty($playground_day))
         <div class="row">
             <a href="{{ route('show_find_family_registration', ['week_id' => $playground_day->week->id]) }}"
                class="btn btn-primary">Registreer betalingen/aanwezigheid</a>
@@ -48,7 +48,7 @@
             window.location.href = "/registrations/date/" + m.format('YYYY-MM-DD');
         }
 
-        const default_date = new Date("{{ $playground_day->date()->format('Y-m-d') }}");
+        const default_date = new Date("{{ $date->format('Y-m-d') }}");
         console.log('default_date', default_date);
         $('#registration-datepicker').datepicker()
             .datepicker('update', default_date)

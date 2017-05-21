@@ -60,6 +60,7 @@ class RegistrationsController extends Controller
 
         return view('registrations.index', [
             'playground_day' => $playground_day,
+            'date' => $date,
             'all_age_groups' => AgeGroup::all(),
             'all_day_parts' => DayPart::all(),
             'all_supplements' => Supplement::all(),
