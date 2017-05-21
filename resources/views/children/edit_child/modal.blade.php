@@ -11,8 +11,7 @@
                 @include('children.edit_child.content')
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Annuleren</button>
-                <button type="button" class="btn btn-primary">Opslaan</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal" id="btn-cancel-edit-child">Sluiten</button>
             </div>
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
@@ -36,5 +35,10 @@
             .data('url', edit_child_families_form_url)
             .load(edit_child_families_form_url);
     });
+    $(function(){
+        $('#btn-cancel-edit-child').click(function(){
+           $('#btn-new-child').focus();
+        });
+    })
 </script>
 @endpush
