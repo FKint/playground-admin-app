@@ -2,7 +2,7 @@
     <table class="table table-bordered">
         <tr>
             <th rowspan="2"></th>
-            <th colspan="{{ count($all_age_groups) }}">Werking</th>
+            <th colspan="{{ count($all_age_groups) }}" class="text-center">Werking</th>
             <th rowspan="2">Totaal</th>
         </tr>
         <tr>

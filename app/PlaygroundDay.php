@@ -12,6 +12,11 @@ class PlaygroundDay extends Model
         return $this->belongsTo(Week::class);
     }
 
+    public function year()
+    {
+        return $this->belongsTo(Year::class);
+    }
+
     public function week_day()
     {
         return $this->belongsTo(WeekDay::class);

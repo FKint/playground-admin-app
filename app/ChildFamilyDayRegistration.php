@@ -17,6 +17,11 @@ class ChildFamilyDayRegistration extends Model
             'supplement_id');
     }
 
+    public function playground_day()
+    {
+        return PlaygroundDay::query()->where([['week_id', 'week_id'], ['week_day_id', 'week_day_id']])->first();
+    }
+
     public function child()
     {
         return $this->belongsTo(Child::class);
