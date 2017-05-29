@@ -27,7 +27,12 @@
                 <td>Naam filter</td>
                 <td>Geboortejaar filter</td>
                 <td>Werking filter</td>
-                <td>Belangrijk filter</td>
+                <td>
+                    <select class="form-control input-sm children-table-filter" id="select-remarks">
+                        <option value="all">Alle</option>
+                        <option value="yes">Met opmerking</option>
+                    </select>
+                </td>
                 <td></td>
                 <td>Wijzigen filter</td>
             </tr>
@@ -39,7 +44,7 @@
 @push('scripts')
 <script>
     $(function () {
-        $('#children-table').DataTable({
+        const table = $('#children-table').DataTable({
             processing: true,
             serverSide: false,
             ajax: '{!! route('getChildren') !!}',
@@ -67,6 +72,21 @@
                     }
                 }
             ]
+        });
+        $.fn.dataTable.ext.search.push(
+            function (settings, data, dataIndex) {
+                const selected_remarks_value = $('#select-remarks').val();
+                if (selected_remarks_value === 'all') {
+                    return true;
+                }
+                if(selected_remarks_value === 'yes'){
+                    return (data[4] && data[4].length > 0);
+                }
+                return true;
+            }
+        );
+        $('.children-table-filter').change(function () {
+            table.draw();
         });
         $('#btn-new-child').focus();
     });
