@@ -18,7 +18,7 @@
             <select class="form-control input-sm registrations-table-filter" id="select-age-group">
                 <option value="all">Alle</option>
                 @foreach($all_age_groups as $age_group)
-                    <option value="{{ $age_group->id }}">
+                    <option value="{{ $age_group->id }}" @if(isset($filter['age_group_id']) && $filter['age_group_id'] == $age_group->id) selected @endif>
                         {{ $age_group->name }}
                     </option>
                 @endforeach
@@ -28,7 +28,7 @@
             <select class="form-control input-sm registrations-table-filter" id="select-daypart">
                 <option value="all">Alle</option>
                 @foreach($all_day_parts as $day_part)
-                    <option value="{{ $day_part->id }}">
+                    <option value="{{ $day_part->id }}" @if(isset($filter['day_part_id']) && $filter['day_part_id'] == $day_part->id) selected @endif>
                         {{ $day_part->name }}
                     </option>
                 @endforeach
@@ -38,7 +38,7 @@
             <select class="form-control input-sm registrations-table-filter" id="select-supplement">
                 <option value="all">Alle</option>
                 @foreach($all_supplements as $supplement)
-                    <option value="{{ $supplement->id }}">
+                    <option value="{{ $supplement->id }}" @if(isset($filter['supplement_id']) && $filter['supplement_id'] == $supplement->id) selected @endif>
                         {{ $supplement->name }}
                     </option>
                 @endforeach
@@ -47,8 +47,8 @@
         <td>
             <select class="form-control input-sm registrations-table-filter" id="select-attended">
                 <option value="all">Alle</option>
-                <option value="1">Ja</option>
-                <option value="0">Nee</option>
+                <option value="1" @if(isset($filter['present']) && $filter['present'] == "yes") selected @endif>Ja</option>
+                <option value="0" @if(isset($filter['present']) && $filter['present'] == "no") selected @endif>Nee</option>
             </select>
         </td>
         <td></td>

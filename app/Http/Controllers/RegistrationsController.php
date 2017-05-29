@@ -58,13 +58,20 @@ class RegistrationsController extends Controller
             return $this->show();
         $playground_day = PlaygroundDay::getPlaygroundDayForDate($date);
 
+        $filter = array();
+        $filter['age_group_id'] = $request->input('filter_age_group_id');
+        $filter['day_part_id'] = $request->input('filter_day_part_id');
+        $filter['supplement_id'] = $request->input('filter_supplement_id');
+        $filter['present'] = $request->input('filter_present');
+
         return view('registrations.index', [
             'playground_day' => $playground_day,
             'date' => $date,
             'all_age_groups' => AgeGroup::all(),
             'all_day_parts' => DayPart::all(),
             'all_supplements' => Supplement::all(),
-            'selected_menu_item' => 'registrations'
+            'selected_menu_item' => 'registrations',
+            'filter' => $filter
         ]);
     }
 
