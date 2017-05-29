@@ -36,7 +36,8 @@ class FamiliesController extends Controller
         $family = Family::findOrFail($family_id);
         return view('families.new_family_with_children.add_child')
             ->with('family', $family)
-            ->with('all_age_groups_by_id', AgeGroup::getAllAgeGroupsById());
+            ->with('all_age_groups_by_id', AgeGroup::getAllAgeGroupsById())
+            ->with('all_age_groups', AgeGroup::all());
     }
 
     public function showSubmitAddChildrenToFamily(Request $request, $family_id)
