@@ -1,5 +1,5 @@
 {{ Form::model($family, ['class' => 'form-horizontal', 'id' => 'edit-family-form']) }}
-@include('families.forms.family')
+@include('forms.family', ['submit_text'=>'Opslaan'])
 {{ Form::close() }}
 
 <script>

@@ -1,10 +1,10 @@
 <h3>Details kind</h3>
 {{ Form::model($child, ['class' => 'form-horizontal', 'id' => 'edit-child-form']) }}
-@include('children.forms.child')
+@include('forms.child')
 {{ Form::close() }}
 
 <script>
-    $(document).ready(function () {
+    $(function () {
         function reloadEditChildDetailsForm() {
             let container = $('#edit-child-div');
             container.load(container.data('url'));

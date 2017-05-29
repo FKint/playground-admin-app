@@ -67,7 +67,7 @@ class ChildrenController extends Controller
 
     protected function loadEditChildFormForChild($child)
     {
-        return view('children.edit_child.child_form')
+        return view('children.edit_child.child_details')
             ->with('child', $child)
             ->with('all_age_groups_by_id', AgeGroup::getAllAgeGroupsById());
     }
@@ -75,8 +75,9 @@ class ChildrenController extends Controller
     public function loadEditFamiliesForm(Request $request)
     {
         $child = Child::findOrFail($request->input('child_id'));
-        return view('children.edit_child.families_form')
-            ->with('child', $child);
+        return view('children.edit_child.families')
+            ->with('child', $child)
+            ->with('all_tariffs_by_id', Tariff::getAllTariffsById());
     }
 
     public function loadLinkNewChildFamilyForm(Request $request, $child_id)
@@ -93,7 +94,8 @@ class ChildrenController extends Controller
         $family->save();
         $child_family = new ChildFamily(['child_id' => $child_id, 'family_id' => $family->id]);
         $child_family->save();
-        return view('children.edit_child.new_family.succeeded');
+        //return view('children.edit_child.new_family.succeeded');
+        return $child_family;
     }
 
     public function getChildFamilySuggestions(Request $request, $child_id)

@@ -26,12 +26,12 @@
         const child_id = $(this).attr('data-child-id');
 
         const edit_child_form_url = '{!! route('edit_child_form') !!}' + '?child_id=' + child_id;
-        $('#edit-child-div')
+        $('#edit-child-info-div')
             .data('url', edit_child_form_url)
             .load(edit_child_form_url);
 
         const edit_child_families_form_url = '{!! route('edit_child_families_form') !!}' + '?child_id=' + child_id;
-        $('#edit-families-div')
+        $('#edit-child-families-div')
             .data('url', edit_child_families_form_url)
             .load(edit_child_families_form_url);
     });

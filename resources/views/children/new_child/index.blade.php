@@ -4,7 +4,7 @@
 
     <h1>Nieuw kind toevoegen</h1>
     {{ Form::open(['class' => 'form-horizontal', 'id' => 'new-child-form']) }}
-    @include('children.forms.child')
+    @include('forms.child')
     {{ Form::close() }}
 
 @endsection

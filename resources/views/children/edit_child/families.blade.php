@@ -1,17 +1,50 @@
-<h4>Kind aan een bestaande voogd linken</h4>
-<form class="typeahead" role="search">
-    <div class="form-group">
-        <input type="search" id="family-search" name="q" class="form-control" placeholder="Search" autocomplete="off">
-    </div>
-</form>
+<div id="existing-child-families">
+    <h4>Huidige voogden</h4>
+    <table class="table" id="child-families-table">
+        <thead>
+        <tr>
+            <th>Voogd ID</th>
+            <th>Naam</th>
+            <th></th>
+        </tr>
+        </thead>
+        @foreach($child->child_families as $child_family)
+            <tr>
+                <td>{{ $child_family->family->id }}</td>
+                <td>{{ $child_family->family->guardian_full_name() }}</td>
+                <td>
+                    <button class="btn btn-xs btn-edit-family">Wijzigen</button>
+                    <button class="btn btn-xs btn-remove-family" data-child-family-id="{{$child_family->id}}">
+                        Verwijderen
+                    </button>
+                </td>
+            </tr>
+        @endforeach
+    </table>
+</div>
+
+<div id="link-existing-child-family">
+    <h4>Kind aan een bestaande voogd linken</h4>
+    <form class="typeahead" role="search">
+        <div class="form-group">
+            <input type="search" id="family-search" name="q" class="form-control" placeholder="Search"
+                   autocomplete="off">
+        </div>
+    </form>
+</div>
+<div id="link-new-child-family">
+    <h4>Kind aan een nieuwe voogd linken</h4>
+    {{ Form::open(['class' => 'form-horizontal', 'id' => 'link-new-family']) }}
+    @include('forms.family', ['submit_text' => 'Voogd toevoegen'])
+    {{ Form::close() }}
+</div>
 
 <script>
-    $(document).ready(function () {
-        function reloadEditChildFamiliesDiv() {
-            const container = $('#edit-families-div');
-            container.load(container.data('url'));
-        }
-
+    function reloadEditChildFamiliesDiv() {
+        const container = $('#existing-child-families').parent();
+        container.load(container.data('url'));
+    }
+    $(function () {
         $('#child-families-table').on('click', '.btn-remove-family', function () {
             $.post('{!! route('removeChildFamily', ['child_id' => $child->id]) !!}', {
                 child_family_id: $(this).data('child-family-id')
@@ -67,5 +100,19 @@
             });
         }).focus();
         $(".tt-hint").addClass("form-control");
+    });
+    $(function () {
+        const form = $('#link-new-family');
+        form.submit(function (event) {
+            event.preventDefault();
+            $.post(
+                '{!! route('submit_link_new_child_family_form', ['child_id' => $child->id]) !!}',
+                form.serializeArray()
+            ).done(function () {
+                reloadEditChildFamiliesDiv();
+            }).fail(function () {
+                alert('Failed!');
+            });
+        });
     });
 </script>

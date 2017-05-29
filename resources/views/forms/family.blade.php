@@ -3,4 +3,4 @@
 {{ Form::bsDropdown('tariff_id', $all_tariffs_by_id) }}
 {{ Form::bsText('remarks') }}
 {{ Form::bsText('contact') }}
-{{ Form::bsSubmit('Voogd toevoegen') }}
+{{ Form::bsSubmit(isset($submit_text) ? $submit_text : "Opslaan") }}

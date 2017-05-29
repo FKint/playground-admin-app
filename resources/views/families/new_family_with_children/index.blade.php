@@ -2,9 +2,9 @@
 
 @section('content')
 
-    <h1>Nieuw gezin toevoegen</h1>
+    <h1>Nieuwe voogd toevoegen</h1>
     {{ Form::open(['class' => 'form-horizontal', 'id' => 'new-family-form']) }}
-    @include('families.forms.family')
+    @include('forms.family', ['submit_text' => 'Voogd aanmaken'])
     {{ Form::close() }}
 
 @endsection
