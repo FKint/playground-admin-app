@@ -1,7 +1,12 @@
 @extends('layouts.app')
 
 @section('content')
-
+    <h1>Transactiegeschiedenis voor familie {{ $family->id }} ({{ $family->guardian_full_name() }})</h1>
+    <div class="row">
+        <div class="col-xs-12">
+            Saldo: <b><span id="family-saldo">{{ $family->getCurrentSaldo() }}</span></b>
+        </div>
+    </div>
     <div class="row">
         <table class="table table-bordered" id="transactions-table">
             <thead>
@@ -60,6 +65,7 @@
                 {data: 'remarks', name: 'remarks'}
             ]
         });
+        $('#family-saldo').text(formatPrice($('#family-saldo').text()));
     });
 
 </script>
