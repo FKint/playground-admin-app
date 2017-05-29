@@ -140,7 +140,7 @@
                     name: 'family_week_registration',
                     data: 'family_id',
                     render: function (data, type, full, meta) {
-                        return '<a class="btn btn-xs btn-family-week-registration" href="{{ route('show_edit_registration', ['week_id'=>$playground_day->week->id]) }}?family_id=' + data + '" data-family-id="' + data + '">Registratie</a>';
+                        return '<a class="btn btn-xs btn-family-week-registration" href="{{ route('show_edit_registration', ['week_id'=>$playground_day->week->id]) }}&family_id=' + data + '" data-family-id="' + data + '">Registratie</a>';
                     }
                 }
             ]
