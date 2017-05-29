@@ -23,10 +23,10 @@
                 <th>Wijzigen</th>
             </tr>
             <tr>
-                <td>Voornaam filter</td>
-                <td>Naam filter</td>
-                <td>Geboortejaar filter</td>
-                <td>Werking filter</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
                 <td>
                     <select class="form-control input-sm children-table-filter" id="select-remarks">
                         <option value="all">Alle</option>
@@ -34,7 +34,7 @@
                     </select>
                 </td>
                 <td></td>
-                <td>Wijzigen filter</td>
+                <td></td>
             </tr>
             </thead>
         </table>
