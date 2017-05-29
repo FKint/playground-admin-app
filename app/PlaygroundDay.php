@@ -36,17 +36,19 @@ class PlaygroundDay extends Model
 
     public function count_supplements_for_age_group($supplement, $age_group)
     {
-        $result = $this->child_family_day_registrations()
+        return $this->child_family_day_registrations()
             ->where('age_group_id', $age_group->id)
             ->join('child_family_day_registration_supplements', 'child_family_day_registrations.id', '=', 'child_family_day_registration_supplements.child_family_day_registration_id')
             ->where('child_family_day_registration_supplements.supplement_id', $supplement->id)
-            ->get();
-        return count($result);
+            ->count();
     }
 
     public function count_supplements($supplement)
     {
-        return 0;
+        return $this->child_family_day_registrations()
+            ->join('child_family_day_registration_supplements', 'child_family_day_registrations.id', '=', 'child_family_day_registration_supplements.child_family_day_registration_id')
+            ->where('child_family_day_registration_supplements.supplement_id', $supplement->id)
+            ->count();
     }
 
     public function count_registrations_for_age_group($age_group)

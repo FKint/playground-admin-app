@@ -15,22 +15,30 @@
                 <th>{{ $supplement->name }}</th>
                 @foreach($all_age_groups as $age_group)
                     <td>
-                        {{ $today_playground_day->count_supplements_for_age_group($supplement, $age_group) }}
+                        <a href="{{ route('registrations_for_date', ['date' => $today_playground_day->date()->format('Y-m-d')]) }}?filter_supplement_id={{$supplement->id}}&filter_age_group_id={{$age_group->id}}">
+                            {{ $today_playground_day->count_supplements_for_age_group($supplement, $age_group) }}
+                        </a>
                     </td>
                 @endforeach
                 <td>
-                    {{ $today_playground_day->count_supplements($supplement) }}
+                    <a href="{{ route('registrations_for_date', ['date' => $today_playground_day->date()->format('Y-m-d')]) }}?filter_supplement_id={{$supplement->id}}">
+                        {{ $today_playground_day->count_supplements($supplement) }}
+                    </a>
                 </td>
             </tr>
         @endforeach
         <th>Aanwezige kinderen</th>
         @foreach($all_age_groups as $age_group)
             <td>
-                {{ $today_playground_day->count_registrations_for_age_group($age_group) }}
+                <a href="{{ route('registrations_for_date', ['date' => $today_playground_day->date()->format('Y-m-d')]) }}?filter_age_group_id={{$age_group->id}}">
+                    {{ $today_playground_day->count_registrations_for_age_group($age_group) }}
+                </a>
             </td>
         @endforeach
         <td>
-            {{ $today_playground_day->count_registrations() }}
+            <a href="{{ route('registrations_for_date', ['date' => $today_playground_day->date()->format('Y-m-d')]) }}">
+                {{ $today_playground_day->count_registrations() }}
+            </a>
         </td>
     </table>
 @else
