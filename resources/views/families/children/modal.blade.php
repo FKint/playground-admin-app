@@ -20,15 +20,16 @@
 
 @push('scripts')
 <script>
-    $('body').on('click', '.btn-show-family-children', function () {
+    function showFamilyChildrenModal(family_id) {
+        closeAllModals();
         // TODO: show spinning cog on modal while waiting for the form to load
         $('#family-children-modal').modal('show');
-        const family_id = $(this).data('family-id');
 
         const family_children_url = '{!! route('load_family_children') !!}' + '?family_id=' + family_id;
         $('#family-children-modal-body')
             .data('url', family_children_url)
             .load(family_children_url);
-    });
+    }
+
 </script>
 @endpush

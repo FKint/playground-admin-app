@@ -1,9 +1,5 @@
 @extends('layouts.app')
-
-
-@include('families.children.modal')
-@include('families.edit_family.modal')
-
+@include('modals.global')
 @push('styles')
 <style>
     .table {
@@ -78,7 +74,14 @@
                 }
             ]
         });
+        table_element.on('click', '.btn-show-family-children', function () {
+            const family_id = $(this).data('family-id');
+            showFamilyChildrenModal(family_id);
+        });
+        table_element.on('click', '.btn-edit-family', function () {
+            const family_id = $(this).data('family-id');
+            showEditFamilyModal(family_id);
+        });
     });
-
 </script>
 @endpush

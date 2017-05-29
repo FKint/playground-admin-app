@@ -16,6 +16,7 @@
         body {
             padding-top: 60px;
         }
+
         .twitter-typeahead {
             width: 100%;
         }
@@ -41,11 +42,16 @@
         </div>
         <div id="navbar" class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
-                <li @if(!empty($selected_menu_item) && $selected_menu_item == 'dashboard')class="active"@endif><a href="{{route('dashboard')}}">Dashboard</a></li>
-                <li @if(!empty($selected_menu_item) && $selected_menu_item == 'children')class="active"@endif><a href="{{route('children')}}">Kinderen</a></li>
-                <li @if(!empty($selected_menu_item) && $selected_menu_item == 'families')class="active"@endif><a href="{{route('families')}}">Gezinnen</a></li>
-                <li @if(!empty($selected_menu_item) && $selected_menu_item == 'registrations')class="active"@endif><a href="{{route('registrations')}}">Registraties</a></li>
-                <li @if(!empty($selected_menu_item) && $selected_menu_item == 'lists')class="active"@endif><a href="#">Lijsten</a></li>
+                <li @if(!empty($selected_menu_item) && $selected_menu_item == 'dashboard')class="active"@endif><a
+                            href="{{route('dashboard')}}">Dashboard</a></li>
+                <li @if(!empty($selected_menu_item) && $selected_menu_item == 'children')class="active"@endif><a
+                            href="{{route('children')}}">Kinderen</a></li>
+                <li @if(!empty($selected_menu_item) && $selected_menu_item == 'families')class="active"@endif><a
+                            href="{{route('families')}}">Gezinnen</a></li>
+                <li @if(!empty($selected_menu_item) && $selected_menu_item == 'registrations')class="active"@endif><a
+                            href="{{route('registrations')}}">Registraties</a></li>
+                <li @if(!empty($selected_menu_item) && $selected_menu_item == 'lists')class="active"@endif><a href="#">Lijsten</a>
+                </li>
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
                        aria-expanded="false">Extra<span class="caret"></span></a>
@@ -58,6 +64,7 @@
         </div><!--/.nav-collapse -->
     </div>
 </nav>
+@include('modals.helpers')
 @stack('modals')
 
 <div class="container" role="main">

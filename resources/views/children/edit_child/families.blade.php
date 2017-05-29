@@ -13,7 +13,9 @@
                 <td>{{ $child_family->family->id }}</td>
                 <td>{{ $child_family->family->guardian_full_name() }}</td>
                 <td>
-                    <button class="btn btn-xs btn-edit-family">Wijzigen</button>
+                    <button class="btn btn-xs btn-edit-family" data-family-id="{{ $child_family->family->id }}">
+                        Wijzigen
+                    </button>
                     <button class="btn btn-xs btn-remove-family" data-child-family-id="{{$child_family->id}}">
                         Verwijderen
                     </button>
@@ -45,7 +47,8 @@
         container.load(container.data('url'));
     }
     $(function () {
-        $('#child-families-table').on('click', '.btn-remove-family', function () {
+        const child_families_table_element = $('#child-families-table');
+        child_families_table_element.on('click', '.btn-remove-family', function () {
             $.post('{!! route('removeChildFamily', ['child_id' => $child->id]) !!}', {
                 child_family_id: $(this).data('child-family-id')
             }, function (result) {
@@ -100,6 +103,11 @@
             });
         }).focus();
         $(".tt-hint").addClass("form-control");
+
+        child_families_table_element.on('click', '.btn-edit-family', function () {
+            const family_id = $(this).data('family-id');
+            showEditFamilyModal(family_id);
+        });
     });
     $(function () {
         const form = $('#link-new-family');

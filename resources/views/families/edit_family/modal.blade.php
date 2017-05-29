@@ -20,15 +20,15 @@
 
 @push('scripts')
 <script>
-    $('body').on('click', '.btn-edit-family', function () {
+    function showEditFamilyModal(family_id) {
+        closeAllModals();
         // TODO: show spinning cog on modal while waiting for the form to load
         $('#edit-family-modal').modal('show');
-        const family_id = $(this).data('family-id');
 
         const edit_family_url = '{!! route('load_edit_family_form') !!}' + '?family_id=' + family_id;
         $('#edit-family-modal-body')
             .data('url', edit_family_url)
             .load(edit_family_url);
-    });
+    }
 </script>
 @endpush

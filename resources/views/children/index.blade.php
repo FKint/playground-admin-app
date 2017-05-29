@@ -1,7 +1,5 @@
 @extends('layouts.app')
-
-@include('children.edit_child.modal')
-@include('children.info_child.modal')
+@include('modals.global')
 @push('styles')
 <style>
     .table {
@@ -13,7 +11,8 @@
 @section('content')
     <div class="row">
         <div class="col-xs-12">
-            <a href="{!! route('show_new_child') !!}" class="btn btn-primary" id="btn-new-child">Nieuw kind toevoegen</a>
+            <a href="{!! route('show_new_child') !!}" class="btn btn-primary" id="btn-new-child">Nieuw kind
+                toevoegen</a>
         </div>
     </div>
     <div class="row">&nbsp;</div>
@@ -51,7 +50,8 @@
 @push('scripts')
 <script>
     $(function () {
-        const table = $('#children-table').DataTable({
+        const table_element = $('#children-table');
+        const table = table_element.DataTable({
             processing: true,
             serverSide: false,
             ajax: '{!! route('getChildren') !!}',
@@ -86,7 +86,7 @@
                 if (selected_remarks_value === 'all') {
                     return true;
                 }
-                if(selected_remarks_value === 'yes'){
+                if (selected_remarks_value === 'yes') {
                     return (data[4] && data[4].length > 0);
                 }
                 return true;
@@ -96,7 +96,20 @@
             table.draw();
         });
         $('#btn-new-child').focus();
-    });
 
+
+        table_element.on('click', '.btn-show-child-info', function () {
+            const child_id = $(this).attr('data-child-id');
+            showChildInfoModal(child_id);
+        });
+        table_element.on('click', '.btn-edit-child', function () {
+            const child_id = $(this).attr('data-child-id');
+            showEditChildModal(child_id);
+        });
+
+        $('#edit-child-modal').on('hidden.bs.modal', function () {
+            $('#btn-new-child').focus();
+        });
+    });
 </script>
 @endpush

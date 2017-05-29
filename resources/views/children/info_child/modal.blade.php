@@ -19,12 +19,12 @@
 
 @push('scripts')
 <script>
-    $('body').on('click', '.btn-show-child-info', function () {
-        // TODO: show spinning cog on modal while waiting for the form to load
+    function showChildInfoModal(child_id) {
+        closeAllModals();
         $('#info-child-modal').modal('show');
-        const child_id = $(this).attr('data-child-id');
+        // TODO: show spinning cog on modal while waiting for the form to load
         const info_child_url = '{!! route('info_child') !!}?child_id=' + child_id;
         $('#info-child-modal-body').load(info_child_url);
-    });
+    }
 </script>
 @endpush

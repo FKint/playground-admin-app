@@ -11,7 +11,8 @@
                 @include('children.edit_child.content')
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal" id="btn-cancel-edit-child">Sluiten</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal" id="btn-cancel-edit-child">Sluiten
+                </button>
             </div>
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
@@ -20,11 +21,10 @@
 
 @push('scripts')
 <script>
-    $('body').on('click', '.btn-edit-child', function () {
-        // TODO: show spinning cog on modal while waiting for the form to load
+    function showEditChildModal(child_id) {
+        closeAllModals();
+        $('#edit-child-tablist').find('li:first > a').click();
         $('#edit-child-modal').modal('show');
-        const child_id = $(this).attr('data-child-id');
-
         const edit_child_form_url = '{!! route('edit_child_form') !!}' + '?child_id=' + child_id;
         $('#edit-child-info-div')
             .data('url', edit_child_form_url)
@@ -34,11 +34,6 @@
         $('#edit-child-families-div')
             .data('url', edit_child_families_form_url)
             .load(edit_child_families_form_url);
-    });
-    $(function(){
-        $('#btn-cancel-edit-child').click(function(){
-           $('#btn-new-child').focus();
-        });
-    })
+    }
 </script>
 @endpush

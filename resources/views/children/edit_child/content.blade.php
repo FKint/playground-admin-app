@@ -1,5 +1,5 @@
 
-<ul class="nav nav-tabs" role="tablist">
+<ul class="nav nav-tabs" role="tablist" id="edit-child-tablist">
     <li role="presentation" class="active">
         <a href="#edit-child-info-div" aria-controls="info" role="tab" data-toggle="tab">Info</a>
     </li>
