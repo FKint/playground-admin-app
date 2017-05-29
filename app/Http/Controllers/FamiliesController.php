@@ -59,7 +59,11 @@ class FamiliesController extends Controller
 
     public function getFamilies()
     {
-        return Datatables::of(Family::query()->with('children'))->make(true);
+        return Datatables::of(
+            Family::query()
+                ->with('children')
+                ->with('tariff')
+        )->make(true);
     }
 
     public function loadFamilyChildrenForm(Request $request)
@@ -73,6 +77,7 @@ class FamiliesController extends Controller
     {
         return $this->loadEditFamilyFormForFamily($request->input('family_id'));
     }
+
     protected function loadEditFamilyFormForFamily($family_id)
     {
 

@@ -37,12 +37,18 @@
             processing: true,
             serverSide: false,
             ajax: '{!! route('getFamilies') !!}',
-            buttons: [ 'pdfHtml5' ],
+            buttons: ['pdfHtml5'],
             columns: [
                 {data: 'id', name: 'id'},
                 {data: 'guardian_first_name', name: 'guardian_first_name'},
                 {data: 'guardian_last_name', name: 'guardian_last_name'},
-                {data: 'tariff_id', name: 'tariff_id'},
+                {
+                    data: {
+                        '_': 'tariff.id',
+                        'display': 'tariff.abbreviation'
+                    },
+                    name: 'tariff.id'
+                },
                 {data: 'remarks', name: 'remarks'},
                 {data: 'contact', name: 'contact'},
                 {
