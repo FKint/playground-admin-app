@@ -57,12 +57,27 @@ class FamiliesController extends Controller
         return redirect()->action('FamiliesController@showAddChildrenToFamily', ['family_id' => $family_id]);
     }
 
+    public function showTransactions($family_id)
+    {
+        $family = Family::findOrFail($family_id);
+        return view('families.transactions.index')
+            ->with('family', $family);
+    }
+
     public function getFamilies()
     {
         return Datatables::of(
             Family::query()
                 ->with('children')
                 ->with('tariff')
+        )->make(true);
+    }
+
+    public function getFamilyTransactions($family_id)
+    {
+        $family = Family::findOrFail($family_id);
+        return Datatables::of(
+            $family->transactions()->with('admin_session')
         )->make(true);
     }
 

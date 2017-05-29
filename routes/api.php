@@ -31,6 +31,8 @@ Route::get('/families', 'FamiliesController@getFamilies')
     ->name('getFamilies');
 Route::get('/family/{family_id}/children', 'FamiliesController@getFamilyChildren')
     ->name('getFamilyChildren');
+Route::get('/family/{family_id}/transactions', 'FamiliesController@getFamilyTransactions')
+    ->name('getFamilyTransactions');
 Route::get('/registrations/playground_day/{playground_day_id}', 'RegistrationsController@getRegistrations')
     ->name('getRegistrations');
 Route::get('/admin_sessions', 'AdminSessionsController@getAdminSessions')

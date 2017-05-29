@@ -16,13 +16,8 @@
         body {
             padding-top: 60px;
         }
-
         .twitter-typeahead {
             width: 100%;
-        }
-        .table {
-            table-layout: fixed;
-            word-wrap: break-word;
         }
     </style>
     @stack('styles')

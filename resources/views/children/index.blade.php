@@ -2,7 +2,14 @@
 
 @include('children.edit_child.modal')
 @include('children.info_child.modal')
-
+@push('styles')
+<style>
+    .table {
+        table-layout: fixed;
+        word-wrap: break-word;
+    }
+</style>
+@endpush
 @section('content')
     <div class="row">
         <div class="col-xs-12">

@@ -16,6 +16,7 @@
             <th>Verwachte inkomsten</th>
             <th>Getelde inkomsten</th>
             <th>Fout</th>
+            <th>Verantwoordelijke</th>
             <th>Opmerkingen</th>
         </tr>
         </thead>
@@ -54,6 +55,10 @@
                     render: function (data) {
                         return formatPrice(data);
                     }
+                },
+                {
+                    data: 'responsible_name',
+                    name: 'responsible_name'
                 },
                 {data: 'remarks', name: 'remarks'}
             ],

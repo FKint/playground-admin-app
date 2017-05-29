@@ -117,6 +117,7 @@
                 @endforeach
             </table>
             <button class="btn btn-default">Inchecken</button>
+            <a href="{{ route('show_family_transactions', ['family_id' => $family->id]) }}" class="btn btn-default">Transactiegeschiedenis</a>
         </div>
         <div class="col-xs-3">
             {{ Form::open(['class' => 'form-horizontal', 'id' => 'register-payment-form']) }}
