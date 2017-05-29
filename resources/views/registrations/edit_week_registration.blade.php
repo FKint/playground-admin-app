@@ -4,6 +4,7 @@
 <style>
     #registration-table {
         white-space: nowrap;
+        table-layout: auto;
     }
 
     #registration-table-div {
