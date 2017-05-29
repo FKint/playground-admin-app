@@ -26,7 +26,8 @@ class ChildrenController extends Controller
     public function showNewChild()
     {
         return view('children.new_child.index')
-            ->with('all_age_groups_by_id', AgeGroup::getAllAgeGroupsById());
+            ->with('all_age_groups_by_id', AgeGroup::getAllAgeGroupsById())
+            ->with('all_age_groups', AgeGroup::all());
     }
 
     public function showSubmitNewChild(Request $request)
