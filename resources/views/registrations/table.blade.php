@@ -1,15 +1,15 @@
 <table class="table table-bordered" id="registrations-table">
     <thead>
     <tr>
-        <th>Voornaam</th>
-        <th>Naam</th>
-        <th>Werking</th>
-        <th>Dagdeel</th>
-        <th>Extraatjes</th>
-        <th>Aanwezig</th>
-        <th>Details - Kind</th>
-        <th>Details - Familie</th>
-        <th>Registratieformulier</th>
+        <th data-class-name="export">Voornaam</th>
+        <th data-class-name="export">Naam</th>
+        <th data-class-name="export">Werking</th>
+        <th data-class-name="export">Dagdeel</th>
+        <th data-class-name="export">Extraatjes</th>
+        <th data-class-name="export">Aanwezig</th>
+        <th data-class-name="no-export">Details - Kind</th>
+        <th data-class-name="no-export">Details - Familie</th>
+        <th data-class-name="no-export">Registratieformulier</th>
     </tr>
     <tr>
         <td></td>
@@ -18,7 +18,8 @@
             <select class="form-control input-sm registrations-table-filter" id="select-age-group">
                 <option value="all">Alle</option>
                 @foreach($all_age_groups as $age_group)
-                    <option value="{{ $age_group->id }}" @if(isset($filter['age_group_id']) && $filter['age_group_id'] == $age_group->id) selected @endif>
+                    <option value="{{ $age_group->id }}"
+                            @if(isset($filter['age_group_id']) && $filter['age_group_id'] == $age_group->id) selected @endif>
                         {{ $age_group->name }}
                     </option>
                 @endforeach
@@ -28,7 +29,8 @@
             <select class="form-control input-sm registrations-table-filter" id="select-daypart">
                 <option value="all">Alle</option>
                 @foreach($all_day_parts as $day_part)
-                    <option value="{{ $day_part->id }}" @if(isset($filter['day_part_id']) && $filter['day_part_id'] == $day_part->id) selected @endif>
+                    <option value="{{ $day_part->id }}"
+                            @if(isset($filter['day_part_id']) && $filter['day_part_id'] == $day_part->id) selected @endif>
                         {{ $day_part->name }}
                     </option>
                 @endforeach
@@ -38,7 +40,8 @@
             <select class="form-control input-sm registrations-table-filter" id="select-supplement">
                 <option value="all">Alle</option>
                 @foreach($all_supplements as $supplement)
-                    <option value="{{ $supplement->id }}" @if(isset($filter['supplement_id']) && $filter['supplement_id'] == $supplement->id) selected @endif>
+                    <option value="{{ $supplement->id }}"
+                            @if(isset($filter['supplement_id']) && $filter['supplement_id'] == $supplement->id) selected @endif>
                         {{ $supplement->name }}
                     </option>
                 @endforeach
@@ -47,8 +50,10 @@
         <td>
             <select class="form-control input-sm registrations-table-filter" id="select-attended">
                 <option value="all">Alle</option>
-                <option value="1" @if(isset($filter['present']) && $filter['present'] == "yes") selected @endif>Ja</option>
-                <option value="0" @if(isset($filter['present']) && $filter['present'] == "no") selected @endif>Nee</option>
+                <option value="1" @if(isset($filter['present']) && $filter['present'] == "yes") selected @endif>Ja
+                </option>
+                <option value="0" @if(isset($filter['present']) && $filter['present'] == "no") selected @endif>Nee
+                </option>
             </select>
         </td>
         <td></td>
@@ -67,7 +72,14 @@
             serverSide: false,
             ajax: '{!! route('getRegistrations', array('playground_day_id'=> $playground_day->id)) !!}',
             dom: 'Blfrtip',
-            buttons: ['pdfHtml5'],
+            buttons: [
+                {
+                    extend: 'pdfHtml5',
+                    exportOptions: {
+                        columns: '.export'
+                    }
+                }
+            ],
             orderCellsTop: true,
             columns: [
                 {data: 'child.first_name', name: 'child.first_name'},

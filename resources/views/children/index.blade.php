@@ -20,11 +20,11 @@
         <table class="table table-bordered" id="children-table">
             <thead>
             <tr>
-                <th>Voornaam</th>
-                <th>Naam</th>
-                <th>Geboortejaar</th>
-                <th>Werking</th>
-                <th>Belangrijk</th>
+                <th data-class-name="export">Voornaam</th>
+                <th data-class-name="export">Naam</th>
+                <th data-class-name="export">Geboortejaar</th>
+                <th data-class-name="export">Werking</th>
+                <th data-class-name="export">Belangrijk</th>
                 <th>Info</th>
                 <th>Wijzigen</th>
             </tr>
@@ -56,7 +56,14 @@
             serverSide: false,
             ajax: '{!! route('getChildren') !!}',
             dom: 'Blfrtip',
-            buttons: ['pdfHtml5'],
+            buttons: [
+                {
+                    extend: 'pdfHtml5',
+                    exportOptions: {
+                        columns: '.export'
+                    }
+                }
+            ],
             orderCellsTop: true,
             columns: [
                 {data: 'first_name', name: 'first_name'},

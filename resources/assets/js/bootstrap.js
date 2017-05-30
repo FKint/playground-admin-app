@@ -1,5 +1,4 @@
 window._ = require('lodash');
-//require('jquery')
 window.$ = window.jQuery = require('jquery');
 
 require('bootstrap-less');
