@@ -36,6 +36,6 @@ class AdminSession extends Model
 
     public function getErrorAttribute()
     {
-        return $this->getExpectedCashAttribute() - $this->counted_cash;
+        return $this->counted_cash - $this->getExpectedCashAttribute();
     }
 }
