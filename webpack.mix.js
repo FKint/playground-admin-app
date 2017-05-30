@@ -10,6 +10,13 @@ const {mix} = require('laravel-mix');
  | file for the application as well as bundling up all the JS files.
  |
  */
+mix.webpackConfig({
+    resolve: {
+        alias: {
+            jquery: "jquery/src/jquery"
+        }
+    }
+});
 
 mix.js('resources/assets/js/app.js', 'public/js')
     .extract([
@@ -22,13 +29,11 @@ mix.js('resources/assets/js/app.js', 'public/js')
         'datatables.net-bs',
         'bloodhound-js',
         'typeahead.js',
+        'corejs-typeahead',
         'datatables.net-buttons-bs',
         'pdfmake-browserified',
     ])
     .version();
-
-//mix.sass('resources/assets/sass/app.scss', 'public/css')
-//    .version();
 
 mix.less('resources/assets/less/app.less', 'public/css')
     .version();

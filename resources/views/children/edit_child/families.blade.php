@@ -62,7 +62,8 @@
                 wildcard: '%QUERY%'
             },
             datumTokenizer: Bloodhound.tokenizers.whitespace('q'),
-            queryTokenizer: Bloodhound.tokenizers.whitespace
+            queryTokenizer: Bloodhound.tokenizers.whitespace,
+            limit: 10
         });
         $('#family-search').typeahead({
             hint: true,

@@ -94,7 +94,6 @@ class ChildrenController extends Controller
         $family->save();
         $child_family = new ChildFamily(['child_id' => $child_id, 'family_id' => $family->id]);
         $child_family->save();
-        //return view('children.edit_child.new_family.succeeded');
         return $child_family;
     }
 

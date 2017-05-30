@@ -1,4 +1,5 @@
 window._ = require('lodash');
+//require('jquery')
 window.$ = window.jQuery = require('jquery');
 
 require('bootstrap-less');
@@ -17,7 +18,7 @@ window.pdfMake = {createPdf: require('pdfmake-browserified')};
 
 
 window.Bloodhound = require('bloodhound-js');
-require('typeahead.js');
+require('corejs-typeahead');
 
 require('bootstrap-datepicker');
 require('bootstrap-datepicker/js/locales/bootstrap-datepicker.nl-BE.js');
