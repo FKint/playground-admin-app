@@ -91,7 +91,7 @@
         return parseFloat(val).toFixed(2);
     }
     function formatPrice(val) {
-        return "€ " + formatPriceWithoutSign(val);
+        return "€&nbsp;" + formatPriceWithoutSign(val);
     }
 </script>
 @stack('scripts')
