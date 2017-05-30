@@ -11,7 +11,7 @@
 @section('content')
     <div class="row">
         <div class="col-xs-12">
-            <a href="{!! route('show_new_family_with_children') !!}" class="btn btn-primary">Nieuw gezin toevoegen</a>
+            <a href="{!! route('show_new_family_with_children') !!}" class="btn btn-primary">Nieuwe voogd toevoegen</a>
         </div>
     </div>
     <div class="row">&nbsp;</div>

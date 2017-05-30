@@ -47,7 +47,7 @@
                 <li @if(!empty($selected_menu_item) && $selected_menu_item == 'children')class="active"@endif><a
                             href="{{route('children')}}">Kinderen</a></li>
                 <li @if(!empty($selected_menu_item) && $selected_menu_item == 'families')class="active"@endif><a
-                            href="{{route('families')}}">Gezinnen</a></li>
+                            href="{{route('families')}}">Voogden</a></li>
                 <li @if(!empty($selected_menu_item) && $selected_menu_item == 'registrations')class="active"@endif><a
                             href="{{route('registrations')}}">Registraties</a></li>
                 <li @if(!empty($selected_menu_item) && $selected_menu_item == 'lists')class="active"@endif><a href="#">Lijsten</a>
