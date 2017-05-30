@@ -27,11 +27,15 @@
             </th>
             @foreach($all_age_groups as $age_group)
                 <td>
-                    {{ $playground_day->count_registrations_for_age_group($age_group) }}
+                    <a href="{{ route('registrations_for_date', ['date' => $playground_day->date()->format('Y-m-d')]) }}?filter_age_group_id={{$age_group->id}}">
+                        {{ $playground_day->count_registrations_for_age_group($age_group) }}
+                    </a>
                 </td>
             @endforeach
             <td>
-                {{ $playground_day->count_registrations() }}
+                <a href="{{ route('registrations_for_date', ['date' => $playground_day->date()->format('Y-m-d')]) }}">
+                    {{ $playground_day->count_registrations() }}
+                </a>
             </td>
         </tr>
     @endforeach
