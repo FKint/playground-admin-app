@@ -28,7 +28,6 @@ mix.js('resources/assets/js/app.js', 'public/js')
         'datatables.net-buttons/js/buttons.html5',
         'datatables.net-bs',
         'bloodhound-js',
-        'typeahead.js',
         'corejs-typeahead',
         'datatables.net-buttons-bs',
         'pdfmake-browserified',
