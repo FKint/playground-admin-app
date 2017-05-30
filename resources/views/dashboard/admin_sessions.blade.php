@@ -62,6 +62,7 @@
                 },
                 {data: 'remarks', name: 'remarks'}
             ],
+            order: [[1, 'desc']]
         });
     });
 </script>
