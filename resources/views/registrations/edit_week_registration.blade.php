@@ -153,7 +153,7 @@
             table.find('select').each(function () {
                 this.selectedIndex = 0;
             });
-            table.find('span.price').text(formatPrice(0));
+            table.find('span.price').html(formatPrice(0));
             table.data('populating', parseInt(table.data('populating')) - 1);
         }
 
@@ -254,14 +254,14 @@
             table.find('td.whole-week').each(function () {
                 const child_id = $(this).data('child-id');
                 $(this).find('.registration-checkbox').prop('checked', data.children[child_id].whole_week_registered);
-                $(this).find('.price').text(formatPrice(data.children[child_id].whole_week_price))
+                $(this).find('.price').html(formatPrice(data.children[child_id].whole_week_price))
             });
             table.find('td.day-registration').each(function () {
                 const child_id = $(this).data('child-id');
                 const week_day_id = $(this).parent('tr').data('week-day-id');
                 const child_day_data = data.children[child_id].days[week_day_id];
                 $(this).find('.registration-checkbox').prop('checked', child_day_data.registered);
-                $(this).find('.price').text(formatPrice(child_day_data.day_price));
+                $(this).find('.price').html(formatPrice(child_day_data.day_price));
             });
             table.find('td.day-age-group').each(function () {
                 const child_id = $(this).data('child-id');
@@ -290,7 +290,7 @@
                 }
                 const child_day_supplement_data = data.children[child_id].days[week_day_id].supplements[supplement_id];
                 $(this).find('.registration-checkbox').prop('checked', child_day_supplement_data.ordered);
-                $(this).find('.price').text(formatPrice(child_day_supplement_data.price));
+                $(this).find('.price').html(formatPrice(child_day_supplement_data.price));
             });
             table.find('td.activity-list-registration').each(function () {
                 const child_id = $(this).data('child-id');
@@ -300,7 +300,7 @@
                 }
                 const activity_list_data = data.children[child_id].activity_lists[activity_list_id];
                 $(this).find('.registration-checkbox').prop('checked', activity_list_data.registered);
-                $(this).find('.price').text(formatPrice(activity_list_data.price));
+                $(this).find('.price').html(formatPrice(activity_list_data.price));
             });
             table.data('populating', parseInt(table.data('populating')) - 1);
 

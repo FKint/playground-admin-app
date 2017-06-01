@@ -65,7 +65,7 @@
                 {data: 'remarks', name: 'remarks'}
             ]
         });
-        $('#family-saldo').text(formatPrice($('#family-saldo').text()));
+        $('#family-saldo').html(formatPrice($('#family-saldo').text()));
     });
 
 </script>
