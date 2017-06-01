@@ -16,6 +16,7 @@
         const new_child_form = $('#new-child-form');
         new_child_form.find('input[name=first_name]').first().focus();
         new_child_form.find('input[name=birth_year]').change(function () {
+            new_child_form.find('select[name=age_group_id]').val(0);
             const birth_year = parseInt($(this).val());
             if (isNaN(birth_year))
                 return true;
@@ -28,7 +29,9 @@
                 const start_year = getYearFromDate(age_groups[i].start_date);
                 const end_year = getYearFromDate(age_groups[i].end_date);
                 if (start_year <= birth_year && birth_year < end_year) {
+                    console.log(start_year + "<=" + birth_year + "<" + end_year);
                     new_child_form.find('select[name=age_group_id]').val(age_groups[i].id);
+                    return;
                 }
             }
         });
