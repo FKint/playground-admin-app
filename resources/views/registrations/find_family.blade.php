@@ -10,8 +10,8 @@
                 <select id="week" name="week" class="form-control">
                     @foreach($all_weeks as $w)
                         <option value="{{ $w->id }}" @if($w->id == $week->id) selected @endif>
-                            Week {{ $w->id }}: {{ $w->first_day_of_week }}
-                            tot {{ $w->last_day()->date()->format('Y-m-d') }}
+                            Week {{ $w->id }}: {{ $w->first_day()->date()->format('d-m-Y') }}
+                            tot {{ $w->last_day()->date()->format('d-m-Y') }}
                         </option>
                     @endforeach
                 </select>

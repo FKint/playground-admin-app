@@ -17,7 +17,6 @@ use App\Transaction;
 use App\Week;
 use App\WeekDay;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 use Yajra\Datatables\Datatables;
 
 class RegistrationsController extends Controller
@@ -31,13 +30,11 @@ class RegistrationsController extends Controller
         if (!$week)
             return PlaygroundDay::first();
         $interval = $upper_bound_date->diff(\DateTime::createFromFormat('Y-m-d', $week->first_day_of_week));
-        Log::info("Interval days: " . $interval->days);
         $week_days = WeekDay::query()
             ->where('days_offset', '<=', $interval->days)
             ->orderByDesc('days_offset')
             ->get();
         foreach ($week_days as $week_day) {
-            Log::info("Considering week day: " . $week_day->id);
             $playground_day = $week->playground_days()->where('playground_days.week_day_id', '=', $week_day->id)->first();
             if ($playground_day)
                 return $playground_day;

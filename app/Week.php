@@ -30,11 +30,26 @@ class Week extends Model
         return $this->hasMany(PlaygroundDay::class);
     }
 
+    public function first_day()
+    {
+        $playground_day = $this->playground_days()
+            ->join('week_days', 'playground_days.week_day_id', '=', 'week_days.id')
+            ->orderBy('week_days.days_offset', 'asc')
+            ->first();
+        Log::info("First day: " . json_encode($playground_day));
+        $playground_day = PlaygroundDay::query()
+            ->where([
+                ['week_day_id', $playground_day->week_day_id],
+                ['week_id', $playground_day->week_id]
+            ])->firstOrFail();
+        return $playground_day;
+    }
+
     public function last_day()
     {
         $playground_day = $this->playground_days()
             ->join('week_days', 'playground_days.week_day_id', '=', 'week_days.id')
-            ->orderBy('week_days.days_offset', -1)->first();
+            ->orderBy('week_days.days_offset', 'desc')->first();
         $playground_day = PlaygroundDay::query()
             ->where([
                 ['week_day_id', $playground_day->week_day_id],
