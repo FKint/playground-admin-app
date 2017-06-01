@@ -1,15 +1,17 @@
 <div class="row">
-    <table class="table table-bordered" id="family-children-table">
-        <thead>
-        <tr>
-            <th>Voornaam</th>
-            <th>Naam</th>
-            <th>Geboortejaar</th>
-            <th>Werking</th>
-            <th>Belangrijk</th>
-        </tr>
-        </thead>
-    </table>
+    <div class="col-xs-12">
+        <table class="table table-bordered" id="family-children-table">
+            <thead>
+            <tr>
+                <th>Voornaam</th>
+                <th>Naam</th>
+                <th>Geboortejaar</th>
+                <th>Werking</th>
+                <th>Belangrijk</th>
+            </tr>
+            </thead>
+        </table>
+    </div>
 </div>
 
 <script>
