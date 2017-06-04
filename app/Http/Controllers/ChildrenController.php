@@ -113,10 +113,14 @@ class ChildrenController extends Controller
 
     public function addChildFamily(Request $request, $child_id)
     {
-        $family_id = $request->input('family_id');
-        $child_family = new ChildFamily(['child_id' => $child_id, 'family_id' => $family_id]);
-        $child_family->save();
-        return $child_family;
+        $child = Child::findorFail($child_id);
+        $family = Family::findOrFail($request->input('family_id'));
+        $child->families()->attach($family);
+        //$family_id = $request->input('family_id');
+        //$child_family = new ChildFamily(['child_id' => $child_id, 'family_id' => $family_id]);
+        //$child_family->save();
+        //return $child_family;
+        return $child->child_families()->where('family_id', '=', $family->id)->firstOrFail();
     }
 
     public function removeChildFamily(Request $request, $child_id)
