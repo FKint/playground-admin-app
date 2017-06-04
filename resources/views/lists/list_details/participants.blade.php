@@ -109,7 +109,7 @@
             $.post('{!! route('addListChildFamily', ['list_id' => $list->id]) !!}', {
                 child_family_id: suggestion.id
             }).done(function () {
-                $('#child-family-search').val("");
+                $('#child-family-search').typeahead('val', '');
                 table.ajax.reload();
             }).fail(function () {
                 alert('Adding child family failed!');
