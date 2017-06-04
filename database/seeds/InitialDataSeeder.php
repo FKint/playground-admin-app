@@ -28,6 +28,7 @@ class InitialDataSeeder extends Seeder
     private $family_ids = [];
     private $child_ids = [];
     private $family_week_registration_ids = [];
+    private $child_family_ids = [];
     private $child_family_week_registration_ids = [];
     private $child_family_day_registration_ids = [];
     private $toddlers_id = null;
@@ -36,6 +37,7 @@ class InitialDataSeeder extends Seeder
     private $home_id;
     private $whole_day_id;
     private $first_admin_session_id;
+    private $activity_list_id;
 
     private function families($family_id)
     {
@@ -45,6 +47,11 @@ class InitialDataSeeder extends Seeder
     private function children($child_id)
     {
         return \App\Child::findOrFail($this->child_ids[$child_id]);
+    }
+
+    private function child_families($child_family_id)
+    {
+        return \App\ChildFamily::findOrFail($this->child_family_ids[$child_family_id]);
     }
 
     private function weeks($week_id)
@@ -262,12 +269,12 @@ class InitialDataSeeder extends Seeder
             "contact" => "1207"
         ]);
         $child = \App\Child::where('first_name', '=', 'Josephine')->firstOrFail();
-        DB::table('child_families')->insert([
+        $this->child_family_ids['jozef_de_backer_josephine'] = DB::table('child_families')->insertGetId([
             "family_id" => $this->family_ids['jozef_de_backer'],
             "child_id" => $child->id
         ]);
         $child = \App\Child::where('first_name', '=', 'Eefje')->firstOrFail();
-        DB::table('child_families')->insert([
+        $this->child_family_ids['jozef_de_backer_eefje'] = DB::table('child_families')->insertGetId([
             "family_id" => $this->family_ids['jozef_de_backer'],
             "child_id" => $child->id
         ]);
@@ -310,12 +317,20 @@ class InitialDataSeeder extends Seeder
 
     private function seed_activity_lists()
     {
-        DB::table('activity_lists')->insert([
+        $this->activity_list_id = DB::table('activity_lists')->insert([
             "name" => "Zwembad O'Town",
             "date" => "2017-07-06",
             "show_on_attendance_form" => true,
             "show_on_dashboard" => true,
             "price" => "1.75"
+        ]);
+        DB::table('activity_list_child_families')->insert([
+            "child_family_id" => $this->child_families('jozef_de_backer_josephine')->id,
+            "activity_list_id" => $this->activity_list_id
+        ]);
+        DB::table('activity_list_child_families')->insert([
+            "child_family_id" => $this->child_families('jozef_de_backer_eefje')->id,
+            "activity_list_id" => $this->activity_list_id
         ]);
     }
 
@@ -323,13 +338,13 @@ class InitialDataSeeder extends Seeder
     {
         $family_jozef_de_backer = $this->families('jozef_de_backer');
         $week0 = $this->weeks(0);
-        $this->family_week_registration_ids['jozef_de_backer_week_0'] = DB::table('family_week_registrations')->insert([
+        $this->family_week_registration_ids['jozef_de_backer_week_0'] = DB::table('family_week_registrations')->insertGetId([
             "family_id" => $family_jozef_de_backer->id,
             "week_id" => $week0->id,
             "tariff_id" => $family_jozef_de_backer->tariff_id
         ]);
         $child_josephine_janssens = $this->children('josephine_janssens');
-        $this->child_family_week_registration_ids['josephine_janssens_week0'] = DB::table('child_family_week_registrations')->insert([
+        $this->child_family_week_registration_ids['josephine_janssens_week0'] = DB::table('child_family_week_registrations')->insertGetId([
             "child_id" => $child_josephine_janssens->id,
             "family_id" => $family_jozef_de_backer->id,
             "week_id" => $week0->id,

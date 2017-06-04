@@ -28,6 +28,6 @@ class CreateActivityListChildFamiliesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('activity_list_child_families');
+        Schema::drop('activity_list_child_families');
     }
 }

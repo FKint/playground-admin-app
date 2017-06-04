@@ -26,6 +26,8 @@ Route::get('/registrations', 'RegistrationsController@show')
 Route::get('/registrations/date/{date}', 'RegistrationsController@showDate')
     ->name('registrations_for_date');
 
+Route::get('/lists', 'ListsController@show')->name('lists');
+
 Route::get('/settings', 'SettingsController@show')->name('settings');
 
 // Edit child
@@ -86,3 +88,9 @@ Route::get('/admin_sessions/close', 'AdminSessionsController@showCloseAdminSessi
     ->name('close_admin_session');
 Route::post('/admin_sessions/close', 'AdminSessionsController@showSubmitCloseAdminSession')
     ->name('submit_close_admin_session');
+
+// Activity lists
+Route::get('/list/{list_id}', 'ListsController@showList')->name('show_list');
+Route::get('/lists/new', 'ListsController@showNewList')->name('show_create_new_list');
+Route::post('/lists/new', 'ListsController@submitNewList')->name('submit_create_new_list');
+Route::post('/list/{list_id}/edit', 'ListsController@submitEditList')->name('submit_edit_list');

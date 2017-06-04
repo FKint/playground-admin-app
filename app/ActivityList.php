@@ -18,6 +18,6 @@ class ActivityList extends Model
      */
     public function child_families()
     {
-        return $this->hasMany(ChildFamily::class);
+        return $this->belongsToMany(ChildFamily::class, 'activity_list_child_families');
     }
 }

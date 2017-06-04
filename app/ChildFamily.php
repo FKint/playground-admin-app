@@ -3,15 +3,31 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Nicolaslopezj\Searchable\SearchableTrait;
 
 class ChildFamily extends Model
 {
+    use SearchableTrait;
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
-    protected $fillable = ['family_id', 'child_id'];
+    protected $fillable = ['family_id', 'child_name_id'];
+
+    protected $searchable = [
+        'columns' => [
+            'families.id' => 5,
+            'families.guardian_first_name' => 5,
+            'families.guardian_last_name' => 5,
+            'children.first_name' => 10,
+            'children.last_name' => 10
+        ],
+        'joins' => [
+            'families' => ['child_families.family_id', 'families.id'],
+            'children' => ['child_families.child_id', 'children.id']
+        ]
+    ];
 
     /**
      * Get corresponding child.
@@ -38,6 +54,7 @@ class ChildFamily extends Model
             ActivityList::class,
             'activity_list_child_families',
             'child_family_id',
-            'activity_list_id');
+            'activity_list_id'
+        );
     }
 }

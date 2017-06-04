@@ -80,7 +80,6 @@
                     '<div class="list-group search-results-dropdown"><div class="list-group-item">Nothing found.</div></div>'
                 ],
                 suggestion: function (data) {
-                    console.log(data);
                     let label = "Familie " + data.id + ": " + data.guardian_first_name + " " + data.guardian_last_name;
                     if (data.children.length > 0) {
                         const children_names = _.map(data.children, function (c) {

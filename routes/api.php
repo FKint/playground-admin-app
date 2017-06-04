@@ -37,6 +37,10 @@ Route::get('/registrations/playground_day/{playground_day_id}', 'RegistrationsCo
     ->name('getRegistrations');
 Route::get('/admin_sessions', 'AdminSessionsController@getAdminSessions')
     ->name('getAdminSessions');
+Route::get('/lists', 'ListsController@getLists')
+    ->name('getLists');
+Route::get('/list/{list_id}/participants', 'ListsController@getListParticipants')
+    ->name('getListParticipants');
 
 // Typeahead.js
 Route::get('/typeahead/child/{child_id}/families/suggestions', 'ChildrenController@getChildFamilySuggestions')
@@ -45,6 +49,8 @@ Route::get('/typeahead/family/{family_id}/children/suggestions', 'FamiliesContro
     ->name('getChildSuggestionsForFamily');
 Route::get('/typeahead/families/suggestions', 'FamiliesController@getFamilySuggestions')
     ->name('getFamilySuggestions');
+Route::get('/typeahead/list/{list_id}/child_families/suggestions', 'ListsController@getListChildFamilySuggestions')
+    ->name('getListChildFamilySuggestions');
 
 // Ajax
 Route::post('/child/{child_id}/families/add', 'ChildrenController@addChildFamily')
@@ -60,3 +66,8 @@ Route::post('/registration/week/{week_id}/family/{family_id}', 'RegistrationsCon
     ->name('submitRegistrationData');
 Route::post('/registration/week/{week_id}/family/{family_id}/prices', 'RegistrationsController@submitRegistrationDataForPrices')
     ->name('submitRegistrationDataForPrices');
+
+Route::post('/list/{list_id}/participants/remove', 'ListsController@removeListParticipant')
+    ->name('removeListParticipant');
+Route::post('/list/{list_id}/participants/add', 'ListsController@addListChildFamily')
+    ->name('addListChildFamily');

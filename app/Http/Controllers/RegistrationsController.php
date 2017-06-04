@@ -106,7 +106,7 @@ class RegistrationsController extends Controller
             'family' => $family,
             'week' => $week,
             'all_supplements' => Supplement::all(),
-            'all_activity_lists' => ActivityList::all(),
+            'all_activity_lists' => ActivityList::query()->where('show_on_attendance_form', '=', true)->get(),
             'all_tariffs_by_id' => Tariff::getAllTariffsById(),
             'all_age_groups' => AgeGroup::all(),
             'all_day_parts' => DayPart::all()

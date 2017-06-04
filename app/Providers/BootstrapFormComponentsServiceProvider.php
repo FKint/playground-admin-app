@@ -18,6 +18,7 @@ class BootstrapFormComponentsServiceProvider extends ServiceProvider
         Form::component('bsTextarea', 'components.form.textarea', ['name', 'attributes' => []]);
         Form::component('bsNumber', 'components.form.number', ['name', 'attributes' => []]);
         Form::component('bsDropdown', 'components.form.dropdown', ['name', 'choices' => [], 'attributes' => []]);
+        Form::component('bsCheckbox', 'components.form.checkbox', ['name', 'attributes' => []]);
         Form::component('bsSubmit', 'components.form.submit', ['text' => 'Opslaan']);
     }
 

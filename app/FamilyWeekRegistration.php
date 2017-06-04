@@ -51,7 +51,9 @@ class FamilyWeekRegistration extends Model
         $default_day_part = DayPart::getDefaultDayPart();
         $result['tariff_id'] = $family_week_registration ? $family_week_registration->tariff_id : $family->tariff_id;
         foreach ($family->child_families as $child_family) {
+            Log::warning("child: " . json_encode($child_family->child));
             $child = $child_family->child;
+            Log::warning("child: ".$child);
             $child_data = [
                 'days' => [],
                 'activity_lists' => []
@@ -267,7 +269,7 @@ class FamilyWeekRegistration extends Model
             $child = Child::findOrFail($child_id);
             $child_family = $child->child_families()->where('family_id', '=', $family->id)->first();
             foreach ($child_data['activity_lists'] as $activity_list_id => $activity_list_data) {
-                $current_activity_registration = $child_family->activity_lists()->where('id', '=', $activity_list_id)->first();
+                $current_activity_registration = $child_family->activity_lists()->where('activity_lists.id', '=', $activity_list_id)->first();
                 $current_activity_price = $activity_list_data['price'];
                 $difference = $current_activity_price -
                     ($current_activity_registration ? $current_activity_registration->price : 0);

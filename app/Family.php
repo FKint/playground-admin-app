@@ -16,7 +16,7 @@ class Family extends Model
      * @var array
      */
     protected $fillable = ['guardian_first_name', 'guardian_last_name', 'tariff_id', 'remarks', 'contact'];
-
+    protected $appends = ['guardian_full_name'];
     protected $searchable = [
         'columns' => [
             'families.id' => 10,
@@ -88,5 +88,10 @@ class Family extends Model
     public function transactions()
     {
         return $this->hasMany(Transaction::class);
+    }
+
+    public function getGuardianFullNameAttribute()
+    {
+        return $this->guardian_full_name();
     }
 }
