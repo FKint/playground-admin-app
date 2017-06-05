@@ -26,7 +26,11 @@ class AdminSession extends Model
 
     public function getSessionStartAttribute()
     {
-        return $this->transactions()->min('created_at');
+        $earliest_transaction_datetime = $this->transactions()->min('created_at');
+        if (!$earliest_transaction_datetime) {
+            return $this->session_end;
+        }
+        return $earliest_transaction_datetime;
     }
 
     public function getExpectedCashAttribute()

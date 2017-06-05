@@ -33,8 +33,26 @@
             serverSide: false,
             ajax: '{!! route('getAdminSessions') !!}',
             columns: [
-                {data: 'session_start', name: 'session_start'},
-                {data: 'session_end', name: 'session_end'},
+                {
+                    data: 'session_start',
+                    name: 'session_start',
+                    render: function (data) {
+                        if (data === null) {
+                            return 'actief';
+                        }
+                        return data;
+                    }
+                },
+                {
+                    data: 'session_end',
+                    name: 'session_end',
+                    render: function (data) {
+                        if (data === null) {
+                            return 'actief';
+                        }
+                        return data;
+                    }
+                },
                 {data: 'nb_transactions', name: 'nb_transactions'},
                 {
                     data: 'expected_cash',
@@ -70,7 +88,7 @@
                     }
                 }
             ],
-            order: [[1, 'desc']]
+            order: [[0, 'desc']]
         });
     });
 </script>
