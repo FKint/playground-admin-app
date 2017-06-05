@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class AdminSession extends Model
 {
     protected $fillable = ['session_end', 'responsible_name', 'counted_cash', 'remarks'];
-    protected $appends = ['nb_transactions', 'session_start', 'expected_cash', 'error'];
+    protected $appends = ['nb_transactions', 'session_start', 'expected_cash', 'error', 'finished'];
 
     public static function getActiveAdminSession()
     {
@@ -17,6 +17,11 @@ class AdminSession extends Model
     public function transactions()
     {
         return $this->hasMany(Transaction::class);
+    }
+
+    public function getFinishedAttribute()
+    {
+        return $this->session_end !== null;
     }
 
     public function getNbTransactionsAttribute()

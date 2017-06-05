@@ -24,7 +24,8 @@ class SaveAdminSessionRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'responsible_name' => 'required|min:1',
+            'counted_cash' => 'required'
         ];
     }
 }

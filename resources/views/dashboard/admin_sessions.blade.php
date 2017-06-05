@@ -83,7 +83,10 @@
                 {
                     data: 'id',
                     name: 'id',
-                    render: function (data) {
+                    render: function (data, type, full) {
+                        if(!full.finished){
+                            return "";
+                        }
                         return '<a href="{{ route('show_edit_admin_session', ['admin_session_id' => 'SESSION_ID']) }}">Wijzigen</a>'.replace('SESSION_ID', data);
                     }
                 }

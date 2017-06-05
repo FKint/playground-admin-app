@@ -58,6 +58,6 @@ class AdminSessionsController extends Controller
             "remarks" => $request->input('remarks')
         );
         $admin_session->update($data);
-        return redirect(route('show_edit_admin_session', ['admin_session_id' => $admin_session_id]));
+        return redirect(route('dashboard'));
     }
 }
