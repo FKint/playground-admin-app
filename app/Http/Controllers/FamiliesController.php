@@ -42,11 +42,10 @@ class FamiliesController extends Controller
 
     public function showSubmitAddChildrenToFamily(Request $request, $family_id)
     {
-        Family::findOrFail($family_id);
+        $family = Family::findOrFail($family_id);
         $child = new Child($request->all());
         $child->save();
-        $child_family = new ChildFamily(['child_id' => $child->id, 'family_id' => $family_id]);
-        $child_family->save();
+        $family->children()->attach($child);
         return redirect()->action('FamiliesController@showAddChildrenToFamily', ['family_id' => $family_id]);
     }
 
@@ -140,10 +139,12 @@ class FamiliesController extends Controller
 
     public function addChildToFamily(Request $request, $family_id)
     {
-        $child_id = $request->input('child_id');
-        $child_family = new ChildFamily(["family_id" => $family_id, "child_id" => $child_id]);
-        $child_family->save();
-        return $child_family;
+        $child = Child::findOrFail($request->input('child_id'));
+        $family = Family::findOrFail($family_id);
+        $family->children()->attach($child);
+        //$child_family = new ChildFamily(["family_id" => $family_id, "child_id" => $child_id]);
+        //$child_family->save();
+        return $family;
     }
 
 }

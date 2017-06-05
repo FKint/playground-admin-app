@@ -33,6 +33,11 @@ class FamilyWeekRegistration extends Model
         ]);
     }
 
+    public function is_empty()
+    {
+        return $this->child_family_week_registrations()->count() == 0;
+    }
+
     public function getTotalWeekPrice()
     {
         $registration_data = FamilyWeekRegistration::getRegistrationDataArray($this->week, $this->family);
@@ -51,9 +56,7 @@ class FamilyWeekRegistration extends Model
         $default_day_part = DayPart::getDefaultDayPart();
         $result['tariff_id'] = $family_week_registration ? $family_week_registration->tariff_id : $family->tariff_id;
         foreach ($family->child_families as $child_family) {
-            Log::warning("child: " . json_encode($child_family->child));
             $child = $child_family->child;
-            Log::warning("child: ".$child);
             $child_data = [
                 'days' => [],
                 'activity_lists' => []

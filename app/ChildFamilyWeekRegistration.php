@@ -17,4 +17,9 @@ class ChildFamilyWeekRegistration extends Model
             ['child_id', '=', $this->child_id]
         ]);
     }
+
+    public function is_empty()
+    {
+        return !$this->whole_week_price && $this->child_family_day_registrations()->count() == 0;
+    }
 }

@@ -102,6 +102,7 @@ class RegistrationsController extends Controller
         $family_id = $request->input('family_id');
         $family = Family::findOrFail($family_id);
         $week = Week::findOrFail($week_id);
+        $this->removeFamilyWeekRegistrationIfEmpty($week, $family);
         return view('registrations.edit_week_registration', [
             'family' => $family,
             'week' => $week,
@@ -111,6 +112,21 @@ class RegistrationsController extends Controller
             'all_age_groups' => AgeGroup::all(),
             'all_day_parts' => DayPart::all()
         ]);
+    }
+
+    private function removeFamilyWeekRegistrationIfEmpty($week, $family)
+    {
+        $family_week_registration = $family->family_week_registrations()->where('week_id', '=', $week->id)->first();
+        if (!$family_week_registration)
+            return;
+        foreach ($family_week_registration->child_family_week_registrations()->get() as $child_family_week_registration) {
+            if ($child_family_week_registration->is_empty()) {
+                $child_family_week_registration->delete();
+            }
+        }
+        if ($family_week_registration->is_empty()) {
+            $family_week_registration->delete();
+        }
     }
 
     private function updateFamilyWeekRegistration($week, $family, $data)
@@ -237,6 +253,7 @@ class RegistrationsController extends Controller
     {
         $week = Week::findOrFail($week_id);
         $family = Family::findOrFail($family_id);
+        $this->removeFamilyWeekRegistrationIfEmpty($week, $family);
         $data = $request->all();
         $data = FamilyWeekRegistration::cleanRegistrationData($data);
 
@@ -257,6 +274,7 @@ class RegistrationsController extends Controller
     {
         $week = Week::findOrFail($week_id);
         $family = Family::findOrFail($family_id);
+        $this->removeFamilyWeekRegistrationIfEmpty($week, $family);
         $data = FamilyWeekRegistration::getRegistrationDataArray($week, $family);
         $data['price_difference'] = 0;
         $data['saldo'] = $family->getCurrentSaldo();
@@ -268,6 +286,7 @@ class RegistrationsController extends Controller
     {
         $week = Week::findOrFail($week_id);
         $family = Family::findOrFail($family_id);
+        $this->removeFamilyWeekRegistrationIfEmpty($week, $family);
         $data = $request->all();
         $data = FamilyWeekRegistration::cleanRegistrationData($data);
         $data = FamilyWeekRegistration::computeRegistrationPrices($week, $data);
