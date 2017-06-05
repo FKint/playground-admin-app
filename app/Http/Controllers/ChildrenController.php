@@ -34,7 +34,15 @@ class ChildrenController extends Controller
     public function showSubmitNewChild(SaveChildRequest $request)
     {
         $request->validate();
-        $child = new Child($request->all());
+        $data = array(
+            'first_name' => ucfirst($request->input('first_name')),
+            'last_name' => ucfirst($request->input('last_name')),
+            'birth_year' => $request->input('birth_year'),
+            'age_group_id' => $request->input('age_group_id'),
+            'remarks' => $request->input('remarks')
+        );
+
+        $child = new Child($data);
         $child->save();
         return redirect()->action('ChildrenController@showEditChild', ['child_id' => $child->id]);
     }
