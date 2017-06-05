@@ -135,7 +135,7 @@
         </div>
         <div class="col-xs-3">
             {{ Form::open(['class' => 'form-horizontal', 'id' => 'register-payment-form']) }}
-            {{ Form::bsDropdown('tariff_id', $all_tariffs_by_id) }}
+            {{ Form::bsDropdown('tariff_id', $all_tariffs_by_id, ['readonly' => true, 'disabled' => true]) }}
             {{ Form::bsNumber('saldo_difference',
             ['id' => 'saldo-difference', 'pattern'=>"[0-9]+([\\.,][0-9]+)?", 'step'=>'0.01', 'readonly' => true]) }}
             {{ Form::bsNumber('received_money',
