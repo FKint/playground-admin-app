@@ -113,6 +113,12 @@ class FamiliesController extends Controller
         return Datatables::of(Family::findOrFail($family_id)->children)->make(true);
     }
 
+    public function loadFamilyChildrenTable(Request $request)
+    {
+        $family = Family::findOrFail($request->input('family_id'));
+        return view('families.children.table', ['family' => $family]);
+    }
+
     public function getChildSuggestionsForFamily(Request $request, $family_id)
     {
         $query = $request->input('q');
@@ -142,8 +148,6 @@ class FamiliesController extends Controller
         $child = Child::findOrFail($request->input('child_id'));
         $family = Family::findOrFail($family_id);
         $family->children()->attach($child);
-        //$child_family = new ChildFamily(["family_id" => $family_id, "child_id" => $child_id]);
-        //$child_family->save();
         return $family;
     }
 

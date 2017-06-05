@@ -68,7 +68,7 @@ Route::get('/family/{family_id}/child/{child_id}/remove', 'FamiliesController@sh
 
 
 // Families
-Route::get('/family/children/form', 'FamiliesController@loadFamilyChildrenForm')
+Route::get('/family/children/table', 'FamiliesController@loadFamilyChildrenTable')
     ->name('load_family_children');
 Route::get('/family/edit/form', 'FamiliesController@loadEditFamilyForm')
     ->name('load_edit_family_form');
