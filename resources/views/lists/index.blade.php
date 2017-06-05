@@ -5,7 +5,7 @@
         <a class="btn btn-primary" href="{{ route('show_create_new_list') }}">Nieuwe lijst aanmaken</a>
     </div>
     <div class="row">
-        <table class="table table-bordered" id="lists-table">
+        <table class="table table-bordered table-striped" id="lists-table">
             <thead>
             <tr>
                 <th data-class-name="export">ID</th>

@@ -10,14 +10,28 @@
     #registration-table-div {
         overflow-x: scroll;
     }
+
+    col.registration-child-col:nth-child(even) {
+        background-color: rgb(252, 252, 252);
+    }
+    col.registration-child-col:nth-child(odd) {
+         background-color: rgb(240, 240, 240);
+     }
 </style>
 @endpush
 
 @section('content')
-    <h1>Wijzig registratie voor familie {{ $family->id }}: {{$family->guardian_first_name}} {{$family->guardian_last_name}}</h1>
+    <h1>Wijzig registratie voor familie {{ $family->id }}
+        : {{$family->guardian_first_name}} {{$family->guardian_last_name}}</h1>
     <div class="row">
         <div class="col-xs-9" id="registration-table-div">
             <table id="registration-table" class="table table-condensed" data-populating="0" data-nb-requests="0">
+                <colgroup>
+                    <col style="font-weight:bold" span="2">
+                    @foreach($family->children as $child)
+                        <col span="4" class="registration-child-col">
+                    @endforeach
+                </colgroup>
                 <tr>
                     <th colspan="2">Kind</th>
                     @foreach($family->children as $child)
@@ -351,14 +365,14 @@
                     decreaseNbRequests();
                     populateRegistrationData(response);
                     clearTransactionData();
-                    if(done !== null){
+                    if (done !== null) {
                         done();
                     }
                 });
         }
 
         $('#submit-registration-data').click(function () {
-            submitRegistrationData(function(){
+            submitRegistrationData(function () {
                 window.location.href = '{!! route('registrations') !!}';
             });
         });
