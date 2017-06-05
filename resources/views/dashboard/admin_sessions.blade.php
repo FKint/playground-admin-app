@@ -18,6 +18,7 @@
             <th>Fout</th>
             <th>Verantwoordelijke</th>
             <th>Opmerkingen</th>
+            <th>Wijzigen</th>
         </tr>
         </thead>
     </table>
@@ -60,7 +61,14 @@
                     data: 'responsible_name',
                     name: 'responsible_name'
                 },
-                {data: 'remarks', name: 'remarks'}
+                {data: 'remarks', name: 'remarks'},
+                {
+                    data: 'id',
+                    name: 'id',
+                    render: function (data) {
+                        return '<a href="{{ route('show_edit_admin_session', ['admin_session_id' => 'SESSION_ID']) }}">Wijzigen</a>'.replace('SESSION_ID', data);
+                    }
+                }
             ],
             order: [[1, 'desc']]
         });

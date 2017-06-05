@@ -88,6 +88,10 @@ Route::get('/admin_sessions/close', 'AdminSessionsController@showCloseAdminSessi
     ->name('close_admin_session');
 Route::post('/admin_sessions/close', 'AdminSessionsController@showSubmitCloseAdminSession')
     ->name('submit_close_admin_session');
+Route::get('/admin_session/{admin_session_id}/edit', 'AdminSessionsController@showEditAdminSession')
+    ->name('show_edit_admin_session');
+Route::post('/admin_session/{admin_session_id}/edit', 'AdminSessionsController@showSaveEditAdminSession')
+    ->name('show_save_edit_admin_session');
 
 // Activity lists
 Route::get('/list/{list_id}', 'ListsController@showList')->name('show_list');
