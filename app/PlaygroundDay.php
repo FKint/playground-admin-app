@@ -73,7 +73,6 @@ class PlaygroundDay extends Model
         if (!$week)
             return null;
         $interval = $date->diff(\DateTime::createFromFormat('Y-m-d', $week->first_day_of_week));
-        Log::info("Interval days: " . $interval->days);
         $week_day = WeekDay::query()
             ->where('days_offset', '=', $interval->days)
             ->first();

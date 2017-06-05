@@ -36,7 +36,6 @@ class Week extends Model
             ->join('week_days', 'playground_days.week_day_id', '=', 'week_days.id')
             ->orderBy('week_days.days_offset', 'asc')
             ->first();
-        Log::info("First day: " . json_encode($playground_day));
         $playground_day = PlaygroundDay::query()
             ->where([
                 ['week_day_id', $playground_day->week_day_id],

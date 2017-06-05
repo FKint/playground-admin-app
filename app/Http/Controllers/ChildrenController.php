@@ -65,7 +65,6 @@ class ChildrenController extends Controller
         $request->validate();
         $child = Child::findOrFail($child_id);
         $child->update($request->all());
-        //return $this->loadEditChildFormForChild($child);
         return array("succes" => true);
     }
 
@@ -94,11 +93,11 @@ class ChildrenController extends Controller
 
     public function submitLinkNewChildFamilyForm(Request $request, $child_id)
     {
+        $child = Child::findOrFail($child_id);
         $family = new Family($request->all());
         $family->save();
-        $child_family = new ChildFamily(['child_id' => $child_id, 'family_id' => $family->id]);
-        $child_family->save();
-        return $child_family;
+        $family->children()->attach($child);
+        return $family;
     }
 
     public function getChildFamilySuggestions(Request $request, $child_id)
