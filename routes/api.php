@@ -53,6 +53,8 @@ Route::get('/typeahead/list/{list_id}/child_families/suggestions', 'ListsControl
     ->name('getListChildFamilySuggestions');
 
 // Ajax
+Route::post('/child/new', 'ChildrenController@submitNewChild')
+    ->name('submitNewChild');
 Route::post('/child/{child_id}/families/add', 'ChildrenController@addChildFamily')
     ->name('addChildFamily');
 Route::post('/child/{child_id}/families/remove', 'ChildrenController@removeChildFamily')

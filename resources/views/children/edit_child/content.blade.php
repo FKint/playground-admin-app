@@ -1,9 +1,9 @@
 
 <ul class="nav nav-tabs" role="tablist" id="edit-child-tablist">
-    <li role="presentation" class="active">
+    <li role="presentation" class="active" data-tag="info">
         <a href="#edit-child-info-div" aria-controls="info" role="tab" data-toggle="tab">Info</a>
     </li>
-    <li role="presentation">
+    <li role="presentation" data-tag="families">
         <a href="#edit-child-families-div" aria-controls="families" role="tab" data-toggle="tab">Voogden</a>
     </li>
 </ul>

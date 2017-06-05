@@ -21,9 +21,12 @@
 
 @push('scripts')
 <script>
-    function showEditChildModal(child_id) {
+    function showEditChildModal(child_id, start_tab) {
         closeAllModals();
-        $('#edit-child-tablist').find('li:first > a').click();
+        if(!start_tab){
+            start_tab = "info";
+        }
+        $('#edit-child-tablist').find('li[data-tag="'+start_tab+'"]:first > a').click();
         $('#edit-child-modal').modal('show');
         const edit_child_form_url = '{!! route('edit_child_form') !!}' + '?child_id=' + child_id;
         $('#edit-child-info-div')

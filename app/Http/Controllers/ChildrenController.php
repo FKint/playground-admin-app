@@ -16,7 +16,9 @@ class ChildrenController extends Controller
     public function show()
     {
         return view('children.index')
-            ->with('selected_menu_item', 'children');
+            ->with('selected_menu_item', 'children')
+            ->with('all_age_groups_by_id', AgeGroup::getAllAgeGroupsById())
+            ->with('all_age_groups', AgeGroup::all());
     }
 
     public function getChildren()
@@ -45,6 +47,22 @@ class ChildrenController extends Controller
         $child = new Child($data);
         $child->save();
         return redirect()->action('ChildrenController@showEditChild', ['child_id' => $child->id]);
+    }
+
+    public function submitNewChild(SaveChildRequest $request)
+    {
+        $request->validate();
+        $data = array(
+            'first_name' => ucfirst($request->input('first_name')),
+            'last_name' => ucfirst($request->input('last_name')),
+            'birth_year' => $request->input('birth_year'),
+            'age_group_id' => $request->input('age_group_id'),
+            'remarks' => $request->input('remarks')
+        );
+
+        $child = Child::create($data);
+        $child->save();
+        return $child;
     }
 
     public function showEditChild($child_id)
