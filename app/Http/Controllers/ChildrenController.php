@@ -6,6 +6,7 @@ use App\AgeGroup;
 use App\Child;
 use App\Family;
 use App\ChildFamily;
+use App\Http\Requests\SaveChildRequest;
 use App\Tariff;
 use Yajra\Datatables\Datatables;
 use Illuminate\Http\Request;
@@ -30,8 +31,9 @@ class ChildrenController extends Controller
             ->with('all_age_groups', AgeGroup::all());
     }
 
-    public function showSubmitNewChild(Request $request)
+    public function showSubmitNewChild(SaveChildRequest $request)
     {
+        $request->validate();
         $child = new Child($request->all());
         $child->save();
         return redirect()->action('ChildrenController@showEditChild', ['child_id' => $child->id]);
@@ -58,11 +60,13 @@ class ChildrenController extends Controller
         return $this->loadEditChildFormForChild($child);
     }
 
-    public function submitEditChildForm(Request $request, $child_id)
+    public function submitEditChildForm(SaveChildRequest $request, $child_id)
     {
+        $request->validate();
         $child = Child::findOrFail($child_id);
         $child->update($request->all());
-        return $this->loadEditChildFormForChild($child);
+        //return $this->loadEditChildFormForChild($child);
+        return array("succes" => true);
     }
 
     protected function loadEditChildFormForChild($child)
@@ -116,10 +120,6 @@ class ChildrenController extends Controller
         $child = Child::findorFail($child_id);
         $family = Family::findOrFail($request->input('family_id'));
         $child->families()->attach($family);
-        //$family_id = $request->input('family_id');
-        //$child_family = new ChildFamily(['child_id' => $child_id, 'family_id' => $family_id]);
-        //$child_family->save();
-        //return $child_family;
         return $child->child_families()->where('family_id', '=', $family->id)->firstOrFail();
     }
 

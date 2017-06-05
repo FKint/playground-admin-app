@@ -3,6 +3,15 @@
 @section('content')
 
     <h1>Nieuw kind toevoegen</h1>
+    @if (count($errors) > 0)
+        <div class="alert alert-danger">
+            <ul>
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
     {{ Form::open(['class' => 'form-horizontal', 'id' => 'new-child-form']) }}
     @include('forms.child')
     {{ Form::close() }}
