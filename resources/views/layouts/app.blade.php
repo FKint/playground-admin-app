@@ -38,7 +38,7 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="#">Bootstrap theme</a>
+            <a class="navbar-brand" href="#">Playground Administration</a>
         </div>
         <div id="navbar" class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
@@ -61,7 +61,7 @@
                        aria-expanded="false">Extra<span class="caret"></span></a>
                     <ul class="dropdown-menu">
                         <li><a href="{{route('settings')}}">Instellingen</a></li>
-                        <li><a href="#">Uitloggen</a></li>
+                        <li><a href="{{ route('logout') }}">Uitloggen</a></li>
                     </ul>
                 </li>
             </ul>
