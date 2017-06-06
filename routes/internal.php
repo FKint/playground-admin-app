@@ -17,7 +17,7 @@ Route::get('/', function () {
 Route::get('/logout', function(){
     \Illuminate\Support\Facades\Auth::logout();
     return redirect(route('home'));
-});
+})->name('logout');
 
 Route::get('/dashboard', 'DashboardController@show')->name('dashboard');
 
