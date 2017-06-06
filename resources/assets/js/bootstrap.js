@@ -8,6 +8,8 @@ require('datatables.net-buttons');
 require('datatables.net-buttons/js/buttons.html5');
 require('datatables.net-bs');
 require('datatables.net-buttons-bs');
+require('datatables.net-buttons/js/buttons.colVis');
+require('datatables.net-buttons-bs/js/buttons.bootstrap');
 
 $.extend(true, $.fn.dataTable.defaults, {
     "language": {"url": "//cdn.datatables.net/plug-ins/1.10.13/i18n/Dutch.json"}

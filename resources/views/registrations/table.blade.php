@@ -78,7 +78,7 @@
                     exportOptions: {
                         columns: '.export'
                     }
-                }
+                }, 'colvis'
             ],
             orderCellsTop: true,
             columns: [
