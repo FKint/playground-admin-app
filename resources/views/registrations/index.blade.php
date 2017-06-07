@@ -45,11 +45,10 @@
 <script>
     $(function () {
         function goToMoment(m) {
-            window.location.href = "/registrations/date/" + m.format('YYYY-MM-DD');
+            window.location.href = "{{ route('registrations_for_date', ['date' => 'DATE']) }}".replace('DATE', m.format('YYYY-MM-DD'));
         }
 
         const default_date = new Date("{{ $date->format('Y-m-d') }}");
-        console.log('default_date', default_date);
         $('#registration-datepicker').datepicker()
             .datepicker('update', default_date)
             .on('changeDate', function (event) {
