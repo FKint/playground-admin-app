@@ -75,6 +75,7 @@ class ListsController extends Controller
         $show_on_attendance_form = $request->input('show_on_attendance_form') === 'on';
         $show_on_dashboard = $request->input('show_on_dashboard') === 'on';
         $data = [
+            "name" => $request->input('name'),
             "date" => $date ? $date->format("Y-m-d") : null,
             "price" => $price,
             "show_on_attendance_form" => $show_on_attendance_form,
