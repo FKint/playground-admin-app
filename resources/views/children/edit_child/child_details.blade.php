@@ -31,10 +31,9 @@
                 '{!! route('update_child_details', ['child_id'=>$child->id]) !!}',
                 form.serialize()
             ).done(function (resp) {
-                console.log(resp);
                 success_div.removeClass('hidden');
+                $(window).trigger('children:updated');
             }).fail(function (resp) {
-                console.log(resp);
                 for (const key in resp.responseJSON) {
                     const field_errors = resp.responseJSON[key];
                     for (const error_index in field_errors) {

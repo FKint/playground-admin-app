@@ -5,12 +5,14 @@
 <script>
     $(document).ready(function () {
         const form = $('#edit-family-form');
+        const form_parent = form.parent();
         form.submit(function (event) {
             event.preventDefault();
-            form.parent().load(
+            form_parent.load(
                 '{!! route('submit_edit_family_form', ['family_id'=>$family->id]) !!}',
                 form.serializeArray()
             );
+            $(window).trigger('families:updated');
         });
     });
 </script>

@@ -99,6 +99,9 @@
                 return true;
             }
         );
+        $(window).on('children:updated', function(){
+            table.ajax.reload();
+        });
         $('.children-table-filter').change(function () {
             table.draw();
         });
@@ -111,7 +114,7 @@
         });
         table_element.on('click', '.btn-edit-child', function () {
             const child_id = $(this).attr('data-child-id');
-            showEditChildModal(child_id);
+            showEditChildModal(child_id, null);
         });
 
         $('#edit-child-modal').on('hidden.bs.modal', function () {

@@ -82,6 +82,9 @@
             const family_id = $(this).data('family-id');
             showEditFamilyModal(family_id);
         });
+        $(window).on('families:updated', function(){
+            table.ajax.reload();
+        });
     });
 </script>
 @endpush

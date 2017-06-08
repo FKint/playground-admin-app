@@ -28,10 +28,13 @@
 
 @push('scripts')
 <script>
-    function showNewChildModal() {
+    function showNewChildModal(done_callback) {
         closeAllModals();
         $('#new-child-form')[0].reset();
         $('#new-child-modal').modal('show');
+        if (done_callback) {
+            $('#new-child-form').off('children:updated').on('children:updated', done_callback);
+        }
     }
     $(function () {
         $('#new-child-form').submit(function () {
@@ -40,6 +43,8 @@
             $.post('{{ route('submitNewChild') }}',
                 $(this).serialize()
             ).done(function (resp) {
+                $('#new-child-form').trigger('children:updated');
+                $(window).trigger('children:updated');
                 showEditChildModal(resp.id, 'families');
             }).fail(function (resp) {
                 for (const key in resp.responseJSON) {

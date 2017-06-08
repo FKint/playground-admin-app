@@ -20,13 +20,14 @@
 
 @push('scripts')
 <script>
-    function showEditFamilyModal(family_id) {
+    function showEditFamilyModal(family_id, update_callback) {
         closeAllModals();
         // TODO: show spinning cog on modal while waiting for the form to load
         $('#edit-family-modal').modal('show');
 
         const edit_family_url = '{!! route('load_edit_family_form') !!}' + '?family_id=' + family_id;
-        $('#edit-family-modal-body')
+        const form_parent = $('#edit-family-modal-body');
+        form_parent
             .data('url', edit_family_url)
             .load(edit_family_url);
     }
