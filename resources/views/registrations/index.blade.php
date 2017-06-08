@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('title')
-    Registraties
+    Registraties {{ $playground_day->date()->format('d-m-Y') }}
 @endsection
 @section('content')
     <h1>Registraties</h1>

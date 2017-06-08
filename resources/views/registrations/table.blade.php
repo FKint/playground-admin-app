@@ -77,6 +77,45 @@
                     extend: 'pdfHtml5',
                     exportOptions: {
                         columns: '.export'
+                    },
+                    title: "Registraties {{ $playground_day->date()->format('d-m-Y') }}",
+                    customize: function (doc) {
+                        doc.footer = function (page, pages) {
+                            return {
+                                columns: [
+                                    {
+                                        alignment: 'center',
+                                        text: [
+                                            {text: page.toString(), italics: true},
+                                            ' van ',
+                                            {text: pages.toString(), italics: true}
+                                        ]
+                                    }
+                                ],
+                                margin: [10, 0]
+                            };
+                        };
+                        let filter_text = "";
+                        if ($('#select-age-group').val() !== 'all') {
+                            filter_text += "Werking: " + $('#select-age-group option:selected').text().trim() + "\n";
+                        }
+                        if ($('#select-daypart').val() !== 'all') {
+                            filter_text += "Dagdeel: " + $('#select-daypart option:selected').text().trim() + "\n";
+                        }
+                        if ($('#select-supplement').val() !== 'all') {
+                            filter_text += "Extraatje: " + $('#select-supplement option:selected').text().trim() + "\n";
+                        }
+                        if ($('#select-attended').val() !== 'all') {
+                            filter_text += "Aanwezig: " + $('#select-attended option:selected').text().trim() + "\n";
+                        }
+                        const search_query = $('#registrations-table').siblings('div.dataTables_filter').find('input').val().trim();
+                        if (search_query.length > 0) {
+                            filter_text += "Filter: " + search_query + "\n";
+                        }
+                        doc.content.splice(1, 0, {
+                            text: filter_text,
+                            alignment: "left"
+                        });
                     }
                 }, 'colvis'
             ],
