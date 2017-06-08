@@ -1,4 +1,15 @@
 @extends('layouts.app')
+@section('title')
+    Lijst {{ $list->id }}: {{ $list->name }}
+    @if($list->date && $list->price)
+        ({{ $list->date }} - € {{ $list->price }})
+    @elseif($list->date)
+        ({{ $list->date }})
+    @elseif($list->price)
+        (€ {{ $list->price }})
+    @endif
+@endsection
+
 @section('content')
     <div class="row">
         <div class="col-xs-12 col-lg-6">

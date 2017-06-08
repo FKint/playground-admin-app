@@ -1,6 +1,10 @@
 @extends('layouts.app')
 @include('modals.global')
 @include('children.new_child.modal')
+
+@section('title')
+    Kinderen
+@endsection
 @push('styles')
 <style>
     .table {

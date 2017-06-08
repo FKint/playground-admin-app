@@ -1,5 +1,8 @@
 @extends('layouts.app')
 
+@section('title')
+    Wachtwoord opnieuw instellen
+@endsection
 @section('content')
 <div class="container">
     <div class="row">

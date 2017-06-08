@@ -1,4 +1,7 @@
 @extends('layouts.app')
+@section('title')
+    Registreren
+@endsection
 
 @section('content')
 <div class="container">

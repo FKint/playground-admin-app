@@ -1,5 +1,7 @@
 @extends('layouts.app')
-
+@section('title')
+    Nieuwe lijst maken
+@endsection
 @section('content')
     <h1>Nieuwe lijst maken</h1>
     {{ Form::open(['class' => 'form-horizontal', 'id' => 'new-list-form']) }}

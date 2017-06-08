@@ -1,5 +1,8 @@
 @extends('layouts.app')
 
+@section('title')
+    Lijsten
+@endsection
 @section('content')
     <div class="row">
         <a class="btn btn-primary" href="{{ route('show_create_new_list') }}">Nieuwe lijst aanmaken</a>

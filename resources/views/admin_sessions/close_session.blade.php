@@ -1,5 +1,7 @@
 @extends('layouts.app')
-
+@section('title')
+    Kassasessie afsluiten
+@endsection
 @section('content')
     <h3>Kassa afsluiten</h3>
     @if (count($errors) > 0)

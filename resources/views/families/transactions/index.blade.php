@@ -1,5 +1,8 @@
 @extends('layouts.app')
 
+@section('title')
+    Transactiegeschiedenis voor voogd {{ $family->id }} ({{ $family->guardian_full_name() }})
+@endsection
 @section('content')
     <h1>Transactiegeschiedenis voor voogd {{ $family->id }} ({{ $family->guardian_full_name() }})</h1>
     <div class="row">

@@ -1,5 +1,7 @@
 @extends('layouts.app')
-
+@section('title')
+    Nieuwe voogd
+@endsection
 @section('content')
 
     <h1>Nieuwe voogd toevoegen</h1>

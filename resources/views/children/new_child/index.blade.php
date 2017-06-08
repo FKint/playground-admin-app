@@ -1,5 +1,8 @@
 @extends('layouts.app')
 
+@section('title')
+    Nieuw kind toevoegen
+@endsection
 @section('content')
 
     <h1>Nieuw kind toevoegen</h1>

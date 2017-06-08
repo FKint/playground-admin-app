@@ -9,7 +9,9 @@
     <meta name="author" content="">
     <link rel="icon" href="/favicon.ico">
 
-    <title>Playground Admin App</title>
+    <title>
+        @yield('title', 'Home') - Playground Administration
+    </title>
 
     <link href="{{mix('/css/app.css')}}" rel="stylesheet">
     <style>
@@ -20,7 +22,8 @@
         .twitter-typeahead {
             width: 100%;
         }
-        #top-navbar{
+
+        #top-navbar {
             background-color: {{ env('ENVIRONMENT_COLOR') }};
         }
     </style>

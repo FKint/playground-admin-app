@@ -1,5 +1,9 @@
 @extends('layouts.app')
 @include('modals.global')
+
+@section('title')
+    Voogden
+@endsection
 @push('styles')
 <style>
     .table {

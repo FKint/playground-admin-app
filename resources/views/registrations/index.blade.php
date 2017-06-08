@@ -1,5 +1,8 @@
 @extends('layouts.app')
 
+@section('title')
+    Registraties
+@endsection
 @section('content')
     <h1>Registraties</h1>
 

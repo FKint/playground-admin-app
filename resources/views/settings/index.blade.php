@@ -1,5 +1,8 @@
 @extends('layouts.app')
 
+@section('title')
+    Instellingen
+@endsection
 @section('content')
     <h1>Instellingen</h1>
     <div class="row">
