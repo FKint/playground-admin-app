@@ -20,6 +20,9 @@
         .twitter-typeahead {
             width: 100%;
         }
+        #top-navbar{
+            background-color: {{ env('ENVIRONMENT_COLOR') }};
+        }
     </style>
     @stack('styles')
 
@@ -28,7 +31,7 @@
 <body>
 
 <!-- Fixed navbar -->
-<nav class="navbar navbar-inverse navbar-fixed-top">
+<nav class="navbar navbar-inverse navbar-fixed-top" id="top-navbar">
     <div class="container">
         <div class="navbar-header">
             <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar"
@@ -38,7 +41,7 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="#">Playground Administration</a>
+            <a class="navbar-brand" href="#">{{ env('ENVIRONMENT_DESCRIPTION') }}</a>
         </div>
         <div id="navbar" class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
