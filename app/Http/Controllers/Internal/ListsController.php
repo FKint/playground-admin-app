@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\ActivityList;
+use App\AdminSession;
 use App\ChildFamily;
+use App\Transaction;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Yajra\Datatables\Datatables;
@@ -43,6 +45,7 @@ class ListsController extends Controller
         $list = ActivityList::findOrFail($list_id);
         $child_family = ChildFamily::findOrFail($request->input('child_family_id'));
         $list->child_families()->detach($child_family);
+        $this->addTransaction($child_family->family, -$list->price, 0, "Kind " . $child_family->child->full_name() . " uitgeschreven van lijst " . $list->name . " (ID: " . $list->id . ")");
         return array("success" => true);
     }
 
@@ -65,7 +68,21 @@ class ListsController extends Controller
         $list = ActivityList::findOrFail($list_id);
         $child_family = ChildFamily::findOrFail($request->input('child_family_id'));
         $list->child_families()->attach($child_family);
+        $this->addTransaction($child_family->family, $list->price, 0, "Kind " . $child_family->child->full_name() . " ingeschreven op lijst " . $list->name . " (ID: " . $list->id . ")");
         return array("success" => true);
+    }
+
+    protected function addTransaction($family, $expected, $paid, $remarks)
+    {
+        $transaction = new Transaction(array(
+            'amount_paid' => $paid,
+            'amount_expected' => $expected,
+            'remarks' => $remarks
+        ));
+        $admin_session = AdminSession::getActiveAdminSession();
+        $transaction->admin_session()->associate($admin_session);
+        $transaction->family()->associate($family);
+        $transaction->save();
     }
 
     protected function getListData(Request $request)
