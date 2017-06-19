@@ -183,6 +183,9 @@ class FamilyWeekRegistration extends Model
                     FamilyWeekRegistration::setToBoolean($supplement['ordered']);
                 }
             }
+            if (!isset($child_data['activity_lists'])) {
+                $child_data['activity_lists'] = array();
+            }
             foreach ($child_data['activity_lists'] as &$activity_list_data) {
                 FamilyWeekRegistration::setToBoolean($activity_list_data['registered']);
             }
