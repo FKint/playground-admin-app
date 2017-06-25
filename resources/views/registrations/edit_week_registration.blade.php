@@ -14,9 +14,10 @@
     col.registration-child-col:nth-child(even) {
         background-color: rgb(252, 252, 252);
     }
+
     col.registration-child-col:nth-child(odd) {
-         background-color: rgb(240, 240, 240);
-     }
+        background-color: rgb(240, 240, 240);
+    }
 </style>
 @endpush
 
@@ -51,7 +52,7 @@
                 <tr>
                     <th colspan="2">Week</th>
                     @foreach($family->children as $child)
-                        <td colspan="4" data-child-id="{{$child->id}}" class="whole-week">
+                        <td colspan="4" data-child-id="{{$child->id}}" class="whole-week-registration">
                             <input class="registration-checkbox" title="Registreer voor volledige week"
                                    type="checkbox"/>
                             <span class="price">€ 0.00</span>
@@ -59,7 +60,9 @@
                     @endforeach
                 </tr>
                 @foreach($week->playground_days as $playground_day)
-                    <tr data-week-day-id="{{$playground_day->week_day->id}}">
+                    <tr data-week-day-id="{{$playground_day->week_day->id}}"
+                        data-date="{{ $playground_day->date()->format('Y-m-d') }}"
+                        class="day-row">
                         <td>{{ $playground_day->week_day->name }}</td>
                         <td>{{ $playground_day->date()->format('Y-m-d') }}</td>
                         @foreach($family->children as $child)
@@ -130,7 +133,7 @@
                     </tr>
                 @endforeach
             </table>
-            <button class="btn btn-default">Inchecken</button>
+            <button class="btn btn-default" id="btn-set-all-attending-today">Inchecken</button>
             <a href="{{ route('show_family_transactions', ['family_id' => $family->id]) }}" class="btn btn-default">Transactiegeschiedenis</a>
         </div>
         <div class="col-xs-3">
@@ -156,6 +159,7 @@
 
 @push('scripts')
 <script>
+    const today = new Date('{{ $today->format('Y-m-d') }}');
 
     $(function () {
         let form = $('#register-payment-form');
@@ -181,7 +185,7 @@
                 data.children["{!! $child->id !!}"]['days']["{!! $playground_day->week_day_id !!}"] = {supplements: {}};
             @endforeach
             @endforeach
-            table.find('td.whole-week').each(function () {
+            table.find('td.whole-week-registration').each(function () {
                 const child_id = $(this).data('child-id');
                 data.children[child_id].whole_week_registered = $(this).find('.registration-checkbox').is(':checked');
             });
@@ -265,7 +269,7 @@
             console.log("Populating: ", data);
             // TODO: assert that the children linked to this family have not been changed in the meantime
             form.find('select[name=tariff_id]').val(data.tariff_id);
-            table.find('td.whole-week').each(function () {
+            table.find('td.whole-week-registration').each(function () {
                 const child_id = $(this).data('child-id');
                 $(this).find('.registration-checkbox').prop('checked', data.children[child_id].whole_week_registered);
                 $(this).find('.price').html(formatPrice(data.children[child_id].whole_week_price))
@@ -331,6 +335,24 @@
             const saldo_difference = parseFloat(form.find('#saldo-difference').val());
             form.find('#new-saldo').val(formatPriceWithoutSign(previous_saldo + saldo_difference - received_money));
         }
+
+        $('#btn-set-all-attending-today').click(function () {
+            table.find('td.day-attendance').each(function () {
+                const date = new Date($(this).parent('tr').data('date'));
+                if (date.getTime() !== today.getTime()) {
+                    return;
+                }
+                const child_id = $(this).data('child-id');
+                const whole_week_registration = table
+                    .find('td.whole-week-registration[data-child-id=' + child_id + '] > input.registration-checkbox')
+                    .is(':checked');
+                const day_registration = $(this)
+                    .parent('tr')
+                    .find('td.day-registration[data-child-id=' + child_id + '] > input.registration-checkbox')
+                    .is(':checked');
+                $(this).find('.attendance-checkbox').prop('checked', day_registration || whole_week_registration);
+            });
+        });
 
         $('#previous-saldo, #received-money').change(function () {
             updateNewSaldo();

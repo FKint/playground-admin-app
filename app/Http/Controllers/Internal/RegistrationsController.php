@@ -16,6 +16,7 @@ use App\Tariff;
 use App\Transaction;
 use App\Week;
 use App\WeekDay;
+use Faker\Provider\DateTime;
 use Illuminate\Http\Request;
 use Yajra\Datatables\Datatables;
 
@@ -103,6 +104,13 @@ class RegistrationsController extends Controller
         $family = Family::findOrFail($family_id);
         $week = Week::findOrFail($week_id);
         $this->removeFamilyWeekRegistrationIfEmpty($week, $family);
+
+        if ($request->has('today')) {
+            $today = \DateTimeImmutable::createFromFormat('Y-m-d', $request->input('today'));
+        } else {
+            $today = new \DateTimeImmutable();
+        }
+
         return view('registrations.edit_week_registration', [
             'family' => $family,
             'week' => $week,
@@ -110,7 +118,8 @@ class RegistrationsController extends Controller
             'all_activity_lists' => ActivityList::query()->where('show_on_attendance_form', '=', true)->get(),
             'all_tariffs_by_id' => Tariff::getAllTariffsById(),
             'all_age_groups' => AgeGroup::all(),
-            'all_day_parts' => DayPart::all()
+            'all_day_parts' => DayPart::all(),
+            'today' => $today
         ]);
     }
 
