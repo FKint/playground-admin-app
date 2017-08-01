@@ -81,13 +81,6 @@ class FamiliesController extends Controller
         )->make(true);
     }
 
-    public function loadFamilyChildrsenForm(Request $request)
-    {
-        $family = Family::findOrFail($request->input('family_id'));
-        return view('families.children.table')
-            ->with('family', $family);
-    }
-
     public function loadEditFamilyForm(Request $request)
     {
         return $this->loadEditFamilyFormForFamily($request->input('family_id'));
