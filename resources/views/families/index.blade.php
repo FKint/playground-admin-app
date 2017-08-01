@@ -104,7 +104,6 @@
                     name: 'children_details',
                     data: 'children_registrations',
                     render: function (data, type, full, meta) {
-                        console.log(meta);
                         let res = "";
                         for (let i = 0; i < data.length; ++i) {
                             if (i > 0)

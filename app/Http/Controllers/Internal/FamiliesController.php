@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Child;
-use App\ChildFamily;
 use App\Family;
 use App\Tariff;
 use App\AgeGroup;

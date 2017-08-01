@@ -61,6 +61,6 @@ class ChildFamily extends Model
     public function child_family_day_registrations()
     {
         return ChildFamilyDayRegistration::query()
-            ->where([['child_id', '=', $this->id], ['family_id', '=', $this->family_id]]);
+            ->where([['child_id', '=', $this->child_id], ['family_id', '=', $this->family_id]]);
     }
 }
