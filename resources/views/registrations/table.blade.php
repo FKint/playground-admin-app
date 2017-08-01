@@ -76,7 +76,7 @@
                 {
                     extend: 'pdfHtml5',
                     exportOptions: {
-                        columns: '.export'
+                        columns: ':visible.export'
                     },
                     title: "Registraties {{ $playground_day->date()->format('d-m-Y') }}",
                     customize: function (doc) {

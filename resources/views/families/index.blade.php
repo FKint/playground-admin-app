@@ -52,7 +52,7 @@
             buttons: [{
                 extend: 'pdfHtml5',
                 exportOptions: {
-                    columns: '.export'
+                    columns: ':visible.export'
                 },
                 title: "Gezinnen",
                 customize: function (doc) {
