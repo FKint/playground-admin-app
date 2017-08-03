@@ -52,7 +52,7 @@
                     }
                 },
                 {
-                    name: 'amount_paid',
+                    name: 'difference',
                     data: 'id',
                     render: function (data, type, full, meta) {
                         return formatPrice(full.amount_paid - full.amount_expected);
