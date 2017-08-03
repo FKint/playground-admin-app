@@ -51,8 +51,6 @@
             window.location.href = "{{ route('registrations_for_date', ['date' => 'DATE']) }}".replace('DATE', m.format('YYYY-MM-DD'));
         }
 
-        //const default_date = new Date("{{ $date->format('Y-m-d') }}");
-        console.log("{{ $date->format('Y-m-d') }}");
         const default_date = new Date({{ $date->format('Y') }}, {{ $date->format('m') }} - 1, {{ $date->format('d') }});
         console.log(default_date);
         $('#registration-datepicker').datepicker()
