@@ -62,21 +62,12 @@ class Family extends Model
 
     public function getTotalCosts()
     {
-        $total_week_registrations_cost = 0;
-        foreach ($this->family_week_registrations as $week_registration) {
-            $total_week_registrations_cost += $week_registration->getTotalWeekPrice();
-        }
-        foreach ($this->child_families as $child_family) {
-            foreach ($child_family->activity_lists as $activity_list) {
-                $total_week_registrations_cost += $activity_list->price;
-            }
-        }
-        return $total_week_registrations_cost;
+        return $this->transactions()->sum('amount_expected');
     }
 
     public function getTotalPayments()
     {
-        return $this->transactions->sum('amount_paid');
+        return $this->transactions()->sum('amount_paid');
     }
 
     public function getCurrentSaldo()
