@@ -59,6 +59,7 @@ class Family extends Model
         return $this->hasMany(FamilyWeekRegistration::class);
     }
 
+
     public function getTotalCosts()
     {
         $total_week_registrations_cost = 0;
@@ -84,6 +85,7 @@ class Family extends Model
         // Positive if the family has debts.
         return $this->getTotalCosts() - $this->getTotalPayments();
     }
+
 
     public function transactions()
     {

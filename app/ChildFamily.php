@@ -57,4 +57,10 @@ class ChildFamily extends Model
             'activity_list_id'
         );
     }
+
+    public function child_family_day_registrations()
+    {
+        return ChildFamilyDayRegistration::query()
+            ->where([['child_id', '=', $this->child_id], ['family_id', '=', $this->family_id]]);
+    }
 }

@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Child;
-use App\ChildFamily;
 use App\Family;
 use App\Tariff;
 use App\AgeGroup;
@@ -70,7 +69,19 @@ class FamiliesController extends Controller
             Family::query()
                 ->with('children')
                 ->with('tariff')
-        )->make(true);
+        )->addColumn('saldo', function (Family $family) {
+            return $family->getCurrentSaldo();
+        })->addColumn('children_registrations', function(Family $family){
+            $children_details = [];
+            foreach($family->child_families as $child_family){
+                $child = $child_family->child;
+                $children_details[] = array(
+                    'full_child_name' => $child->full_name(),
+                    'nb_registrations' => $child_family->child_family_day_registrations()->count()
+                );
+            }
+            return $children_details;
+        })->make(true);
     }
 
     public function getFamilyTransactions($family_id)
