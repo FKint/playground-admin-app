@@ -70,7 +70,7 @@ class FamiliesController extends Controller
                 ->with('children')
                 ->with('tariff')
         )->addColumn('saldo', function (Family $family) {
-            return $family->getCurrentSaldo();
+            return $family->getCurrentSaldo(true);
         })->addColumn('children_registrations', function(Family $family){
             $children_details = [];
             foreach($family->child_families as $child_family){

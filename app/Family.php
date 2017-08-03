@@ -60,9 +60,22 @@ class Family extends Model
     }
 
 
-    public function getTotalCosts()
+    public function getTotalCosts($cached=false)
     {
-        return $this->transactions()->sum('amount_expected');
+        if($cached) {
+            return $this->transactions()->sum('amount_expected');
+        }else{
+            $total_week_registrations_cost = 0;
+            foreach ($this->family_week_registrations as $week_registration) {
+                $total_week_registrations_cost += $week_registration->getTotalWeekPrice();
+            }
+            foreach ($this->child_families as $child_family) {
+                foreach ($child_family->activity_lists as $activity_list) {
+                    $total_week_registrations_cost += $activity_list->price;
+                }
+            }
+            return $total_week_registrations_cost;
+        }
     }
 
     public function getTotalPayments()
@@ -70,11 +83,11 @@ class Family extends Model
         return $this->transactions()->sum('amount_paid');
     }
 
-    public function getCurrentSaldo()
+    public function getCurrentSaldo($cached=false)
     {
         // The saldo of the organisation's relationship with the family.
         // Positive if the family has debts.
-        return $this->getTotalCosts() - $this->getTotalPayments();
+        return $this->getTotalCosts($cached) - $this->getTotalPayments();
     }
 
 
