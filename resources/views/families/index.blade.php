@@ -99,7 +99,6 @@
                         return formatPrice(data);
                     }
                 }, {
-                    visible: false,
                     searchable: true,
                     name: 'children_details',
                     data: 'children_registrations',
