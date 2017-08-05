@@ -101,15 +101,13 @@
                 }, {
                     searchable: true,
                     name: 'children_details',
-                    data: 'children_registrations',
-                    render: function (data, type, full, meta) {
-                        let res = "";
-                        for (let i = 0; i < data.length; ++i) {
-                            if (i > 0)
-                                res += ', ';
-                            res += data[i].full_child_name + ' (' + data[i].nb_registrations + ' dagen)';
+                    data: 'child_families',
+                    render: function (child_families, type, full, meta) {
+                        let records = [];
+                        for(let i = 0; i < child_families.length; ++i){
+                            records.push(child_families[i].child.full_name + "("+child_families[i].nb_registrations + " dagen)");
                         }
-                        return res;
+                        return records.join(", ");
                     }
                 },
                 {

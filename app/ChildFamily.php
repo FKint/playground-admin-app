@@ -14,6 +14,7 @@ class ChildFamily extends Model
      * @var array
      */
     protected $fillable = ['family_id', 'child_name_id'];
+    protected $appends = ['nb_registrations'];
 
     protected $searchable = [
         'columns' => [
@@ -62,5 +63,9 @@ class ChildFamily extends Model
     {
         return ChildFamilyDayRegistration::query()
             ->where([['child_id', '=', $this->child_id], ['family_id', '=', $this->family_id]]);
+    }
+
+    public function getNbRegistrationsAttribute(){
+        return $this->child_family_day_registrations()->count();
     }
 }

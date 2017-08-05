@@ -16,7 +16,7 @@ class Family extends Model
      * @var array
      */
     protected $fillable = ['guardian_first_name', 'guardian_last_name', 'tariff_id', 'remarks', 'contact'];
-    protected $appends = ['guardian_full_name'];
+    protected $appends = ['guardian_full_name', 'saldo'];
     protected $searchable = [
         'columns' => [
             'families.id' => 10,
@@ -60,11 +60,11 @@ class Family extends Model
     }
 
 
-    public function getTotalCosts($cached=false)
+    public function getTotalCosts($cached = false)
     {
-        if($cached) {
+        if ($cached) {
             return $this->transactions()->sum('amount_expected');
-        }else{
+        } else {
             $total_week_registrations_cost = 0;
             foreach ($this->family_week_registrations as $week_registration) {
                 $total_week_registrations_cost += $week_registration->getTotalWeekPrice();
@@ -83,7 +83,7 @@ class Family extends Model
         return $this->transactions()->sum('amount_paid');
     }
 
-    public function getCurrentSaldo($cached=false)
+    public function getCurrentSaldo($cached = false)
     {
         // The saldo of the organisation's relationship with the family.
         // Positive if the family has debts.
@@ -99,5 +99,10 @@ class Family extends Model
     public function getGuardianFullNameAttribute()
     {
         return $this->guardian_full_name();
+    }
+
+    public function getSaldoAttribute()
+    {
+        return $this->getCurrentSaldo(true);
     }
 }

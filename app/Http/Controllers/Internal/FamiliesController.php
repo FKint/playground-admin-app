@@ -69,19 +69,10 @@ class FamiliesController extends Controller
             Family::query()
                 ->with('children')
                 ->with('tariff')
-        )->addColumn('saldo', function (Family $family) {
-            return $family->getCurrentSaldo(true);
-        })->addColumn('children_registrations', function(Family $family){
-            $children_details = [];
-            foreach($family->child_families as $child_family){
-                $child = $child_family->child;
-                $children_details[] = array(
-                    'full_child_name' => $child->full_name(),
-                    'nb_registrations' => $child_family->child_family_day_registrations()->count()
-                );
-            }
-            return $children_details;
-        })->make(true);
+                ->with('child_families')
+                ->with('child_families.child')
+                ->get()
+        )->make(true);
     }
 
     public function getFamilyTransactions($family_id)
