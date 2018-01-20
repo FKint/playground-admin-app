@@ -1,0 +1,54 @@
+version: '3'
+services:
+  # Laravel PHP container
+  app:
+  # TODO: use image name (Docker Hub)
+    build:
+      context: .
+      dockerfile: app/Dockerfile.production
+    volumes:
+      - /var/www/storage
+      - .laravel.env.production:/var/www/.env
+    environment:
+      - "DB_PORT=3306"
+      - "DB_HOST=database"
+      - "DB_CONNECTION=mysql"
+      - "DB_PASSWORD=${DB_PASSWORD}"
+      - "DB_USERNAME=${DB_USERNAME}"
+      - "DB_DATABASE=${DB_DATABASE}"
+      - "REDIS_HOST=cache"
+
+  # Nginx web server
+  nginx:
+    build:
+      context: .
+      dockerfile: nginx/Dockerfile.production
+    volumes:
+      - "${LE_DIR}:/etc/letsencrypt:"
+    ports:
+      - 80:80
+      - 443:443
+
+  # Database
+  database:
+    image: mysql:5
+    volumes:
+      - dbdata:/var/lib/mysql
+    environment:
+      - "MYSQL_DATABASE=${DB_DATABASE}"
+      - "MYSQL_USER=${DB_USERNAME}"
+      - "MYSQL_PASSWORD=${DB_PASSWORD}"
+      - "MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}"
+  cache:
+    image: redis:alpine
+
+  # PHPMyAdmin
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin:latest
+    environment:
+      - "PMA_HOST=database"
+      - "PMA_USER=${DB_USERNAME}"
+      - "PMA_PASSWORD=${DB_PASSWORD}"
+
+volumes:
+  dbdata:

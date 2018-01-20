@@ -1,0 +1,29 @@
+{
+  "private": true,
+  "scripts": {
+    "dev": "cross-env NODE_ENV=development node_modules/webpack/bin/webpack.js --progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js",
+    "watch": "cross-env NODE_ENV=development node_modules/webpack/bin/webpack.js --watch --progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js",
+    "watch-poll": "cross-env NODE_ENV=development node_modules/webpack/bin/webpack.js --watch --watch-poll --progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js",
+    "hot": "cross-env NODE_ENV=development node_modules/webpack-dev-server/bin/webpack-dev-server.js --inline --hot --config=node_modules/laravel-mix/setup/webpack.config.js",
+    "production": "cross-env NODE_ENV=production node_modules/webpack/bin/webpack.js --progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js"
+  },
+  "devDependencies": {
+    "bloodhound-js": "^1.2.2",
+    "bootstrap-datepicker": "^1.7.1",
+    "bootstrap-less": "^3.3.8",
+    "corejs-typeahead": "^1.2.1",
+    "cross-env": "^5.1",
+    "datatables.net": "^1.10.16",
+    "datatables.net-bs": "^1.10.16",
+    "datatables.net-buttons": "^1.5.1",
+    "datatables.net-buttons-bs": "^1.5.1",
+    "jquery": "^3.3.0",
+    "laravel-mix": "^1.7.2",
+    "less": "^2.7.3",
+    "less-loader": "^4.0.5",
+    "lodash": "^4.17.4",
+    "moment": "^2.20.1",
+    "pdfmake-browserified": "^0.1.4"
+  },
+  "dependencies": {}
+}
