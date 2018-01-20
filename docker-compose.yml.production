@@ -5,7 +5,7 @@ services:
   # TODO: use image name (Docker Hub)
     build:
       context: .
-      dockerfile: app/Dockerfile.production
+      dockerfile: app.Dockerfile.production
     volumes:
       - /var/www/storage
       - .laravel.env.production:/var/www/.env
@@ -22,7 +22,7 @@ services:
   nginx:
     build:
       context: .
-      dockerfile: nginx/Dockerfile.production
+      dockerfile: nginx.Dockerfile.production
     volumes:
       - "${LE_DIR}:/etc/letsencrypt:"
     ports:

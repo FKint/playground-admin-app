@@ -2,9 +2,10 @@
 node_modules
 vendor
 
-Dockerfile.*
-
 storage/framework/cache/**
 storage/framework/sessions/**
 storage/framework/views/**
 storage/framework/logs/**
+public/css/*
+public/js/*
+public/fonts/*

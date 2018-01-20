@@ -4,7 +4,7 @@ services:
   app:
     build:
       context: .
-      dockerfile: app/Dockerfile.development
+      dockerfile: app.Dockerfile.development
     working_dir: /var/www
     volumes:
       - ./app:/var/www
@@ -21,7 +21,7 @@ services:
   nginx:
     build:
       context: .
-      dockerfile: nginx/Dockerfile.development
+      dockerfile: nginx.Dockerfile.development
     working_dir: /var/www
     volumes:
       - ./app:/var/www
