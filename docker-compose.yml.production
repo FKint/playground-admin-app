@@ -9,6 +9,7 @@ services:
     volumes:
       - /var/www/storage
       - .laravel.env.production:/var/www/.env
+      - public_app_data:/var/www/public:rw
     environment:
       - "DB_PORT=3306"
       - "DB_HOST=database"
@@ -25,9 +26,12 @@ services:
       dockerfile: nginx.Dockerfile.production
     volumes:
       - "${LE_DIR}:/etc/letsencrypt:"
+      - public_app_data:/var/www/public:ro
     ports:
       - 80:80
       - 443:443
+    depends_on:
+      - app
 
   # Database
   database:
@@ -52,3 +56,5 @@ services:
 
 volumes:
   dbdata:
+  public_app_data:
+    driver: local
