@@ -192,18 +192,6 @@ class OrganizationAuthenticationTest extends TestCase
         ];
     }
 
-    /**
-     * A basic test example.
-     *
-     * @return void
-     */
-    public function testExample()
-    {
-        $response = $this->actingAs($this->actualUser)
-            ->get('/');
-        $response->assertStatus(200);
-    }
-
     protected function callAllAPIEndpoints($expected_status)
     {
         foreach ($this->readOnlyAPIRoutes as $route_name => $url) {
