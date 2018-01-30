@@ -14,59 +14,82 @@ use Illuminate\Http\Request;
 */
 
 // Datatables
-Route::get('/age_groups', 'AgeGroupsController@getAgeGroups')
-    ->name('getAgeGroups');
-Route::get('/supplements', 'SupplementsController@getSupplements')
-    ->name('getSupplements');
-Route::get('/day_parts', 'DayPartsController@getDayParts')
-    ->name('getDayParts');
-Route::get('/tariffs', 'TariffsController@getTariffs')
-    ->name('getTariffs');
-Route::get('/children', 'ChildrenController@getChildren')
-    ->name('getChildren');
-Route::get('/families', 'FamiliesController@getFamilies')
-    ->name('getFamilies');
-Route::get('/family/{family_id}/children', 'FamiliesController@getFamilyChildren')
-    ->name('getFamilyChildren');
-Route::get('/family/{family_id}/transactions', 'FamiliesController@getFamilyTransactions')
-    ->name('getFamilyTransactions');
-Route::get('/registrations/playground_day/{playground_day_id}', 'RegistrationsController@getRegistrations')
-    ->name('getRegistrations');
-Route::get('/admin_sessions', 'AdminSessionsController@getAdminSessions')
-    ->name('getAdminSessions');
-Route::get('/lists', 'ListsController@getLists')
-    ->name('getLists');
-Route::get('/list/{list_id}/participants', 'ListsController@getListParticipants')
-    ->name('getListParticipants');
+Route::name('datatables.')->prefix('datatables')->group(function () {
+    Route::get('/age_groups', 'AgeGroupsController@getAgeGroups')
+        ->name('age_groups');
+    Route::get('/supplements', 'SupplementsController@getSupplements')
+        ->name('supplements');
+    Route::get('/day_parts', 'DayPartsController@getDayParts')
+        ->name('day_parts');
+    Route::get('/tariffs', 'TariffsController@getTariffs')
+        ->name('tariffs');
+    Route::get('/children', 'ChildrenController@getChildren')
+        ->name('children');
+    Route::get('/families', 'FamiliesController@getFamilies')
+        ->name('families');
+    Route::get('/family/{family}/children', 'FamiliesController@getFamilyChildren')
+        ->name('family_children')
+        ->middleware('model_same_year:family');
+    Route::get('/family/{family}/transactions', 'FamiliesController@getFamilyTransactions')
+        ->name('family_transactions')
+        ->middleware('model_same_year:family');
+    Route::get('/registrations/playground_day/{playground_day}', 'RegistrationsController@getRegistrations')
+        ->name('registrations')
+        ->middleware('model_same_year:playground_day');
+    Route::get('/admin_sessions', 'AdminSessionsController@getAdminSessions')
+        ->name('admin_sessions');
+    Route::get('/lists', 'ListsController@getLists')
+        ->name('lists');
+    Route::get('/list/{list}/participants', 'ListsController@getListParticipants')
+        ->name('list_participants')
+        ->middleware('model_same_year:list');
+});
 
 // Typeahead.js
-Route::get('/typeahead/child/{child_id}/families/suggestions', 'ChildrenController@getChildFamilySuggestions')
-    ->name('getChildFamilySuggestions');
-Route::get('/typeahead/family/{family_id}/children/suggestions', 'FamiliesController@getChildSuggestionsForFamily')
-    ->name('getChildSuggestionsForFamily');
-Route::get('/typeahead/families/suggestions', 'FamiliesController@getFamilySuggestions')
-    ->name('getFamilySuggestions');
-Route::get('/typeahead/list/{list_id}/child_families/suggestions', 'ListsController@getListChildFamilySuggestions')
-    ->name('getListChildFamilySuggestions');
+Route::name('typeahead.')->prefix('typeahead')->group(function () {
+    Route::get('/child/{child}/families/suggestions', 'ChildrenController@getChildFamilySuggestions')
+        ->name('family_suggestions_for_child')
+        ->middleware('model_same_year:child');
+    Route::get('/family/{family}/children/suggestions', 'FamiliesController@getChildSuggestionsForFamily')
+        ->name('child_suggestions_for_family')
+        ->middleware('model_same_year:family');
+    Route::get('/families/suggestions', 'FamiliesController@getFamilySuggestions')
+        ->name('family_suggestions');
+    Route::get('/list/{list}/child_families/suggestions', 'ListsController@getListChildFamilySuggestions')
+        ->name('child_family_suggestions_for_list')
+        ->middleware('model_same_year:list');
+});
 
 // Ajax
-Route::post('/child/new', 'ChildrenController@submitNewChild')
-    ->name('submitNewChild');
-Route::post('/child/{child_id}/families/add', 'ChildrenController@addChildFamily')
-    ->name('addChildFamily');
-Route::post('/child/{child_id}/families/remove', 'ChildrenController@removeChildFamily')
-    ->name('removeChildFamily');
-Route::post('/family/{family_id}/children/add', 'FamiliesController@addChildToFamily')
-    ->name('addChildToFamily');
+// Read-only
+Route::get('/registration/week/{week}/family/{family}', 'RegistrationsController@getRegistrationData')
+    ->name('registration_data')
+    ->middleware('model_same_year:week,family');
 
-Route::get('/registration/week/{week_id}/family/{family_id}', 'RegistrationsController@getRegistrationData')
-    ->name('getRegistrationData');
-Route::post('/registration/week/{week_id}/family/{family_id}', 'RegistrationsController@submitRegistrationData')
-    ->name('submitRegistrationData');
-Route::post('/registration/week/{week_id}/family/{family_id}/prices', 'RegistrationsController@submitRegistrationDataForPrices')
-    ->name('submitRegistrationDataForPrices');
+Route::middleware('can:update,year')->group(function () {
+    Route::post('/child/new', 'ChildrenController@submitNewChild')
+        ->name('create_new_child');
+    Route::post('/child/{child}/families/add/{family}', 'ChildrenController@addChildFamily')
+        ->name('add_family_to_child')
+        ->middleware('model_same_year:child,family');
+    Route::post('/child/{child}/families/{family}/remove', 'ChildrenController@removeChildFamily')
+        ->name('remove_family_from_child')
+        ->middleware('model_same_year:child,family');
+    Route::post('/family/{family}/children/add/{child}', 'FamiliesController@addChildToFamily')
+        ->name('add_child_to_family')
+        ->middleware('model_same_year:family,child');
 
-Route::post('/list/{list_id}/participants/remove', 'ListsController@removeListParticipant')
-    ->name('removeListParticipant');
-Route::post('/list/{list_id}/participants/add', 'ListsController@addListChildFamily')
-    ->name('addListChildFamily');
+    Route::post('/registration/week/{week}/family/{family}', 'RegistrationsController@submitRegistrationData')
+        ->name('submit_registration_data')
+        ->middleware('model_same_year:week,family');
+    Route::post('/registration/week/{week}/family/{family}/prices', 'RegistrationsController@submitRegistrationDataForPrices')
+        ->name('simulate_submit_registration_data')
+        ->middleware('model_same_year:week,family');
+
+    Route::post('/list/{activity_list}/participants/add/{child_family}', 'ListsController@addListChildFamily')
+        ->name('add_participant_to_list')
+        ->middleware('model_same_year:activity_list,child_family');
+    Route::post('/list/{activity_list}/participants/{child_family}/remove', 'ListsController@removeListParticipant')
+        ->name('remove_participant_from_list')
+        ->middleware('model_same_year:activity_list,child_family');
+});

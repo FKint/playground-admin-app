@@ -12,4 +12,9 @@ class Supplement extends Model
      * @var array
      */
     protected $fillable = ['name', 'price'];
+
+    public function year()
+    {
+        return $this->belongsTo(Year::class);
+    }
 }

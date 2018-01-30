@@ -14,7 +14,7 @@
         $('#supplements-table').DataTable({
             processing: true,
             serverSide: true,
-            ajax: '{!! route('getSupplements') !!}',
+            ajax: '{!! route('api.datatables.supplements') !!}',
             columns: [
                 {data: 'name', name: 'name'},
                 {data: 'price', name: 'price'}

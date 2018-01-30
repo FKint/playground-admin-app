@@ -21,13 +21,13 @@ class AgeGroup extends Model
         return $this->hasMany(Child::class);
     }
 
-
-    public static function getAllAgeGroupsById()
+    public function year()
     {
-        $all_age_groups = [];
-        foreach (AgeGroup::all() as $age_group) {
-            $all_age_groups[$age_group->id] = $age_group->abbreviation . " - " . $age_group->name;
-        }
-        return $all_age_groups;
+        return $this->belongsTo(Year::class);
+    }
+
+    public function full_abbreviation_and_name()
+    {
+        return $this->abbreviation . " - " . $this->name;
     }
 }

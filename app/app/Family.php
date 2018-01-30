@@ -105,4 +105,9 @@ class Family extends Model
     {
         return $this->getCurrentSaldo(true);
     }
+
+    public function year()
+    {
+        return $this->belongsTo(Year::class);
+    }
 }

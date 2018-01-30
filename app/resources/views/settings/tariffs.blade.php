@@ -18,7 +18,7 @@
         $('#tariffs-table').DataTable({
             processing: true,
             serverSide: true,
-            ajax: '{!! route('getTariffs') !!}',
+            ajax: '{!! route('api.datatables.tariffs') !!}',
             columns: [
                 {data: 'name', name: 'name'},
                 {data: 'abbreviation', name: 'abbreviation'},

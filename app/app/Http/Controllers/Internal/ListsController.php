@@ -3,12 +3,13 @@
 namespace App\Http\Controllers\Internal;
 
 use App\ActivityList;
-use App\AdminSession;
 use App\ChildFamily;
+use App\Family;
+use App\Http\Controllers\Controller;
 use App\Transaction;
+use App\Year;
 use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables;
-use App\Http\Controllers\Controller;
 
 class ListsController extends Controller
 {
@@ -17,9 +18,8 @@ class ListsController extends Controller
         return view('lists.index');
     }
 
-    public function showList(Request $request, $list_id)
+    public function showList(Request $request, Year $year, ActivityList $list)
     {
-        $list = ActivityList::findOrFail($list_id);
         return view('lists.list_details')
             ->with('list', $list);
     }
@@ -29,57 +29,64 @@ class ListsController extends Controller
         return view('lists.new_list');
     }
 
-    public function getLists(Request $request)
+    public function getLists(Year $year)
     {
-        return DataTables::make(ActivityList::query())->make(true);
+        return DataTables::make($year->activity_lists())->make(true);
     }
 
-    public function getListParticipants($list_id)
+    public function getListParticipants(Year $year, ActivityList $list)
     {
-        $list = ActivityList::findOrFail($list_id);
         return DataTables::make($list->child_families()->with('child')->with('family'))->make(true);
     }
 
-    public function removeListParticipant(Request $request, $list_id)
+    public function removeListParticipant(Request $request, Year $year, ActivityList $activity_list, ChildFamily $child_family)
     {
-        $list = ActivityList::findOrFail($list_id);
-        $child_family = ChildFamily::findOrFail($request->input('child_family_id'));
-        $list->child_families()->detach($child_family);
-        $this->addTransaction($child_family->family, -$list->price, 0, "Kind " . $child_family->child->full_name() . " uitgeschreven van lijst " . $list->name . " (ID: " . $list->id . ")");
+        $activity_list->child_families()->detach($child_family);
+        $this->addTransaction(
+            $year,
+            $child_family->family,
+            -$activity_list->price,
+            0,
+            "Kind " . $child_family->child->full_name() . " uitgeschreven van lijst " . $activity_list->name . " (ID: " . $activity_list->id . ")"
+        );
         return array("success" => true);
     }
 
-    public function getListChildFamilySuggestions(Request $request, $list_id)
+    public function getListChildFamilySuggestions(Request $request, Year $year, ActivityList $list)
     {
-        $list = ActivityList::findOrFail($list_id);
         $query = $request->input('q');
-        $child_families = ChildFamily::search($query)
+        $child_families = $year->child_families()->search($query)
             ->with('child')
             ->with('family')
-            ->whereDoesntHave("activity_lists", function ($query) use ($list_id) {
-                $query->where('activity_lists.id', '=', $list_id);
+            ->whereDoesntHave("activity_lists", function ($query) use ($list) {
+                $query->where('activity_lists.id', '=', $list->id);
             })
             ->get();
         return $child_families;
     }
 
-    public function addListChildFamily(Request $request, $list_id)
+    public function addListChildFamily(Request $request, Year $year, ActivityList $activity_list, ChildFamily $child_family)
     {
-        $list = ActivityList::findOrFail($list_id);
-        $child_family = ChildFamily::findOrFail($request->input('child_family_id'));
-        $list->child_families()->attach($child_family);
-        $this->addTransaction($child_family->family, $list->price, 0, "Kind " . $child_family->child->full_name() . " ingeschreven op lijst " . $list->name . " (ID: " . $list->id . ")");
+        $activity_list->child_families()->syncWithoutDetaching([$child_family->id => ['year_id' => $year->id]]);
+        $this->addTransaction(
+            $year,
+            $child_family->family,
+            $activity_list->price,
+            0,
+            "Kind " . $child_family->child->full_name() . " ingeschreven op lijst " . $activity_list->name . " (ID: " . $activity_list->id . ")"
+        );
         return array("success" => true);
     }
 
-    protected function addTransaction($family, $expected, $paid, $remarks)
+    protected function addTransaction(Year $year, Family $family, $expected, $paid, string $remarks)
     {
         $transaction = new Transaction(array(
             'amount_paid' => $paid,
             'amount_expected' => $expected,
-            'remarks' => $remarks
+            'remarks' => $remarks,
+            'year_id' => $year->id
         ));
-        $admin_session = AdminSession::getActiveAdminSession();
+        $admin_session = $year->getActiveAdminSession();
         $transaction->admin_session()->associate($admin_session);
         $transaction->family()->associate($family);
         $transaction->save();
@@ -108,9 +115,8 @@ class ListsController extends Controller
         return redirect(route('show_list', ['list_id' => $list->id]));
     }
 
-    public function submitEditList(Request $request, $list_id)
+    public function submitEditList(Request $request, ActivityList $list)
     {
-        $list = ActivityList::findOrFail($list_id);
         $list->update($this->getListData($request));
         return redirect(route('show_list', ['list_id' => $list->id]));
     }

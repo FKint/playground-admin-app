@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.internal')
 @section('title')
     Lijst {{ $list->id }}: {{ $list->name }}
     @if($list->date && $list->price)

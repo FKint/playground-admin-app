@@ -2,7 +2,6 @@ version: '3'
 services:
   # Laravel PHP container
   app:
-  # TODO: use image name (Docker Hub)
     image: jokkebrok/playground-php-app:latest
     volumes:
       - /var/www/storage

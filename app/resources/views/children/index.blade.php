@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.internal')
 @include('modals.global')
 @include('children.new_child.modal')
 
@@ -58,7 +58,7 @@
         const table = table_element.DataTable({
             processing: true,
             serverSide: false,
-            ajax: '{!! route('getChildren') !!}',
+            ajax: '{!! route('api.datatables.children') !!}',
             dom: 'Blfrtip',
             buttons: [
                 {

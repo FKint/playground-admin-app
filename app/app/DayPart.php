@@ -17,4 +17,9 @@ class DayPart extends Model
     {
         return DayPart::where('default', '=', true)->firstOrFail();
     }
+
+    public function year()
+    {
+        return $this->belongsTo(Year::class);
+    }
 }

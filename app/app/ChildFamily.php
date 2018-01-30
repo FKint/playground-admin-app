@@ -65,7 +65,13 @@ class ChildFamily extends Model
             ->where([['child_id', '=', $this->child_id], ['family_id', '=', $this->family_id]]);
     }
 
-    public function getNbRegistrationsAttribute(){
+    public function getNbRegistrationsAttribute()
+    {
         return $this->child_family_day_registrations()->count();
+    }
+
+    public function year()
+    {
+        return $this->belongsTo(Year::class);
     }
 }

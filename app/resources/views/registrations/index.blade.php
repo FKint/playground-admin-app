@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.internal')
 
 @section('title')
     Registraties {{ $date->format('d-m-Y') }}
@@ -30,7 +30,7 @@
     <div class="row">&nbsp;</div>
     @if(!empty($playground_day))
         <div class="row">
-            <a href="{{ route('show_find_family_registration', ['week_id' => $playground_day->week->id]) }}"
+            <a href="{{ route('internal.show_find_family_registration', ['week_id' => $playground_day->week->id]) }}"
                class="btn btn-primary">Registreer betalingen/aanwezigheid</a>
         </div>
         <div class="row">&nbsp;</div>
@@ -48,7 +48,7 @@
 <script>
     $(function () {
         function goToMoment(m) {
-            window.location.href = "{{ route('registrations_for_date', ['date' => 'DATE']) }}".replace('DATE', m.format('YYYY-MM-DD'));
+            window.location.href = "{{ route('internal.registrations_for_date', ['date' => 'DATE']) }}".replace('DATE', m.format('YYYY-MM-DD'));
         }
 
         const default_date = new Date({{ $date->format('Y') }}, {{ $date->format('m') }} - 1, {{ $date->format('d') }});

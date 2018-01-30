@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Internal;
 
 use App\Supplement;
+use App\Year;
 use Yajra\DataTables\DataTables;
 use App\Http\Controllers\Controller;
 

@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.internal')
 @include('modals.global')
 
 @section('title')
@@ -15,7 +15,7 @@
 @section('content')
     <div class="row">
         <div class="col-xs-12">
-            <a href="{!! route('show_new_family_with_children') !!}" class="btn btn-primary">Nieuwe voogd toevoegen</a>
+            <a href="{!! route('internal.show_new_family_with_children') !!}" class="btn btn-primary">Nieuwe voogd toevoegen</a>
         </div>
     </div>
     <div class="row">&nbsp;</div>
@@ -47,7 +47,7 @@
         const table = table_element.DataTable({
             processing: true,
             serverSide: false,
-            ajax: '{!! route('getFamilies') !!}',
+            ajax: '{!! route('api.datatables.families') !!}',
             dom: 'Blfrtip',
             buttons: [{
                 extend: 'pdfHtml5',

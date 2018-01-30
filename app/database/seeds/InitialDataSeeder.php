@@ -8,9 +8,11 @@ class InitialDataSeeder extends Seeder
      * Run the database seeds.
      *
      * @return void
+     * @throws Exception
      */
     public function run()
     {
+        $this->seed_organization_and_year();
         $this->seed_admin_sessions();
         $this->seed_age_groups();
         $this->seed_day_parts();
@@ -19,6 +21,8 @@ class InitialDataSeeder extends Seeder
         $this->seed_tariffs();
     }
 
+    protected $organization;
+    protected $year;
     protected $week_ids = [];
     protected $week_day_ids = [];
     protected $toddlers_id = null;
@@ -38,74 +42,97 @@ class InitialDataSeeder extends Seeder
         return \App\WeekDay::findOrFail($this->week_day_ids[$week_day_id]);
     }
 
+    protected function seed_organization_and_year()
+    {
+        $this->organization = factory(\App\Organization::class)->create();
+        $this->year = factory(\App\Year::class)->create([
+            'organization_id' => $this->organization->id,
+            'description' => '2018'
+        ]);
+    }
+
     protected function seed_admin_sessions()
     {
-        $this->first_admin_session_id = DB::table('admin_sessions')->insertGetId([]);
+        $this->first_admin_session_id = factory(\App\AdminSession::class)->create(['year_id' => $this->year->id])->id;
     }
 
     protected function seed_age_groups()
     {
-        $this->toddlers_id = DB::table('age_groups')->insert(['name' => 'Kleuters',
-            'abbreviation' => 'KLS',
-            'start_date' => (new DateTime())->setDate(2012, 1, 1),
-            'end_date' => (new DateTime())->setDate(2015, 1, 1)]);
-        $this->middle_group_id = DB::table('age_groups')->insert(['name' => 'Grote',
-            'abbreviation' => '6-12',
-            'start_date' => (new DateTime())->setDate(2005, 1, 1),
-            'end_date' => (new DateTime())->setDate(2012, 1, 1)]);
-        $this->teenagers_id = DB::table('age_groups')->insert(['name' => 'Tieners',
-            'abbreviation' => '12+',
-            'start_date' => (new DateTime())->setDate(2003, 1, 1),
-            'end_date' => (new DateTime())->setDate(2005, 1, 1)]);
+        $this->toddlers_id = factory(\App\AgeGroup::class)->create([
+                'year_id' => $this->year->id,
+                'name' => 'Kleuters',
+                'abbreviation' => 'KLS',
+                'start_date' => (new DateTime())->setDate(2012, 1, 1),
+                'end_date' => (new DateTime())->setDate(2015, 1, 1)]
+        )->id;
+        $this->middle_group_id = factory(\App\AgeGroup::class)->create([
+                'year_id' => $this->year->id,
+                'name' => 'Grote',
+                'abbreviation' => '6-12',
+                'start_date' => (new DateTime())->setDate(2005, 1, 1),
+                'end_date' => (new DateTime())->setDate(2012, 1, 1)]
+        )->id;
+        $this->teenagers_id = factory(\App\AgeGroup::class)->create([
+                'year_id' => $this->year->id,
+                'name' => 'Tieners',
+                'abbreviation' => '12+',
+                'start_date' => (new DateTime())->setDate(2003, 1, 1),
+                'end_date' => (new DateTime())->setDate(2005, 1, 1)]
+        )->id;
     }
 
     protected function seed_day_parts()
     {
-        $this->whole_day_id = DB::table('day_parts')->insertGetId([
+        $this->whole_day_id = factory(\App\DayPart::class)->create([
+            'year_id' => $this->year->id,
             'name' => "Lunch",
             'order' => 1,
             'default' => true
-        ]);
-        $this->home_id = DB::table('day_parts')->insertGetId([
+        ])->id;
+        $this->home_id = factory(\App\DayPart::class)->create([
+            'year_id' => $this->year->id,
             'name' => "Thuis",
             'order' => 2
-        ]);
+        ])->id;
     }
 
     protected function seed_supplements()
     {
-        DB::table('supplements')->insert([
+        factory(\App\Supplement::class)->create([
+            'year_id' => $this->year->id,
             'name' => "IJsje",
             'price' => '0.50'
         ]);
     }
 
+    /**
+     * @throws Exception
+     */
     protected function seed_dates()
     {
-        $year_2017_id = DB::table('years')->insertGetId([
-            'year' => 2017
-        ]);
         $week_day_names = ["Maandag", "Dinsdag", "Woensdag", "Donderdag", "Vrijdag"];
         $holidays = ["2017-07-21"];
         for ($i = 0; $i < 5; ++$i) {
-            $this->week_day_ids[] = DB::table('week_days')->insertGetId([
+            $this->week_day_ids[] = factory(\App\WeekDay::class)->create([
+                'year_id' => $this->year->id,
                 'days_offset' => $i,
                 'name' => $week_day_names[$i]
-            ]);
+            ])->id;
         }
-        $monday = (new DateTimeImmutable())->setDate(2017, 7, 3);
+        $monday = (new DateTimeImmutable())->setDate(2018, 7, 2);
         $day = new DateInterval('P1D');
         $week = new DateInterval('P1W');
         for ($i = 0; $i < 6; ++$i) {
-            $this->week_ids[$i] = DB::table('weeks')->insertGetId([
-                'year_id' => $year_2017_id,
+            $this->week_ids[$i] = factory(\App\Week::class)->create([
+                'year_id' => $this->year->id,
                 'week_number' => 1 + $i,
                 'first_day_of_week' => $monday
-            ]);
+            ])->id;
             $week_day = $monday;
             for ($j = 0; $j < count($this->week_day_ids); ++$j) {
                 if (!in_array($week_day->format("Y-m-d"), $holidays)) {
-                    DB::table('playground_days')->insert([
+                    factory(\App\PlaygroundDay::class)->create([
+                        'year_id' => $this->year->id,
                         'week_id' => $this->week_ids[$i],
                         'week_day_id' => $this->week_day_ids[$j]
                     ]);
@@ -118,7 +145,8 @@ class InitialDataSeeder extends Seeder
 
     protected function seed_tariffs()
     {
-        DB::table('tariffs')->insert([
+        factory(\App\Tariff::class)->create([
+            'year_id' => $this->year->id,
             "name" => "Normaal",
             "abbreviation" => "NRML",
             "day_first_child" => 5.00,
@@ -126,7 +154,8 @@ class InitialDataSeeder extends Seeder
             "week_first_child" => 22.5,
             "week_later_children" => 18.5
         ]);
-        DB::table('tariffs')->insert([
+        factory(\App\Tariff::class)->create([
+            'year_id' => $this->year->id,
             "name" => "Sociaal",
             "abbreviation" => "SCL",
             "day_first_child" => 2.5,

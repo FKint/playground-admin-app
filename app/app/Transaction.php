@@ -11,7 +11,7 @@ class Transaction extends Model
      *
      * @var array
      */
-    protected $fillable = ['family_id', 'amount_paid', 'amount_expected', 'remarks', 'admin_session_id'];
+    protected $fillable = ['family_id', 'amount_paid', 'amount_expected', 'remarks', 'admin_session_id', 'year_id'];
 
     /**
      * Get the default tariff for this family.

@@ -1,11 +1,11 @@
-@extends('layouts.app')
+@extends('layouts.internal')
 
 @section('title')
     Lijsten
 @endsection
 @section('content')
     <div class="row">
-        <a class="btn btn-primary" href="{{ route('show_create_new_list') }}">Nieuwe lijst aanmaken</a>
+        <a class="btn btn-primary" href="{{ route('internal.show_create_new_list') }}">Nieuwe lijst aanmaken</a>
     </div>
     <div class="row">
         <table class="table table-bordered table-striped" id="lists-table">
@@ -31,7 +31,7 @@
         const table = table_element.DataTable({
             processing: true,
             serverSide: false,
-            ajax: '{!! route('getLists') !!}',
+            ajax: '{!! route('api.datatables.lists') !!}',
             dom: 'Blfrtip',
             buttons: [
                 {
@@ -70,7 +70,8 @@
         });
         table_element.on('click', '.btn-list-details', function () {
             const list_id = $(this).data('list-id');
-            window.location.href = '{!! route('show_list', ['list_id' => 'LISTID']) !!}'.replace('LISTID', list_id);
+            window.location.href = '{!! route('internal.show_list', ['list' => 'LIST_ID']) !!}'
+                .replace('LIST_ID', list_id);
         });
     });
 </script>

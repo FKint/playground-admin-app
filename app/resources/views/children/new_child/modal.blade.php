@@ -40,7 +40,7 @@
         $('#new-child-form').submit(function () {
             $('#new-child-errors-div').addClass('hidden');
             $('#new-child-errors-list').empty();
-            $.post('{{ route('submitNewChild') }}',
+            $.post('{{ route('api.create_new_child') }}',
                 $(this).serialize()
             ).done(function (resp) {
                 $('#new-child-form').trigger('children:updated');
@@ -57,7 +57,7 @@
             });
             return false;
         });
-        const age_groups = {!! $all_age_groups !!};
+        const age_groups = {!! $year->age_groups !!};
         const new_child_form = $('#new-child-form');
         new_child_form.find('input[name=first_name]').first().focus();
         new_child_form.find('input[name=birth_year]').change(function () {

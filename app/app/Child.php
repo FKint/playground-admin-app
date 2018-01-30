@@ -13,7 +13,7 @@ class Child extends Model
      *
      * @var array
      */
-    protected $fillable = ['first_name', 'last_name', 'birth_year', 'age_group_id', 'remarks'];
+    protected $fillable = ['first_name', 'last_name', 'birth_year', 'age_group_id', 'remarks', 'year_id'];
     protected $appends = ['full_name'];
 
     protected $searchable = [
@@ -60,5 +60,10 @@ class Child extends Model
     public function getFullNameAttribute()
     {
         return $this->full_name();
+    }
+
+    public function year()
+    {
+        return $this->belongsTo(Year::class);
     }
 }

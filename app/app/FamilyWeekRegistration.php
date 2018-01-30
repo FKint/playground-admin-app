@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Log;
 class FamilyWeekRegistration extends Model
 {
 
-    protected $fillable = ['family_id', 'week_id', 'tariff_id'];
+    protected $fillable = ['family_id', 'week_id', 'tariff_id', 'year_id'];
 
     public function tariff()
     {

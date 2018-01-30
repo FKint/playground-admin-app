@@ -3,7 +3,7 @@
 @endif
 
 <div class="row">
-    <a href="{{ route('close_admin_session') }}" class="btn btn-primary">Huidige kassa afsluiten.</a>
+    <a href="{{ route('internal.close_admin_session') }}" class="btn btn-primary">Huidige kassa afsluiten.</a>
 </div>
 <div class="row"></div>
 <div class="row">
@@ -31,7 +31,7 @@
         $('#admin-sessions-table').DataTable({
             processing: true,
             serverSide: false,
-            ajax: '{!! route('getAdminSessions') !!}',
+            ajax: '{!! route('api.datatables.admin_sessions') !!}',
             columns: [
                 {
                     data: 'session_start',
@@ -87,7 +87,7 @@
                         if(!full.finished){
                             return "";
                         }
-                        return '<a href="{{ route('show_edit_admin_session', ['admin_session_id' => 'SESSION_ID']) }}">Wijzigen</a>'.replace('SESSION_ID', data);
+                        return '<a href="{{ route('internal.show_edit_admin_session', ['admin_session_id' => 'SESSION_ID']) }}">Wijzigen</a>'.replace('SESSION_ID', data);
                     }
                 }
             ],

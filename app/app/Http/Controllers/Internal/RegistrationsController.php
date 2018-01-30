@@ -3,33 +3,33 @@
 namespace App\Http\Controllers\Internal;
 
 use App\ActivityList;
-use App\AdminSession;
 use App\AgeGroup;
 use App\ChildFamilyDayRegistration;
 use App\ChildFamilyWeekRegistration;
 use App\DayPart;
 use App\Family;
 use App\FamilyWeekRegistration;
+use App\Http\Controllers\Controller;
 use App\PlaygroundDay;
 use App\Supplement;
 use App\Tariff;
 use App\Transaction;
 use App\Week;
 use App\WeekDay;
+use App\Year;
 use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables;
-use App\Http\Controllers\Controller;
 
 class RegistrationsController extends Controller
 {
-    public static function getLastPlaygroundDayUntil($upper_bound_date)
+    public static function getLastPlaygroundDayUntil(Year $year, $upper_bound_date)
     {
-        $week = Week::query()
+        $week = $year->weeks()
             ->whereDate('first_day_of_week', '<=', $upper_bound_date->format('Y-m-d'))
             ->orderByDesc('first_day_of_week')
             ->first();
         if (!$week)
-            return PlaygroundDay::first();
+            return $year->playground_days()->first();
         $interval = $upper_bound_date->diff(\DateTime::createFromFormat('Y-m-d', $week->first_day_of_week));
         $week_days = WeekDay::query()
             ->where('days_offset', '<=', $interval->days)
@@ -43,18 +43,18 @@ class RegistrationsController extends Controller
         return $week->playground_days()->first();
     }
 
-    public function show()
+    public function show(Year $year)
     {
-        $playground_day = RegistrationsController::getLastPlaygroundDayUntil(new \DateTimeImmutable());
-        return redirect()->route('registrations_for_date', ['date' => $playground_day->date()->format('Y-m-d')]);
+        $playground_day = RegistrationsController::getLastPlaygroundDayUntil($year, new \DateTimeImmutable());
+        return redirect()->route('internal.registrations_for_date', ['date' => $playground_day->date()->format('Y-m-d')]);
     }
 
-    public function showDate(Request $request, $date_str)
+    public function showDate(Request $request, Year $year, $date_str)
     {
-        $date = \DateTime::createFromFormat('Y-m-d', $date_str);
+        $date = \DateTimeImmutable::createFromFormat('Y-m-d', $date_str);
         if (!$date)
-            return $this->show();
-        $playground_day = PlaygroundDay::getPlaygroundDayForDate($date);
+            return $this->show($year);
+        $playground_day = $year->getPlaygroundDayForDate($date);
 
         $filter = array();
         $filter['age_group_id'] = $request->input('filter_age_group_id');
@@ -65,17 +65,13 @@ class RegistrationsController extends Controller
         return view('registrations.index', [
             'playground_day' => $playground_day,
             'date' => $date,
-            'all_age_groups' => AgeGroup::all(),
-            'all_day_parts' => DayPart::all(),
-            'all_supplements' => Supplement::all(),
             'selected_menu_item' => 'registrations',
             'filter' => $filter
         ]);
     }
 
-    public function getRegistrations($playground_day_id)
+    public function getRegistrations(Year $year, PlaygroundDay $playground_day)
     {
-        $playground_day = PlaygroundDay::findOrFail($playground_day_id);
         return DataTables::make(
             ChildFamilyDayRegistration::query()
                 ->where([
@@ -89,11 +85,11 @@ class RegistrationsController extends Controller
         )->make(true);
     }
 
-    public function showFindFamily(Request $request, $week_id)
+    public function showFindFamily(Request $request, Year $year, Week $week)
     {
         return view('registrations.find_family', [
-            'week' => Week::findOrFail($week_id),
-            'all_weeks' => Week::all()
+            'week' => $week,
+            'all_weeks' => $year->weeks()
         ]);
     }
 
@@ -138,14 +134,15 @@ class RegistrationsController extends Controller
         }
     }
 
-    private function updateFamilyWeekRegistration($week, $family, $data)
+    private function updateFamilyWeekRegistration(Year $year, Week $week, Family $family, $data)
     {
         $family_week_registration = $family->family_week_registrations()
             ->where('week_id', '=', $week->id)->first();
         if (!$family_week_registration) {
             $family_week_registration = new FamilyWeekRegistration([
                 'family_id' => $family->id,
-                'week_id' => $week->id
+                'week_id' => $week->id,
+                'year_id' => $year->id
             ]);
         }
 
@@ -241,7 +238,7 @@ class RegistrationsController extends Controller
         }
     }
 
-    private function updateTransaction($family, $data, $expected_money)
+    private function updateTransaction(Year $year, Family $family, $data, $expected_money)
     {
         $received_money = $data['received_money'];
         if (!$received_money) {
@@ -250,39 +247,35 @@ class RegistrationsController extends Controller
         $transaction = new Transaction(array(
             'amount_paid' => $received_money,
             'amount_expected' => $expected_money,
-            'remarks' => $data['transaction_remarks']
+            'remarks' => $data['transaction_remarks'],
+            'year_id' => $year->id
         ));
-        $admin_session = AdminSession::getActiveAdminSession();
+        $admin_session = $year->getActiveAdminSession();
         $transaction->admin_session()->associate($admin_session);
         $transaction->family()->associate($family);
         $transaction->save();
     }
 
-    public function submitRegistrationData(Request $request, $week_id, $family_id)
+    public function submitRegistrationData(Request $request, Year $year, Week $week, Family $family)
     {
-        $week = Week::findOrFail($week_id);
-        $family = Family::findOrFail($family_id);
         $this->removeFamilyWeekRegistrationIfEmpty($week, $family);
         $data = $request->all();
         $data = FamilyWeekRegistration::cleanRegistrationData($data);
 
         $old_saldo = $family->getCurrentSaldo();
 
-        $this->updateFamilyWeekRegistration($week, $family, $data);
+        $this->updateFamilyWeekRegistration($year, $week, $family, $data);
 
-        $family = Family::findOrFail($family_id);
         $new_saldo = $family->getCurrentSaldo();
 
-        $this->updateTransaction($family, $data, $new_saldo - $old_saldo);
+        $this->updateTransaction($year, $family, $data, $new_saldo - $old_saldo);
 
-        return $this->getRegistrationData($week_id, $family_id);
+        return $this->getRegistrationData($year, $week, $family);
     }
 
 
-    public function getRegistrationData($week_id, $family_id)
+    public function getRegistrationData(Year $year, Week $week, Family $family)
     {
-        $week = Week::findOrFail($week_id);
-        $family = Family::findOrFail($family_id);
         $this->removeFamilyWeekRegistrationIfEmpty($week, $family);
         $data = FamilyWeekRegistration::getRegistrationDataArray($week, $family);
         $data['price_difference'] = 0;
@@ -291,10 +284,8 @@ class RegistrationsController extends Controller
     }
 
 
-    public function submitRegistrationDataForPrices(Request $request, $week_id, $family_id)
+    public function submitRegistrationDataForPrices(Request $request, Year $year, Week $week, Family $family)
     {
-        $week = Week::findOrFail($week_id);
-        $family = Family::findOrFail($family_id);
         $this->removeFamilyWeekRegistrationIfEmpty($week, $family);
         $data = $request->all();
         $data = FamilyWeekRegistration::cleanRegistrationData($data);

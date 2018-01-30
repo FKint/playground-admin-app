@@ -20,4 +20,9 @@ class ActivityList extends Model
     {
         return $this->belongsToMany(ChildFamily::class, 'activity_list_child_families');
     }
+
+    public function year()
+    {
+        return $this->belongsTo(Year::class);
+    }
 }

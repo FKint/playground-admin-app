@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
 
@@ -24,8 +25,8 @@ class RouteServiceProvider extends ServiceProvider
     public function boot()
     {
         //
-
         parent::boot();
+        Route::model('year', App\Year::class);
     }
 
     /**
@@ -60,7 +61,8 @@ class RouteServiceProvider extends ServiceProvider
     protected function mapInternalWebRoutes()
     {
         Route::prefix('internal')
-            ->middleware('auth')
+            ->name('internal.')
+            ->middleware(['auth', 'bindings'])
             ->namespace('\App\Http\Controllers\Internal')
             ->group(base_path('routes/internal.php'));
     }
@@ -74,8 +76,9 @@ class RouteServiceProvider extends ServiceProvider
      */
     protected function mapApiRoutes()
     {
-        Route::prefix('api')
-            ->middleware('auth')
+        Route::prefix('api/{year}')
+            ->name('api.')
+            ->middleware(['api_auth', 'bindings', 'can:view,year'])
             ->namespace('\App\Http\Controllers\Internal')
             ->group(base_path('routes/api.php'));
     }

@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.internal')
 
 @section('title')
     Transactiegeschiedenis voor voogd {{ $family->id }} ({{ $family->guardian_full_name() }})

@@ -6,6 +6,7 @@ use App\Child;
 use App\Family;
 use App\Tariff;
 use App\AgeGroup;
+use App\Year;
 use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables;
 use App\Http\Controllers\Controller;
@@ -31,43 +32,44 @@ class FamiliesController extends Controller
         return redirect()->action('FamiliesController@showAddChildrenToFamily', ['family_id' => $family->id]);
     }
 
-    public function showAddChildrenToFamily(Request $request, $family_id)
+    public function showAddChildrenToFamily(Request $request, Family $family)
     {
-        $family = Family::findOrFail($family_id);
         return view('families.new_family_with_children.add_child')
             ->with('family', $family)
             ->with('all_age_groups_by_id', AgeGroup::getAllAgeGroupsById())
             ->with('all_age_groups', AgeGroup::all());
     }
 
-    public function showSubmitAddChildrenToFamily(Request $request, $family_id)
+    public function showSubmitAddChildrenToFamily(Request $request, Family $family)
     {
-        $family = Family::findOrFail($family_id);
         $child = new Child($request->all());
         $child->save();
         $family->children()->attach($child);
-        return redirect()->action('FamiliesController@showAddChildrenToFamily', ['family_id' => $family_id]);
+        return redirect()->action('FamiliesController@showAddChildrenToFamily', ['family' => $family]);
     }
 
-    public function showRemoveChildFromNewFamilyWithChildren(Request $request, $family_id, $child_id)
+    public function showRemoveChildFromNewFamilyWithChildren(Request $request, Year $year, Family $family, Child $child)
     {
-        $family = Family::findOrFail($family_id);
-        $child_family = $family->child_families()->where('child_id', '=', $child_id)->firstOrFail();
+        $child_family = $family->child_families()->where('child_id', '=', $child->id)->firstOrFail();
         $child_family->delete();
-        return redirect()->action('FamiliesController@showAddChildrenToFamily', ['family_id' => $family_id]);
+        return redirect()->action('FamiliesController@showAddChildrenToFamily', ['family' => $family]);
     }
 
-    public function showTransactions($family_id)
+    public function showTransactions(Family $family)
     {
-        $family = Family::findOrFail($family_id);
         return view('families.transactions.index')
             ->with('family', $family);
     }
 
-    public function getFamilies()
+    /**
+     * @param Year $year
+     * @return mixed
+     * @throws \Exception
+     */
+    public function getFamilies(Year $year)
     {
         return DataTables::make(
-            Family::query()
+            $year->families()
                 ->with('children')
                 ->with('tariff')
                 ->with('child_families')
@@ -76,9 +78,8 @@ class FamiliesController extends Controller
         )->make(true);
     }
 
-    public function getFamilyTransactions($family_id)
+    public function getFamilyTransactions(Year $year, Family $family)
     {
-        $family = Family::findOrFail($family_id);
         return DataTables::make(
             $family->transactions()->with('admin_session')
         )->make(true);
@@ -89,24 +90,22 @@ class FamiliesController extends Controller
         return $this->loadEditFamilyFormForFamily($request->input('family_id'));
     }
 
-    protected function loadEditFamilyFormForFamily($family_id)
+    protected function loadEditFamilyFormForFamily(Family $family)
     {
-
-        $family = Family::findOrFail($family_id);
         return view('families.edit_family.form')
             ->with('family', $family)
-            ->with('all_tariffs_by_id', Tariff::getAllTariffsById());
+            ->with('all_tariffs_by_id', $family->year->getAllTariffsById());
     }
 
-    public function submitEditFamilyForm(Request $request, $family_id)
+    public function submitEditFamilyForm(Request $request, Year $year, Family $family)
     {
-        Family::findOrFail($family_id)->update($request->all());
-        return $this->loadEditFamilyFormForFamily($family_id);
+        $family->update($request->all());
+        return $this->loadEditFamilyFormForFamily($family);
     }
 
-    public function getFamilyChildren($family_id)
+    public function getFamilyChildren(Year $year, Family $family)
     {
-        return DataTables::make(Family::findOrFail($family_id)->children)->make(true);
+        return DataTables::make($family->children)->make(true);
     }
 
     public function loadFamilyChildrenTable(Request $request)
@@ -115,15 +114,15 @@ class FamiliesController extends Controller
         return view('families.children.table', ['family' => $family]);
     }
 
-    public function getChildSuggestionsForFamily(Request $request, $family_id)
+    public function getChildSuggestionsForFamily(Request $request, Year $year, Family $family)
     {
         $query = $request->input('q');
         $children = Child::search($query)
             ->groupBy('children.id')
             ->with('child_families')
             ->with('families')
-            ->whereDoesntHave("families", function ($query) use ($family_id) {
-                $query->where('family_id', '=', $family_id);
+            ->whereDoesntHave("families", function ($query) use ($family) {
+                $query->where('family_id', '=', $family->id);
             })
             ->get();
         return $children;
@@ -139,11 +138,9 @@ class FamiliesController extends Controller
         return $families;
     }
 
-    public function addChildToFamily(Request $request, $family_id)
+    public function addChildToFamily(Request $request, Year $year, Family $family, Child $child)
     {
-        $child = Child::findOrFail($request->input('child_id'));
-        $family = Family::findOrFail($family_id);
-        $family->children()->attach($child);
+        $family->children()->syncWithoutDetaching([$child->id => ['year_id' => $year->id]]);
         return $family;
     }
 

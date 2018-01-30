@@ -63,22 +63,4 @@ class PlaygroundDay extends Model
     {
         return $this->child_family_day_registrations()->count();
     }
-
-    public static function getPlaygroundDayForDate($date)
-    {
-        $week = Week::query()
-            ->whereDate('first_day_of_week', '<=', $date->format('Y-m-d'))
-            ->orderByDesc('first_day_of_week')
-            ->first();
-        if (!$week)
-            return null;
-        $interval = $date->diff(\DateTime::createFromFormat('Y-m-d', $week->first_day_of_week));
-        $week_day = WeekDay::query()
-            ->where('days_offset', '=', $interval->days)
-            ->first();
-        if (!$week_day)
-            return null;
-        return $week->playground_days()->where('week_day_id', '=', $week_day->id)->first();
-
-    }
 }

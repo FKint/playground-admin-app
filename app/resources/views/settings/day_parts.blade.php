@@ -14,7 +14,7 @@
         $('#day-parts-table').DataTable({
             processing: true,
             serverSide: true,
-            ajax: '{!! route('getDayParts') !!}',
+            ajax: '{!! route('api.datatables.day_parts') !!}',
             columns: [
                 {data: 'name', name: 'name'},
                 {data: 'order', name: 'order'}

@@ -13,12 +13,13 @@ class Tariff extends Model
      */
     protected $fillable = ['name', 'abbreviation', 'week_first_child', 'week_later_children', 'day_first_child', 'day_later_children'];
 
-    public static function getAllTariffsById()
+    public function full_abbreviation_and_name()
     {
-        $all_tariffs = [];
-        foreach (Tariff::all() as $tariff) {
-            $all_tariffs[$tariff->id] = $tariff->abbreviation . " - " . $tariff->name;
-        }
-        return $all_tariffs;
+        return $this->abbreviation . " - " . $this->name;
+    }
+
+    public function year()
+    {
+        return $this->belongsTo(Year::class);
     }
 }

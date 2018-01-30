@@ -12,7 +12,7 @@ use App\Http\Controllers\Controller;
 
 class DashboardController extends Controller
 {
-    public function show(Request $request)
+    public function show(Request $request, Year $year)
     {
         $selected_date = $request->input('date');
         if ($selected_date) {
@@ -20,8 +20,7 @@ class DashboardController extends Controller
         } else {
             $selected_date = new \DateTimeImmutable();
         }
-        $playground_day = PlaygroundDay::getPlaygroundDayForDate($selected_date);
-        $year = Year::first();
+        $playground_day = $year->getPlaygroundDayForDate($selected_date);
         if ($playground_day) {
             $year = $playground_day->week->year;
         }
@@ -30,7 +29,7 @@ class DashboardController extends Controller
             ->with('year', $year)
             ->with('all_age_groups', AgeGroup::all())
             ->with('supplements', Supplement::all())
-            ->with("active_admin_session", AdminSession::getActiveAdminSession())
+            ->with("active_admin_session", $year->getActiveAdminSession())
             ->with("selected_menu_item", "dashboard");
     }
 }

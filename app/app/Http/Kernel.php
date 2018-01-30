@@ -2,7 +2,11 @@
 
 namespace App\Http;
 
+use App\Http\Middleware\AddYearVariableToTemplates;
+use App\Http\Middleware\ApiAuthenticationCheck;
+use App\Http\Middleware\CheckModelSameYear;
 use App\Http\Middleware\RedirectIfNotAdmin;
+use App\Http\Middleware\SetDefaultYearForUrls;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 
 class Kernel extends HttpKernel
@@ -24,7 +28,7 @@ class Kernel extends HttpKernel
         \Illuminate\Session\Middleware\StartSession::class,
         // \Illuminate\Session\Middleware\AuthenticateSession::class,
         \Illuminate\View\Middleware\ShareErrorsFromSession::class,
-        // \App\Http\Middleware\VerifyCsrfToken::class,
+        \App\Http\Middleware\VerifyCsrfToken::class,
         // \Illuminate\Routing\Middleware\SubstituteBindings::class,
     ];
 
@@ -41,7 +45,6 @@ class Kernel extends HttpKernel
 
         ],
         'internal' => [
-            RedirectIfNotAdmin::class
         ]
     ];
 
@@ -53,6 +56,10 @@ class Kernel extends HttpKernel
      * @var array
      */
     protected $routeMiddleware = [
+        'add_year_variable_to_templates' => AddYearVariableToTemplates::class,
+        'api_auth' => ApiAuthenticationCheck::class,
+        'model_same_year' => CheckModelSameYear::class,
+        'default_year_route_parameter' => SetDefaultYearForUrls::class,
         'auth' => \Illuminate\Auth\Middleware\Authenticate::class,
         'auth.basic' => \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,
         'bindings' => \Illuminate\Routing\Middleware\SubstituteBindings::class,
