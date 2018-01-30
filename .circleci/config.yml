@@ -4,7 +4,7 @@ jobs:
   build:
     docker:
       - image: circleci/php:7.2-node-browsers
-    working_directory: ~/laravel/app
+    working_directory: ~/laravel
     steps:
       - checkout
       - run: sudo apt install -y libsqlite3-dev zlib1g-dev
@@ -12,23 +12,33 @@ jobs:
       - run: sudo composer self-update
       - restore_cache:
           keys:
-            - composer-v1-{{ checksum "composer.lock" }}
+            - composer-v1-{{ checksum "app/composer.lock" }}
             - composer-v1-
-      - run: composer install -n --prefer-dist
+      - run:
+          command: composer install -n --prefer-dist
+          working_directory: ./app
       - save_cache:
-          key: composer-v1-{{ checksum "composer.lock" }}
+          key: composer-v1-{{ checksum "app/composer.lock" }}
           paths:
-            - vendor
+            - app/vendor
       - restore_cache:
           keys:
-            - node-v1-{{ checksum "package.json" }}
+            - node-v1-{{ checksum "app/package.json" }}
             - node-v1-
-      - run: yarn install
+      - run:
+          command: yarn install
+          working_directory: ./app
       - save_cache:
-          key: node-v1-{{ checksum "package.json" }}
+          key: node-v1-{{ checksum "app/package.json" }}
           paths:
-            - node_modules
-      - run: touch storage/testing.sqlite
-      - run: php artisan migrate --env=testing --database=sqlite_testing --force
-      - run: ./vendor/bin/codecept build
-      - run: ./vendor/bin/codecept run
+            - app/node_modules
+      - run: touch app/storage/testing.sqlite
+      - run:
+          command: php artisan migrate --env=testing --database=sqlite_testing --force
+          working_directory: ./app
+      - run:
+          command: ./vendor/bin/codecept build
+          working_directory: ./app
+      - run:
+          command: ./vendor/bin/codecept run
+          working_directory: ./app
