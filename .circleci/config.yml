@@ -34,11 +34,8 @@ jobs:
             - app/node_modules
       - run: touch app/storage/testing.sqlite
       - run:
-          command: php artisan migrate --env=testing --database=sqlite_testing --force
+          command: php artisan migrate:fresh --env=testing --database=sqlite_testing --force
           working_directory: ./app
       - run:
-          command: ./vendor/bin/codecept build
-          working_directory: ./app
-      - run:
-          command: ./vendor/bin/codecept run
+          command: ./vendor/phpunit/phpunit/phpunit
           working_directory: ./app

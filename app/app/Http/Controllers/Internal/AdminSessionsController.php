@@ -16,7 +16,7 @@ class AdminSessionsController extends Controller
     {
         $admin_session = $year->getActiveAdminSession();
         if ($admin_session == null) {
-            return redirect()->route('open_new_admin_session');
+            return redirect()->route('internal.open_new_admin_session');
         }
         return view('admin_sessions.close_session');
     }
@@ -35,7 +35,7 @@ class AdminSessionsController extends Controller
         $admin_session->save();
         $new_admin_session = new AdminSession();
         $new_admin_session->save();
-        return redirect()->route('dashboard');
+        return redirect()->route('internal.dashboard');
     }
 
     public function getAdminSessions(Year $year)
@@ -57,6 +57,6 @@ class AdminSessionsController extends Controller
             "remarks" => $request->input('remarks')
         );
         $adminSession->update($data);
-        return redirect(route('dashboard'));
+        return redirect(route('internal.dashboard'));
     }
 }

@@ -18,6 +18,8 @@ class ChangeRemarksAndContactToText extends Migration
         });
         Schema::table('families', function(Blueprint $table){
             $table->text('remarks')->nullable()->change();
+        });
+        Schema::table('families', function(Blueprint $table){
             $table->text('contact')->nullable()->change();
         });
     }
@@ -34,6 +36,8 @@ class ChangeRemarksAndContactToText extends Migration
         });
         Schema::table('families', function(Blueprint $table){
             $table->string('remarks')->nullable()->change();
+        });
+        Schema::table('families', function(Blueprint $table){
             $table->string('contact')->nullable()->change();
         });
     }

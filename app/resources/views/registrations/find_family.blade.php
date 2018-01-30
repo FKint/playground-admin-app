@@ -31,7 +31,7 @@
         $(function () {
             let engine = new Bloodhound({
                 remote: {
-                    url: '{!! route('getFamilySuggestions') !!}?q=%QUERY%',
+                    url: '{!! route('api.typeahead.family_suggestions') !!}?q=%QUERY%',
                     wildcard: '%QUERY%'
                 },
                 datumTokenizer: Bloodhound.tokenizers.whitespace('q'),

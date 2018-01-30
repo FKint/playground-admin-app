@@ -1,8 +1,8 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
 class AddOrganizations extends Migration
 {
@@ -18,16 +18,21 @@ class AddOrganizations extends Migration
             $table->string('full_name', 100)->unique();
             $table->timestamps();
         });
-
         Schema::table('years', function (Blueprint $table) {
             $table->string('year', 100)->change();
+        });
+        Schema::table('years', function (Blueprint $table) {
             $table->renameColumn('year', 'description');
+        });
+        Schema::table('years', function (Blueprint $table) {
             $table->integer('organization_id')->unsigned()->default(1);
             $table->foreign('organization_id')->references('id')->on('organizations');
         });
         Schema::table('activity_lists', function (Blueprint $table) {
             $table->integer('year_id')->unsigned()->default(1);
             $table->foreign('year_id')->references('id')->on('years');
+        });
+        Schema::table('activity_lists', function (Blueprint $table) {
             $table->decimal('price', 5, 2)->nullable(false)->default(0)->change();
         });
         Schema::table('admin_sessions', function (Blueprint $table) {
@@ -89,7 +94,7 @@ class AddOrganizations extends Migration
             $table->foreign(['year_id', 'child_family_id'])->references(['year_id', 'id'])->on('child_families');
             $table->foreign(['year_id', 'activity_list_id'])->references(['year_id', 'id'])->on('activity_lists');
         });
-        Schema::table('family_week_registrations', function(Blueprint $table){
+        Schema::table('family_week_registrations', function (Blueprint $table) {
             $table->integer('year_id')->unsigned()->default(1);
             $table->foreign('year_id')->references('id')->on('years');
             $table->foreign(['year_id', 'family_id'])->references(['year_id', 'id'])->on('families');
@@ -165,7 +170,7 @@ class AddOrganizations extends Migration
             $table->dropIndex(['year_id', 'id']);
             $table->dropColumn('year_id');
         });
-        Schema::table('family_week_registrations', function(Blueprint $table){
+        Schema::table('family_week_registrations', function (Blueprint $table) {
             $table->dropForeign(['year_id', 'family_id']);
             $table->dropForeign(['year_id', 'week_id']);
             $table->dropForeign(['year_id', 'tariff_id']);
@@ -234,12 +239,18 @@ class AddOrganizations extends Migration
         Schema::table('activity_lists', function (Blueprint $table) {
             $table->dropForeign(['year_id']);
             $table->dropColumn('year_id');
+        });
+        Schema::table('activity_lists', function (Blueprint $table) {
             $table->decimal('price', 5, 2)->nullable(true)->default(0)->change();
         });
         Schema::table('years', function (Blueprint $table) {
             $table->dropForeign(['organization_id']);
             $table->dropColumn('organization_id');
+        });
+        Schema::table('years', function (Blueprint $table) {
             $table->integer('description')->change();
+        });
+        Schema::table('years', function (Blueprint $table) {
             $table->renameColumn('description', 'year');
         });
         Schema::dropIfExists('organizations');
