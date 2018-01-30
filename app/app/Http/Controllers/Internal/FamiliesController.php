@@ -2,14 +2,14 @@
 
 namespace App\Http\Controllers\Internal;
 
+use App\AgeGroup;
 use App\Child;
 use App\Family;
+use App\Http\Controllers\Controller;
 use App\Tariff;
-use App\AgeGroup;
 use App\Year;
 use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables;
-use App\Http\Controllers\Controller;
 
 class FamiliesController extends Controller
 {
@@ -85,9 +85,9 @@ class FamiliesController extends Controller
         )->make(true);
     }
 
-    public function loadEditFamilyForm(Request $request)
+    public function loadEditFamilyForm(Request $request, Year $year, Family $family)
     {
-        return $this->loadEditFamilyFormForFamily($request->input('family_id'));
+        return $this->loadEditFamilyFormForFamily($family);
     }
 
     protected function loadEditFamilyFormForFamily(Family $family)
@@ -108,9 +108,8 @@ class FamiliesController extends Controller
         return DataTables::make($family->children)->make(true);
     }
 
-    public function loadFamilyChildrenTable(Request $request)
+    public function loadFamilyChildrenTable(Request $request, Year $year, Family $family)
     {
-        $family = Family::findOrFail($request->input('family_id'));
         return view('families.children.table', ['family' => $family]);
     }
 

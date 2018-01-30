@@ -69,4 +69,9 @@ class YearPolicy
         return $this->update($user, $year);
     }
 
+    public function create_family(User $user, Year $year)
+    {
+        return $this->update($user, $year);
+    }
+
 }

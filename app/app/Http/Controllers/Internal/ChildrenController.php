@@ -80,7 +80,7 @@ class ChildrenController extends Controller
      * @return $this
      * @throws \Illuminate\Auth\Access\AuthorizationException
      */
-    public function loadChildInfoForm(Child $child, Year $year)
+    public function loadChildInfoForm(Year $year, Child $child)
     {
         $this->authorize('view', $child);
         return view('children.info_child.modal_content')
@@ -114,7 +114,7 @@ class ChildrenController extends Controller
      * @return $this
      * @throws \Illuminate\Auth\Access\AuthorizationException
      */
-    public function loadEditFamiliesForm(Request $request, Child $child, Year $year)
+    public function loadEditFamiliesForm(Request $request, Year $year, Child $child)
     {
         $this->authorize('view', $child);
         return view('children.edit_child.families')
@@ -128,7 +128,7 @@ class ChildrenController extends Controller
      * @return $this
      * @throws \Illuminate\Auth\Access\AuthorizationException
      */
-    public function loadLinkNewChildFamilyForm(Child $child, Year $year)
+    public function loadLinkNewChildFamilyForm(Year $year, Child $child)
     {
         $this->authorize('view', $child);
         return view('children.edit_child.new_family.form')
@@ -177,7 +177,7 @@ class ChildrenController extends Controller
      * @return \Illuminate\Http\JsonResponse
      * @throws \Illuminate\Auth\Access\AuthorizationException
      */
-    public function submitEditChildForm(SaveChildRequest $request, Child $child, Year $year)
+    public function submitEditChildForm(SaveChildRequest $request, Year $year, Child $child)
     {
         $this->authorize('update', $child);
         $request->validate();

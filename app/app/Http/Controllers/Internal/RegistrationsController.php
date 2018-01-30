@@ -93,14 +93,9 @@ class RegistrationsController extends Controller
         ]);
     }
 
-    public function showEditRegistration(Request $request)
+    public function showEditRegistration(Request $request, Year $year, Family $family, Week $week)
     {
-        $week_id = $request->input('week_id');
-        $family_id = $request->input('family_id');
-        $family = Family::findOrFail($family_id);
-        $week = Week::findOrFail($week_id);
         $this->removeFamilyWeekRegistrationIfEmpty($week, $family);
-
         if ($request->has('today')) {
             $today = \DateTimeImmutable::createFromFormat('Y-m-d', $request->input('today'));
         } else {
@@ -110,16 +105,16 @@ class RegistrationsController extends Controller
         return view('registrations.edit_week_registration', [
             'family' => $family,
             'week' => $week,
-            'all_supplements' => Supplement::all(),
-            'all_activity_lists' => ActivityList::query()->where('show_on_attendance_form', '=', true)->get(),
-            'all_tariffs_by_id' => Tariff::getAllTariffsById(),
-            'all_age_groups' => AgeGroup::all(),
-            'all_day_parts' => DayPart::all(),
+//            'all_supplements' => $year->supplements(),
+//            'all_activity_lists' => $year->activity_lists()->where('show_on_attendance_form', '=', true)->get(),
+//            'all_tariffs_by_id' => $year->getAllTariffsById(),
+//            'all_age_groups' => $year->age_groups(),
+//            'all_day_parts' => $year->day_parts(),
             'today' => $today
         ]);
     }
 
-    private function removeFamilyWeekRegistrationIfEmpty($week, $family)
+    private function removeFamilyWeekRegistrationIfEmpty(Week $week, Family $family)
     {
         $family_week_registration = $family->family_week_registrations()->where('week_id', '=', $week->id)->first();
         if (!$family_week_registration)

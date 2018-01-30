@@ -9,7 +9,7 @@
         form.submit(function (event) {
             event.preventDefault();
             form_parent.load(
-                '{!! route('submit_edit_family_form', ['family_id'=>$family->id]) !!}',
+                '{!! route('internal.submit_edit_family_form', ['family'=>$family]) !!}',
                 form.serializeArray()
             );
             $(window).trigger('families:updated');

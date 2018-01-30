@@ -27,10 +27,15 @@ mix.js('resources/assets/js/app.js', 'public/js')
         'datatables.net-buttons',
         'datatables.net-buttons/js/buttons.html5',
         'datatables.net-bs',
+        'datatables.net-buttons-bs',
+        'datatables.net-buttons/js/buttons.colVis',
+        'datatables.net-buttons-bs/js/buttons.bootstrap',
         'bloodhound-js',
         'corejs-typeahead',
-        'datatables.net-buttons-bs',
         'pdfmake-browserified',
+        'bootstrap-datepicker',
+        'bootstrap-datepicker/js/locales/bootstrap-datepicker.nl-BE.js',
+        'moment'
     ])
     .version();
 

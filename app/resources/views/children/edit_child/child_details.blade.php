@@ -28,7 +28,7 @@
             event.preventDefault();
             const form = $('#edit-child-form');
             $.post(
-                '{!! route('update_child_details', ['child_id'=>$child->id]) !!}',
+                '{!! route('internal.update_child_details', ['child'=>$child]) !!}',
                 form.serialize()
             ).done(function (resp) {
                 success_div.removeClass('hidden');

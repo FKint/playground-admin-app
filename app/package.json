@@ -25,5 +25,7 @@
     "moment": "^2.20.1",
     "pdfmake-browserified": "^0.1.4"
   },
-  "dependencies": {}
+  "dependencies": {
+    "datatables.net-plugins": "^1.10.15"
+  }
 }

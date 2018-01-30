@@ -27,7 +27,7 @@
             $('#family-children-modal').modal('show');
 
             const family_children_url = '{!! route('internal.load_family_children', ['family' => 'FAMILY_ID']) !!}'
-                .substr('FAMILY_ID', family_id);
+                .replace('FAMILY_ID', family_id);
             $('#family-children-modal-body')
                 .data('url', family_children_url)
                 .load(family_children_url);

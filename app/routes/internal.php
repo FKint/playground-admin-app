@@ -71,9 +71,9 @@ Route::prefix('{year}')
 
 
         // Families
-        Route::get('/family/children/table', 'FamiliesController@loadFamilyChildrenTable')
+        Route::get('/family/{family}/children/table', 'FamiliesController@loadFamilyChildrenTable')
             ->name('load_family_children');
-        Route::get('/family/edit/form', 'FamiliesController@loadEditFamilyForm')
+        Route::get('/family/{family}/edit/form', 'FamiliesController@loadEditFamilyForm')
             ->name('load_edit_family_form');
         Route::post('/family/{family}/edit/form', 'FamiliesController@submitEditFamilyForm')
             ->name('submit_edit_family_form');
@@ -83,7 +83,7 @@ Route::prefix('{year}')
         // Edit registrations
         Route::get('/registrations/week/{week}/families/find', 'RegistrationsController@showFindFamily')
             ->name('show_find_family_registration');
-        Route::get('/registrations/edit', 'RegistrationsController@showEditRegistration')
+        Route::get('/registrations/family/{family}/week/{week}/edit', 'RegistrationsController@showEditRegistration')
             ->name('show_edit_registration');
 
         // Admin sessions

@@ -27,7 +27,7 @@
             $('#edit-family-modal').modal('show');
 
             const edit_family_url = '{!! route('internal.load_edit_family_form', ['family' => 'FAMILY_ID']) !!}'
-                .substr('FAMILY_ID', family_id);
+                .replace('FAMILY_ID', family_id);
             const form_parent = $('#edit-family-modal-body');
             form_parent
                 .data('url', edit_family_url)

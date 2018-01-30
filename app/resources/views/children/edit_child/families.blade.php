@@ -46,19 +46,19 @@
         const container = $('#existing-child-families').parent();
         container.load(container.data('url'));
     }
+
     $(function () {
         const child_families_table_element = $('#child-families-table');
         child_families_table_element.on('click', '.btn-remove-family', function () {
-            $.post('{!! route('removeChildFamily', ['child_id' => $child->id]) !!}', {
-                child_family_id: $(this).data('child-family-id')
-            }, function (result) {
+            $.post('{!! route('api.remove_family_from_child', ['child' => $child, 'family' => 'FAMILY_ID']) !!}'
+                .replace('FAMILY_ID', $(this).data('family-id')), {}, function (result) {
                 reloadEditChildFamiliesDiv();
             });
         });
 
         let engine = new Bloodhound({
             remote: {
-                url: '{!! route('getChildFamilySuggestions', ['child_id' => $child->id]) !!}?q=%QUERY%',
+                url: '{!! route('api.typeahead.family_suggestions_for_child', ['child' => $child]) !!}?q=%QUERY%',
                 wildcard: '%QUERY%'
             },
             datumTokenizer: Bloodhound.tokenizers.whitespace('q'),
@@ -91,9 +91,8 @@
                 }
             }
         }).on('typeahead:selected', function (event, suggestion) {
-            $.post('{!! route('addChildFamily', ['child_id' => $child->id]) !!}', {
-                family_id: suggestion.id
-            }, function (result) {
+            $.post('{!! route('api.add_family_to_child', ['child' => $child, 'family' => 'FAMILY_ID']) !!}'
+                .replace('FAMILY_ID', suggestion.id), {}, function (result) {
                 reloadEditChildFamiliesDiv();
             }).done(function () {
                 console.log('done');
@@ -114,7 +113,7 @@
         form.submit(function (event) {
             event.preventDefault();
             $.post(
-                '{!! route('submit_link_new_child_family_form', ['child_id' => $child->id]) !!}',
+                '{!! route('internal.submit_link_new_child_family_form', ['child' => $child]) !!}',
                 form.serializeArray()
             ).done(function () {
                 reloadEditChildFamiliesDiv();
