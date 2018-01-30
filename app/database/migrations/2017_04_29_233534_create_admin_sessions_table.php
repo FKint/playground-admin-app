@@ -24,7 +24,7 @@ class CreateAdminSessionsTable extends Migration
         });
         DB::table('transactions')->truncate();
         Schema::table('transactions', function (Blueprint $table) {
-            $table->integer('admin_session_id')->unsigned()->index();
+            $table->integer('admin_session_id')->unsigned()->default(1)->index();
             $table->foreign('admin_session_id')->references('id')->on('admin_sessions');
         });
     }

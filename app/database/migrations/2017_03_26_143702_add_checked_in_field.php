@@ -14,7 +14,7 @@ class AddCheckedInField extends Migration
     public function up()
     {
         Schema::table('day_registrations', function (Blueprint $table) {
-            $table->boolean('checked_in');
+            $table->boolean('checked_in')->default(false);
         });
     }
 

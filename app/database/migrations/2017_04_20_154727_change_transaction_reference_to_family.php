@@ -14,7 +14,7 @@ class ChangeTransactionReferenceToFamily extends Migration
     public function up()
     {
         Schema::table("transactions", function (Blueprint $table) {
-            $table->integer('family_id')->unsigned();
+            $table->integer('family_id')->unsigned()->default(1);
             $table->foreign('family_id')->references('id')->on('families');
 
         });
@@ -30,7 +30,7 @@ class ChangeTransactionReferenceToFamily extends Migration
             }
         });
         Schema::table("transactions", function (Blueprint $table) {
-            $table->integer('family_id')->unsigned()->nullable(false)->change();
+            $table->integer('family_id')->unsigned()->default(1)->nullable(false)->change();
             $table->index('family_id');
 
             $table->dropForeign(['child_family_id']);
