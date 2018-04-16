@@ -2,11 +2,9 @@
 
 namespace App\Http\Controllers\Internal;
 
-use App\AgeGroup;
 use App\Child;
 use App\Family;
 use App\Http\Controllers\Controller;
-use App\Tariff;
 use App\Year;
 use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables;
@@ -19,40 +17,41 @@ class FamiliesController extends Controller
             ->with('selected_menu_item', 'families');
     }
 
-    public function showNewFamilyWithChildren()
+    public function showNewFamilyWithChildren(Year $year)
     {
         return view('families.new_family_with_children.index')
-            ->with('all_tariffs_by_id', Tariff::getAllTariffsById());
+            ->with('all_tariffs_by_id', $year->getAllTariffsById());
     }
 
-    public function showSubmitNewFamilyWithChildren(Request $request)
+    public function showSubmitNewFamilyWithChildren(Request $request, Year $year)
     {
         $family = new Family($request->all());
+        $family->year()->associate($year);
         $family->save();
-        return redirect()->action('FamiliesController@showAddChildrenToFamily', ['family_id' => $family->id]);
+        return redirect(route('internal.show_add_child_to_family', ['family' => $family]));
     }
 
-    public function showAddChildrenToFamily(Request $request, Family $family)
+    public function showAddChildrenToFamily(Year $year, Family $family)
     {
         return view('families.new_family_with_children.add_child')
             ->with('family', $family)
-            ->with('all_age_groups_by_id', AgeGroup::getAllAgeGroupsById())
-            ->with('all_age_groups', AgeGroup::all());
+            ->with('year', $year);
     }
 
-    public function showSubmitAddChildrenToFamily(Request $request, Family $family)
+    public function showSubmitAddChildrenToFamily(Request $request, Year $year, Family $family)
     {
         $child = new Child($request->all());
+        $child->year()->associate($year);
         $child->save();
         $family->children()->attach($child);
-        return redirect()->action('FamiliesController@showAddChildrenToFamily', ['family' => $family]);
+        return redirect(route('internal.show_add_child_to_family', ['family' => $family]));
     }
 
     public function showRemoveChildFromNewFamilyWithChildren(Request $request, Year $year, Family $family, Child $child)
     {
         $child_family = $family->child_families()->where('child_id', '=', $child->id)->firstOrFail();
         $child_family->delete();
-        return redirect()->action('FamiliesController@showAddChildrenToFamily', ['family' => $family]);
+        return redirect(route('internal.show_add_child_to_family', ['family' => $family]));
     }
 
     public function showTransactions(Family $family)
@@ -116,7 +115,8 @@ class FamiliesController extends Controller
     public function getChildSuggestionsForFamily(Request $request, Year $year, Family $family)
     {
         $query = $request->input('q');
-        $children = Child::search($query)
+        $children = $year->children()
+            ->search($query)
             ->groupBy('children.id')
             ->with('child_families')
             ->with('families')
@@ -127,10 +127,11 @@ class FamiliesController extends Controller
         return $children;
     }
 
-    public function getFamilySuggestions(Request $request)
+    public function getFamilySuggestions(Request $request, Year $year)
     {
         $query = $request->input('q');
-        $families = Family::search($query)
+        $families = $year->families()
+            ->search($query)
             ->groupBy('families.id')
             ->with('children')
             ->get();

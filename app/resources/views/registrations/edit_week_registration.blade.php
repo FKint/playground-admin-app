@@ -134,7 +134,8 @@
                 @endforeach
             </table>
             <button class="btn btn-default" id="btn-set-all-attending-today">Inchecken</button>
-            <a href="{{ route('internal.show_family_transactions', ['family_id' => $family->id]) }}" class="btn btn-default">Transactiegeschiedenis</a>
+            <a href="{{ route('internal.show_family_transactions', ['family' => $family]) }}"
+               class="btn btn-default">Transactiegeschiedenis</a>
         </div>
         <div class="col-xs-3">
             {{ Form::open(['class' => 'form-horizontal', 'id' => 'register-payment-form']) }}
@@ -246,7 +247,7 @@
 
             function loadCurrentRegistrationData(callback) {
                 increaseNbRequests();
-                $.get('{{ route('api.registration_data', ['week_id'=>$week->id, 'family_id'=>$family->id]) }}',
+                $.get('{{ route('api.registration_data', ['week'=>$week, 'family'=>$family]) }}',
                     function (result) {
                         decreaseNbRequests();
                         callback(result);
@@ -380,8 +381,7 @@
                 const data = getRegistrationFormData();
                 console.log("sending registration data: ", data);
                 increaseNbRequests();
-                $.post('{{ route('api.submit_registration_data',
-            ['week_id' => $week->id, 'family_id' => $family->id]) }}',
+                $.post('{{ route('api.submit_registration_data', ['week' => $week, 'family' => $family]) }}',
                     data, function (response) {
                         console.log('Submitted registration data, got following back: ', response);
                         decreaseNbRequests();
@@ -400,7 +400,7 @@
             });
             $('#submit-registration-data-and-next').click(function () {
                 submitRegistrationData();
-                window.location.href = '{!! route('internal.show_find_family_registration', ['week_id' => $week->id]) !!}';
+                window.location.href = '{!! route('internal.show_find_family_registration', ['week' => $week]) !!}';
             });
             $('#btn-cancel').click(function () {
                 window.location.href = '{!! route('internal.registrations') !!}';

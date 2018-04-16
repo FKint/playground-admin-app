@@ -27,9 +27,6 @@ class DashboardController extends Controller
         return view('dashboard.index')
             ->with('today_playground_day', $playground_day)
             ->with('year', $year)
-            ->with('all_age_groups', AgeGroup::all())
-            ->with('supplements', Supplement::all())
-            ->with("active_admin_session", $year->getActiveAdminSession())
             ->with("selected_menu_item", "dashboard");
     }
 }

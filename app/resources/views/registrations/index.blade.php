@@ -30,7 +30,7 @@
     <div class="row">&nbsp;</div>
     @if(!empty($playground_day))
         <div class="row">
-            <a href="{{ route('internal.show_find_family_registration', ['week_id' => $playground_day->week->id]) }}"
+            <a href="{{ route('internal.show_find_family_registration', ['week' => $playground_day->week]) }}"
                class="btn btn-primary">Registreer betalingen/aanwezigheid</a>
         </div>
         <div class="row">&nbsp;</div>

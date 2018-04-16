@@ -31,7 +31,7 @@ class RegistrationsController extends Controller
         if (!$week)
             return $year->playground_days()->first();
         $interval = $upper_bound_date->diff(\DateTime::createFromFormat('Y-m-d', $week->first_day_of_week));
-        $week_days = WeekDay::query()
+        $week_days = $year->week_days()
             ->where('days_offset', '<=', $interval->days)
             ->orderByDesc('days_offset')
             ->get();
@@ -73,7 +73,7 @@ class RegistrationsController extends Controller
     public function getRegistrations(Year $year, PlaygroundDay $playground_day)
     {
         return DataTables::make(
-            ChildFamilyDayRegistration::query()
+            $year->child_family_day_registrations()
                 ->where([
                     ['week_id', '=', $playground_day->week_id],
                     ['week_day_id', '=', $playground_day->week_day_id]
@@ -105,11 +105,6 @@ class RegistrationsController extends Controller
         return view('registrations.edit_week_registration', [
             'family' => $family,
             'week' => $week,
-//            'all_supplements' => $year->supplements(),
-//            'all_activity_lists' => $year->activity_lists()->where('show_on_attendance_form', '=', true)->get(),
-//            'all_tariffs_by_id' => $year->getAllTariffsById(),
-//            'all_age_groups' => $year->age_groups(),
-//            'all_day_parts' => $year->day_parts(),
             'today' => $today
         ]);
     }
@@ -141,12 +136,12 @@ class RegistrationsController extends Controller
             ]);
         }
 
-        $tariff = Tariff::findOrFail($data['tariff_id']);
+        $tariff = $year->tariffs()->findOrFail($data['tariff_id']);
         $family_week_registration->tariff()->associate($tariff);
         $family_week_registration->save();
 
         $children_data = $data['children'];
-        $default_day_part = DayPart::getDefaultDayPart();
+        $default_day_part = $year->getDefaultDayPart();
 
         foreach ($family->child_families as $child_family) {
             // TODO: check other registrations for $child in $week (e.g. through other families)
@@ -188,8 +183,8 @@ class RegistrationsController extends Controller
                     $age_group = null;
                     $attended = false;
                     if ($day_data) {
-                        $day_part = DayPart::find($day_data['day_part_id']);
-                        $age_group = AgeGroup::find($day_data['age_group_id']);
+                        $day_part = $year->day_parts()->find($day_data['day_part_id']);
+                        $age_group = $year->age_groups()->find($day_data['age_group_id']);
                         if ($day_data['attended']) {
                             $attended = true;
                         }
@@ -201,7 +196,7 @@ class RegistrationsController extends Controller
                     $child_family_day_registration->save();
 
                     $supplements_data = $day_data ? $day_data['supplements'] : [];
-                    foreach (Supplement::all() as $supplement) {
+                    foreach ($year->supplements as $supplement) {
                         if (key_exists($supplement->id, $supplements_data) && $supplements_data[$supplement->id]['ordered']) {
                             if (!$child_family_day_registration->supplements->contains($supplement)) {
                                 $child_family_day_registration->supplements()->attach($supplement);
@@ -219,7 +214,7 @@ class RegistrationsController extends Controller
 
             $activity_lists = $child_data ? $child_data['activity_lists'] : [];
             foreach ($activity_lists as $activity_list_id => $activity_list_data) {
-                $activity_list = ActivityList::findOrFail($activity_list_id);
+                $activity_list = $year->activity_lists()->findOrFail($activity_list_id);
                 if ($activity_list_data['registered']) {
                     if (!$child_family->activity_lists->contains($activity_list_id)) {
                         $child_family->activity_lists()->attach($activity_list);

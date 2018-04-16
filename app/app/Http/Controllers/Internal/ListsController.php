@@ -103,21 +103,22 @@ class ListsController extends Controller
             "date" => $date ? $date->format("Y-m-d") : null,
             "price" => $price,
             "show_on_attendance_form" => $show_on_attendance_form,
-            "show_on_dashboard" => $show_on_dashboard
+            "show_on_dashboard" => $show_on_dashboard,
         ];
         return $data;
     }
 
-    public function submitNewList(Request $request)
+    public function submitNewList(Request $request, Year $year)
     {
         $list = new ActivityList($this->getListData($request));
+        $list->year()->asociate($year);
         $list->save();
-        return redirect(route('show_list', ['list_id' => $list->id]));
+        return redirect(route('show_list', ['list' => $list]));
     }
 
-    public function submitEditList(Request $request, ActivityList $list)
+    public function submitEditList(Request $request, Year $year, ActivityList $list)
     {
         $list->update($this->getListData($request));
-        return redirect(route('show_list', ['list_id' => $list->id]));
+        return redirect(route('internal.show_list', ['list' => $list]));
     }
 }

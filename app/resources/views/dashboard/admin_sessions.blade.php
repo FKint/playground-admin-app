@@ -1,4 +1,4 @@
-@if(!$active_admin_session)
+@if(!$year->getActiveAdminSession())
     <div class="alert alert-danger">Geen kassa actief!</div>
 @endif
 

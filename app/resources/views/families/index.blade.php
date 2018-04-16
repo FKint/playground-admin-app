@@ -1,5 +1,4 @@
 @extends('layouts.internal')
-@include('modals.global')
 
 @section('title')
     Voogden

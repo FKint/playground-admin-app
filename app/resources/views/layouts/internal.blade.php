@@ -1,4 +1,5 @@
 @extends('layouts.app')
+@include('modals.global')
 
 @section('navbar-items')
     <li @if(!empty($selected_menu_item) && $selected_menu_item == 'dashboard')class="active"@endif><a

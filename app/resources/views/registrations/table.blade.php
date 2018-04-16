@@ -173,7 +173,7 @@
                         name: 'child_details',
                         data: 'child_id',
                         render: function (data, type, full, meta) {
-                            return '<a class="btn btn-xs btn-show-child" href="#" data-child-id="' + data + '">Kind</a>';
+                            return '<a class="btn btn-xs btn-show-child-info" href="#" data-child-id="' + data + '">Kind</a>';
                         }
                     },
                     {
@@ -191,7 +191,11 @@
                         name: 'family_week_registration',
                         data: 'family_id',
                         render: function (data, type, full, meta) {
-                            return '<a class="btn btn-xs btn-family-week-registration" href="{{ route('internal.show_edit_registration', ['week'=>$playground_day->week, 'family' => 'FAMILY_ID']) }}" data-family-id="' + data + '">Registratie</a>'
+                            return ('<a class="btn btn-xs btn-family-week-registration" href="{{
+                            route('internal.show_edit_registration', [
+                                'week'=>$playground_day->week,
+                                'family' => 'FAMILY_ID'
+                            ]) }}" data-family-id="' + data + '">Registratie</a>')
                                 .replace('FAMILY_ID', data);
                         }
                     }
@@ -236,6 +240,11 @@
             );
             $('.registrations-table-filter').change(function () {
                 table.draw();
+            });
+
+            table_element.on('click', '.btn-show-child-info', function () {
+                const child_id = $(this).attr('data-child-id');
+                showChildInfoModal(child_id);
             });
         });
     </script>

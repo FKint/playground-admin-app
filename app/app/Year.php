@@ -132,4 +132,9 @@ class Year extends Model
     {
         return $this->hasMany(Supplement::class);
     }
+
+    public function child_family_day_registrations()
+    {
+        return $this->hasMany(ChildFamilyDayRegistration::class);
+    }
 }

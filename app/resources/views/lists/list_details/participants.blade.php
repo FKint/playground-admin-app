@@ -106,7 +106,7 @@
                     }
                 }
             }).on('typeahead:selected', function (event, suggestion) {
-                $.post('{!! route('api.add_participant_to_list', ['list' => $list, 'child_family' => 'CHILD_FAMILY']) !!}'
+                $.post('{!! route('api.add_participant_to_list', ['list' => $list, 'child_family' => 'CHILD_FAMILY_ID']) !!}'
                     .replace('CHILD_FAMILY_ID', suggestion.id)
                 ).done(function () {
                     $('#child-family-search').typeahead('val', '');

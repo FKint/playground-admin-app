@@ -2,14 +2,14 @@
 
 namespace App\Http\Controllers\Internal;
 
-use App\DayPart;
-use Yajra\DataTables\DataTables;
 use App\Http\Controllers\Controller;
+use App\Year;
+use Yajra\DataTables\DataTables;
 
 class DayPartsController extends Controller
 {
-    public function getDayParts()
+    public function getDayParts(Year $year)
     {
-        return DataTables::make(DayPart::query())->make(true);
+        return DataTables::make($year->day_parts())->make(true);
     }
 }
