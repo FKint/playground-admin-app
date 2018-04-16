@@ -14,9 +14,13 @@
 
 * Make sure the containers are running (`docker-compose up`).
 * Pull changes from git (`git pull`)
-* Open a shell in the container (e.g. `docker exec -it playgroundadminapp_web_1 /bin/bash`)
-* Run `./install-dev.sh` to update composer packages and node modules and to pack the assets for the application.
+* Open a shell in the container (e.g. `docker exec -it playgroundadminapp_app_1 /bin/bash`)
+* Run `./install-packages.sh` to update composer packages and node modules and to pack the assets for the application.
 * Run `php artisan migrate` to apply database changes.
+
+## Tests (local)
+* Open a shell in the container (e.g. `docker exec -it playgroundadminapp_app_1 /bin/bash`)
+* Run `./vendor/phpunit/phpunit/phpunit`
 
 ## Setup (docker-compose production)
 * `ufw allow 80` and `ufw allow 443`.
