@@ -13,11 +13,6 @@ class DayPart extends Model
      */
     protected $fillable = ['name', 'order'];
 
-    public static function getDefaultDayPart()
-    {
-        return DayPart::where('default', '=', true)->firstOrFail();
-    }
-
     public function year()
     {
         return $this->belongsTo(Year::class);

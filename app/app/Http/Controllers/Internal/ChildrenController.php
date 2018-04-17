@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\SaveChildRequest;
 use App\Year;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Yajra\DataTables\DataTables;
 
 class ChildrenController extends Controller
@@ -46,13 +47,13 @@ class ChildrenController extends Controller
     public function showSubmitNewChild(SaveChildRequest $request, Year $year)
     {
         $this->authorize('create_child', $year);
-        $request->validate();
+        $data = $request->validated();
         $data = array(
-            'first_name' => ucfirst($request->input('first_name')),
-            'last_name' => ucfirst($request->input('last_name')),
-            'birth_year' => $request->input('birth_year'),
-            'age_group_id' => $request->input('age_group_id'),
-            'remarks' => $request->input('remarks'),
+            'first_name' => ucfirst($data['first_name']),
+            'last_name' => ucfirst($data['last_name']),
+            'birth_year' => $data['birth_year'],
+            'age_group_id' => $data['age_group_id'],
+            'remarks' => $data['remarks'],
         );
 
         $child = new Child($data);
@@ -156,13 +157,13 @@ class ChildrenController extends Controller
     public function submitNewChild(SaveChildRequest $request, Year $year)
     {
         $this->authorize('create_child', $year);
-        $request->validate();
+        $data = $request->validated();
         $data = array(
-            'first_name' => ucfirst($request->input('first_name')),
-            'last_name' => ucfirst($request->input('last_name')),
-            'birth_year' => $request->input('birth_year'),
-            'age_group_id' => $request->input('age_group_id'),
-            'remarks' => $request->input('remarks'),
+            'first_name' => ucfirst($data['first_name']),
+            'last_name' => ucfirst($data['last_name']),
+            'birth_year' => $data['birth_year'],
+            'age_group_id' => $data['age_group_id'],
+            'remarks' => $data['remarks'],
             'year_id' => $year->id
         );
         $child = Child::create($data);
@@ -180,8 +181,8 @@ class ChildrenController extends Controller
     public function submitEditChildForm(SaveChildRequest $request, Year $year, Child $child)
     {
         $this->authorize('update', $child);
-        $request->validate();
-        $child->update($request->all());
+        $data = $request->validated();
+        $child->update($data);
         return response()->json(['success' => true]);
     }
 

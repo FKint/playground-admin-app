@@ -53,7 +53,7 @@ class FamilyWeekRegistration extends Model
         $result = [
             'children' => []
         ];
-        $default_day_part = DayPart::getDefaultDayPart();
+        $default_day_part = $week->year->getDefaultDayPart();
         $result['tariff_id'] = $family_week_registration ? $family_week_registration->tariff_id : $family->tariff_id;
         foreach ($family->child_families as $child_family) {
             $child = $child_family->child;

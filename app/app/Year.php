@@ -137,4 +137,9 @@ class Year extends Model
     {
         return $this->hasMany(ChildFamilyDayRegistration::class);
     }
+
+    public function getDefaultDayPart()
+    {
+        return $this->day_parts()->where('default', '=', true);
+    }
 }

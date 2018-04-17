@@ -16,8 +16,8 @@ use App\User;
 use App\Week;
 use App\WeekDay;
 use App\Year;
-use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Tests\TestCase;
 
 class OrganizationAuthenticationTest extends TestCase
 {
@@ -192,15 +192,23 @@ class OrganizationAuthenticationTest extends TestCase
         ];
     }
 
-    protected function callAllAPIEndpoints($expected_status)
+    protected function callAllAPIEndpoints($expected_status = null)
     {
         foreach ($this->readOnlyAPIRoutes as $route_name => $url) {
             $response = $this->get($url);
-            $response->assertStatus($expected_status);
+            if ($expected_status) {
+                $response->assertStatus($expected_status);
+            } else {
+                $response->assertSuccessful();
+            }
         }
         foreach ($this->writeAPIRoutes as $route_name => $request_data) {
-            $response = $this->post($request_data['route'], $request_data['data']);
-            $response->assertStatus($expected_status);
+            $response = $this->postJson($request_data['route'], $request_data['data']);
+            if ($expected_status) {
+                $response->assertStatus($expected_status);
+            } else {
+                $response->assertSuccessful();
+            }
         }
     }
 
@@ -220,6 +228,6 @@ class OrganizationAuthenticationTest extends TestCase
     public function testAPIAuthorized()
     {
         $this->actingAs($this->actualUser);
-        $this->callAllAPIEndpoints(200);
+        $this->callAllAPIEndpoints(null);
     }
 }
