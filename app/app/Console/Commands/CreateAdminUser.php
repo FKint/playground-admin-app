@@ -13,7 +13,7 @@ class CreateAdminUser extends Command
      *
      * @var string
      */
-    protected $signature = 'admin:create {name} {email}';
+    protected $signature = 'admin:create {organization_id} {name} {email}';
 
     /**
      * The console command description.
@@ -54,7 +54,8 @@ class CreateAdminUser extends Command
             "email" => $this->argument('email'),
             "password" => Hash::make($password), // HASH!
             "remember_token" => $hint,
-            "admin" => true
+            "admin" => true,
+            "organization_id" => $this->argument('organization_id')
         ]);
         $this->info("User added!");
     }
