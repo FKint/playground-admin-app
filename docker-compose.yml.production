@@ -15,6 +15,9 @@ services:
       - "DB_USERNAME=${DB_USERNAME}"
       - "DB_DATABASE=${DB_DATABASE}"
       - "REDIS_HOST=cache"
+    depends_on:
+      - database
+      - cache
 
   # Nginx web server
   nginx:
@@ -29,6 +32,7 @@ services:
       - 443:443
     depends_on:
       - app
+    restart: always
 
   # Database
   database:
@@ -40,8 +44,10 @@ services:
       - "MYSQL_USER=${DB_USERNAME}"
       - "MYSQL_PASSWORD=${DB_PASSWORD}"
       - "MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}"
+
   cache:
     image: redis:alpine
+
 
   # PHPMyAdmin
   phpmyadmin:
@@ -50,6 +56,9 @@ services:
       - "PMA_HOST=database"
       - "PMA_USER=${DB_USERNAME}"
       - "PMA_PASSWORD=${DB_PASSWORD}"
+    depends_on:
+      - database
+    restart: always
 
 volumes:
   dbdata:
