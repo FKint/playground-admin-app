@@ -56,9 +56,10 @@ class OrganizationAuthenticationTest extends TestCase
         }, factory(Tariff::class, 2)->create(['year_id' => $this->actualYear->id])->toArray());
         $this->actualAgeGroup = factory(AgeGroup::class)->create(['year_id' => $this->actualYear->id]);
 
-        $this->actualWeekDays = array_map(function ($o) {
-            return WeekDay::findOrFail($o['id']);
-        }, factory(WeekDay::class, 5)->create(['year_id' => $this->actualYear->id])->toArray());
+        $this->actualWeekDays = array_map(
+            function ($offset) {
+                return factory(WeekDay::class)->create(['year_id' => $this->actualYear->id, 'days_offset' => $offset]);
+            }, [0, 1, 2, 3, 4]);
 
         $this->actualWeeks = array_map(function ($o) {
             return Week::findOrFail($o['id']);
