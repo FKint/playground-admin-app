@@ -7,6 +7,7 @@ use App\AdminSession;
 use App\AgeGroup;
 use App\DayPart;
 use App\Family;
+use App\Supplement;
 use App\Tariff;
 use App\Week;
 use App\WeekDay;
@@ -38,6 +39,9 @@ class CloneYearTest extends TestCase
             'year_id' => $this->year->id
         ]);
         factory(AdminSession::class)->create([
+            'year_id' => $this->year->id
+        ]);
+        factory(Supplement::class)->create([
             'year_id' => $this->year->id
         ]);
     }

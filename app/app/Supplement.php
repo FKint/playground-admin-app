@@ -21,7 +21,7 @@ class Supplement extends Model
     public function make_copy(Year $year)
     {
         $new_supplement = $this->replicate();
-        $year->supplements()->attach($new_supplement);
+        $new_supplement->year()->associate($year);
         return $new_supplement;
     }
 }

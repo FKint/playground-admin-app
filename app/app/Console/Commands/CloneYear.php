@@ -51,8 +51,8 @@ class CloneYear extends Command
      */
     public function handle()
     {
+        $year = Year::findOrFail($this->argument('year_id'));
         $description = $this->ask('Year description? ');
-        $year = Year::query()->get($this->argument('year_id'));
         // get first date
         $first_day = $this->ask_date('First day');
         // get last date
