@@ -2,7 +2,6 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
 class RestrictUniqueWeekDayNamesToPerYear extends Migration
@@ -14,8 +13,8 @@ class RestrictUniqueWeekDayNamesToPerYear extends Migration
      */
     public function up()
     {
-        DB::statement("ALTER TABLE `week_days` ADD UNIQUE( `days_offset`, `year_id`);");
         Schema::table('week_days', function (Blueprint $table) {
+            $table->unique(['days_offset', 'year_id']);
             $table->dropUnique(['name']);
         });
     }
@@ -27,8 +26,8 @@ class RestrictUniqueWeekDayNamesToPerYear extends Migration
      */
     public function down()
     {
-        DB::statement("ALTER TABLE `week_days` DROP INDEX `days_offset`;");
         Schema::table('week_days', function (Blueprint $table) {
+            $table->dropUnique(['days_offset', 'year_id']);
             $table->unique(['name']);
         });
     }
