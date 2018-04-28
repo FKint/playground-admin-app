@@ -9,8 +9,8 @@ use App\Http\Controllers\Controller;
 
 class SupplementsController extends Controller
 {
-    public function getSupplements()
+    public function getSupplements(Year $year)
     {
-        return DataTables::make(Supplement::query())->make(true);
+        return DataTables::make($year->supplements())->make(true);
     }
 }
