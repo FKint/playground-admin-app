@@ -25,3 +25,9 @@
         </ul>
     </li>
 @endsection
+
+@section('year-descriptor')
+    @if(!empty($year))
+        {{ $year->description }}
+    @endif
+@endsection

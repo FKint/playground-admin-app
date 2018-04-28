@@ -45,7 +45,8 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="{{route('home')}}">{{ env('ENVIRONMENT_DESCRIPTION') }}</a>
+            <a class="navbar-brand"
+               href="{{route('home')}}">@yield('year-descriptor', env('ENVIRONMENT_DESCRIPTION'))</a>
         </div>
         <div id="navbar" class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
