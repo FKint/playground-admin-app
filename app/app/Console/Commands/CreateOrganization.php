@@ -12,7 +12,7 @@ class CreateOrganization extends Command
      *
      * @var string
      */
-    protected $signature = 'organization:new {name}';
+    protected $signature = 'organization:create {name}';
 
     /**
      * The console command description.
