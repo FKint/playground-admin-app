@@ -120,7 +120,7 @@ class InitialDataSeeder extends Seeder
             ])->id;
         }
         $monday = (new DateTimeImmutable())->setDate(2018, 7, 2);
-        $day = new DateInterval('P1D');
+        $day = new DateInterval('P01D');
         $week = new DateInterval('P1W');
         for ($i = 0; $i < 6; ++$i) {
             $this->week_ids[$i] = factory(\App\Week::class)->create([

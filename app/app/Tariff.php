@@ -22,4 +22,11 @@ class Tariff extends Model
     {
         return $this->belongsTo(Year::class);
     }
+
+    public function make_copy(Year $year)
+    {
+        $new_tariff = $this->replicate();
+        $new_tariff->year()->associate($year);
+        return $new_tariff;
+    }
 }

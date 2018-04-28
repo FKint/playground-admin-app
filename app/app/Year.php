@@ -2,6 +2,7 @@
 
 namespace App;
 
+use DateInterval;
 use DateTimeImmutable;
 use Illuminate\Database\Eloquent\Model;
 
@@ -12,7 +13,7 @@ class Year extends Model
      *
      * @var array
      */
-    protected $fillable = ['year'];
+    protected $fillable = ['description'];
 
     /**
      * Get all weeks in this year.
@@ -141,5 +142,79 @@ class Year extends Model
     public function getDefaultDayPart()
     {
         return $this->day_parts()->where('default', '=', true);
+    }
+
+    /**
+     * Makes a clone of the current year.
+     * Makes a copy of the settings for age groups, day parts, week days, supplements and tariffs.
+     * Generates dates between $first_day and $last_day on the week days (and generates weeks accordingly) except for
+     * dates in $exception_days.
+     * @param string $description
+     * @param DateTimeImmutable $first_day
+     * @param DateTimeImmutable $last_day
+     * @param array $exception_days
+     * @return Model
+     */
+    public function make_copy(string $description, DateTimeImmutable $first_day, DateTimeImmutable $last_day, array $exception_days)
+    {
+        function getStartOfWeekDate(DateTimeImmutable $date)
+        {
+            // https://gist.github.com/stecman/0203410aa4da0ef01ea9
+            $date = $date->setTime(0, 0, 0);
+
+            if ($date->format('N') == 1) {
+                // If the date is already a Monday, return it as-is
+                return $date;
+            } else {
+                // Otherwise, return the date of the nearest Monday in the past
+                // This includes Sunday in the previous week instead of it being the start of a new week
+                return $date->modify('last monday');
+            }
+        }
+
+        $new_year = $this->replicate();
+        $new_year->description = $description;
+        $new_year->save();
+        foreach ($this->week_days as $week_day) {
+            $week_day->make_copy($new_year)->save();
+        }
+        $current_day = $first_day;
+        $day_interval = DateInterval::createFromDateString('1 day');
+        while ($current_day <= $last_day) {
+            $monday_of_week = getStartOfWeekDate($current_day);
+            $day_number = $current_day->format('N') - 1;
+            $week_day = $new_year->week_days()->where('days_offset', '=', $day_number)->first();
+            if (!in_array($current_day, $exception_days) && $week_day) {
+                $week = $new_year->weeks()->where('first_day_of_week', $monday_of_week)->first();
+                if (!$week) {
+                    $week = new Week(['week_number' => $new_year->weeks()->count(), 'first_day_of_week' => $monday_of_week]);
+                    $week->year()->associate($new_year);
+                    $week->save();
+                }
+                $playground_day = new PlaygroundDay();
+                $playground_day->week_day()->associate($week_day);
+                $playground_day->week()->associate($week);
+                $playground_day->year()->associate($new_year);
+                $playground_day->save();
+            }
+            $current_day = $current_day->add($day_interval);
+        }
+
+        foreach ($this->day_parts as $day_part) {
+            $day_part->make_copy($new_year)->save();
+        }
+        foreach ($this->age_groups as $age_group) {
+            $age_group->make_copy($new_year)->save();
+        }
+        foreach ($this->tariffs as $tariff) {
+            $tariff->make_copy($new_year)->save();
+        }
+        foreach ($this->supplements as $supplement) {
+            $supplement->make_copy($new_year)->save();
+        }
+        $admin_session = new AdminSession();
+        $admin_session->year()->associate($new_year);
+        $admin_session->save();
+        return $new_year;
     }
 }

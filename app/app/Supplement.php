@@ -17,4 +17,11 @@ class Supplement extends Model
     {
         return $this->belongsTo(Year::class);
     }
+
+    public function make_copy(Year $year)
+    {
+        $new_supplement = $this->replicate();
+        $year->supplements()->attach($new_supplement);
+        return $new_supplement;
+    }
 }

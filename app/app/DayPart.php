@@ -17,4 +17,10 @@ class DayPart extends Model
     {
         return $this->belongsTo(Year::class);
     }
+
+    public function make_copy($year){
+        $new_day_part = $this->replicate();
+        $new_day_part->year()->associate($year);
+        return $new_day_part;
+    }
 }

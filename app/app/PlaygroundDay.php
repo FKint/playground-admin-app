@@ -7,6 +7,13 @@ use Illuminate\Support\Facades\Log;
 
 class PlaygroundDay extends Model
 {
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = ['week_day_id'];
+
     public function week()
     {
         return $this->belongsTo(Week::class);
