@@ -56,8 +56,6 @@ services:
     image: phpmyadmin/phpmyadmin:latest
     environment:
       - "PMA_HOST=database"
-      - "PMA_USER=${DB_USERNAME}"
-      - "PMA_PASSWORD=${DB_PASSWORD}"
     depends_on:
       - database
     restart: always
