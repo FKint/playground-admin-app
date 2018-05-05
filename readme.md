@@ -37,8 +37,8 @@
 
 ## Update (docker-compose production) with longer downtime
 * `git pull`
-* `docker-compose  -f docker-compose.yml.production pull`
-* `docker-compose up --build`
+* `docker-compose -f docker-compose.yml.production pull`
+* `docker-compose -f docker-compose.yml.production up --build`
 * In the container: run `php artisan migrate`
 * In the container: run `php artisan config:cache`.
 * (Not supported yet) In the container: run `php artisan route:cache`.
