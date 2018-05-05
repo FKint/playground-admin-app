@@ -6,7 +6,7 @@
 @section('content')
 
     <h1>Nieuw kind toevoegen</h1>
-    @if ($errors->has())
+    @if ($errors->any())
         <div class="alert alert-danger">
             <ul>
                 @foreach ($errors->all() as $error)
