@@ -24,7 +24,7 @@
 @push('scripts')
 <script>
     $(function () {
-        const age_groups = {!! $all_age_groups !!};
+        const age_groups = {!! $year->age_groups !!};
         const new_child_form = $('#new-child-form');
         new_child_form.find('input[name=first_name]').first().focus();
         new_child_form.find('input[name=birth_year]').change(function () {
