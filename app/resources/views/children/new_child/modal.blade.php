@@ -47,11 +47,11 @@
                 $(window).trigger('children:updated');
                 showEditChildModal(resp.id, 'families');
             }).fail(function (resp) {
-                for (const key in resp.responseJSON) {
-                    const field_errors = resp.responseJSON[key];
-                    for (const error_key in field_errors) {
-                        $('#new-child-errors-list').append($('<li>').text(field_errors[error_key]));
-                    }
+                const response = resp.responseJSON;
+                $('#new-child-errors-list').append($('<li>').text(response.message));
+                for (const key in response.errors) {
+                    const field_error = response.errors[key];
+                    $('#new-child-errors-list').append($('<li>').text(field_error));
                 }
                 $('#new-child-errors-div').removeClass('hidden');
             });
