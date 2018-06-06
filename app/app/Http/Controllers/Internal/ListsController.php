@@ -111,9 +111,9 @@ class ListsController extends Controller
     public function submitNewList(Request $request, Year $year)
     {
         $list = new ActivityList($this->getListData($request));
-        $list->year()->asociate($year);
+        $list->year()->associate($year);
         $list->save();
-        return redirect(route('show_list', ['list' => $list]));
+        return redirect(route('internal.show_list', ['list' => $list]));
     }
 
     public function submitEditList(Request $request, Year $year, ActivityList $list)
