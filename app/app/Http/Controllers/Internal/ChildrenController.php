@@ -200,7 +200,7 @@ class ChildrenController extends Controller
         $family = new Family($request->all());
         $family->year()->associate($year);
         $family->save();
-        $family->children()->attach($child);
+        $child->families()->syncWithoutDetaching([$family->id => ['year_id' => $year->id]]);
         return $family;
     }
 
