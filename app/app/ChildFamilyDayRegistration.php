@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class ChildFamilyDayRegistration extends Model
 {
-    protected $fillable = ['child_id', 'family_id', 'week_id', 'week_day_id', 'day_part_id', 'attended', 'age_group_id'];
+    protected $fillable = ['child_id', 'family_id', 'week_id', 'week_day_id', 'day_part_id', 'attended', 'age_group_id', 'year_id'];
 
     public function supplements()
     {

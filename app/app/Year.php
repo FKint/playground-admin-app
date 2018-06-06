@@ -141,7 +141,7 @@ class Year extends Model
 
     public function getDefaultDayPart()
     {
-        return $this->day_parts()->where('default', '=', true);
+        return $this->day_parts()->where('default', '=', true)->first();
     }
 
     /**

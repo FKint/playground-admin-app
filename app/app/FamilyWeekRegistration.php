@@ -45,7 +45,7 @@ class FamilyWeekRegistration extends Model
     }
 
 
-    public static function getRegistrationDataArray($week, $family)
+    public static function getRegistrationDataArray(Week $week, Family $family)
     {
         $family_week_registration = $family->family_week_registrations()
             ->where('week_id', '=', $week->id)

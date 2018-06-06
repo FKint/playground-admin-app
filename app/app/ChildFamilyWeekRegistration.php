@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class ChildFamilyWeekRegistration extends Model
 {
-    protected $fillable = ['child_id', 'family_id', 'week_id', 'whole_week_price'];
+    protected $fillable = ['child_id', 'family_id', 'week_id', 'whole_week_price', 'year_id'];
 
 
     public function child_family_day_registrations()

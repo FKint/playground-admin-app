@@ -2,22 +2,17 @@
 
 namespace App\Http\Controllers\Internal;
 
-use App\ActivityList;
-use App\AgeGroup;
 use App\ChildFamilyDayRegistration;
 use App\ChildFamilyWeekRegistration;
-use App\DayPart;
 use App\Family;
 use App\FamilyWeekRegistration;
 use App\Http\Controllers\Controller;
 use App\PlaygroundDay;
-use App\Supplement;
-use App\Tariff;
 use App\Transaction;
 use App\Week;
-use App\WeekDay;
 use App\Year;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Yajra\DataTables\DataTables;
 
 class RegistrationsController extends Controller
@@ -154,7 +149,8 @@ class RegistrationsController extends Controller
                 $child_family_week_registration = new ChildFamilyWeekRegistration([
                     'child_id' => $child->id,
                     'family_id' => $family->id,
-                    'week_id' => $week->id
+                    'week_id' => $week->id,
+                    'year_id' => $year->id
                 ]);
             }
             $child_data = $children_data[$child->id];
@@ -176,7 +172,8 @@ class RegistrationsController extends Controller
                             'child_id' => $child->id,
                             'family_id' => $family->id,
                             'week_id' => $week->id,
-                            'week_day_id' => $playground_day->week_day_id
+                            'week_day_id' => $playground_day->week_day_id,
+                            'year_id' => $year->id
                         ]);
                     }
                     $day_part = null;
@@ -192,7 +189,6 @@ class RegistrationsController extends Controller
                     $child_family_day_registration->day_part()->associate($day_part ? $day_part : $default_day_part);
                     $child_family_day_registration->age_group()->associate($age_group ? $age_group : $child->age_group());
                     $child_family_day_registration->attended = $attended;
-
                     $child_family_day_registration->save();
 
                     $supplements_data = $day_data ? $day_data['supplements'] : [];
