@@ -16,7 +16,7 @@
                     <button class="btn btn-xs btn-edit-family" data-family-id="{{ $child_family->family->id }}">
                         Wijzigen
                     </button>
-                    <button class="btn btn-xs btn-remove-family" data-child-family-id="{{$child_family->id}}">
+                    <button class="btn btn-xs btn-remove-family" data-family-id="{{$child_family->family->id}}">
                         Verwijderen
                     </button>
                 </td>
