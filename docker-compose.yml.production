@@ -21,12 +21,9 @@ services:
 
   # Nginx web server
   nginx:
-    build:
-      context: .
-      dockerfile: nginx.Dockerfile.production
+    image: jokkebrok/playground-php-app:nginx
     volumes:
       - "${LE_DIR}:/etc/letsencrypt:"
-      - ./app/public:/var/www/public:ro
     ports:
       - 80:80
       - 443:443
