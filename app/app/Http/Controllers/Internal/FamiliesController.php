@@ -43,7 +43,7 @@ class FamiliesController extends Controller
         $child = new Child($request->all());
         $child->year()->associate($year);
         $child->save();
-        $family->children()->attach($child);
+        $child->families()->syncWithoutDetaching([$family->id => ['year_id' => $year->id]]);
         return redirect(route('internal.show_add_child_to_family', ['family' => $family]));
     }
 
