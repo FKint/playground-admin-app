@@ -17,7 +17,12 @@ server {
     add_header X-Content-Type-Options "nosniff";
 
     index index.php index.html;
-    root /var/www/public;
+    root /var/www/app/public;
+
+
+    location / {
+        try_files $uri $uri/ /index.php?$args;
+    }
 
     error_page 404 /index.php;
 
@@ -30,6 +35,8 @@ server {
         fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
         fastcgi_param PATH_INFO $fastcgi_path_info;
     }
+
+
 }
 
 server {
