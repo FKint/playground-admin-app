@@ -2,7 +2,7 @@ FROM nginx:stable
 
 
 # Install Node.js
-RUN apt-get update && apt-get install -y curl gnupg && curl -sL https://deb.nodesource.com/setup_8.x | bash - && apt-get install -y nodejs && npm install npm@latest -g && apt-get clean
+RUN apt-get update && apt-get install -y curl zip unzip gnupg libpng-dev && curl -sL https://deb.nodesource.com/setup_8.x | bash - && apt-get install -y nodejs && npm install npm@latest -g && apt-get clean
 
 # RUN mkdir -p /var/www/static && chmod 755 /var/www/static
 ADD app /opt/app
