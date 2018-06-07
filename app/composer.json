@@ -17,10 +17,12 @@
     "yajra/laravel-datatables-oracle": "^8.0"
   },
   "require-dev": {
+    "facebook/webdriver": "^1.6",
+    "filp/whoops": "~2.0",
     "fzaninotto/faker": "~1.4",
+    "laravel/dusk": "^3.0",
     "mockery/mockery": "0.9.*",
-    "phpunit/phpunit": "~7.0",
-    "filp/whoops": "~2.0"
+    "phpunit/phpunit": "~7.0"
   },
   "autoload": {
     "classmap": [
