@@ -41,3 +41,5 @@ mix.js('resources/assets/js/app.js', 'public/js')
 
 mix.less('resources/assets/less/app.less', 'public/css')
     .version();
+
+mix.copy('node_modules/datatables.net-plugins/i18n/Dutch.lang', 'public/dataTables.Dutch.lang');

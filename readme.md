@@ -41,11 +41,10 @@
 * `docker-compose -f docker-compose.yml.production up --build`
 * In the container: run `php artisan migrate`
 * In the container: run `php artisan config:cache`.
-* (Not supported yet) In the container: run `php artisan route:cache`.
+* In the container: run `php artisan route:cache`.
 
-# TODO
-* Build images upon git push and push images to Docker Hub
-* Use docker images in docker-compose file
+## Initialize
+*
 
 ## License
 This project (and the Laravel framework too) is open-sourced software licensed under the [MIT license](http://opensource.org/licenses/MIT).
