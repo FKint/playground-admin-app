@@ -11,12 +11,12 @@ WORKDIR /var/www
 RUN apt-get update && apt-get install -y zip unzip gnupg libpng-dev && apt-get clean
 
 # Install composer and packages
-RUN curl -sL https://raw.githubusercontent.com/composer/getcomposer.org/32c2c34883cf31c57e4729d1afaf09facad7615b/web/installer | php -- --quiet \
+RUN curl -sL https://raw.githubusercontent.com/composer/getcomposer.org/fe44bd5b10b89fbe7e7fc70e99e5d1a344a683dd/web/installer | php -- --quiet \
     && ./composer.phar install --no-dev --no-scripts --optimize-autoloader \
     && rm composer.phar
 
 # Install Node.js
-RUN curl -sL https://deb.nodesource.com/setup_8.x | bash - && apt-get install -y nodejs && npm install
+RUN curl -sL https://deb.nodesource.com/setup_8.x | bash - && apt-get install -y nodejs && npm install npm@latest -g && npm install
 
 COPY ./app /var/www
 
