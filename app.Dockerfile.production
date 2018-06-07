@@ -8,9 +8,9 @@ COPY ./app/database /var/www/database
 WORKDIR /var/www
 
 # Install composer and packages
-RUN curl -sL https://raw.githubusercontent.com/composer/getcomposer.org/fe44bd5b10b89fbe7e7fc70e99e5d1a344a683dd/web/installer | php -- --quiet \
+RUN apt-get update && apt-get install -y curl git && curl -sL https://raw.githubusercontent.com/composer/getcomposer.org/fe44bd5b10b89fbe7e7fc70e99e5d1a344a683dd/web/installer | php -- --quiet \
     && ./composer.phar install --no-dev --no-scripts --optimize-autoloader \
-    && rm composer.phar
+    && rm composer.phar && apt-get purge -y curl git && apt-get autoremove --purge -y && apt-get clean
 
 COPY ./app /var/www
 
