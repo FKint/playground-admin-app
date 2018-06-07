@@ -19,10 +19,6 @@ server {
     index index.php index.html;
     root /var/www/public;
 
-    location / {
-        try_files $uri $uri/ /index.php?query_string;
-    }
-
     error_page 404 /index.php;
 
     location ~ \.php$ {

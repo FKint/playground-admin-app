@@ -4,7 +4,7 @@ services:
   app:
     image: jokkebrok/playground-php-app:latest
     volumes:
-      - /var/www/storage
+      - app_storage:/var/www/storage
       - .laravel.env.production:/var/www/.env
     environment:
       - "DB_PORT=3306"
@@ -23,7 +23,7 @@ services:
   nginx:
     image: jokkebrok/playground-php-app:nginx
     volumes:
-      - "${LE_DIR}:/etc/letsencrypt:"
+      - "${LE_DIR}:/etc/letsencrypt:ro"
     ports:
       - 80:80
       - 443:443
@@ -60,3 +60,4 @@ services:
 
 volumes:
   dbdata:
+  app_storage:
