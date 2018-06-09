@@ -15,7 +15,9 @@ jobs:
             - composer-v1-{{ checksum "app/composer.lock" }}
             - composer-v1-
       - run:
-          command: composer install -n --prefer-dist
+          command: cp .laravel.env.dusk.example ./app/.env
+      - run:
+          command: composer install -n --prefer-dist --ignore-platform-reqs
           working_directory: ./app
       - save_cache:
           key: composer-v1-{{ checksum "app/composer.lock" }}
@@ -38,4 +40,21 @@ jobs:
           working_directory: ./app
       - run:
           command: ./vendor/phpunit/phpunit/phpunit
+          working_directory: ./app
+      - run:
+          command: yarn run production
+          working_directory: ./app
+      - run:
+          name: Start Chrome Driver
+          command: ./vendor/laravel/dusk/bin/chromedriver-linux
+          background: true
+          working_directory: ./app
+      - run:
+          name: Run Laravel Server
+          command: php artisan serve
+          background: true
+          working_directory: ./app
+      - run:
+          name: Run Laravel Dusk Tests
+          command: php artisan dusk
           working_directory: ./app
