@@ -1,7 +1,5 @@
 <?php
 
-use Illuminate\Http\Request;
-
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -75,9 +73,13 @@ Route::middleware('can:update,year')->group(function () {
     Route::post('/child/{child}/families/{family}/remove', 'ChildrenController@removeChildFamily')
         ->name('remove_family_from_child')
         ->middleware('model_same_year:child,family');
+
     Route::post('/family/{family}/children/add/{child}', 'FamiliesController@addChildToFamily')
         ->name('add_child_to_family')
         ->middleware('model_same_year:family,child');
+    Route::post('/family/{family}/edit', 'FamiliesController@updateFamily')
+        ->name('update_family')
+        ->middleware('model_same_year:family');
 
     Route::post('/registration/week/{week}/family/{family}', 'RegistrationsController@submitRegistrationData')
         ->name('submit_registration_data')

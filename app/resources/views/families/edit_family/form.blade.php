@@ -1,3 +1,11 @@
+<div class="alert alert-success hidden" id="family-details-success-div">
+    Wijzigingen opgeslagen.
+</div>
+<div class="alert alert-danger hidden" id="family-details-error-div">
+    Failure: <span id="family-details-error-summary"></span>
+    <ul id="family-details-error-list">
+    </ul>
+</div>
 {{ Form::model($family, ['class' => 'form-horizontal', 'id' => 'edit-family-form']) }}
 @include('forms.family', ['submit_text'=>'Opslaan'])
 {{ Form::close() }}
@@ -6,13 +14,34 @@
     $(document).ready(function () {
         const form = $('#edit-family-form');
         const form_parent = form.parent();
+        const family_update_success = $('#family-details-success-div');
+        const family_update_fail = $('#family-details-error-div');
+        const family_details_error_summary = $('#family-details-error-summary');
+        const family_details_error_list = $('#family-details-error-list');
         form.submit(function (event) {
             event.preventDefault();
-            form_parent.load(
-                '{!! route('internal.submit_edit_family_form', ['family'=>$family]) !!}',
-                form.serializeArray()
-            );
-            $(window).trigger('families:updated');
+            family_update_fail.addClass('hidden');
+            family_update_success.addClass('hidden');
+            family_details_error_summary.empty();
+            family_details_error_list.empty();
+            $.post(
+                '{!! route('api.update_family', ['family'=>$family]) !!}',
+                form.serialize()
+            ).done(function (resp) {
+                family_update_success.removeClass('hidden');
+                $(window).trigger('families:updated');
+            }).fail(function (resp) {
+                family_update_fail.removeClass('hidden');
+                family_details_error_summary.text(resp.responseJSON.message);
+                console.log(resp.responseJSON.errors);
+                Object.values(resp.responseJSON.errors).forEach(field_errors => {
+                    console.log(field_errors);
+                    console.log(Object.entries(field_errors));
+                    Object.values(field_errors).forEach(error_message => {
+                        family_details_error_list.append($('<li>').text(error_message));
+                    });
+                });
+            });
         });
     });
 </script>

@@ -75,8 +75,6 @@ Route::prefix('{year}')
             ->name('load_family_children');
         Route::get('/family/{family}/edit/form', 'FamiliesController@loadEditFamilyForm')
             ->name('load_edit_family_form');
-        Route::post('/family/{family}/edit/form', 'FamiliesController@submitEditFamilyForm')
-            ->name('submit_edit_family_form');
         Route::get('/family/{family}/transactions', 'FamiliesController@showTransactions')
             ->name('show_family_transactions');
 

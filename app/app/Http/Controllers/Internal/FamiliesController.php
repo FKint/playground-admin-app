@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Internal;
 use App\Child;
 use App\Family;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\UpdateFamilyInfoRequest;
 use App\Year;
 use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables;
@@ -96,10 +97,10 @@ class FamiliesController extends Controller
             ->with('all_tariffs_by_id', $family->year->getAllTariffsById());
     }
 
-    public function submitEditFamilyForm(Request $request, Year $year, Family $family)
+    public function updateFamily(UpdateFamilyInfoRequest $request, Year $year, Family $family)
     {
-        $family->update($request->all());
-        return $this->loadEditFamilyFormForFamily($family);
+        $validated = $request->validated();
+        $family->update($validated);
     }
 
     public function getFamilyChildren(Year $year, Family $family)
