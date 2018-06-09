@@ -51,7 +51,7 @@ jobs:
           working_directory: ./app
       - run:
           name: Run Laravel Server
-          command: php artisan serve --port=21000
+          command: php artisan serve
           background: true
           working_directory: ./app
       - run:
