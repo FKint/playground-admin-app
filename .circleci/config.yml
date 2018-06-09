@@ -15,6 +15,8 @@ jobs:
             - composer-v1-{{ checksum "app/composer.lock" }}
             - composer-v1-
       - run:
+          command: cp .laravel.env.dusk.example ./app/.env
+      - run:
           command: composer install -n --prefer-dist --ignore-platform-reqs
           working_directory: ./app
       - save_cache:
@@ -47,8 +49,6 @@ jobs:
           command: ./vendor/laravel/dusk/bin/chromedriver-linux
           background: true
           working_directory: ./app
-      - run:
-          command: cp .laravel.env.dusk.example ./app/.env
       - run:
           name: Run Laravel Server
           command: php artisan serve --port=21000
