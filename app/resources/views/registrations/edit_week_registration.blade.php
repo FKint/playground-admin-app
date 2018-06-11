@@ -133,9 +133,6 @@
                     </tr>
                 @endforeach
             </table>
-            <button class="btn btn-default" id="btn-set-all-attending-today">Inchecken</button>
-            <a href="{{ route('internal.show_family_transactions', ['family' => $family]) }}"
-               class="btn btn-default">Transactiegeschiedenis</a>
         </div>
         <div class="col-xs-3">
             {{ Form::open(['class' => 'form-horizontal', 'id' => 'register-payment-form']) }}
@@ -151,9 +148,12 @@
             ['id' => 'new-saldo', 'pattern'=>"[0-9]+([\\.,][0-9]+)?", 'step'=>'0.01', 'readonly' => true]) }}
             {{ Form::close() }}
 
-            <button class="btn btn-default" id="btn-cancel">Annuleren</button>
+            <button class="btn btn-default" id="btn-set-all-attending-today">Inchecken</button><br><br>
             <button class="btn btn-primary" id="submit-registration-data">Opslaan</button>
-            <button class="btn btn-primary" id="submit-registration-data-and-next">Opslaan en volgende</button>
+            <button class="btn btn-primary" id="submit-registration-data-and-next">Opslaan en volgende</button><br>
+            <button class="btn btn-default" id="btn-cancel">Annuleren</button><br><br>
+            <a href="{{ route('internal.show_family_transactions', ['family' => $family]) }}"
+               class="btn btn-default">Transactiegeschiedenis</a>
         </div>
     </div>
 @endsection
