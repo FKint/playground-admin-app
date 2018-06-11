@@ -33,7 +33,7 @@
         const table = table_element.DataTable({
             processing: true,
             serverSide: false,
-            ajax: '{!! route('getFamilyTransactions', ['family_id'=>$family->id]) !!}',
+            ajax: '{!! route('api.datatables.family_transactions', ['family'=>$family]) !!}',
             buttons: ['pdfHtml5'],
             columns: [
                 {data: 'created_at', name: 'created_at'},

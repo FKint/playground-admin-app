@@ -55,7 +55,7 @@ class FamiliesController extends Controller
         return redirect(route('internal.show_add_child_to_family', ['family' => $family]));
     }
 
-    public function showTransactions(Family $family)
+    public function showTransactions(Year $year, Family $family)
     {
         return view('families.transactions.index')
             ->with('family', $family);
@@ -86,11 +86,6 @@ class FamiliesController extends Controller
     }
 
     public function loadEditFamilyForm(Request $request, Year $year, Family $family)
-    {
-        return $this->loadEditFamilyFormForFamily($family);
-    }
-
-    protected function loadEditFamilyFormForFamily(Family $family)
     {
         return view('families.edit_family.form')
             ->with('family', $family)
