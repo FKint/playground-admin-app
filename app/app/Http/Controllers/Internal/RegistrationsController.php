@@ -12,7 +12,6 @@ use App\Transaction;
 use App\Week;
 use App\Year;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 use Yajra\DataTables\DataTables;
 
 class RegistrationsController extends Controller
@@ -195,7 +194,7 @@ class RegistrationsController extends Controller
                     foreach ($year->supplements as $supplement) {
                         if (key_exists($supplement->id, $supplements_data) && $supplements_data[$supplement->id]['ordered']) {
                             if (!$child_family_day_registration->supplements->contains($supplement)) {
-                                $child_family_day_registration->supplements()->attach($supplement);
+                                $child_family_day_registration->supplements()->attach($supplement, ['year_id' => $year->id]);
                             }
                         } else {
                             if ($child_family_day_registration->supplements->contains($supplement)) {
@@ -213,7 +212,7 @@ class RegistrationsController extends Controller
                 $activity_list = $year->activity_lists()->findOrFail($activity_list_id);
                 if ($activity_list_data['registered']) {
                     if (!$child_family->activity_lists->contains($activity_list_id)) {
-                        $child_family->activity_lists()->attach($activity_list);
+                        $child_family->activity_lists()->attach($activity_list, ['year_id' => $year->id]);
                     }
                 } else {
                     if ($child_family->activity_lists->contains($activity_list_id)) {
