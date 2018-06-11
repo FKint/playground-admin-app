@@ -102,6 +102,11 @@ class Year extends Model
         return $this->hasMany(ActivityList::class);
     }
 
+    public function getDashboardLists()
+    {
+        return $this->activity_lists()->where('show_on_dashboard', '=', true)->get();
+    }
+
     public function child_families()
     {
         return $this->hasMany(ChildFamily::class);
