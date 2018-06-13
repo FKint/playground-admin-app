@@ -24,6 +24,8 @@
 
 ## Setup (docker-compose production)
 * `ufw allow 80` and `ufw allow 443`.
+* `ufw allow from 127.0.0.1 to 127.0.0.1 port 21306 proto tcp`
+* `ufw allow from 127.0.0.1 to 127.0.0.1 port 21001 proto tcp`
 * Install `certbot`:
     * `add-apt-repository ppa:certbot/certbot && apt-get update && apt-get install -y certbot && apt-get clean`
     * `certbot certonly --authenticator standalone  -d admin.jokkebrok.be --pre-hook "docker-compose -f /root/playground-admin-app/docker-compose.yml.production stop" --post-hook "docker-compose -f /root/playground-admin-app/docker-compose.yml.production start"`
@@ -43,9 +45,13 @@
 * In the container: run `php artisan config:cache`.
 * In the container: run `php artisan route:cache`.
 
-## Access PHPMyAdmin
+## Access PHPMyAdmin 
 * `ssh root@admin.jokkebrok.be -L 22001:localhost:21001 -N`
 * Visit `http://localhost:22001`
+
+## Access MySQL
+* `ssh root@admin.jokkebrok.be -L 22306:localhost:21306 -N`
+* Connect to MySQL at `localhost:22306`
 
 ## License
 This project (and the Laravel framework too) is open-sourced software licensed under the [MIT license](http://opensource.org/licenses/MIT).
