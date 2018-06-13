@@ -29,9 +29,7 @@ class AddAgeGroupAndAttendedFieldsToDayRegistrations extends Migration
     {
         Schema::table('child_family_day_registrations', function (Blueprint $table) {
             $table->dropForeign(['age_group_id']);
-            $table->dropIndex(['age_group_id']);
-            $table->dropColumn('age_group_id');
-            $table->dropColumn('attended');
+            $table->dropColumn(['age_group_id', 'attended']);
         });
     }
 }

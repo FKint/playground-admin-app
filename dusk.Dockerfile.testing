@@ -1,0 +1,18 @@
+FROM circleci/php:7.2-node-browsers
+
+RUN sudo apt install -y libsqlite3-dev zlib1g-dev libpng-dev && sudo docker-php-ext-install zip pdo_mysql && sudo composer self-update
+
+WORKDIR /var/www
+
+COPY app/ /var/www
+COPY .laravel.env.dusk.example .env
+
+RUN sudo chown -R $(whoami) $(pwd)
+RUN composer install -n --prefer-dist --ignore-platform-reqs
+RUN yarn install
+
+# RUN touch storage/testing.sqlite
+RUN yarn run production
+
+COPY testing_scripts.sh testing_scripts.sh
+ENTRYPOINT ./testing_scripts.sh

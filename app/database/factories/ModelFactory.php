@@ -12,21 +12,30 @@
 */
 
 /** @var \Illuminate\Database\Eloquent\Factory $factory */
+
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
+
 $factory->define(App\User::class, function (Faker\Generator $faker, $params) {
-    static $password;
+    if(key_exists('password', $params)){
+        $password = $params['password'];
+    }else{
+        $password = Hash::make('secret');
+    }
     if (key_exists('organization_id', $params)) {
         $organization_id = $params['organization_id'];
     } else {
         $organization_id = factory(App\Organization::class)->create()->id;
     }
-    return [
+    $result = [
         'name' => $faker->name,
         'email' => $faker->unique()->safeEmail,
-        'password' => $password ?: $password = bcrypt('secret'),
+        'password' => $password,
         'remember_token' => str_random(10),
         'admin' => false,
         'organization_id' => $organization_id
     ];
+    return $result;
 });
 
 /** @var \Illuminate\Database\Eloquent\Factory $factory */

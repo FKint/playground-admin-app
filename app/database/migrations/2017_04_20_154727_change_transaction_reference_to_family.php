@@ -49,7 +49,7 @@ class ChangeTransactionReferenceToFamily extends Migration
         Schema::table("transactions", function (Blueprint $table) {
             $table->dropForeign(['family_id']);
             $table->dropColumn('family_id');
-            $table->integer('child_family_id')->unsigned()->index();
+            $table->integer('child_family_id')->unsigned()->index()->default(0);
             $table->foreign('child_family_id')->references('id')->on('child_families');
         });
 
