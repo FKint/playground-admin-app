@@ -25,7 +25,8 @@ class SaveAdminSessionRequest extends FormRequest
     {
         return [
             'responsible_name' => 'required|min:1',
-            'counted_cash' => 'required'
+            'counted_cash' => 'required',
+            'remarks'=>'nullable'
         ];
     }
 }

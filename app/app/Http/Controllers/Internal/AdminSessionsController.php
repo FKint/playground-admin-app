@@ -24,12 +24,12 @@ class AdminSessionsController extends Controller
     public function showSubmitCloseAdminSession(SaveAdminSessionRequest $request, Year $year)
     {
         $admin_session = $year->getActiveAdminSession();
-        $request->validate();
+        $validated_data = $request->validated();
         $data = array(
-            "responsible_name" => $request->input('responsible_name'),
-            "counted_cash" => $request->input('counted_cash'),
+            "responsible_name" => $validated_data['responsible_name'],
+            "counted_cash" => $validated_data['counted_cash'],
             "session_end" => Carbon::now(),
-            "remarks" => $request->input('remarks')
+            "remarks" => $validated_data['remarks']
         );
         $admin_session->update($data);
         $admin_session->save();
