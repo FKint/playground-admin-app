@@ -136,15 +136,15 @@
         </div>
         <div class="col-xs-3">
             {{ Form::open(['class' => 'form-horizontal', 'id' => 'register-payment-form']) }}
-            {{ Form::bsDropdown('tariff_id', $year->getAllTariffsById(), ['readonly' => true, 'disabled' => true]) }}
-            {{ Form::bsNumber('saldo_difference',
+            {{ Form::bsDropdown('tariff_id', 'Tarief', $year->getAllTariffsById(), ['readonly' => true, 'disabled' => true]) }}
+            {{ Form::bsNumber('saldo_difference', 'Verwachte bedrag',
             ['id' => 'saldo-difference', 'pattern'=>"[0-9]+([\\.,][0-9]+)?", 'step'=>'0.01', 'readonly' => true]) }}
-            {{ Form::bsNumber('received_money',
+            {{ Form::bsNumber('received_money', 'Ontvangen bedrag',
             ['id' => 'received-money', 'pattern'=>"[0-9]+([\\.,][0-9]+)?", 'step'=>'0.01']) }}
-            {{ Form::bsText('remarks', ['id' => 'remarks']) }}
-            {{ Form::bsNumber('previous_saldo',
+            {{ Form::bsText('remarks', 'Remarks', ['id' => 'remarks']) }}
+            {{ Form::bsNumber('previous_saldo', 'Vorig saldo',
             ['id' => 'previous-saldo', 'pattern'=>"[0-9]+([\\.,][0-9]+)?", 'step'=>'0.01', 'readonly' => true]) }}
-            {{ Form::bsNumber('new_saldo',
+            {{ Form::bsNumber('new_saldo', 'Nieuw saldo',
             ['id' => 'new-saldo', 'pattern'=>"[0-9]+([\\.,][0-9]+)?", 'step'=>'0.01', 'readonly' => true]) }}
             {{ Form::close() }}
 
