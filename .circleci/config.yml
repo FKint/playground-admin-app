@@ -35,9 +35,9 @@ jobs:
           paths:
             - app/node_modules
       - run: touch app/storage/testing.sqlite
-      - run:
-          command: php artisan migrate:fresh --env=testing --database=sqlite_testing --force
-          working_directory: ./app
+#      - run:
+#          command: php artisan migrate:fresh --env=testing --database=sqlite_testing --force
+#          working_directory: ./app
       - run:
           command: ./vendor/phpunit/phpunit/phpunit
           working_directory: ./app

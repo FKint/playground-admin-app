@@ -16,13 +16,10 @@ use App\User;
 use App\Week;
 use App\WeekDay;
 use App\Year;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 class OrganizationAuthenticationTest extends TestCase
 {
-    use RefreshDatabase;
-
     private $actualUser;
     private $actualOrganization;
     private $actualYear;
