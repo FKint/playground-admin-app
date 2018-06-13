@@ -38,15 +38,15 @@
             columns: [
                 {data: 'created_at', name: 'created_at'},
                 {
-                    data: 'amount_paid',
-                    name: 'amount_paid',
+                    data: 'amount_expected',
+                    name: 'amount_expected',
                     render: function (data) {
                         return formatPrice(data);
                     }
                 },
                 {
-                    data: 'amount_expected',
-                    name: 'amount_expected',
+                    data: 'amount_paid',
+                    name: 'amount_paid',
                     render: function (data) {
                         return formatPrice(data);
                     }
@@ -55,7 +55,7 @@
                     name: 'difference',
                     data: 'id',
                     render: function (data, type, full, meta) {
-                        return formatPrice(full.amount_paid - full.amount_expected);
+                        return formatPrice(full.amount_expected - full.amount_paid);
                     }
                 },
                 {
