@@ -43,8 +43,9 @@
 * In the container: run `php artisan config:cache`.
 * In the container: run `php artisan route:cache`.
 
-## Initialize
-*
+## Access PHPMyAdmin
+* `ssh root@admin.jokkebrok.be -L 22001:localhost:21001 -N`
+* Visit `http://localhost:22001`
 
 ## License
 This project (and the Laravel framework too) is open-sourced software licensed under the [MIT license](http://opensource.org/licenses/MIT).
