@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Internal;
 use App\Child;
 use App\Family;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\SaveChildRequest;
 use App\Http\Requests\UpdateFamilyInfoRequest;
 use App\Year;
 use Illuminate\Http\Request;
@@ -39,9 +40,9 @@ class FamiliesController extends Controller
             ->with('year', $year);
     }
 
-    public function showSubmitAddChildrenToFamily(Request $request, Year $year, Family $family)
+    public function showSubmitAddChildrenToFamily(SaveChildRequest $request, Year $year, Family $family)
     {
-        $child = new Child($request->all());
+        $child = new Child($request->validated());
         $child->year()->associate($year);
         $child->save();
         $child->families()->syncWithoutDetaching([$family->id => ['year_id' => $year->id]]);

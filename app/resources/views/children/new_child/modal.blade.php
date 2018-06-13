@@ -9,9 +9,8 @@
             </div>
             <div class="modal-body" id="new-child-modal-body">
                 <div class="alert alert-danger hidden" id="new-child-errors-div">
-                    <ul id="new-child-errors-list">
-
-                    </ul>
+                    Failure: <span id="new-child-error-summary"></span>
+                    <ul id="new-child-errors-list"></ul>
                 </div>
                 {{ Form::open(['class' => 'form-horizontal', 'id' => 'new-child-form']) }}
                 @include('forms.child')
@@ -37,9 +36,12 @@
         }
     }
     $(function () {
+        const new_child_fail = $('#new-child-errors-div');
+        const new_child_errors_list = $('#new-child-errors-list');
+        const new_child_error_summary = $('#new-child-error-summary');
         $('#new-child-form').submit(function () {
-            $('#new-child-errors-div').addClass('hidden');
-            $('#new-child-errors-list').empty();
+            new_child_fail.addClass('hidden');
+            new_child_errors_list.empty();
             $.post('{{ route('api.create_new_child') }}',
                 $(this).serialize()
             ).done(function (resp) {
@@ -48,12 +50,13 @@
                 showEditChildModal(resp.id, 'families');
             }).fail(function (resp) {
                 const response = resp.responseJSON;
-                $('#new-child-errors-list').append($('<li>').text(response.message));
-                for (const key in response.errors) {
-                    const field_error = response.errors[key];
-                    $('#new-child-errors-list').append($('<li>').text(field_error));
-                }
-                $('#new-child-errors-div').removeClass('hidden');
+                new_child_error_summary.text(response.message);
+                Object.values(response.errors).forEach(field_errors => {
+                    Object.values(field_errors).forEach(error_message => {
+                        new_child_errors_list.append($('<li>').text(error_message));
+                    });
+                });
+                new_child_fail.removeClass('hidden');
             });
             return false;
         });

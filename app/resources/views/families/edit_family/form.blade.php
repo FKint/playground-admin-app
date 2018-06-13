@@ -13,7 +13,6 @@
 <script>
     $(document).ready(function () {
         const form = $('#edit-family-form');
-        const form_parent = form.parent();
         const family_update_success = $('#family-details-success-div');
         const family_update_fail = $('#family-details-error-div');
         const family_details_error_summary = $('#family-details-error-summary');
@@ -31,12 +30,10 @@
                 family_update_success.removeClass('hidden');
                 $(window).trigger('families:updated');
             }).fail(function (resp) {
+                const response = resp.responseJSON;
                 family_update_fail.removeClass('hidden');
-                family_details_error_summary.text(resp.responseJSON.message);
-                console.log(resp.responseJSON.errors);
-                Object.values(resp.responseJSON.errors).forEach(field_errors => {
-                    console.log(field_errors);
-                    console.log(Object.entries(field_errors));
+                family_details_error_summary.text(response.message);
+                Object.values(response.errors).forEach(field_errors => {
                     Object.values(field_errors).forEach(error_message => {
                         family_details_error_list.append($('<li>').text(error_message));
                     });

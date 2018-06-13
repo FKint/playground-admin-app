@@ -3,8 +3,8 @@
     Wijzigingen opgeslagen.
 </div>
 <div class="alert alert-danger hidden" id="child-details-error-div">
-    <ul id="child-details-error-list">
-    </ul>
+    Failure: <span id="child-details-error-summary"></span>
+    <ul id="child-details-error-list"></ul>
 </div>
 {{ Form::model($child, ['class' => 'form-horizontal', 'id' => 'edit-child-form']) }}
 @include('forms.child')
@@ -12,36 +12,32 @@
 
 <script>
     $(function () {
-        function reloadEditChildDetailsForm() {
-            let container = $('#edit-child-div');
-            container.load(container.data('url'));
-        }
-
-        const error_list = $('#child-details-error-list');
-        const error_div = $('#child-details-error-div');
-        const success_div = $('#child-details-success-div');
+        const child_update_success = $('#child-details-success-div');
+        const child_update_fail = $('#child-details-error-div');
+        const child_details_error_summary = $('#child-details-error-summary');
+        const child_details_error_list = $('#child-details-error-list');
         const form = $('#edit-child-form');
         form.submit(function (event) {
-            error_list.empty();
-            error_div.addClass('hidden');
-            success_div.addClass('hidden');
+            child_details_error_list.empty();
+            child_update_fail.addClass('hidden');
+            child_update_success.addClass('hidden');
             event.preventDefault();
             const form = $('#edit-child-form');
             $.post(
                 '{!! route('internal.update_child_details', ['child'=>$child]) !!}',
                 form.serialize()
             ).done(function (resp) {
-                success_div.removeClass('hidden');
+                child_update_success.removeClass('hidden');
                 $(window).trigger('children:updated');
             }).fail(function (resp) {
-                for (const key in resp.responseJSON) {
-                    const field_errors = resp.responseJSON[key];
-                    for (const error_index in field_errors) {
-                        const error_message = field_errors[error_index];
-                        error_list.append($('<li>').text(error_message));
-                    }
-                }
-                error_div.removeClass('hidden');
+                const response = resp.responseJSON;
+                child_update_fail.removeClass('hidden');
+                child_details_error_summary.text(response.message);
+                Object.values(response.errors).forEach(field_errors => {
+                    Object.values(field_errors).forEach(error_message => {
+                        child_details_error_list.append($('<li>').text(error_message));
+                    });
+                });
             });
         });
         form.on('change', 'form-control', function () {
