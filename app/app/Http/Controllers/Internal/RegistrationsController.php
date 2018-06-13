@@ -221,6 +221,9 @@ class RegistrationsController extends Controller
                 }
             }
         }
+        $family->refresh();
+        $week->refresh();
+        $year->refresh();
     }
 
     private function updateTransaction(Year $year, Family $family, $data, $expected_money)
@@ -248,11 +251,9 @@ class RegistrationsController extends Controller
         $data = FamilyWeekRegistration::cleanRegistrationData($data);
 
         $old_saldo = $family->getCurrentSaldo();
-
         $this->updateFamilyWeekRegistration($year, $week, $family, $data);
 
         $new_saldo = $family->getCurrentSaldo();
-
         $this->updateTransaction($year, $family, $data, $new_saldo - $old_saldo);
 
         return $this->getRegistrationData($year, $week, $family);
