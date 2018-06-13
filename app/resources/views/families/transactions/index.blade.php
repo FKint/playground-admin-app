@@ -15,8 +15,8 @@
             <thead>
             <tr>
                 <th>Datum</th>
-                <th>Betaald</th>
                 <th>Verwacht</th>
+                <th>Betaald</th>
                 <th>Verschil</th>
                 <th>Verantwoordelijke</th>
                 <th>Opmerkingen</th>
