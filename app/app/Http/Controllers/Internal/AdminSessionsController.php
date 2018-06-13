@@ -34,6 +34,7 @@ class AdminSessionsController extends Controller
         $admin_session->update($data);
         $admin_session->save();
         $new_admin_session = new AdminSession();
+        $new_admin_session->year()->associate($year);
         $new_admin_session->save();
         return redirect()->route('internal.dashboard');
     }
@@ -43,20 +44,15 @@ class AdminSessionsController extends Controller
         return DataTables::make($year->admin_sessions())->make(true);
     }
 
-    public function showEditAdminSession(AdminSession $adminSession)
+    public function showEditAdminSession(Year $year, AdminSession $adminSession)
     {
         return view('admin_sessions.edit_session', ["admin_session" => $adminSession]);
     }
 
-    public function showSaveEditAdminSession(SaveAdminSessionRequest $request, AdminSession $adminSession)
+    public function showSaveEditAdminSession(SaveAdminSessionRequest $request, Year $year, AdminSession $adminSession)
     {
-        $request->validate();
-        $data = array(
-            "responsible_name" => $request->input('responsible_name'),
-            "counted_cash" => $request->input('counted_cash'),
-            "remarks" => $request->input('remarks')
-        );
-        $adminSession->update($data);
+        $validated_data = $request->validated();
+        $adminSession->update($validated_data);
         return redirect(route('internal.dashboard'));
     }
 }
