@@ -139,7 +139,7 @@
             {{ Form::bsDropdown('tariff_id', 'Tarief', $year->getAllTariffsById(), ['readonly' => true, 'disabled' => true]) }}
             {{ Form::bsNumber('saldo_difference', 'Verwachte bedrag',
             ['id' => 'saldo-difference', 'pattern'=>"[0-9]+([\\.,][0-9]+)?", 'step'=>'0.01', 'readonly' => true]) }}
-            {{ Form::bsNumber('received_money', 'Ontvangen bedrag',
+            {{ Form::bsNumber('received_money', 'Betaald',
             ['id' => 'received-money', 'pattern'=>"[0-9]+([\\.,][0-9]+)?", 'step'=>'0.01']) }}
             {{ Form::bsText('remarks', 'Remarks', ['id' => 'remarks']) }}
             {{ Form::bsNumber('previous_saldo', 'Vorig saldo',
