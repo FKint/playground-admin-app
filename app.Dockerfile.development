@@ -1,6 +1,6 @@
 FROM php:fpm
 
-RUN apt-get update && apt-get install -y zip unzip gnupg libpng-dev && apt-get clean
+RUN apt-get update && apt-get install -y zip unzip gnupg libpng-dev libzip-dev && apt-get clean
 RUN docker-php-ext-install pdo_mysql zip
 
 WORKDIR /var/www
