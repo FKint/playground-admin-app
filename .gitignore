@@ -1,8 +1,10 @@
 .idea
+*.swp
+*.code-workspace
 
 .env*
 !.env.example
-.laravel.env.*
+.laravel.env
 !.laravel.env*.example
 
 migrations.sql

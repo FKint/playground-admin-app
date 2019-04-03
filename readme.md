@@ -3,7 +3,7 @@
 ## Setup (local)
 
 * Run `docker-compose -f docker-compose.yml.development up`
-* Copy `.env.example` to `.env` and `.laravel.env.development.example` to `.laravel.env.example`.
+* Copy `.env.example` to `.env` and `.laravel.env.development.example` to `.laravel.env`.
 * Open a shell in the container (e.g. `docker exec -it playgroundadminapp_app_1 /bin/bash`)
 * Run `./install-packages.sh` to install and pack Composer and NPM packages.
 * Run `php artisan key:generate` to generate a key for the application.
