@@ -32,7 +32,7 @@ jobs:
           command: docker build -f docker/Dockerfile --target app -t $IMAGE_NAME:app-$CIRCLE_BRANCH-$CIRCLE_SHA1 -t $IMAGE_NAME:app-latest .
       - run:
           name: Build nginx
-          command: docker build -f docker/Dockerfile --target nginx -t $IMAGE_NAME:nginx-$CIRCLE_BRANCH-$CIRCLE_SHA1 -t $IMAGE_NAME:nginx-latest .
+          command: docker build -f docker/Dockerfile --target nginx-prod -t $IMAGE_NAME:nginx-$CIRCLE_BRANCH-$CIRCLE_SHA1 -t $IMAGE_NAME:nginx-latest .
       - run:
           name: Archive Docker images
           command: docker save -o /tmp/docker-images.tar $IMAGE_NAME:app-$CIRCLE_BRANCH-$CIRCLE_SHA1 $IMAGE_NAME:app-latest $IMAGE_NAME:nginx-$CIRCLE_BRANCH-$CIRCLE_SHA1 $IMAGE_NAME:nginx-latest
