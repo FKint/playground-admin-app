@@ -16,6 +16,15 @@ WORKDIR /root/app
 COPY app /root/app
 RUN composer install --no-dev --optimize-autoloader
 
+#############################################
+# Composer PHP packages builder for testing #
+#############################################
+FROM composer as composer-builder-test
+WORKDIR /root/app
+COPY app /root/app
+COPY .laravel.env.dusk.example .env
+RUN composer install --optimize-autoloader
+
 ##############
 # Nginx PROD #
 ##############
@@ -35,7 +44,7 @@ ADD nginx/vhost.conf.development /etc/nginx/conf.d/default.conf
 #############
 # Based on: https://github.com/laradock/php-fpm/blob/master/Dockerfile-73
 # and https://github.com/laradock/laradock/blob/master/php-fpm/Dockerfile
-FROM php:7.3-fpm as php-fpm
+FROM php:7.2-fpm as php-fpm
 ENV DEBIAN_FRONTEND noninteractive
 RUN apt-get update && \
     pecl channel-update pecl.php.net && \
@@ -71,3 +80,12 @@ COPY --from=npm-builder /root/app/public ./public
 # volume)
 RUN php artisan route:cache
 VOLUME ["/var/www/storage", "/var/www/.env"]
+
+######################
+# PHP image: Testing #
+######################
+FROM php-fpm as app-test
+WORKDIR /var/www
+COPY --from=composer-builder-test /root/app .
+COPY --from=npm-builder /root/app/public ./public
+RUN mkdir /var/www/storage/testing && touch /var/www/storage/testing/sqlite

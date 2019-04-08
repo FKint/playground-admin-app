@@ -61,6 +61,19 @@ jobs:
           name: Publish Docker images to Docker Hub
           command: docker push $IMAGE_NAME
   test:
+    executor: docker-publisher
+    steps:
+      - attach_workspace:
+          at: /tmp/workspace
+      - setup_remote_docker:
+          version: 18.09.3
+      - run:
+          name: Load archived Docker images
+          command: docker load -i /tmp/workspace/docker-images.tar
+      - run:
+          name: "Run PHP Unit tests"
+          command: docker run -v jokkebrok/playground-admin-app:app-test vendor/bin/phpunit
+  test-old:
     docker:
       - image: circleci/php:7.2-node-browsers
     working_directory: ~/laravel
