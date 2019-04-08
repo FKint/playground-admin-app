@@ -2,10 +2,7 @@ version: '3.7'
 services:
   # Laravel PHP container
   app:
-    # image: jokkebrok/playground-php-app:app
-    build:
-      context: app
-      dockerfile: docker/app.Dockerfile.production
+    image: jokkebrok/playground-php-app:app-latest
     volumes:
       - app_storage:/var/www/storage
       - .laravel.env.production:/var/www/.env
@@ -24,7 +21,7 @@ services:
 
   # Nginx web server
   nginx:
-    image: jokkebrok/playground-php-app:nginx
+    image: jokkebrok/playground-php-app:nginx-latest
     volumes:
       - "${LE_DIR}:/etc/letsencrypt:ro"
     ports:
