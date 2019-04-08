@@ -10,7 +10,7 @@ jobs:
   build:
     executor: docker-publisher
     steps:
-      - setup_remote_docker
+      - setup_remote_docker:
           version: 18.09.3
       - checkout
       - restore_cache:
@@ -45,7 +45,8 @@ jobs:
     steps:
       - attach_workspace:
           at: /tmp/workspace
-      - setup_remote_docker
+      - setup_remote_docker:
+          version: 18.09.3
       - run:
           name: Load archived Docker images
           command: docker load -i /tmp/workspace/docker-images.tar
@@ -55,7 +56,7 @@ jobs:
       - run:
           name: Publish Docker images to Docker Hub
           command: docker push $IMAGE_NAME
-  tests:
+  test:
     docker:
       - image: circleci/php:7.2-node-browsers
     working_directory: ~/laravel
@@ -117,7 +118,7 @@ workflows:
   version: 2
   build-master:
     jobs:
-      - build:
+      - build
       - test:
           requires:
             - build
