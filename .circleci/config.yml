@@ -13,6 +13,11 @@ jobs:
       - setup_remote_docker:
           version: 18.09.3
       - checkout
+      - run:
+          name: Prepare Circle CI cache
+          command: |
+            echo "$CIRCLE_BRANCH" > .circle-branch
+            echo "$CIRCLE_SHA1" > .circle-sha1
       - restore_cache:
           keys:
             - docker-images-v1-{{ $CIRCLE_BRANCH }}
@@ -33,7 +38,7 @@ jobs:
           name: Archive Docker images
           command: docker save -o /tmp/docker-images.tar $IMAGE_NAME:app-$TAG_SUFFIX $IMAGE_NAME:app-latest $IMAGE_NAME:nginx-$TAG_SUFFIX $IMAGE_NAME:nginx-latest
       - save_cache:
-          key: docker-images-v1-{{ $CIRCLE_BRANCH }}-{{ $CIRCLE_SHA1 }}
+          key: docker-images-v1-{{ checksum .circle-branch }}-{{ checksum .circle-sha1 }}
           paths:
             - /tmp/docker-images.tar
       - persist_to_workspace:
