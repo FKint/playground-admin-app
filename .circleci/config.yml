@@ -1,7 +1,61 @@
-version: 2
-
+version: 2.1
+executors:
+  docker-publisher:
+    environment:
+      IMAGE_NAME: jokkebrok/playground-php-app
+      TAG_SUFFIX: $CIRCLE_BRANCH-$CIRCLE_SHA1
+    docker:
+      - image: circleci/buildpack-deps:stretch
 jobs:
   build:
+    executor: docker-publisher
+    steps:
+      - setup_remote_docker
+          version: 18.09.3
+      - checkout
+      - restore_cache:
+          keys:
+            - docker-images-v1-{{ $CIRCLE_BRANCH }}
+            - docker-images-v1
+      - run:
+          name: Load cached images
+          command: |
+            if [[ -f /tmp/docker-images.tar ]]; then
+              docker load -i /tmp/docker-images.tar
+            fi
+      - run:
+          name: Build app
+          command: docker build -f docker/Dockerfile --target app -t $IMAGE_NAME:app-$TAG_SUFFIX -t $IMAGE_NAME:app-latest .
+      - run:
+          name: Build nginx
+          command: docker build -f docker/Dockerfile --target nginx -t $IMAGE_NAME:nginx-$TAG_SUFFIX -t $IMAGE_NAME:nginx-latest .
+      - run:
+          name: Archive Docker images
+          command: docker save -o /tmp/docker-images.tar $IMAGE_NAME:app-$TAG_SUFFIX $IMAGE_NAME:app-latest $IMAGE_NAME:nginx-$TAG_SUFFIX $IMAGE_NAME:nginx-latest
+      - save_cache:
+          key: docker-images-v1-{{ $CIRCLE_BRANCH }}-{{ $CIRCLE_SHA1 }}
+          paths:
+            - /tmp/docker-images.tar
+      - persist_to_workspace:
+          root: /tmp
+          paths:
+            - docker-images.tar
+  publish-latest:
+    executor: docker-publisher
+    steps:
+      - attach_workspace:
+          at: /tmp/workspace
+      - setup_remote_docker
+      - run:
+          name: Load archived Docker images
+          command: docker load -i /tmp/workspace/docker-images.tar
+      - run:
+          name: Log in to Docker Hub
+          command: echo "$DOCKER_HUB_PASSWORD" | docker login -u "$DOCKER_HUB_USERNAME" --password-stdin
+      - run:
+          name: Publish Docker images to Docker Hub
+          command: docker push $IMAGE_NAME
+  tests:
     docker:
       - image: circleci/php:7.2-node-browsers
     working_directory: ~/laravel
@@ -58,3 +112,21 @@ jobs:
           name: Run Laravel Dusk Tests
           command: php artisan dusk
           working_directory: ./app
+
+workflows:
+  version: 2
+  build-master:
+    jobs:
+      - build:
+      - test:
+          requires:
+            - build
+      - publish-latest:
+          requires:
+            - build
+            - test
+          filters:
+            branches:
+              only: 
+                - master
+                - docker-migration
