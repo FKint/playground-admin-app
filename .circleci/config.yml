@@ -3,7 +3,6 @@ executors:
   docker-publisher:
     environment:
       IMAGE_NAME: jokkebrok/playground-php-app
-      TAG_SUFFIX: $CIRCLE_BRANCH-$CIRCLE_SHA1
     docker:
       - image: circleci/buildpack-deps:stretch
 jobs:
@@ -20,7 +19,7 @@ jobs:
             echo "$CIRCLE_SHA1" > .circle-sha1
       - restore_cache:
           keys:
-            - docker-images-v1-{{ $CIRCLE_BRANCH }}
+            - docker-images-v1-{{ checksum .circle-branch }}
             - docker-images-v1
       - run:
           name: Load cached images
@@ -30,13 +29,13 @@ jobs:
             fi
       - run:
           name: Build app
-          command: docker build -f docker/Dockerfile --target app -t $IMAGE_NAME:app-$TAG_SUFFIX -t $IMAGE_NAME:app-latest .
+          command: docker build -f docker/Dockerfile --target app -t $IMAGE_NAME:app-$CIRCLE_BRANCH-$CIRCLE_SHA1 -t $IMAGE_NAME:app-latest .
       - run:
           name: Build nginx
-          command: docker build -f docker/Dockerfile --target nginx -t $IMAGE_NAME:nginx-$TAG_SUFFIX -t $IMAGE_NAME:nginx-latest .
+          command: docker build -f docker/Dockerfile --target nginx -t $IMAGE_NAME:nginx-$CIRCLE_BRANCH-$CIRCLE_SHA1 -t $IMAGE_NAME:nginx-latest .
       - run:
           name: Archive Docker images
-          command: docker save -o /tmp/docker-images.tar $IMAGE_NAME:app-$TAG_SUFFIX $IMAGE_NAME:app-latest $IMAGE_NAME:nginx-$TAG_SUFFIX $IMAGE_NAME:nginx-latest
+          command: docker save -o /tmp/docker-images.tar $IMAGE_NAME:app-$CIRCLE_BRANCH-$CIRCLE_SHA1 $IMAGE_NAME:app-latest $IMAGE_NAME:nginx-$CIRCLE_BRANCH-$CIRCLE_SHA1 $IMAGE_NAME:nginx-latest
       - save_cache:
           key: docker-images-v1-{{ checksum .circle-branch }}-{{ checksum .circle-sha1 }}
           paths:
