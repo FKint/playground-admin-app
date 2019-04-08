@@ -7,7 +7,7 @@ executors:
     docker:
       - image: circleci/buildpack-deps:stretch
 jobs:
-  build:
+  build-docker-images:
     executor: docker-publisher
     steps:
       - setup_remote_docker:
@@ -118,13 +118,13 @@ workflows:
   version: 2
   build-master:
     jobs:
-      - build
+      - build-docker-images
       - test:
           requires:
-            - build
+            - build-docker-images
       - publish-latest:
           requires:
-            - build
+            - build-docker-images
             - test
           filters:
             branches:
