@@ -35,7 +35,7 @@ jobs:
           command: docker build -f docker/Dockerfile --target nginx-prod -t $IMAGE_NAME:nginx-$CIRCLE_BRANCH-$CIRCLE_SHA1 -t $IMAGE_NAME:nginx-latest .
       - run:
           name: Build app for testing
-          command: docker build -f docker/Dockerfile --target app-test -t $IMAGE_NAME:app-test
+          command: docker build -f docker/Dockerfile --target app-test -t $IMAGE_NAME:app-test .
       - run:
           name: Archive Docker images
           command: docker save -o /tmp/docker-images.tar $IMAGE_NAME:app-$CIRCLE_BRANCH-$CIRCLE_SHA1 $IMAGE_NAME:app-latest $IMAGE_NAME:nginx-$CIRCLE_BRANCH-$CIRCLE_SHA1 $IMAGE_NAME:nginx-latest $IMAGE_NAME:app-test
