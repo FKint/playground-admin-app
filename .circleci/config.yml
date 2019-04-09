@@ -90,7 +90,7 @@ jobs:
           name: Run Laravel Dusk tests
           command: |
             docker network create tmp-dusk-network
-            docker run -d --name app-container --network tmp-dusk-network $IMAGE_NAME:app-test php artisan serve
+            docker run -d --name app-container --network tmp-dusk-network $IMAGE_NAME:app-test php artisan serve --host=app-container
             docker run -d --name selenium --network tmp-dusk-network --shm-size=2g selenium/standalone-chrome:3
             docker exec app-container php artisan dusk
 workflows:
