@@ -109,6 +109,7 @@ workflows:
           requires:
             - build-docker-images
             - test
+            - test-dusk
           filters:
             branches:
               only: 
