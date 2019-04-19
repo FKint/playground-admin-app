@@ -3,6 +3,7 @@ services:
   # Laravel PHP container
   app:
     build:
+      context: app
       dockerfile: docker/Dockerfile
       target: app
     working_dir: /var/www
