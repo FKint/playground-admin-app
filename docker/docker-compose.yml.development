@@ -3,9 +3,9 @@ services:
   # Laravel PHP container
   app:
     build:
-      context: app
+      context: .
       dockerfile: docker/Dockerfile
-      target: app
+      target: app-prod
     working_dir: /var/www
     volumes:
       - ./app:/var/www
@@ -21,7 +21,7 @@ services:
   # Nginx web server
   nginx:
     build:
-      context: app
+      context: .
       dockerfile: docker/Dockerfile
       target: nginx-dev
     working_dir: /var/www
