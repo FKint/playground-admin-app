@@ -39,7 +39,7 @@ jobs:
             for stage in ${BuildStages[*]}; do
               FullCacheString="${FullCacheString} --cache-from $IMAGE_NAME:$stage"
               docker build --target $stage $FullCacheString -t $IMAGE_NAME:$stage -f docker/Dockerfile .
-              StringOfImages="${StringOfImagesWithTags} $IMAGE_NAME:$stage"
+              StringOfImagesWithTags="${StringOfImagesWithTags} $IMAGE_NAME:$stage"
             done
             docker save -o /tmp/docker-images.tar $StringOfImagesWithTags
       # - run:
