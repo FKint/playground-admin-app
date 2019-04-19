@@ -1,10 +1,11 @@
-version: '3'
+version: '3.7'
 services:
   # Laravel PHP container
   app:
     build:
       context: .
-      dockerfile: app.Dockerfile.development
+      dockerfile: docker/Dockerfile
+      target: app-prod
     working_dir: /var/www
     volumes:
       - ./app:/var/www
@@ -21,10 +22,11 @@ services:
   nginx:
     build:
       context: .
-      dockerfile: nginx.Dockerfile.development
+      dockerfile: docker/Dockerfile
+      target: nginx-dev
     working_dir: /var/www
     volumes:
-      - ./app:/var/www
+      - ./app/public:/var/www/public
     ports:
       - 21000:80
 

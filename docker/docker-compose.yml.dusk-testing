@@ -1,0 +1,25 @@
+version: '3.7'
+services:
+  # Laravel PHP container
+  app-container:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+      target: app-test
+    command: 
+      - sh
+      - -c
+      - |
+        php artisan serve --host=app-container &
+        curl --retry 10 --retry-connrefused http://app-container:8000 > /dev/null
+        curl --retry 10 --retry-connrefused http://selenium:4444 > /dev/null
+        php artisan dusk
+    working_dir: /var/www
+    volumes:
+      - ./app:/var/www
+      - .laravel.env.dusk.example:/var/www/.env
+    depends_on:
+      - selenium 
+  selenium:
+    image: selenium/standalone-chrome:3
+    shm_size: 2gb
