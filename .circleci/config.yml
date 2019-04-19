@@ -19,8 +19,8 @@ jobs:
             echo "$CIRCLE_SHA1" > .circle-sha1
       - restore_cache:
           keys:
-            - docker-images-v3-{{ checksum ".circle-branch" }}
-            - docker-images-v3
+            - docker-images-2019041500-{{ checksum ".circle-branch" }}
+            - docker-images-2019041500
       - run:
           name: Load cached layers
           command: |
