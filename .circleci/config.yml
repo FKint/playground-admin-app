@@ -25,15 +25,20 @@ jobs:
           name: Load cached layers
           command: |
             if [[ -f /tmp/docker-images.tar ]]; then
+              echo "Loading cached layers"
               docker load -i /tmp/docker-images.tar
+            else
+              echo "No cached layers found"
             fi
       - run:
           name: Build Docker Layers
           command: |
             BuildStages=("composer-builder" "composer-builder-test" "npm-builder" "nginx-prod" "nginx-dev" "composer-installer" "app-prod" "composer-installer-test" "app-test")
             StringOfImagesWithTags=""
+            FullCacheString=""
             for stage in ${BuildStages[*]}; do
-              docker build --target $stage --cache-from $IMAGE_NAME:$stage -t $IMAGE_NAME:$stage -f docker/Dockerfile .
+              FullCacheString="${FullCacheString} --cache-from $IMAGE_NAME:$stage"
+              docker build --target $stage $FullCacheString -t $IMAGE_NAME:$stage -f docker/Dockerfile .
               StringOfImages="${StringOfImagesWithTags} $IMAGE_NAME:$stage"
             done
             docker save -o /tmp/docker-images.tar $StringOfImagesWithTags
