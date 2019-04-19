@@ -42,6 +42,8 @@ jobs:
               StringOfImagesWithTags="${StringOfImagesWithTags} $IMAGE_NAME:$stage"
             done
             docker save -o /tmp/docker-images.tar $StringOfImagesWithTags
+            docker save -o /tmp/docker-app-test.tar $IMAGE_NAME:app-test
+            docker save -o /tmp/docker-prod.tar $IMAGE_NAME:app-prod $IMAGE_NAME:nginx-prod
       # - run:
       #     name: Build app
       #     command: |
@@ -63,7 +65,8 @@ jobs:
       - persist_to_workspace:
           root: /tmp
           paths:
-            - docker-images.tar
+            - docker-app-test.tar
+            - docker-prod.tar
   publish-latest:
     executor: docker-publisher
     steps:
@@ -73,7 +76,7 @@ jobs:
           version: 18.09.3
       - run:
           name: Load archived Docker images
-          command: docker load -i /tmp/workspace/docker-images.tar
+          command: docker load -i /tmp/workspace/docker-prod.tar
       - run:
           name: Log in to Docker Hub
           command: echo "$DOCKER_HUB_PASSWORD" | docker login -u "$DOCKER_HUB_USERNAME" --password-stdin
@@ -93,7 +96,7 @@ jobs:
           version: 18.09.3
       - run:
           name: Load archived Docker images
-          command: docker load -i /tmp/workspace/docker-images.tar
+          command: docker load -i /tmp/workspace/docker-app-test.tar
       - run:
           name: Run PHP Unit tests
           command: docker run --name app-test $IMAGE_NAME:app-test vendor/bin/phpunit
@@ -106,7 +109,7 @@ jobs:
           version: 18.09.3
       - run:
           name: Load archived Docker images
-          command: docker load -i /tmp/workspace/docker-images.tar
+          command: docker load -i /tmp/workspace/docker-app-test.tar
       - run:
           name: Run Laravel Dusk tests
           command: |
