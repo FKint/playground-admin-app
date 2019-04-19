@@ -6,7 +6,7 @@ WORKDIR /root/app
 COPY app/composer.json /root/app/composer.json
 COPY app/composer.lock /root/app/composer.lock
 COPY app/database /root/app/database
-RUN composer install --no-dev --optimize-autoloader --no-scripts
+RUN composer install --no-interaction --no-progress --no-dev --optimize-autoloader --no-scripts
 
 #############################################
 # Composer PHP packages builder for testing #
@@ -14,7 +14,7 @@ RUN composer install --no-dev --optimize-autoloader --no-scripts
 FROM composer-builder as composer-builder-test
 WORKDIR /root/app
 COPY .laravel.env.dusk.example .env
-RUN composer install --optimize-autoloader --no-scripts
+RUN composer install --no-interaction --no-progress --optimize-autoloader --no-scripts
 
 ##############################
 # NPM package Assets builder #
@@ -26,7 +26,7 @@ COPY app/package-lock.json /root/app/package-lock.json
 COPY app/package.json /root/app/package.json
 COPY app/resources/assets /root/app/resources/assets
 WORKDIR /root/app
-RUN npm install
+RUN npm install --no-progress
 RUN npm run production
 
 ##############
@@ -49,7 +49,7 @@ ADD nginx/vhost.conf.development /etc/nginx/conf.d/default.conf
 FROM composer-builder as composer-installer
 WORKDIR /root/app
 COPY app .
-RUN composer install --no-dev --optimize-autoloader
+RUN composer install --no-interaction --no-progress --no-dev --optimize-autoloader
 
 ###################
 # PHP image: PROD #
@@ -70,7 +70,7 @@ VOLUME ["/var/www/storage", "/var/www/.env"]
 FROM composer-builder-test as composer-installer-test
 WORKDIR /root/app
 COPY app .
-RUN composer install --optimize-autoloader
+RUN composer install --no-interaction --no-progress --optimize-autoloader
 
 ######################
 # PHP image: Testing #
