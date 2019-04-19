@@ -19,8 +19,8 @@ jobs:
             echo "$CIRCLE_SHA1" > .circle-sha1
       - restore_cache:
           keys:
-            - docker-images-v1-{{ checksum ".circle-branch" }}
-            - docker-images-v1
+            - docker-images-v2-{{ checksum ".circle-branch" }}
+            - docker-images-v2
       - run:
           name: Load cached images
           command: |
@@ -40,7 +40,7 @@ jobs:
           name: Archive Docker images
           command: docker save -o /tmp/docker-images.tar $IMAGE_NAME:app-$CIRCLE_BRANCH-$CIRCLE_SHA1 $IMAGE_NAME:app-latest $IMAGE_NAME:nginx-$CIRCLE_BRANCH-$CIRCLE_SHA1 $IMAGE_NAME:nginx-latest $IMAGE_NAME:app-test
       - save_cache:
-          key: docker-images-v1-{{ checksum ".circle-branch" }}-{{ checksum ".circle-sha1" }}
+          key: docker-images-v2-{{ checksum ".circle-branch" }}-{{ checksum ".circle-sha1" }}
           paths:
             - /tmp/docker-images.tar
       - persist_to_workspace:
