@@ -22,7 +22,7 @@ services:
   nginx:
     build:
       context: app
-      dockerfile: docker/app.Dockerfile.production
+      dockerfile: docker/Dockerfile
       target: nginx-dev
     working_dir: /var/www
     volumes:
