@@ -1,7 +1,7 @@
 #################################
 # Composer PHP packages builder #
 #################################
-FROM composer as composer-builder
+FROM composer:1.8.5 as composer-builder
 WORKDIR /root/app 
 COPY app/composer.json /root/app/composer.json
 COPY app/composer.lock /root/app/composer.lock
@@ -32,7 +32,7 @@ RUN npm run production
 ##############
 # Nginx PROD #
 ##############
-FROM nginx:stable as nginx-prod
+FROM nginx:1.14.2 as nginx-prod
 ADD nginx/vhost.conf.production /etc/nginx/conf.d/default.conf
 WORKDIR /var/www
 COPY --from=npm-builder /root/app/public .
@@ -40,7 +40,7 @@ COPY --from=npm-builder /root/app/public .
 #############
 # Nginx DEV #
 #############
-FROM nginx:stable as nginx-dev
+FROM nginx:1.14.2 as nginx-dev
 ADD nginx/vhost.conf.development /etc/nginx/conf.d/default.conf
 
 ##########################################################################
@@ -54,7 +54,7 @@ RUN composer install --no-dev --optimize-autoloader
 ###################
 # PHP image: PROD #
 ###################
-FROM fkint/laravel-docker:latest as app
+FROM fkint/laravel-docker:latest as app-prod
 WORKDIR /var/www
 COPY --from=composer-installer /root/app .
 COPY --from=npm-builder /root/app/public ./public

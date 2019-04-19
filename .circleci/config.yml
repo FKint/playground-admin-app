@@ -19,28 +19,40 @@ jobs:
             echo "$CIRCLE_SHA1" > .circle-sha1
       - restore_cache:
           keys:
-            - docker-images-v2-{{ checksum ".circle-branch" }}
-            - docker-images-v2
+            - docker-images-v3-{{ checksum ".circle-branch" }}
+            - docker-images-v3
       - run:
-          name: Load cached images
+          name: Load cached layers
           command: |
             if [[ -f /tmp/docker-images.tar ]]; then
               docker load -i /tmp/docker-images.tar
             fi
       - run:
-          name: Build app
-          command: docker build -f docker/Dockerfile --target app -t $IMAGE_NAME:app-$CIRCLE_BRANCH-$CIRCLE_SHA1 -t $IMAGE_NAME:app-latest .
-      - run:
-          name: Build nginx
-          command: docker build -f docker/Dockerfile --target nginx-prod -t $IMAGE_NAME:nginx-$CIRCLE_BRANCH-$CIRCLE_SHA1 -t $IMAGE_NAME:nginx-latest .
-      - run:
-          name: Build app for testing
-          command: docker build -f docker/Dockerfile --target app-test -t $IMAGE_NAME:app-test .
-      - run:
-          name: Archive Docker images
-          command: docker save -o /tmp/docker-images.tar $IMAGE_NAME:app-$CIRCLE_BRANCH-$CIRCLE_SHA1 $IMAGE_NAME:app-latest $IMAGE_NAME:nginx-$CIRCLE_BRANCH-$CIRCLE_SHA1 $IMAGE_NAME:nginx-latest $IMAGE_NAME:app-test
+          name: Build Docker Layers
+          command: |
+            BuildStages=("composer-builder" "composer-builder-test" "npm-builder" "nginx-prod" "nginx-dev" "composer-installer" "app-prod" "composer-installer-test" "app-test")
+            StringOfImagesWithTags=""
+            for stage in ${BuildStages[*]}; do
+              docker build --target $stage --cache-from $IMAGE_NAME:$stage -t $IMAGE_NAME:$stage -f docker/Dockerfile .
+              StringOfImages="${StringOfImagesWithTags} $IMAGE_NAME:$stage"
+            done
+            docker save -o /tmp/docker-images.tar $StringOfImagesWithTags
+      # - run:
+      #     name: Build app
+      #     command: |
+      #       docker tag $MULTISTAGE_IMAGE_NAME:app-prod $IMAGE_NAME:app-prod
+      #       # docker build -f docker/Dockerfile --target app -t $IMAGE_NAME:app-$CIRCLE_BRANCH-$CIRCLE_SHA1 -t $IMAGE_NAME:app-latest .
+      # - run:
+      #     name: Build nginx
+      #     command: docker build -f docker/Dockerfile --target nginx-prod -t $IMAGE_NAME:nginx-$CIRCLE_BRANCH-$CIRCLE_SHA1 -t $IMAGE_NAME:nginx-latest .
+      # - run:
+      #     name: Build app for testing
+      #     command: docker build -f docker/Dockerfile --target app-test -t $IMAGE_NAME:app-test .
+      # - run:
+      #     name: Archive Docker images
+      #     command: docker save -o /tmp/docker-images.tar $IMAGE_NAME:app-$CIRCLE_BRANCH-$CIRCLE_SHA1 $IMAGE_NAME:app-latest $IMAGE_NAME:nginx-$CIRCLE_BRANCH-$CIRCLE_SHA1 $IMAGE_NAME:nginx-latest $IMAGE_NAME:app-test
       - save_cache:
-          key: docker-images-v2-{{ checksum ".circle-branch" }}-{{ checksum ".circle-sha1" }}
+          key: docker-images-v3-{{ checksum ".circle-branch" }}-{{ checksum ".circle-sha1" }}
           paths:
             - /tmp/docker-images.tar
       - persist_to_workspace:
@@ -62,7 +74,11 @@ jobs:
           command: echo "$DOCKER_HUB_PASSWORD" | docker login -u "$DOCKER_HUB_USERNAME" --password-stdin
       - run:
           name: Publish Docker images to Docker Hub
-          command: docker push $IMAGE_NAME
+          command: |
+            docker tag $IMAGE_NAME:app-prod "$IMAGE_NAME:app-prod-$CIRCLE_BRANCH-$CIRCLE_SHA1"
+            docker push $IMAGE_NAME:app-prod
+            docker tag $IMAGE_NAME:nginx-prod "$IMAGE_NAME:nginx-prod-$CIRCLE_BRANCH-$CIRCLE_SHA1"
+            docker push $IMAGE_NAME:nginx-prod
   test:
     executor: docker-publisher
     steps:
