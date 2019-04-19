@@ -44,20 +44,6 @@ jobs:
             docker save -o /tmp/docker-images.tar $StringOfImagesWithTags
             docker save -o /tmp/docker-app-test.tar $IMAGE_NAME:app-test
             docker save -o /tmp/docker-prod.tar $IMAGE_NAME:app-prod $IMAGE_NAME:nginx-prod
-      # - run:
-      #     name: Build app
-      #     command: |
-      #       docker tag $MULTISTAGE_IMAGE_NAME:app-prod $IMAGE_NAME:app-prod
-      #       # docker build -f docker/Dockerfile --target app -t $IMAGE_NAME:app-$CIRCLE_BRANCH-$CIRCLE_SHA1 -t $IMAGE_NAME:app-latest .
-      # - run:
-      #     name: Build nginx
-      #     command: docker build -f docker/Dockerfile --target nginx-prod -t $IMAGE_NAME:nginx-$CIRCLE_BRANCH-$CIRCLE_SHA1 -t $IMAGE_NAME:nginx-latest .
-      # - run:
-      #     name: Build app for testing
-      #     command: docker build -f docker/Dockerfile --target app-test -t $IMAGE_NAME:app-test .
-      # - run:
-      #     name: Archive Docker images
-      #     command: docker save -o /tmp/docker-images.tar $IMAGE_NAME:app-$CIRCLE_BRANCH-$CIRCLE_SHA1 $IMAGE_NAME:app-latest $IMAGE_NAME:nginx-$CIRCLE_BRANCH-$CIRCLE_SHA1 $IMAGE_NAME:nginx-latest $IMAGE_NAME:app-test
       - save_cache:
           key: docker-images-2019041500-{{ checksum ".circle-branch" }}-{{ checksum ".circle-sha1" }}
           paths:
