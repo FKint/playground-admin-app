@@ -51,7 +51,7 @@ services:
 
   # PHPMyAdmin
   phpmyadmin:
-    image: phpmyadmin/phpmyadmin:latest
+    image: phpmyadmin/phpmyadmin:4.7
     environment:
       - "PMA_HOST=database"
     depends_on:

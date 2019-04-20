@@ -20,16 +20,14 @@ RUN composer install --no-interaction --no-progress --optimize-autoloader --no-s
 # NPM package Assets builder #
 ##############################
 FROM node:8-alpine as npm-builder
-# TODO(fkint): check if can update packages to remove this
-RUN apk add --update autoconf libpng-dev bash build-base
-RUN npm install npm@latest -g 
-COPY app/webpack.mix.js /root/app/webpack.mix.js
-COPY app/package-lock.json /root/app/package-lock.json
-COPY app/package.json /root/app/package.json
-COPY app/resources/assets /root/app/resources/assets
+RUN apk add yarn
 WORKDIR /root/app
-RUN npm ci --no-progress
-RUN npm run production
+COPY app/yarn.lock /root/app/yarn.lock
+COPY app/package.json /root/app/package.json
+RUN yarn
+COPY app/resources/assets /root/app/resources/assets
+COPY app/webpack.mix.js /root/app/webpack.mix.js
+RUN yarn run production
 
 ##############
 # Nginx PROD #

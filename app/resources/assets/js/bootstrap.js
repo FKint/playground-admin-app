@@ -15,8 +15,9 @@ $.extend(true, $.fn.dataTable.defaults, {
     "language": {"url": "/dataTables.Dutch.lang"}
 });
 
-window.pdfMake = {createPdf: require('pdfmake-browserified')};
-
+const pdfMake = require('pdfmake/build/pdfmake.js');
+const pdfFonts = require('pdfmake/build/vfs_fonts.js');
+pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
 window.Bloodhound = require('bloodhound-js');
 require('corejs-typeahead');
