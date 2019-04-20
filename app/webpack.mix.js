@@ -1,4 +1,4 @@
-const {mix} = require('laravel-mix');
+const mix = require('laravel-mix');
 
 /*
  |--------------------------------------------------------------------------
@@ -33,7 +33,8 @@ mix.js('resources/assets/js/app.js', 'public/js')
         'datatables.net-buttons-bs/js/buttons.bootstrap',
         'bloodhound-js',
         'corejs-typeahead',
-        'pdfmake-browserified',
+        'pdfmake/build/pdfmake.js',
+        'pdfmake/build/vfs_fonts.js',
         'bootstrap-datepicker',
         'bootstrap-datepicker/js/locales/bootstrap-datepicker.nl-BE.js',
         'moment'
