@@ -20,25 +20,7 @@ mix.webpackConfig({
 });
 
 mix.js('resources/assets/js/app.js', 'public/js')
-    .extract([
-        'lodash',
-        'jquery',
-        'bootstrap-less',
-        'datatables.net',
-        'datatables.net-buttons',
-        'datatables.net-buttons/js/buttons.html5',
-        'datatables.net-bs',
-        'datatables.net-buttons-bs',
-        'datatables.net-buttons/js/buttons.colVis',
-        'datatables.net-buttons-bs/js/buttons.bootstrap',
-        'bloodhound-js',
-        'corejs-typeahead',
-        'pdfmake/build/pdfmake.js',
-        'pdfmake/build/vfs_fonts.js',
-        'bootstrap-datepicker',
-        'bootstrap-datepicker/js/locales/bootstrap-datepicker.nl-BE.js',
-        'moment'
-    ])
+    .extract()
     .version();
 
 mix.less('resources/assets/less/app.less', 'public/css')
