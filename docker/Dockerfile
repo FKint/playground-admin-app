@@ -42,8 +42,8 @@ RUN composer install --no-interaction --no-progress --optimize-autoloader
 ######################
 FROM fkint/laravel-docker:latest as app-test
 WORKDIR /var/www
-COPY --from=composer-installer-test /root/app .
-COPY --from=npm-builder /root/app/public ./public
+COPY --chown=www-data:www-data --from=composer-installer-test /root/app .
+COPY --chown=www-data:www-data --from=npm-builder /root/app/public ./public
 
 ##############
 # Nginx PROD #
@@ -72,10 +72,10 @@ RUN composer install --no-interaction --no-progress --no-dev --optimize-autoload
 ###################
 FROM fkint/laravel-docker:latest as app-prod
 WORKDIR /var/www
-COPY --from=composer-installer /root/app .
-COPY --from=npm-builder /root/app/public ./public
+USER www-data
+COPY --chown=www-data:www-data --from=composer-installer /root/app .
+COPY --chown=www-data:www-data --from=npm-builder /root/app/public ./public
 # TODO(fkint): find a good way to run "php artisan config:cache" after
 # the env file is in the image (cannot do here as the env file is a 
 # volume)
 RUN php artisan route:cache
-VOLUME ["/var/www/storage", "/var/www/.env"]

@@ -10,6 +10,7 @@ services:
     working_dir: /var/www
     volumes:
       - ./app/tests:/var/www/tests
+      - ./app/database/factories:/var/www/database/factories
       - .laravel.env.dusk.example:/var/www/.env
     depends_on:
       - selenium 

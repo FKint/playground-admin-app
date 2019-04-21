@@ -8,7 +8,11 @@ services:
       target: app-prod
     working_dir: /var/www
     volumes:
-      - ./app:/var/www
+      - ./app/app:/var/www/app
+      - ./app/config:/var/www/config
+      - ./app/database:/var/www/database
+      - ./app/resources:/var/www/resources
+      - ./app/routes:/var/www/routes
       - .laravel.env.development:/var/www/.env
     environment:
       - "DB_PORT=3306"
