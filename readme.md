@@ -20,6 +20,10 @@
 * Run `./install-packages.sh` to update composer packages and node modules and to pack the assets for the application.
 * Run `php artisan migrate` to apply database changes.
 
+## Dusk tests (local)
+* Run `docker-compose -f docker/docker-compose.yml.dusk-testing --project-dir . up`.
+* In a separate terminal, run `docker exec -it playground-admin-app_app-container_1 php artisan dusk`.
+
 ## Tests (local)
 * Open a shell in the container (e.g. `docker exec -it playgroundadminapp_app_1 /bin/bash`)
 * Run `./vendor/phpunit/phpunit/phpunit`
