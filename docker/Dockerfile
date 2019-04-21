@@ -77,7 +77,5 @@ RUN composer install --no-interaction --no-progress --optimize-autoloader
 ######################
 FROM fkint/laravel-docker:latest as app-test
 WORKDIR /var/www
-COPY app .
 COPY --from=composer-installer-test /root/app .
 COPY --from=npm-builder /root/app/public ./public
-RUN mkdir /var/www/storage/testing && touch /var/www/storage/testing/sqlite
