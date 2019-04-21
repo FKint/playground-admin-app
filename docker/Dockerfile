@@ -29,6 +29,22 @@ COPY app/resources/assets /root/app/resources/assets
 COPY app/webpack.mix.js /root/app/webpack.mix.js
 RUN yarn run production
 
+##########################################################################
+# Run install scripts using cached vendor folder and current source code #
+##########################################################################
+FROM composer-builder-test as composer-installer-test
+WORKDIR /root/app
+COPY app .
+RUN composer install --no-interaction --no-progress --optimize-autoloader
+
+######################
+# PHP image: Testing #
+######################
+FROM fkint/laravel-docker:latest as app-test
+WORKDIR /var/www
+COPY --from=composer-installer-test /root/app .
+COPY --from=npm-builder /root/app/public ./public
+
 ##############
 # Nginx PROD #
 ##############
@@ -63,19 +79,3 @@ COPY --from=npm-builder /root/app/public ./public
 # volume)
 RUN php artisan route:cache
 VOLUME ["/var/www/storage", "/var/www/.env"]
-
-##########################################################################
-# Run install scripts using cached vendor folder and current source code #
-##########################################################################
-FROM composer-builder-test as composer-installer-test
-WORKDIR /root/app
-COPY app .
-RUN composer install --no-interaction --no-progress --optimize-autoloader
-
-######################
-# PHP image: Testing #
-######################
-FROM fkint/laravel-docker:latest as app-test
-WORKDIR /var/www
-COPY --from=composer-installer-test /root/app .
-COPY --from=npm-builder /root/app/public ./public
