@@ -8,3 +8,4 @@ Homestead.yaml
 .env
 composer.phar
 npm-debug.log
+yarn-error.log

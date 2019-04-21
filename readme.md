@@ -1,8 +1,10 @@
+# Warning: this information is outdated
+
 # Playground admin web app using Laravel
 
 ## Setup (local)
 
-* Run `docker-compose -f docker-compose.yml.development up`
+* Run `docker-compose -f docker/docker-compose.yml.development --project-directory . up`
 * Copy `.env.example` to `.env` and `.laravel.env.development.example` to `.laravel.env`.
 * Open a shell in the container (e.g. `docker exec -it playgroundadminapp_app_1 /bin/bash`)
 * Run `./install-packages.sh` to install and pack Composer and NPM packages.

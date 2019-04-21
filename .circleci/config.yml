@@ -1,60 +1,128 @@
-version: 2
-
-jobs:
-  build:
+version: 2.1
+executors:
+  docker-publisher:
+    environment:
+      IMAGE_NAME: jokkebrok/playground-php-app
     docker:
-      - image: circleci/php:7.2-node-browsers
-    working_directory: ~/laravel
+      - image: circleci/buildpack-deps:stretch
+jobs:
+  build-docker-images:
+    executor: docker-publisher
     steps:
+      - setup_remote_docker:
+          version: 18.09.3
       - checkout
-      - run: sudo apt install -y libsqlite3-dev zlib1g-dev libpng-dev
-      - run: sudo docker-php-ext-install zip
-      - run: sudo composer self-update
+      - run:
+          name: Prepare Circle CI cache
+          command: |
+            echo "$CIRCLE_BRANCH" > .circle-branch
+            echo "$CIRCLE_SHA1" > .circle-sha1
       - restore_cache:
           keys:
-            - composer-v1-{{ checksum "app/composer.lock" }}
-            - composer-v1-
+            - docker-images-2019041500-{{ checksum ".circle-branch" }}
+            - docker-images-2019041500
       - run:
-          command: cp .laravel.env.dusk.example ./app/.env
+          name: Load cached layers
+          command: |
+            if [[ -f /tmp/docker-images.tar ]]; then
+              echo "Loading cached layers"
+              docker load -i /tmp/docker-images.tar
+            else
+              echo "No cached layers found"
+            fi
       - run:
-          command: composer install -n --prefer-dist --ignore-platform-reqs
-          working_directory: ./app
+          name: Build Docker Layers
+          command: |
+            BuildStages=("composer-builder" "composer-builder-test" "npm-builder" "nginx-prod" "nginx-dev" "composer-installer" "app-prod" "composer-installer-test" "app-test")
+            StringOfImagesWithTags=""
+            FullCacheString=""
+            for stage in ${BuildStages[*]}; do
+              FullCacheString="${FullCacheString} --cache-from $IMAGE_NAME:$stage"
+              docker build --target $stage $FullCacheString -t $IMAGE_NAME:$stage -f docker/Dockerfile .
+              StringOfImagesWithTags="${StringOfImagesWithTags} $IMAGE_NAME:$stage"
+            done
+            docker save -o /tmp/docker-images.tar $StringOfImagesWithTags
+            docker save -o /tmp/docker-app-test.tar $IMAGE_NAME:app-test
+            docker save -o /tmp/docker-prod.tar $IMAGE_NAME:app-prod $IMAGE_NAME:nginx-prod
       - save_cache:
-          key: composer-v1-{{ checksum "app/composer.lock" }}
+          key: docker-images-2019041500-{{ checksum ".circle-branch" }}-{{ checksum ".circle-sha1" }}
           paths:
-            - app/vendor
-      - restore_cache:
-          keys:
-            - node-v1-{{ checksum "app/package.json" }}
-            - node-v1-
-      - run:
-          command: yarn install
-          working_directory: ./app
-      - save_cache:
-          key: node-v1-{{ checksum "app/package.json" }}
+            - /tmp/docker-images.tar
+      - persist_to_workspace:
+          root: /tmp
           paths:
-            - app/node_modules
-      - run: touch app/storage/testing.sqlite
-#      - run:
-#          command: php artisan migrate:fresh --env=testing --database=sqlite_testing --force
-#          working_directory: ./app
+            - docker-app-test.tar
+            - docker-prod.tar
+  publish-latest:
+    executor: docker-publisher
+    steps:
+      - attach_workspace:
+          at: /tmp/workspace
+      - setup_remote_docker:
+          version: 18.09.3
       - run:
-          command: ./vendor/phpunit/phpunit/phpunit
-          working_directory: ./app
+          name: Load archived Docker images
+          command: docker load -i /tmp/workspace/docker-prod.tar
       - run:
-          command: yarn run production
-          working_directory: ./app
+          name: Log in to Docker Hub
+          command: echo "$DOCKER_HUB_PASSWORD" | docker login -u "$DOCKER_HUB_USERNAME" --password-stdin
       - run:
-          name: Start Chrome Driver
-          command: ./vendor/laravel/dusk/bin/chromedriver-linux
-          background: true
-          working_directory: ./app
+          name: Publish Docker images to Docker Hub
+          command: |
+            docker tag $IMAGE_NAME:app-prod "$IMAGE_NAME:app-prod-$CIRCLE_BRANCH-$CIRCLE_SHA1"
+            docker push $IMAGE_NAME:app-prod
+            docker tag $IMAGE_NAME:nginx-prod "$IMAGE_NAME:nginx-prod-$CIRCLE_BRANCH-$CIRCLE_SHA1"
+            docker push $IMAGE_NAME:nginx-prod
+  test:
+    executor: docker-publisher
+    steps:
+      - attach_workspace:
+          at: /tmp/workspace
+      - setup_remote_docker:
+          version: 18.09.3
       - run:
-          name: Run Laravel Server
-          command: php artisan serve
-          background: true
-          working_directory: ./app
+          name: Load archived Docker images
+          command: docker load -i /tmp/workspace/docker-app-test.tar
       - run:
-          name: Run Laravel Dusk Tests
-          command: php artisan dusk
-          working_directory: ./app
+          name: Run PHP Unit tests
+          command: docker run --name app-test $IMAGE_NAME:app-test vendor/bin/phpunit
+  test-dusk:
+    executor: docker-publisher
+    steps:
+      - attach_workspace:
+          at: /tmp/workspace
+      - setup_remote_docker:
+          version: 18.09.3
+      - run:
+          name: Load archived Docker images
+          command: docker load -i /tmp/workspace/docker-app-test.tar
+      - run:
+          name: Run Laravel Dusk tests
+          command: |
+            docker network create tmp-dusk-network
+            docker run -d --name app-container --network tmp-dusk-network $IMAGE_NAME:app-test php artisan serve --host=app-container
+            docker run -d --name selenium --network tmp-dusk-network --shm-size=2g selenium/standalone-chrome:3
+            docker exec app-container curl --retry 10 --retry-connrefused http://app-container:8000 > /dev/null
+            docker exec app-container curl --retry 10 --retry-connrefused http://selenium:4444 > /dev/null
+            docker exec app-container php artisan dusk
+workflows:
+  version: 2
+  build-master:
+    jobs:
+      - build-docker-images
+      - test:
+          requires:
+            - build-docker-images
+      - test-dusk:
+          requires:
+            - build-docker-images
+            - test
+      - publish-latest:
+          requires:
+            - build-docker-images
+            - test
+            - test-dusk
+          filters:
+            branches:
+              only: 
+                - master

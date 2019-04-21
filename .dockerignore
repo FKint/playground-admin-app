@@ -1,3 +1,14 @@
 app/node_modules
 app/vendor
 app/.env*
+
+docker
+.circleci
+.vscode
+deployment-scripts
+.dockerignore
+docker-compose*
+*Dockerfile*
+*.code-workspace
+readme.md
+.git
