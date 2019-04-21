@@ -44,8 +44,8 @@ class InitialDataSeeder extends Seeder
 
     protected function seed_organization_and_year()
     {
-        $this->organization = factory(\App\Organization::class)->create();
-        $this->year = factory(\App\Year::class)->create([
+        $this->organization = \App\Organization::create(['full_name' => "Jokkebrok"]);
+        $this->year = \App\Year::create([
             'organization_id' => $this->organization->id,
             'description' => '2018'
         ]);
@@ -53,26 +53,26 @@ class InitialDataSeeder extends Seeder
 
     protected function seed_admin_sessions()
     {
-        $this->first_admin_session_id = factory(\App\AdminSession::class)->create(['year_id' => $this->year->id])->id;
+        $this->first_admin_session_id = \App\AdminSession::create(['year_id' => $this->year->id, 'responsible_name' => 'Dummy'])->id;
     }
 
     protected function seed_age_groups()
     {
-        $this->toddlers_id = factory(\App\AgeGroup::class)->create([
+        $this->toddlers_id = \App\AgeGroup::create([
                 'year_id' => $this->year->id,
                 'name' => 'Kleuters',
                 'abbreviation' => 'KLS',
                 'start_date' => (new DateTime())->setDate(2012, 1, 1),
                 'end_date' => (new DateTime())->setDate(2015, 1, 1)]
         )->id;
-        $this->middle_group_id = factory(\App\AgeGroup::class)->create([
+        $this->middle_group_id = \App\AgeGroup::create([
                 'year_id' => $this->year->id,
                 'name' => 'Grote',
                 'abbreviation' => '6-12',
                 'start_date' => (new DateTime())->setDate(2005, 1, 1),
                 'end_date' => (new DateTime())->setDate(2012, 1, 1)]
         )->id;
-        $this->teenagers_id = factory(\App\AgeGroup::class)->create([
+        $this->teenagers_id = \App\AgeGroup::create([
                 'year_id' => $this->year->id,
                 'name' => 'Tieners',
                 'abbreviation' => '12+',
@@ -83,13 +83,13 @@ class InitialDataSeeder extends Seeder
 
     protected function seed_day_parts()
     {
-        $this->whole_day_id = factory(\App\DayPart::class)->create([
+        $this->whole_day_id = \App\DayPart::create([
             'year_id' => $this->year->id,
             'name' => "Lunch",
             'order' => 1,
             'default' => true
         ])->id;
-        $this->home_id = factory(\App\DayPart::class)->create([
+        $this->home_id = \App\DayPart::create([
             'year_id' => $this->year->id,
             'name' => "Thuis",
             'order' => 2
@@ -113,7 +113,7 @@ class InitialDataSeeder extends Seeder
         $week_day_names = ["Maandag", "Dinsdag", "Woensdag", "Donderdag", "Vrijdag"];
         $holidays = ["2017-07-21"];
         for ($i = 0; $i < 5; ++$i) {
-            $this->week_day_ids[] = factory(\App\WeekDay::class)->create([
+            $this->week_day_ids[] = \App\WeekDay::create([
                 'year_id' => $this->year->id,
                 'days_offset' => $i,
                 'name' => $week_day_names[$i]
@@ -123,7 +123,7 @@ class InitialDataSeeder extends Seeder
         $day = new DateInterval('P01D');
         $week = new DateInterval('P1W');
         for ($i = 0; $i < 6; ++$i) {
-            $this->week_ids[$i] = factory(\App\Week::class)->create([
+            $this->week_ids[$i] = \App\Week::create([
                 'year_id' => $this->year->id,
                 'week_number' => 1 + $i,
                 'first_day_of_week' => $monday
@@ -131,7 +131,7 @@ class InitialDataSeeder extends Seeder
             $week_day = $monday;
             for ($j = 0; $j < count($this->week_day_ids); ++$j) {
                 if (!in_array($week_day->format("Y-m-d"), $holidays)) {
-                    factory(\App\PlaygroundDay::class)->create([
+                    \App\PlaygroundDay::create([
                         'year_id' => $this->year->id,
                         'week_id' => $this->week_ids[$i],
                         'week_day_id' => $this->week_day_ids[$j]
@@ -145,7 +145,7 @@ class InitialDataSeeder extends Seeder
 
     protected function seed_tariffs()
     {
-        factory(\App\Tariff::class)->create([
+        \App\Tariff::create([
             'year_id' => $this->year->id,
             "name" => "Normaal",
             "abbreviation" => "NRML",
@@ -154,7 +154,7 @@ class InitialDataSeeder extends Seeder
             "week_first_child" => 22.5,
             "week_later_children" => 18.5
         ]);
-        factory(\App\Tariff::class)->create([
+        \App\Tariff::create([
             'year_id' => $this->year->id,
             "name" => "Sociaal",
             "abbreviation" => "SCL",
