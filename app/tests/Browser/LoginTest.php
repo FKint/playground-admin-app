@@ -9,22 +9,52 @@ use Tests\DuskTestCase;
 
 class LoginTest extends DuskTestCase
 {
+    protected $user;
+
+    public function setUp()
+    {
+        parent::setUp();
+        $this->user = factory(User::class)->create(['email' => 'play2@ground.com', 'password' => Hash::make('longer-password')]);
+    }
 
     /**
-     * A Dusk test example.
+     * Logging in.
      *
      * @return void
      * @throws \Throwable
      */
-    public function testExample()
+    public function testLogin()
     {
-        $user = factory(User::class)->create(['email' => 'play2@ground.com', 'password' => Hash::make('longer-password')]);
-        $this->browse(function (Browser $browser) use ($user) {
+        $this->browse(function (Browser $browser) {
             $browser->visit('/')
-                ->type('email', $user->email)
+                ->type('email', "play2@ground.com")
+                ->type('password', 'longer-password')
+                ->press('Login');
+            $browser->driver->takeScreenshot('testLogin.png');
+            $browser->assertSee('Start')
+                ->assertSee('U heeft toegang tot de volgende jaargangen:');
+        });
+    }
+
+    public function testLogin_BadPassword()
+    {
+        $this->browse(function (Browser $browser) {
+            $browser->visit('/')
+                ->type('email', "play2@ground.com")
+                ->type('password', 'invalid-password')
+                ->press('Login')
+                ->assertSee('These credentials do not match our records');
+        });
+    }
+
+    public function testLogin_InvalidUsername()
+    {
+        $this->browse(function (Browser $browser) {
+            $browser->visit('/')
+                ->type('email', "no-such-user@ground.com")
                 ->type('password', 'longer-password')
                 ->press('Login')
-                ->assertSee('Start');
+                ->assertSee('These credentials do not match our records');
         });
     }
 }
