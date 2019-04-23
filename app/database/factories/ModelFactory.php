@@ -9,17 +9,16 @@
 | you a convenient way to create models for testing and seeding your
 | database. Just tell the factory how a default model should look.
 |
-*/
+ */
 
 /** @var \Illuminate\Database\Eloquent\Factory $factory */
 
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Log;
 
 $factory->define(App\User::class, function (Faker\Generator $faker, $params) {
-    if(key_exists('password', $params)){
+    if (key_exists('password', $params)) {
         $password = $params['password'];
-    }else{
+    } else {
         $password = Hash::make('secret');
     }
     if (key_exists('organization_id', $params)) {
@@ -33,7 +32,7 @@ $factory->define(App\User::class, function (Faker\Generator $faker, $params) {
         'password' => $password,
         'remember_token' => str_random(10),
         'admin' => false,
-        'organization_id' => $organization_id
+        'organization_id' => $organization_id,
     ];
     return $result;
 });
@@ -41,7 +40,7 @@ $factory->define(App\User::class, function (Faker\Generator $faker, $params) {
 /** @var \Illuminate\Database\Eloquent\Factory $factory */
 $factory->define(App\Organization::class, function (Faker\Generator $faker) {
     return [
-        'full_name' => substr($faker->company, 0, 50)
+        'full_name' => substr($faker->company, 0, 50),
     ];
 });
 
@@ -54,7 +53,7 @@ $factory->define(App\Year::class, function (Faker\Generator $faker, $params) {
     }
     return [
         'description' => $faker->text(20),
-        'organization_id' => $organization_id
+        'organization_id' => $organization_id,
     ];
 });
 
@@ -74,7 +73,7 @@ $factory->define(App\Family::class, function (Faker\Generator $faker, $params) {
         'guardian_first_name' => $faker->firstName,
         'guardian_last_name' => $faker->lastName,
         'tariff_id' => $tariff_id,
-        'year_id' => $year_id
+        'year_id' => $year_id,
     ];
 });
 
@@ -89,7 +88,7 @@ $factory->define(App\ActivityList::class, function (Faker\Generator $faker, $par
         'name' => $faker->text(100),
         'show_on_attendance_form' => $faker->boolean,
         'show_on_dashboard' => $faker->boolean,
-        'year_id' => $year_id
+        'year_id' => $year_id,
     ];
 });
 
@@ -107,7 +106,7 @@ $factory->define(App\Tariff::class, function (Faker\Generator $faker, $params) {
         'week_later_children' => $faker->numberBetween(1500, 5000) / 100,
         'day_first_child' => $faker->numberBetween(200, 600) / 100,
         'day_later_children' => $faker->numberBetween(100, 300) / 100,
-        'year_id' => $year_id
+        'year_id' => $year_id,
     ];
 });
 
@@ -185,7 +184,7 @@ $factory->define(App\Child::class, function (Faker\Generator $faker, $params) {
         'first_name' => $faker->firstName,
         'last_name' => $faker->lastName,
         'birth_year' => $faker->year,
-        'age_group_id' => $age_group_id
+        'age_group_id' => $age_group_id,
     ];
 });
 
@@ -201,7 +200,7 @@ $factory->define(App\AgeGroup::class, function (Faker\Generator $faker, $params)
         'name' => $faker->firstName,
         'abbreviation' => $faker->lastName,
         'start_date' => $faker->date,
-        'end_date' => $faker->date
+        'end_date' => $faker->date,
     ];
 });
 
@@ -216,7 +215,7 @@ $factory->define(App\DayPart::class, function (Faker\Generator $faker, $params) 
         'year_id' => $year_id,
         'default' => false,
         'name' => 'Full Day',
-        'order' => $faker->numberBetween(0, 100)
+        'order' => $faker->numberBetween(0, 100),
     ];
 });
 
@@ -240,7 +239,7 @@ $factory->define(App\ChildFamily::class, function (Faker\Generator $faker, $para
     return [
         'year_id' => $year_id,
         'family_id' => $family_id,
-        'child_id' => $child_id
+        'child_id' => $child_id,
     ];
 });
 
@@ -267,8 +266,6 @@ $factory->define(App\Supplement::class, function (Faker\Generator $faker, $param
     return [
         'year_id' => $year_id,
         'name' => $faker->text(50),
-        'price' => $faker->numberBetween(10, 1000) / 100
+        'price' => $faker->numberBetween(10, 1000) / 100,
     ];
 });
-
-
