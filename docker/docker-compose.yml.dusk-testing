@@ -9,8 +9,12 @@ services:
     command: php artisan serve --host=app-container
     working_dir: /var/www
     volumes:
+      - ./app/app:/var/www/app
+      - ./app/config:/var/www/config
+      - ./app/database:/var/www/database
+      - ./app/resources:/var/www/resources
+      - ./app/routes:/var/www/routes
       - ./app/tests:/var/www/tests
-      - ./app/database/factories:/var/www/database/factories
       - .laravel.env.dusk.example:/var/www/.env
     depends_on:
       - selenium 
