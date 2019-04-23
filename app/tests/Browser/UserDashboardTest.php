@@ -4,6 +4,7 @@ namespace Tests\Browser;
 
 use Laravel\Dusk\Browser;
 use Tests\Browser\Pages\UserDashboardPage;
+use Tests\Browser\Pages\InternalDashboardPage;
 use Tests\DuskTestCase;
 
 class UserDashboardTest extends DuskTestCase
@@ -27,14 +28,16 @@ class UserDashboardTest extends DuskTestCase
      *
      * @return void
      */
-    public function testUserDashboard_showsYears()
+    public function testUserDashboard_showsYearLinksAndCanNavigate()
     {
         $this->browse(function (Browser $browser) {
             $browser->loginAs($this->user1)
                 ->visit(new UserDashboardPage)
                 ->assertShowsYear($this->year1->description)
                 ->assertShowsYear($this->year2->description)
-                ->assertDontShowYear($this->year3->description);
+                ->assertDontShowYear($this->year3->description)
+                ->navigateToYearDashboard($this->year2->description)
+                ->on(new InternalDashboardPage($this->year2->id));
         });
     }
 }
