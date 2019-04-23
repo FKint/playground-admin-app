@@ -25,3 +25,5 @@ app/storage/logs/**
 app/public/css/*
 app/public/js/*
 app/public/fonts/*
+app/tests/Browser/screenshots/**
+app/tests/Browser/console/**
