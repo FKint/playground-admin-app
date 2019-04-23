@@ -5,7 +5,7 @@ namespace Tests\Browser;
 use App\User;
 use Laravel\Dusk\Browser;
 use Tests\Browser\Pages\LoginPage;
-use Tests\Browser\Pages\InternalDashboardPage;
+use Tests\Browser\Pages\UserDashboardPage;
 use Tests\DuskTestCase;
 
 class HomeTest extends DuskTestCase
@@ -24,17 +24,17 @@ class HomeTest extends DuskTestCase
     }
 
     /**
-     * Navigates to the internal dashboard when logged in.
+     * Navigates to the user dashboard when logged in.
      *
      * @return void
      */
-    public function testHome_AuthenticatedToInternalDashboardPage()
+    public function testHome_AuthenticatedToUserDashboardPage()
     {
         $user = factory(User::class)->create();
         $this->browse(function (Browser $browser) use ($user) {
             $browser->loginAs($user)
                 ->visit('/')
-                ->on(new InternalDashboardPage);
+                ->on(new UserDashboardPage);
         });
     }
 }

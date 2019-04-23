@@ -5,7 +5,7 @@ namespace Tests\Browser\Pages;
 use Laravel\Dusk\Browser;
 use Laravel\Dusk\Page as BasePage;
 
-class InternalDashboardPage extends BasePage
+class UserDashboardPage extends BasePage
 {
     /**
      * Get the URL for the page.
@@ -40,5 +40,21 @@ class InternalDashboardPage extends BasePage
         return [
             '@element' => '#selector',
         ];
+    }
+
+    /**
+     * Asserts that a link to the provided year is shown on the dashboard.
+     */
+    public function assertShowsYear(Browser $browser, $yearName)
+    {
+        $browser->assertSeeLink($yearName);
+    }
+
+    /**
+     * Asserts that a link to the provided year is not shown on th dashboard.
+     */
+    public function assertDontShowYear(Browser $browser, $yearName)
+    {
+        $browser->assertDontSeeLink($yearName);
     }
 }

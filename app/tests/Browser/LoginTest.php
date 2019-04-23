@@ -6,7 +6,7 @@ use App\User;
 use Illuminate\Support\Facades\Hash;
 use Laravel\Dusk\Browser;
 use Tests\Browser\Pages\LoginPage;
-use Tests\Browser\Pages\InternalDashboardPage;
+use Tests\Browser\Pages\UserDashboardPage;
 use Tests\DuskTestCase;
 
 class LoginTest extends DuskTestCase
@@ -31,7 +31,7 @@ class LoginTest extends DuskTestCase
             // TODO(fkint): add visual diff
             $browser->visit(new LoginPage)
                 ->submitLoginForm("play2@ground.com", "longer-password")
-                ->on(new InternalDashboardPage);
+                ->on(new UserDashboardPage);
         });
     }
 
