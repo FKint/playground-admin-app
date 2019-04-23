@@ -25,7 +25,12 @@ class Year extends Model
 
     public function getActiveAdminSession()
     {
-        return $this->admin_sessions()->whereNull('session_end')->firstOrFail();
+        if($this->admin_sessions()->count() == 0){
+            $admin_session = new AdminSession();
+            $admin_session->year()->associate($this);
+            $admin_session->save();
+        }
+        $this->admin_sessions()->whereNull('session_end')->firstOrFail();
     }
 
     public function admin_sessions()
