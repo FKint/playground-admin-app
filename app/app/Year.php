@@ -30,7 +30,7 @@ class Year extends Model
             $admin_session->year()->associate($this);
             $admin_session->save();
         }
-        $this->admin_sessions()->whereNull('session_end')->firstOrFail();
+        return $this->admin_sessions()->whereNull('session_end')->firstOrFail();
     }
 
     public function admin_sessions()

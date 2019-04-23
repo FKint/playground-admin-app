@@ -65,21 +65,21 @@ class OrganizationAuthenticationTest extends TestCase
         $this->actualPlaygroundDay = factory(PlaygroundDay::class)->create([
             'year_id' => $this->actualYear->id,
             'week_id' => $this->actualWeeks[array_rand($this->actualWeeks)]->id,
-            'week_day_id' => $this->actualWeekDays[array_rand($this->actualWeekDays)]->id
+            'week_day_id' => $this->actualWeekDays[array_rand($this->actualWeekDays)]->id,
         ]);
 
         $this->actualChild = factory(Child::class)->create([
-            'year_id' => $this->actualYear->id
+            'year_id' => $this->actualYear->id,
         ]);
         $this->actualChildFamily = factory(ChildFamily::class)->create(['year_id' => $this->actualYear->id]);
         $this->immutableChildFamily = factory(ChildFamily::class)->create(['year_id' => $this->actualYear->id]);
 
         $this->actualDayPart = factory(DayPart::class)->create([
             'default' => true,
-            'year_id' => $this->actualYear->id
+            'year_id' => $this->actualYear->id,
         ]);
         $this->actualAdminSession = factory(AdminSession::class)->create([
-            'year_id' => $this->actualYear->id
+            'year_id' => $this->actualYear->id,
         ]);
 
         $this->setUpRoutes();
@@ -118,16 +118,16 @@ class OrganizationAuthenticationTest extends TestCase
                     'last_name' => 'De Rudder',
                     'birth_year' => 2010,
                     'age_group_id' => $this->actualAgeGroup->id,
-                    'remarks' => ''
+                    'remarks' => '',
                 ],
             ],
             'add_family_to_child' => [
                 'route' => route('api.add_family_to_child', [
                     'year' => $this->actualYear,
                     'child' => $this->actualChild,
-                    'family' => $this->actualFamily
+                    'family' => $this->actualFamily,
                 ]),
-                'data' => []
+                'data' => [],
             ],
             'remove_family_from_child' => [
                 'route' => route('api.remove_family_from_child', [
@@ -135,58 +135,58 @@ class OrganizationAuthenticationTest extends TestCase
                     'child' => $this->actualChildFamily->child->id,
                     'family' => $this->actualChildFamily->family->id,
                 ]),
-                'data' => []
+                'data' => [],
             ],
             'add_child_to_family' => [
                 'route' => route('api.add_child_to_family', [
                     'year' => $this->actualYear,
                     'child' => $this->actualChildFamily->child,
-                    'family' => $this->actualChildFamily->family
+                    'family' => $this->actualChildFamily->family,
                 ]),
-                'data' => []
+                'data' => [],
             ],
             'submit_registration_data' => [
                 'route' => route('api.submit_registration_data', [
                     'year' => $this->actualYear,
                     'week' => $this->actualWeeks[0],
-                    'family' => $this->emptyFamily
+                    'family' => $this->emptyFamily,
                 ]),
                 'data' => [
                     'children' => [],
                     'tariff_id' => $this->actualTariffs[0]->id,
                     'received_money' => 0,
-                    'transaction_remarks' => 0
-                ]
+                    'transaction_remarks' => 0,
+                ],
             ],
             'simulate_submit_registration_data' => [
                 'route' => route('api.submit_registration_data', [
                     'year' => $this->actualYear,
                     'week' => $this->actualWeeks[0],
-                    'family' => $this->emptyFamily
+                    'family' => $this->emptyFamily,
                 ]),
                 'data' => [
                     'children' => [],
                     'tariff_id' => $this->actualTariffs[0]->id,
                     'received_money' => 0,
-                    'transaction_remarks' => 0
-                ]
+                    'transaction_remarks' => 0,
+                ],
             ],
             'add_participant_to_list' => [
                 'route' => route('api.add_participant_to_list', [
                     'year' => $this->actualYear,
                     'activity_list' => $this->actualList,
-                    'child_family' => $this->immutableChildFamily
+                    'child_family' => $this->immutableChildFamily,
                 ]),
-                'data' => []
+                'data' => [],
             ],
             'remove_participant_from_list' => [
                 'route' => route('api.remove_participant_from_list', [
                     'year' => $this->actualYear,
                     'activity_list' => $this->actualList,
-                    'child_family' => $this->immutableChildFamily
+                    'child_family' => $this->immutableChildFamily,
                 ]),
-                'data' => []
-            ]
+                'data' => [],
+            ],
         ];
     }
 
