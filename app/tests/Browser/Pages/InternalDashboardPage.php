@@ -8,10 +8,21 @@ use Laravel\Dusk\Page as BasePage;
 class InternalDashboardPage extends BasePage
 {
     private $yearId;
+    private $dateParam;
 
-    public function __construct($yearId)
+    public function __construct($yearId, $dateParam = null)
     {
         $this->yearId = $yearId;
+        $this->dateParam = $dateParam;
+    }
+
+    private function getRouteParams()
+    {
+        $params = ['year' => $this->yearId];
+        if ($this->dateParam) {
+            $params['date'] = $this->dateParam->format('Y-m-d');
+        }
+        return $params;
     }
 
     /**
@@ -21,7 +32,7 @@ class InternalDashboardPage extends BasePage
      */
     public function url()
     {
-        return "/internal/" . $this->yearId . "/dashboard";
+        return route('internal.dashboard', $this->getRouteParams());
     }
 
     /**
@@ -32,7 +43,7 @@ class InternalDashboardPage extends BasePage
      */
     public function assert(Browser $browser)
     {
-        $browser->assertPathIs($this->url())
+        $browser->assertRouteIs('internal.dashboard', $this->getRouteParams())
             ->assertSee("Dashboard")
             ->assertSee("Kassa")
             ->assertSee("Registraties vandaag")

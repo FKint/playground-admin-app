@@ -2,13 +2,9 @@
 
 namespace App\Http\Controllers\Internal;
 
-use App\AdminSession;
-use App\AgeGroup;
-use App\PlaygroundDay;
-use App\Supplement;
+use App\Http\Controllers\Controller;
 use App\Year;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 
 class DashboardController extends Controller
 {
