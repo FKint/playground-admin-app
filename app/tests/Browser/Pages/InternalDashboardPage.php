@@ -33,7 +33,11 @@ class InternalDashboardPage extends BasePage
     public function assert(Browser $browser)
     {
         $browser->assertPathIs($this->url())
-            ->assertSee("Registraties vandaag");
+            ->assertSee("Dashboard")
+            ->assertSee("Kassa")
+            ->assertSee("Registraties vandaag")
+            ->assertSee("Lijsten")
+            ->assertSee("Registraties overzicht");
     }
 
     /**

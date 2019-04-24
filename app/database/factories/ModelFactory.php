@@ -253,6 +253,7 @@ $factory->define(App\AdminSession::class, function (Faker\Generator $faker, $par
     return [
         'year_id' => $year_id,
         'responsible_name' => $faker->firstName,
+        'session_end' => $faker->dateTime,
     ];
 });
 
@@ -267,5 +268,31 @@ $factory->define(App\Supplement::class, function (Faker\Generator $faker, $param
         'year_id' => $year_id,
         'name' => $faker->text(50),
         'price' => $faker->numberBetween(10, 1000) / 100,
+    ];
+});
+
+$factory->define(App\Transaction::class, function (Faker\Generator $faker, $params) {
+    if (key_exists('year_id', $params)) {
+        $year_id = $params['year_id'];
+    } else {
+        $year_id = factory(\App\Year::class)->create()->id;
+    }
+    if (key_exists('family_id', $params)) {
+        $family_id = $params['family_id'];
+    } else {
+        $family_id = factory(\App\Family::class)->create(['year_id' => $year_id])->id;
+    }
+    if (key_exists('admin_session_id', $params)) {
+        $admin_session_id = $params['admin_session_id'];
+    } else {
+        $admin_session_id = factory(\App\AdminSession::class)->create(['year_id' => $year_id]);
+    }
+    return [
+        'family_id' => $family_id,
+        'amount_paid' => $faker->numberBetween(-1000, 1000) / 100,
+        'amount_expected' => $faker->numberBetween(-1000, 1000) / 100,
+        'remarks' => $faker->text(50),
+        'admin_session_id' => $admin_session_id,
+        'year_id' => $year_id,
     ];
 });
