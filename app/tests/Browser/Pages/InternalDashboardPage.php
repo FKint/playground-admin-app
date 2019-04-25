@@ -3,22 +3,20 @@
 namespace Tests\Browser\Pages;
 
 use Laravel\Dusk\Browser;
-use Laravel\Dusk\Page as BasePage;
 
-class InternalDashboardPage extends BasePage
+class InternalDashboardPage extends InternalPage
 {
-    private $yearId;
     private $dateParam;
 
     public function __construct($yearId, $dateParam = null)
     {
-        $this->yearId = $yearId;
+        parent::__construct($yearId);
         $this->dateParam = $dateParam;
     }
 
-    private function getRouteParams()
+    protected function getRouteParams()
     {
-        $params = ['year' => $this->yearId];
+        $params = parent::getRouteParams();
         if ($this->dateParam) {
             $params['date'] = $this->dateParam->format('Y-m-d');
         }
