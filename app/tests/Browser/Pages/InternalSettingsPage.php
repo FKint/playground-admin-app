@@ -7,13 +7,13 @@ use Laravel\Dusk\Browser;
 class InternalSettingsPage extends InternalPage
 {
     /**
-     * Get the URL for the page.
+     * Get the route name for the page.
      *
      * @return string
      */
-    public function url()
+    public function getRouteName()
     {
-        return route('internal.settings', $this->getRouteParams());
+        return 'internal.settings';
     }
 
     /**
@@ -24,8 +24,8 @@ class InternalSettingsPage extends InternalPage
      */
     public function assert(Browser $browser)
     {
-        $browser->assertRouteIs('internal.settings', $this->getRouteParams())
-            ->assertSee("Werkingen")
+        parent::assert($browser);
+        $browser->assertSee("Werkingen")
             ->assertSee("Extraatjes")
             ->assertSee("Dagdelen")
             ->assertSee("Tariefplannen");

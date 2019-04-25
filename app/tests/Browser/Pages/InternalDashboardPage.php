@@ -24,13 +24,13 @@ class InternalDashboardPage extends InternalPage
     }
 
     /**
-     * Get the URL for the page.
+     * Get the route name for the page.
      *
      * @return string
      */
-    public function url()
+    public function getRouteName()
     {
-        return route('internal.dashboard', $this->getRouteParams());
+        return 'internal.dashboard';
     }
 
     /**
@@ -41,8 +41,8 @@ class InternalDashboardPage extends InternalPage
      */
     public function assert(Browser $browser)
     {
-        $browser->assertRouteIs('internal.dashboard', $this->getRouteParams())
-            ->assertSee("Dashboard")
+        parent::assert($browser);
+        $browser->assertSee("Dashboard")
             ->assertSee("Kassa")
             ->assertSee("Registraties vandaag")
             ->assertSee("Lijsten")

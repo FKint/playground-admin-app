@@ -13,6 +13,9 @@ abstract class InternalPage extends BasePage
     {
         $this->yearId = $yearId;
     }
+
+    abstract protected function getRouteName();
+
     protected function getRouteParams()
     {
         return ['year' => $this->yearId];
@@ -23,7 +26,10 @@ abstract class InternalPage extends BasePage
      *
      * @return string
      */
-    abstract public function url();
+    public function url()
+    {
+        return route($this->getRouteName(), $this->getRouteParams());
+    }
 
     /**
      * Assert that the browser is on the page.
@@ -33,7 +39,7 @@ abstract class InternalPage extends BasePage
      */
     public function assert(Browser $browser)
     {
-        $browser->assertPathIs($this->url());
+        $browser->assertRouteIs($this->getRouteName(), $this->getRouteParams());
     }
 
     /**
@@ -53,5 +59,11 @@ abstract class InternalPage extends BasePage
         $browser->clickLink("Extra")
             ->clickLink("Instellingen")
             ->on(new InternalSettingsPage($this->yearId));
+    }
+
+    public function navigateToFamiliesPage(Browser $browser)
+    {
+        $browser->clickLink("Voogden")
+            ->on(new InternalFamiliesPage($this->yearId));
     }
 }
