@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Browser;
+namespace Tests\Browser\UserJourneys;
 
 use Laravel\Dusk\Browser;
 use Tests\Browser\Pages\InternalDashboardPage;
@@ -19,7 +19,7 @@ class UserJourneySettingsTest extends DuskTestCase
         $this->user = factory(\App\User::class)->create(['organization_id' => $this->year->organization_id]);
     }
     /**
-     * A Dusk test example.
+     * Verifies that the settings page can be accessed from the Internal Dashboard and that the page is displayed correctly.
      *
      * @return void
      */
