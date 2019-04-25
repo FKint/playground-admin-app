@@ -25,7 +25,7 @@ class Year extends Model
 
     public function getActiveAdminSession()
     {
-        if($this->admin_sessions()->count() == 0){
+        if ($this->admin_sessions()->count() == 0) {
             $admin_session = new AdminSession();
             $admin_session->year()->associate($this);
             $admin_session->save();
@@ -128,14 +128,18 @@ class Year extends Model
             ->whereDate('first_day_of_week', '<=', $date->format('Y-m-d'))
             ->orderByDesc('first_day_of_week')
             ->first();
-        if (!$week)
+        if (!$week) {
             return null;
+        }
+
         $interval = $date->diff(\DateTime::createFromFormat('Y-m-d', $week->first_day_of_week));
         $week_day = $this->week_days()
             ->where('days_offset', '=', $interval->days)
             ->first();
-        if (!$week_day)
+        if (!$week_day) {
             return null;
+        }
+
         return $week->playground_days()->where('week_day_id', '=', $week_day->id)->first();
     }
 

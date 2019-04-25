@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class WeekDay extends Model
 {
-    //
+    protected $fillable = ['year_id', 'days_offset', 'name'];
 
     public function year()
     {

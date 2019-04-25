@@ -126,7 +126,7 @@ class InitialDataSeeder extends Seeder
             $this->week_ids[$i] = \App\Week::create([
                 'year_id' => $this->year->id,
                 'week_number' => 1 + $i,
-                'first_day_of_week' => $monday
+                'first_day_of_week' => $monday->format("Y-m-d")
             ])->id;
             $week_day = $monday;
             for ($j = 0; $j < count($this->week_day_ids); ++$j) {
