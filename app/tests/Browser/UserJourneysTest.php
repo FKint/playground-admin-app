@@ -42,7 +42,7 @@ class UserJourneysTest extends DuskTestCase
                 ->navigateToFamiliesPage()
                 ->navigateToAddFamilyPage()
                 ->enterAddFamilyFormData('Joran', 'De Wachter', $this->normalTariff->id, "Only speak English", "Dad: +4987676545652")
-                ->submitAddFamilySuccessfully(\App\Family::count()+1)
+                ->submitAddFamilySuccessfully(\App\Family::count() + 1)
                 ->assertSeeGuardianName('Joran De Wachter')
                 ->enterAddChildToFamilyFormData("Josje", "De Wachter", 2008, null, "Allergic to peanuts")
             // TODO(fkint): assert that age group 6-12 is selected
@@ -56,7 +56,7 @@ class UserJourneysTest extends DuskTestCase
                 ->navigateToFamiliesPage()
                 ->navigateToAddFamilyPage()
                 ->enterAddFamilyFormData('Annelies', 'Vandenbroucke', $this->socialTariff->id, "", "")
-                ->submitAddFamilySuccessfully(\App\Family::count()+1)
+                ->submitAddFamilySuccessfully(\App\Family::count() + 1)
                 ->assertSeeGuardianName("Annelies Vandenbroucke")
                 ->enterAddChildToFamilyFormData("Rik", "Vandenbroucke", 2012, $this->ageGroup612->id, "")
                 ->submitAddChildToFamilySuccessfully()
@@ -73,6 +73,32 @@ class UserJourneysTest extends DuskTestCase
             $child3 = \App\Child::where(['first_name' => "Rik", "last_name" => "Vandenbroucke"])->firstOrFail();
             $this->assertEquals($this->ageGroup612->id, $child3->age_group_id);
         });
+    }
+
+    /**
+     * Test for editing a family.
+     *
+     * @return void
+     */
+    public function testEditFamily()
+    {
+        $newFamily = factory(\App\Family::class)->create(['year_id' => $this->year->id, 'guardian_first_name' => 'Erica', 'guardian_last_name' => 'Van Heulen']);
+        $this->browse(function (Browser $browser) use ($newFamily) {
+            $browser->loginAs($this->user)
+                ->visit(new InternalDashboardPage($this->year->id))
+                ->navigateToFamiliesPage()
+                ->assertSeeFamilyEntryInTable($this->existingFamily->id, "Veronique", "Baeten")
+                ->assertSeeFamilyEntryInTable($newFamily->id, "Erica", "Van Heulen")
+                ->navigateToEditFamily($this->existingFamily->id)
+                ->enterEditFamilyFormData("Veronica", "Baetens", $this->socialTariff->id, "previously known as Veronique Baeten", "veronica@bs.com")
+                ->submitEditFamilyFormSuccessfully()
+                ->closeEditFamilyDialog()
+                ->assertSeeFamilyEntryInTable($this->existingFamily->id, "Veronica", "Baetens")
+                ->assertSeeFamilyEntryInTable($newFamily->id, "Erica", "Van Heulen");
+        });
+        $this->existingFamily->refresh();
+        $this->assertEquals("Veronica", $this->existingFamily->guardian_first_name);
+        $this->assertEquals("Baetens", $this->existingFamily->guardian_last_name);
     }
 
     /**

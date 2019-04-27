@@ -19,7 +19,7 @@
     </div>
     <div class="row">&nbsp;</div>
     <div class="row">
-        <table class="table table-bordered" id="families-table">
+        <table class="table table-bordered" id="families-table" dusk="families-table">
             <thead>
             <tr>
                 <th data-class-name="export">ID</th>
@@ -48,6 +48,9 @@
             serverSide: false,
             ajax: '{!! route('api.datatables.families') !!}',
             dom: 'Blfrtip',
+            createdRow(row, data, dataIndex){
+                $(row).attr('data-family-id', data.id);
+            },
             buttons: [{
                 extend: 'pdfHtml5',
                 exportOptions: {
@@ -79,8 +82,20 @@
             }, 'colvis'],
             columns: [
                 {data: 'id', name: 'id'},
-                {data: 'guardian_first_name', name: 'guardian_first_name'},
-                {data: 'guardian_last_name', name: 'guardian_last_name'},
+                {
+                    data: 'guardian_first_name', 
+                    name: 'guardian_first_name', 
+                    createdCell(td, cellData, rowData, row, col){
+                        $(td).attr('data-field', 'guardian_first_name');
+                    },
+                },
+                {
+                    data: 'guardian_last_name', 
+                    name: 'guardian_last_name',
+                    createdCell(td, cellData, rowData, row, col){
+                        $(td).attr('data-field', 'guardian_last_name');
+                    },
+                },
                 {
                     data: {
                         '_': 'tariff.id',

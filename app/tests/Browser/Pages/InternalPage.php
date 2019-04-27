@@ -72,4 +72,25 @@ abstract class InternalPage extends BasePage
         $browser->clickLink("Kinderen")
             ->on(new InternalChildrenPage($this->yearId));
     }
+
+    protected function enterFamilyFormData(Browser $browser, $duskSelector, $guardianFirstName, $guardianLastName, $tariffId, $remarks, $contact)
+    {
+        // TODO(fkint): try to use assertSeeIn or within if it doesn't assert page-level conditions.
+        $browser->waitFor("@" . $duskSelector);
+        if (isset($guardianFirstName)) {
+            $browser->type('[dusk="' . $duskSelector . '"] [dusk=guardian_first_name]', $guardianFirstName);
+        }
+        if (isset($guardianLastName)) {
+            $browser->type('[dusk="' . $duskSelector . '"] [dusk=guardian_last_name]', $guardianLastName);
+        }
+        if (isset($tariffId)) {
+            $browser->select('[dusk="' . $duskSelector . '"] [dusk=tariff_id]', $tariffId);
+        }
+        if (isset($remarks)) {
+            $browser->type('[dusk="' . $duskSelector . '"] [dusk=remarks]', $remarks);
+        }
+        if (isset($contact)) {
+            $browser->type('[dusk="' . $duskSelector . '"] [dusk=contact]', $contact);
+        }
+    }
 }
