@@ -110,8 +110,7 @@ class InternalAddChildToFamilyPage extends InternalPage
     public function selectAddExistingChildSuggestion(Browser $browser, $childName)
     {
         $browser->within(new TypeaheadComponent('@child-search-typeahead'), function ($browser) use ($childName) {
-            $browser//->waitForLink($childName)
-                ->selectSuggestion($childName)
+            $browser->selectSuggestion($childName)
                 ->waitForReload();
         });
     }
