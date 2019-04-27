@@ -20,7 +20,7 @@
     </div>
     <div class="row">&nbsp;</div>
     <div class="row">
-        <table class="table table-bordered" id="children-table">
+        <table class="table table-bordered" id="children-table" dusk="children-table">
             <thead>
             <tr>
                 <th data-class-name="export">Voornaam</th>

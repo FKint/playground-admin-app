@@ -66,4 +66,10 @@ abstract class InternalPage extends BasePage
         $browser->clickLink("Voogden")
             ->on(new InternalFamiliesPage($this->yearId));
     }
+
+    public function navigateToChildrenPage(Browser $browser)
+    {
+        $browser->clickLink("Kinderen")
+            ->on(new InternalChildrenPage($this->yearId));
+    }
 }

@@ -1,5 +1,5 @@
 @push('modals')
-    <div class="modal fade" tabindex="-1" role="dialog" id="edit-child-modal">
+    <div class="modal fade" tabindex="-1" role="dialog" id="edit-child-modal" dusk="edit-child-modal">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
