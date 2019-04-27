@@ -3,6 +3,7 @@
 namespace Tests\Browser\Pages;
 
 use Laravel\Dusk\Browser;
+use Tests\Browser\Components\TypeaheadComponent;
 
 class InternalAddChildToFamilyPage extends InternalPage
 {
@@ -88,8 +89,30 @@ class InternalAddChildToFamilyPage extends InternalPage
         // TODO(fkint): use $browser->with(...). Currently doesn't work because it seems to check the whole page's assertions within that element.
     }
 
+    public function assertDontSeeCurrentChildName(Browser $browser, $childName)
+    {
+        // TODO(fkint): use $browser->with(...). Currently doesn't work because it seems to check the whole page's assertions within that element.
+        $browser->assertDontSee($childName);
+    }
+
     public function assertSeeGuardianName(Browser $browser, $guardianName)
     {
         $browser->assertSee("Voogd: " . $guardianName);
+    }
+
+    public function enterAddExistingChildFormData(Browser $browser, $input)
+    {
+        $browser->within(new TypeaheadComponent('@child-search-typeahead'), function ($browser) use ($input) {
+            $browser->typeQuery($input);
+        });
+    }
+
+    public function selectAddExistingChildSuggestion(Browser $browser, $childName)
+    {
+        $browser->within(new TypeaheadComponent('@child-search-typeahead'), function ($browser) use ($childName) {
+            $browser//->waitForLink($childName)
+                ->selectSuggestion($childName)
+                ->waitForReload();
+        });
     }
 }
