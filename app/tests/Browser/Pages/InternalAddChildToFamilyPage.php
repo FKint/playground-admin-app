@@ -61,21 +61,9 @@ class InternalAddChildToFamilyPage extends InternalPage
 
     public function enterAddChildToFamilyFormData(Browser $browser, $firstName = null, $lastName = null, $birthYear = null, $ageGroupId = null, $remarks = null)
     {
-        if (isset($firstName)) {
-            $browser->type('@first_name', $firstName);
-        }
-        if (isset($lastName)) {
-            $browser->type('@last_name', $lastName);
-        }
-        if (isset($birthYear)) {
-            $browser->type('@birth_year', $birthYear);
-        }
-        if (isset($ageGroupId)) {
-            $browser->select('@age_group_id', $ageGroupId);
-        }
-        if (isset($remarks)) {
-            $browser->type('@remarks', $remarks);
-        }
+        // TODO(fkint): use more accurate selector for containing form
+        $duskSelector = 'new-child-form';
+        $this->enterChildFormData($browser, $duskSelector, $firstName, $lastName, $birthYear, $ageGroupId, $remarks);
     }
 
     public function submitAddChildToFamilySuccessfully(Browser $browser)

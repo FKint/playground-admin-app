@@ -93,4 +93,25 @@ abstract class InternalPage extends BasePage
             $browser->type('[dusk="' . $duskSelector . '"] [dusk=contact]', $contact);
         }
     }
+
+    protected function enterChildFormData(Browser $browser, $duskSelector, $firstName, $lastName, $birthYear, $ageGroupId, $remarks)
+    {
+        $browser->waitFor("@" . $duskSelector);
+        $fullSelector = '[dusk="' . $duskSelector . '"] ';
+        if (isset($firstName)) {
+            $browser->type($fullSelector . ' [dusk="first_name"]', $firstName);
+        }
+        if (isset($lastName)) {
+            $browser->type($fullSelector . ' [dusk="last_name"]', $lastName);
+        }
+        if (isset($birthYear)) {
+            $browser->type($fullSelector . ' [dusk="birth_year"]', $birthYear);
+        }
+        if (isset($ageGroupId)) {
+            $browser->select($fullSelector . ' [dusk="age_group_id"]', $ageGroupId);
+        }
+        if (isset($remarks)) {
+            $browser->type($fullSelector . ' [dusk="remarks"]', $remarks);
+        }
+    }
 }

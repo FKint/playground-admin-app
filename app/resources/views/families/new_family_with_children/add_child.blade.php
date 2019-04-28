@@ -18,7 +18,7 @@
         @endforeach
     </ul>
     <h3>Nieuw kind toevoegen</h3>
-    {{ Form::open(['class' => 'form-horizontal', 'id' => 'new-child-form']) }}
+    {{ Form::open(['class' => 'form-horizontal', 'id' => 'new-child-form', 'dusk' => 'new-child-form']) }}
     @include('forms.child')
     {{ Form::close() }}
     <h3>Bestaand kind toevoegen</h3>

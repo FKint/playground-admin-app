@@ -74,12 +74,13 @@ class InternalChildrenPage extends InternalPage
             ->waitFor("@edit-child-modal");
     }
 
-    public function assertSeeChildEntryInTable(Browser $browser, $firstName, $lastName)
+    public function assertSeeChildEntryInTable(Browser $browser, $childId, $firstName, $lastName)
     {
         // TODO(fkint): Use a better selector verifying that $firstName and $lastName appear together in a row.
-        $browser->waitForText($firstName)
-            ->assertSeeIn("@children-table", $firstName)
-            ->assertSeeIn("@children-table", $lastName);
+        $selector = '[dusk="children-table"] tr[data-child-id="' . $childId . '"] ';
+        $browser->waitFor($selector)
+            ->assertSeeIn($selector . '[data-field="first_name"]', $firstName)
+            ->assertSeeIn($selector . '[data-field="last_name"]', $lastName);
     }
 
     public function assertSeeEditChildDialogTabFamilies(Browser $browser)
@@ -154,5 +155,29 @@ class InternalChildrenPage extends InternalPage
     {
         $browser->click('[dusk="edit-family-form"] [dusk=submit]')
             ->waitForText("Wijzigingen opgeslagen.");
+    }
+
+    public function navigateToEditChildDialog(Browser $browser, $childId)
+    {
+        $selector = 'a.btn-edit-child[data-child-id="' . $childId . '"]';
+        $browser->click($selector)
+            ->waitFor('@edit-child-modal');
+    }
+
+    public function enterEditChildFormData(Browser $browser, $firstName, $lastName, $birthYear, $ageGroupId, $remarks)
+    {
+        $this->enterChildFormData($browser, "edit-child-form", $firstName, $lastName, $birthYear, $ageGroupId, $remarks);
+    }
+
+    public function submitEditChildFormSuccessfully(Browser $browser)
+    {
+        $browser->click('[dusk="edit-child-form"] [dusk=submit]')
+            ->waitForText("Wijzigingen opgeslagen");
+    }
+
+    public function closeEditChildDialog(Browser $browser)
+    {
+        $browser->click("@btn-close-edit-child")
+            ->waitUntilMissing("@edit-child-form");
     }
 }

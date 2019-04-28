@@ -26,7 +26,7 @@ class UserJourneysTest extends DuskTestCase
         $this->ageGroup612 = \App\AgeGroup::whereAbbreviation('6-12')->firstOrFail();
         $this->ageGroupKls = \App\AgeGroup::whereAbbreviation('KLS')->firstOrFail();
         $this->existingFamily = factory(\App\Family::class)->create(['year_id' => $this->year->id, 'guardian_first_name' => 'Veronique', 'guardian_last_name' => 'Baeten']);
-        $this->existingChild = factory(\App\Child::class)->create(['year_id' => $this->year->id, 'first_name' => 'Reinoud', 'last_name' => 'Declercq']);
+        $this->existingChild = factory(\App\Child::class)->create(['year_id' => $this->year->id, 'first_name' => 'Reinoud', 'last_name' => 'Declercq', 'age_group_id' => $this->ageGroupKls->id]);
         factory(\App\ChildFamily::class)->create(['year_id' => $this->year->id, 'family_id' => $this->existingFamily->id, 'child_id' => $this->existingChild->id]);
     }
     /**
@@ -114,8 +114,9 @@ class UserJourneysTest extends DuskTestCase
                 ->navigateToChildrenPage()
                 ->navigateToAddNewChildDialog()
                 ->enterAddChildFormData('Sonja', 'Boonen', 2004, null, null)
-                ->submitAddChildFormSuccessfully()
-                ->assertSeeChildEntryInTable('Sonja', 'Boonen')
+                ->submitAddChildFormSuccessfully();
+            $newChild = \App\Child::where(['first_name' => 'Sonja', 'last_name' => 'Boonen'])->first();
+            $browser->assertSeeChildEntryInTable($newChild->id, 'Sonja', 'Boonen')
                 ->assertSeeEditChildDialogTabFamilies()
                 ->enterAddNewFamilyFormData('Erik', 'Bulcke', $this->socialTariff->id, 'Requires invoice', 'Call: +329878767875')
                 ->submitAddNewFamilySuccessfully('Erik Bulcke')
@@ -124,7 +125,6 @@ class UserJourneysTest extends DuskTestCase
                 ->selectAddExistingFamilySuggestion("Veronique Baeten")
                 ->assertSeeCurrentFamily("Erik Bulcke")
                 ->assertSeeCurrentFamily("Veronique Baeten");
-            $newChild = \App\Child::where(['first_name' => 'Sonja', 'last_name' => 'Boonen'])->first();
             $this->assertNotNull($newChild);
             $this->assertEquals(2, $newChild->families()->count());
             $this->assertNotNull($newChild->families()->where(['guardian_first_name' => 'Veronique', 'guardian_last_name' => 'Baeten'])->first());
@@ -151,11 +151,43 @@ class UserJourneysTest extends DuskTestCase
     }
 
     /**
+     * Test for editing a child.
+     *
+     * @return void
+     */
+    public function testEditChild()
+    {
+        $child2 = factory(\App\Child::class)->create(['year_id' => $this->year->id, 'first_name' => 'Jan', 'last_name' => 'Cornelis']);
+        $child3 = factory(\App\Child::class)->create(['year_id' => $this->year->id, 'first_name' => 'Piet', 'last_name' => 'Declercq']);
+
+        $this->browse(function (Browser $browser) use ($child2, $child3) {
+            $browser->loginAs($this->user)
+                ->visit(new InternalDashboardPage($this->year->id))
+                ->navigateToChildrenPage()
+                ->assertSeeChildEntryInTable($this->existingChild->id, "Reinoud", "Declercq")
+                ->assertSeeChildEntryInTable($child2->id, "Jan", "Cornelis")
+                ->assertSeeChildEntryInTable($child3->id, "Piet", "Declercq")
+                ->navigateToEditChildDialog($this->existingChild->id)
+                ->enterEditChildFormData("Ronald", "De Clercq", 2005, null, null)
+                ->submitEditChildFormSuccessfully()
+                ->closeEditChildDialog()
+            // TODO(fkint): add waiting period?
+                ->assertSeeChildEntryInTable($this->existingChild->id, "Ronald", "De Clercq")
+                ->assertSeeChildEntryInTable($child2->id, "Jan", "Cornelis")
+                ->assertSeeChildEntryInTable($child3->id, "Piet", "Declercq");
+        });
+        $this->existingChild->refresh();
+        $this->assertEquals("Ronald", $this->existingChild->first_name);
+        $this->assertEquals("De Clercq", $this->existingChild->last_name);
+        $this->assertEquals($this->ageGroupKls->id, $this->existingChild->age_group_id);
+    }
+
+    /**
      * Test for the settings page.
      *
      * @return void
      */
-    public function testShowsSections()
+    public function testSettingsPage()
     {
         $this->browse(function (Browser $browser) {
             $browser->loginAs($this->user)

@@ -60,6 +60,9 @@
                 serverSide: false,
                 ajax: '{!! route('api.datatables.children') !!}',
                 dom: 'Blfrtip',
+                createdRow(row, data, dataIndex){
+                    $(row).attr('data-child-id', data.id);
+                },
                 buttons: [
                     {
                         extend: 'pdfHtml5',
@@ -70,8 +73,20 @@
                 ],
                 orderCellsTop: true,
                 columns: [
-                    {data: 'first_name', name: 'first_name'},
-                    {data: 'last_name', name: 'last_name'},
+                    {
+                        data: 'first_name', 
+                        name: 'first_name',
+                        createdCell(td, cellData, rowData, row, col){
+                            $(td).attr('data-field', 'first_name');
+                        },
+                    },
+                    {
+                        data: 'last_name', 
+                        name: 'last_name',
+                        createdCell(td, cellData, rowData, row, col){
+                            $(td).attr('data-field', 'last_name');
+                        },
+                    },
                     {data: 'birth_year', name: 'birth_year'},
                     {data: 'age_group.name', name: 'age_group.name', sortable: false},
                     {data: 'remarks', name: 'remarks'},
