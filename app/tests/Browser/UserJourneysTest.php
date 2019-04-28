@@ -42,6 +42,7 @@ class UserJourneysTest extends DuskTestCase
                 ->navigateToFamiliesPage()
                 ->navigateToAddFamilyPage()
                 ->enterAddFamilyFormData('Joran', 'De Wachter', $this->normalTariff->id, "Only speak English", "Dad: +4987676545652")
+            // TODO(fkint): split following call so we can use the actual Id after the entry has been inserted.
                 ->submitAddFamilySuccessfully(\App\Family::count() + 1)
                 ->assertSeeGuardianName('Joran De Wachter')
                 ->enterAddChildToFamilyFormData("Josje", "De Wachter", 2008, null, "Allergic to peanuts")
