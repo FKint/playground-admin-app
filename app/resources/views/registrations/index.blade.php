@@ -14,7 +14,7 @@
         </div>
         <div class="col-xs-3 col-lg-3">
             <div class="input-group date" data-provide="datepicker" data-date-format="yyyy/mm/dd"
-                 id="registration-datepicker">
+                 id="registration-datepicker" dusk="registration-datepicker">
                 <input type="text" class="form-control">
                 <div class="input-group-addon">
                     <span class="glyphicon glyphicon-th"></span>

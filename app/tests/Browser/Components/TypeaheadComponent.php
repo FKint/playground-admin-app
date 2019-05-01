@@ -21,7 +21,6 @@ class TypeaheadComponent extends BaseComponent
     public function selector()
     {
         return $this->selector;
-        // return '.twitter-typeahead > [dusk=' . $this->duskName . ']:not([readonly])';
     }
 
     /**

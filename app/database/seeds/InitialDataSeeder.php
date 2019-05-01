@@ -111,7 +111,7 @@ class InitialDataSeeder extends Seeder
     protected function seed_dates()
     {
         $week_day_names = ["Maandag", "Dinsdag", "Woensdag", "Donderdag", "Vrijdag"];
-        $holidays = ["2017-07-21"];
+        $holidays = ["2018-07-21"];
         for ($i = 0; $i < 5; ++$i) {
             $this->week_day_ids[] = \App\WeekDay::create([
                 'year_id' => $this->year->id,

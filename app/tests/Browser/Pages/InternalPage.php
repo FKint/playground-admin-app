@@ -85,6 +85,12 @@ abstract class InternalPage extends BasePage
             ->on(new InternalActivityListsPage($this->yearId));
     }
 
+    public function navigateToRegistrationsPage(Browser $browser, \DateTimeImmutable $date)
+    {
+        $browser->clickLink("Registraties")
+            ->on(new InternalRegistrationsPage($this->yearId, $date));
+    }
+
     protected function enterFamilyFormData(Browser $browser, $duskSelector, $guardianFirstName, $guardianLastName, $tariffId, $remarks, $contact)
     {
         // TODO(fkint): try to use assertSeeIn or within if it doesn't assert page-level conditions.

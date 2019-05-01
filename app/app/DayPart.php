@@ -11,7 +11,7 @@ class DayPart extends Model
      *
      * @var array
      */
-    protected $fillable = ['name', 'order'];
+    protected $fillable = ['name', 'order', 'default', 'year_id'];
 
     public function year()
     {

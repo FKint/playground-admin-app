@@ -25,7 +25,7 @@ class UserJourneysTest extends DuskTestCase
         $this->socialTariff = \App\Tariff::whereAbbreviation('SCL')->firstOrFail();
         $this->ageGroup612 = \App\AgeGroup::whereAbbreviation('6-12')->firstOrFail();
         $this->ageGroupKls = \App\AgeGroup::whereAbbreviation('KLS')->firstOrFail();
-        $this->existingFamily = factory(\App\Family::class)->create(['year_id' => $this->year->id, 'guardian_first_name' => 'Veronique', 'guardian_last_name' => 'Baeten']);
+        $this->existingFamily = factory(\App\Family::class)->create(['year_id' => $this->year->id, 'guardian_first_name' => 'Veronique', 'guardian_last_name' => 'Baeten', 'tariff_id' => $this->normalTariff->id]);
         $this->existingChild = factory(\App\Child::class)->create(['year_id' => $this->year->id, 'first_name' => 'Reinoud', 'last_name' => 'Declercq', 'age_group_id' => $this->ageGroupKls->id]);
         $this->existingChildFamily = factory(\App\ChildFamily::class)->create(['year_id' => $this->year->id, 'family_id' => $this->existingFamily->id, 'child_id' => $this->existingChild->id]);
     }
@@ -242,6 +242,97 @@ class UserJourneysTest extends DuskTestCase
                 ->assertSeeActivityList("Need medication")
                 ->assertSeeActivityList("Kid Rock")
                 ->assertDontSeeActivityList("Past activity");
+        });
+    }
+
+    /**
+     * Test for updating registrations.
+     */
+    public function testRegistrationsFlow()
+    {
+        $this->browse(function (Browser $browser) {
+            $child2 = factory(\App\Child::class)->create(['year_id' => $this->year->id, 'first_name' => 'Jan', 'last_name' => 'Cornelis', 'age_group_id' => $this->ageGroup612->id]);
+            $family2 = factory(\App\Family::class)->create(['year_id' => $this->year->id, 'guardian_first_name' => 'Arnold', 'guardian_last_name' => 'Coucke', 'tariff_id' => $this->normalTariff->id]);
+            $child2->families()->syncWithoutDetaching([$this->existingFamily->id => ['year_id' => $this->year->id]]);
+            $child2Family1 = $child2->child_families()->firstOrFail();
+            $child2->families()->syncWithoutDetaching([$family2->id => ['year_id' => $this->year->id]]);
+            $child2Family2 = $family2->child_families()->firstOrFail();
+            $child3 = factory(\App\Child::class)->create(['year_id' => $this->year->id, 'first_name' => 'Wouter', 'last_name' => 'Sanders', 'age_group_id' => $this->ageGroupKls->id]);
+            $child3->families()->syncWithoutDetaching([$family2->id => ['year_id' => $this->year->id]]);
+
+            $lastDate = $this->year->playground_days()->get()->map(function ($playgroundDay) {return $playgroundDay->date();})->max();
+            $date = new \DateTimeImmutable("2018-07-11"); // Wednesday of the second week
+            $playgroundDay = $this->year->playground_days()->get()->filter(function ($playgroundDay) use ($date) {return $playgroundDay->date()->format('Y-m-d') === $date->format('Y-m-d');})->first();
+
+            $monday = $this->year->week_days()->where('name', 'Maandag')->firstOrFail();
+            $tuesday = $this->year->week_days()->where('name', 'Dinsdag')->firstOrFail();
+            $wednesday = $this->year->week_days()->where('name', 'Woensdag')->firstOrFail();
+
+            $supplementIceCream = $this->year->supplements()->where('name', 'IJsje')->firstOrFail();
+
+            $browser->loginAs($this->user)
+                ->visit(new InternalDashboardPage($this->year->id))
+                ->navigateToRegistrationsPage($lastDate)
+                ->navigateToRegistrationsWithDatePage($date)
+                ->navigateToRegisterFindFamilyPage($playgroundDay->week_id)
+                ->enterFindFamilyFormData("Reinoud")
+                ->selectFindFamilySuggestion("Reinoud Declercq")
+                ->assertOnEditFamilyRegistrationPage($playgroundDay->week_id, $this->existingFamily->id, "Veronique Baeten")
+                ->selectWeekRegistrationForChild($this->existingChild->id)
+                ->selectDayRegistrationForChild($child2->id, $wednesday->id)
+                ->selectDayAgeGroupForChild($child2->id, $wednesday->id, $this->ageGroupKls->id)
+                ->selectDayRegistrationForChild($child2->id, $monday->id)
+                ->selectDayAgeGroupForChild($child2->id, $monday->id, $this->ageGroupKls->id)
+                ->selectSupplementForChild($this->existingChild->id, $monday->id, $supplementIceCream->id)
+                ->selectSupplementForChild($child2->id, $wednesday->id, $supplementIceCream->id)
+                ->checkInChild($this->existingChild->id, $wednesday->id)
+                ->checkInChild($child2->id, $wednesday->id)
+                ->pause(5000) // TODO(fkint): add a loading indicator to the page instead of waiting until this literal text appears
+                ->assertExpectedAmount("31.50")
+                ->assertPaidFieldContent("31.50")
+                ->submitRegistrationFormAndNavigateToNext();
+
+            $transaction = $this->year->getActiveAdminSession()->transactions()->where('family_id', $this->existingFamily->id)->first();
+            $this->assertNotNull($transaction);
+            $this->assertEquals("31.50", $transaction->amount_expected);
+            $this->assertEquals("31.50", $transaction->amount_paid);
+
+            $this->assertEquals(5, $this->existingChildFamily->child_family_day_registrations()->count());
+            $this->assertEquals(2, $child2Family1->child_family_day_registrations()->count());
+            $this->assertEquals(2, $child2Family1->child_family_day_registrations()->where('age_group_id', $this->ageGroupKls->id)->count());
+            $wednesdayRegistrationChild2 = $child2Family1->child_family_day_registrations()->where(['week_day_id' => $wednesday->id])->first();
+            $this->assertNotNull($wednesdayRegistrationChild2);
+            $this->assertTrue((bool) $wednesdayRegistrationChild2->attended);
+            $this->assertEquals(1, $wednesdayRegistrationChild2->supplements()->count());
+            $mondayRegistrationChild2 = $child2Family1->child_family_day_registrations()->where(['week_day_id' => $monday->id])->first();
+            $this->assertNotNull($mondayRegistrationChild2);
+            $this->assertFalse((bool) $mondayRegistrationChild2->attended);
+            $this->assertEquals(0, $mondayRegistrationChild2->supplements()->count());
+
+            $activityList = factory(\App\ActivityList::class)->create(['year_id' => $this->year->id, 'name' => 'Kid Rock', 'show_on_attendance_form' => true, 'price' => "0.89"]);
+            $activityList2 = factory(\App\ActivityList::class)->create(['year_id' => $this->year->id, 'name' => 'Swimming', 'show_on_attendance_form' => false]);
+
+            $browser->enterFindFamilyFormData("Wouter Sanders")
+                ->selectFindFamilySuggestion("Arnold Coucke")
+                ->assertOnEditFamilyRegistrationPage($playgroundDay->week_id, $family2->id, "Arnold Coucke")
+                ->assertSeeActivityList("Kid Rock")
+                ->assertDontSeeActivityList("Swimming")
+                ->selectWeekRegistrationForChild($child3->id)
+                ->selectDayRegistrationForChild($child2->id, $tuesday->id)
+                ->assertDayRegistrationForChild($child2->id, $tuesday->id)
+                ->assertNotDayRegistrationForChild($child2->id, $wednesday->id)
+                ->selectActivityListRegistrationForChild($child3->id, $activityList->id)
+                ->checkInChild($child3->id, $tuesday->id)
+                ->checkInChild($child2->id, $tuesday->id)
+                ->pause(5000) // TODO(fkint): add a loading indicator to the page instead of waiting until this literal text appears
+                ->assertExpectedAmount("27.39")
+                ->enterPaidField("25")
+                ->assertNewSaldo("2.39")
+                ->submitRegistrationFormAndNavigateToNext();
+
+            $this->assertEquals(1, $activityList->child_families()->count());
+            $participatingChildFamily = $activityList->child_families()->first();
+            $this->assertEquals($child3->id, $participatingChildFamily->child_id);
         });
     }
 

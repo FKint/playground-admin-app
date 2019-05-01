@@ -22,8 +22,7 @@
 @endpush
 
 @section('content')
-    <h1>Wijzig registratie voor familie {{ $family->id }}
-        : {{$family->guardian_first_name}} {{$family->guardian_last_name}}</h1>
+    <h1>Wijzig registratie voor familie {{ $family->id }}: {{$family->guardian_full_name}}</h1>
     <div class="row">
         <div class="col-xs-9" id="registration-table-div">
             <table id="registration-table" class="table table-condensed" data-populating="0" data-nb-requests="0">
@@ -53,7 +52,7 @@
                     <th colspan="2">Week</th>
                     @foreach($family->children as $child)
                         <td colspan="4" data-child-id="{{$child->id}}" class="whole-week-registration">
-                            <input class="registration-checkbox" title="Registreer voor volledige week"
+                            <input class="registration-checkbox registration-setting" title="Registreer voor volledige week"
                                    type="checkbox"/>
                             <span class="price">€ 0.00</span>
                         </td>
@@ -67,25 +66,25 @@
                         <td>{{ $playground_day->date()->format('Y-m-d') }}</td>
                         @foreach($family->children as $child)
                             <td class="day-registration" data-child-id="{{$child->id}}">
-                                <input class="registration-checkbox" title="Registreer voor deze dag" type="checkbox"/>
+                                <input class="registration-checkbox registration-setting" title="Registreer voor deze dag" type="checkbox"/>
                                 <span class="price">€ 0.00</span>
                             </td>
                             <td class="day-age-group" data-child-id="{{$child->id}}">
-                                <select class="age-group" title="Werking">
+                                <select class="age-group registration-setting" title="Werking">
                                     @foreach($year->age_groups as $age_group)
                                         <option value="{{ $age_group->id }}">{{ $age_group->abbreviation }}</option>
                                     @endforeach
                                 </select>
                             </td>
                             <td class="day-day-part" data-child-id="{{$child->id}}">
-                                <select class="day-part" title="Dagdeel">
+                                <select class="day-part registration-setting" title="Dagdeel">
                                     @foreach($year->day_parts as $day_part)
                                         <option value="{{ $day_part->id }}">{{ $day_part->name }}</option>
                                     @endforeach
                                 </select>
                             </td>
                             <td class="day-attendance" data-child-id="{{$child->id}}">
-                                <input type="checkbox" title="Aanwezig" class="attendance-checkbox"/>
+                                <input type="checkbox" title="Aanwezig" class="attendance-checkbox registration-setting"/>
                             </td>
                         @endforeach
                     </tr>
@@ -105,7 +104,7 @@
                             <td>{{ $supplement->name }}</td>
                             @foreach($family->children as $child)
                                 <td class="day-supplement" data-child-id="{{ $child->id }}">
-                                    <input class="registration-checkbox" title="Extraatje bestellen" type="checkbox"/>
+                                    <input class="registration-checkbox registration-setting" title="Extraatje bestellen" type="checkbox"/>
                                     <span class="price">€ 0.00</span>
                                 </td>
                                 <td colspan="3"></td>
@@ -125,7 +124,7 @@
                         <td colspan="2">{{ $activity_list->name }}</td>
                         @foreach($family->children as $child)
                             <td class="activity-list-registration" data-child-id="{{ $child->id }}">
-                                <input class="registration-checkbox" type="checkbox"/>
+                                <input class="registration-checkbox registration-setting" type="checkbox"/>
                                 <span class="price">€ 0.00</span>
                             </td>
                             <td colspan="3"></td>
@@ -150,7 +149,7 @@
 
             <button class="btn btn-default" id="btn-set-all-attending-today">Inchecken</button><br><br>
             <button class="btn btn-primary" id="submit-registration-data">Opslaan</button>
-            <button class="btn btn-primary" id="submit-registration-data-and-next">Opslaan en volgende</button><br>
+            <button class="btn btn-primary" id="submit-registration-data-and-next" dusk="submit-registration-data-and-next">Opslaan en volgende</button><br>
             <button class="btn btn-default" id="btn-cancel">Annuleren</button><br><br>
             <a href="{{ route('internal.show_family_transactions', ['family' => $family]) }}"
                class="btn btn-default">Transactiegeschiedenis</a>
@@ -161,7 +160,7 @@
 @push('scripts')
     <script>
         const today = new Date('{{ $today->format('Y-m-d') }}');
-
+        // TODO(fkint): Improve asynchronous behavior (e.g. by using Promises)
         $(function () {
             let form = $('#register-payment-form');
             let table = $('#registration-table');
@@ -399,18 +398,20 @@
                 });
             });
             $('#submit-registration-data-and-next').click(function () {
-                submitRegistrationData();
-                window.location.href = '{!! route('internal.show_find_family_registration', ['week' => $week]) !!}';
+                submitRegistrationData(function(){
+                    window.location.href = '{!! route('internal.show_find_family_registration', ['week' => $week]) !!}';
+                });
             });
             $('#btn-cancel').click(function () {
                 window.location.href = '{!! route('internal.registrations') !!}';
             });
 
-            table.find('.registration-checkbox').change(function () {
+            function refreshRegistrationPrices(){
                 if (parseInt(table.data('populating')) === 0) {
                     populateUpdatedRegistrationPrices();
                 }
-            });
+            }
+            table.on('change', '.registration-setting', refreshRegistrationPrices);
 
             populateCurrentRegistrationData();
         });
