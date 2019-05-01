@@ -54,6 +54,12 @@ abstract class InternalPage extends BasePage
         ];
     }
 
+    public function navigateToDashboardPage(Browser $browser)
+    {
+        $browser->clickLink("Dashboard")
+            ->on(new InternalDashboardPage($this->yearId));
+    }
+
     public function navigateToSettingsPage(Browser $browser)
     {
         $browser->clickLink("Extra")
@@ -71,6 +77,12 @@ abstract class InternalPage extends BasePage
     {
         $browser->clickLink("Kinderen")
             ->on(new InternalChildrenPage($this->yearId));
+    }
+
+    public function navigateToActivityListsPage(Browser $browser)
+    {
+        $browser->clickLink("Lijsten")
+            ->on(new InternalActivityListsPage($this->yearId));
     }
 
     protected function enterFamilyFormData(Browser $browser, $duskSelector, $guardianFirstName, $guardianLastName, $tariffId, $remarks, $contact)
@@ -112,6 +124,36 @@ abstract class InternalPage extends BasePage
         }
         if (isset($remarks)) {
             $browser->type($fullSelector . ' [dusk="remarks"]', $remarks);
+        }
+    }
+
+    protected function enterActivityListFormData(Browser $browser, $duskSelector, $name, $price, $date, $showOnAttendanceForm, $showOnDashboard)
+    {
+        $browser->waitFor("@" . $duskSelector);
+        $fullSelector = '[dusk="' . $duskSelector . '"] ';
+        if (isset($name)) {
+            $browser->type($fullSelector . ' [dusk="name"]', $name);
+        }
+        if (isset($price)) {
+            $browser->type($fullSelector . ' [dusk="price"]', $price);
+        }
+        if (isset($date)) {
+            // TODO(fkint): use date picker in tests
+            $browser->type($fullSelector . ' [dusk="date"]', $date->format('Y-m-d'));
+        }
+        if (isset($showOnAttendanceForm)) {
+            if ($showOnAttendanceForm) {
+                $browser->check($fullSelector . ' [dusk="show_on_attendance_form"]');
+            } else {
+                $browser->uncheck($fullSelector . ' [dusk="show_on_attendance_form"]');
+            }
+        }
+        if (isset($showOnDashboard)) {
+            if ($showOnDashboard) {
+                $browser->check($fullSelector . ' [dusk="show_on_dashboard"]');
+            } else {
+                $browser->uncheck($fullSelector . ' [dusk="show_on_dashboard"]');
+            }
         }
     }
 }

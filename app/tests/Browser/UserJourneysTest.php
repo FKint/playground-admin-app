@@ -12,7 +12,7 @@ class UserJourneysTest extends DuskTestCase
     private $year;
     private $normalTariff, $socialTariff;
     private $ageGroup612, $ageGroupKls;
-    private $existingFamily, $existingChild;
+    private $existingFamily, $existingChild, $existingChildFamily;
 
     public function setUp()
     {
@@ -27,7 +27,7 @@ class UserJourneysTest extends DuskTestCase
         $this->ageGroupKls = \App\AgeGroup::whereAbbreviation('KLS')->firstOrFail();
         $this->existingFamily = factory(\App\Family::class)->create(['year_id' => $this->year->id, 'guardian_first_name' => 'Veronique', 'guardian_last_name' => 'Baeten']);
         $this->existingChild = factory(\App\Child::class)->create(['year_id' => $this->year->id, 'first_name' => 'Reinoud', 'last_name' => 'Declercq', 'age_group_id' => $this->ageGroupKls->id]);
-        factory(\App\ChildFamily::class)->create(['year_id' => $this->year->id, 'family_id' => $this->existingFamily->id, 'child_id' => $this->existingChild->id]);
+        $this->existingChildFamily = factory(\App\ChildFamily::class)->create(['year_id' => $this->year->id, 'family_id' => $this->existingFamily->id, 'child_id' => $this->existingChild->id]);
     }
     /**
      * Test for creating a new family and managing associations with new and existing children.
@@ -181,6 +181,68 @@ class UserJourneysTest extends DuskTestCase
         $this->assertEquals("Ronald", $this->existingChild->first_name);
         $this->assertEquals("De Clercq", $this->existingChild->last_name);
         $this->assertEquals($this->ageGroupKls->id, $this->existingChild->age_group_id);
+    }
+
+    /**
+     * Test for creating activity lists.
+     */
+    public function testCreateActivityList()
+    {
+        $this->browse(function (Browser $browser) {
+            $child2 = factory(\App\Child::class)->create(['year_id' => $this->year->id, 'first_name' => 'Jan', 'last_name' => 'Cornelis']);
+            $family2 = factory(\App\Family::class)->create(['year_id' => $this->year->id, 'guardian_first_name' => 'Arnold', 'guardian_last_name' => 'Coucke']);
+            $child2->families()->syncWithoutDetaching([$family2->id => ['year_id' => $this->year->id]]);
+
+            $browser->loginAs($this->user)
+                ->visit(new InternalDashboardPage($this->year->id))
+                ->navigateToActivityListsPage()
+                ->navigateToAddNewActivityListPage()
+                ->enterAddActivityListFormData("Kid Rock", "3.50", new \DateTimeImmutable('2018-07-23'), true, true)
+                ->submitAddActivityListFormSuccessfully();
+            $activityListKidRock = \App\ActivityList::where(['name' => 'Kid Rock'])->first();
+            $this->assertNotNull($activityListKidRock);
+            $browser->assertOnActivityListPage($activityListKidRock->id)
+                ->assertSeeActivityListDetails("Kid Rock", "3.50", "2018-07-23", true, true)
+                ->assertNoActivityParticipants();
+
+            $browser->navigateToActivityListsPage()
+                ->navigateToAddNewActivityListPage()
+                ->enterAddActivityListFormData("Need medication", null, null, false, true)
+                ->submitAddActivityListFormSuccessfully();
+            $activityListMedication = \App\ActivityList::where(['name' => 'Need medication'])->first();
+            $this->assertNotNull($activityListMedication);
+            $browser->assertOnActivityListPage($activityListMedication->id)
+                ->assertSeeActivityListDetails("Need medication", "", "", false, true)
+                ->assertNoActivityParticipants()
+                ->enterAddParticipantFormData("Reinoud")
+                ->selectAddParticipantSuggestion("Reinoud Declercq")
+                ->assertActivityParticipant("Reinoud Declercq", "Veronique Baeten");
+
+            $browser->navigateToActivityListsPage()
+                ->navigateToAddNewActivityListPage()
+                ->enterAddActivityListFormData("Past activity", "1.00", new \DateTimeImmutable("2018-07-02"), false, false)
+                ->submitAddActivityListFormSuccessfully();
+            $activityListPast = \App\ActivityList::where(['name' => 'Past activity'])->first();
+            $this->assertNotNull($activityListPast);
+            $browser->assertOnActivityListPage($activityListPast->id)
+                ->assertSeeActivityListDetails("Past activity", "1.00", "2018-07-02", false, false)
+                ->enterEditActivityListFormData("Past activity: swimming", null, null, null, null)
+                ->assertNoActivityParticipants()
+                ->enterAddParticipantFormData("Coucke")
+                ->selectAddParticipantSuggestion("Jan Cornelis")
+                ->assertActivityParticipant("Jan Cornelis", "Arnold Coucke")
+                ->enterAddParticipantFormData("Reinoud")
+                ->selectAddParticipantSuggestion("Reinoud Declercq")
+                ->assertActivityParticipant("Reinoud Declercq", "Veronique Baeten")
+                ->deleteParticipant($this->existingChildFamily->id)
+                ->assertNotActivityParticipant("Reinoud Declercq")
+                ->assertActivityParticipant("Jan Cornelis", "Arnold Coucke");
+
+            $browser->navigateToDashboardPage()
+                ->assertSeeActivityList("Need medication")
+                ->assertSeeActivityList("Kid Rock")
+                ->assertDontSeeActivityList("Past activity");
+        });
     }
 
     /**

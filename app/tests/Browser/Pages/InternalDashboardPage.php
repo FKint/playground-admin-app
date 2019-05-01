@@ -49,15 +49,13 @@ class InternalDashboardPage extends InternalPage
             ->assertSee("Registraties overzicht");
     }
 
-    /**
-     * Get the element shortcuts for the page.
-     *
-     * @return array
-     */
-    public function elements()
+    public function assertSeeActivityList(Browser $browser, $name)
     {
-        return [
-            '@element' => '#selector',
-        ];
+        $browser->assertSeeLink($name);
+    }
+
+    public function assertDontSeeActivityList(Browser $browser, $name)
+    {
+        $browser->assertDontSeeLink($name);
     }
 }

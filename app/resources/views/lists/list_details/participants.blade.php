@@ -1,7 +1,7 @@
 <div class="row">
     <h2>Deelnemer toevoegen</h2>
     <form class="typeahead" role="search">
-        <div class="form-group">
+        <div class="form-group" dusk="child-family-search-typeahead">
             <input type="search" id="child-family-search" name="q" class="form-control" placeholder="Search"
                    autocomplete="off">
         </div>
@@ -9,7 +9,7 @@
 </div>
 <div class="row">
     <h2>Huidige deelnemers</h2>
-    <table class="table table-bordered" id="participants-table">
+    <table class="table table-bordered" id="participants-table" dusk="participants-table">
         <thead>
         <tr>
             <th data-class-name="export">Kind</th>

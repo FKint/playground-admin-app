@@ -49,7 +49,7 @@ class InternalChildrenPage extends InternalPage
 
     public function enterAddChildFormData(Browser $browser, $firstName, $lastName, $birthYear, $ageGroupId, $remarks)
     {
-        $browser->waitFor("@new-child-modal");
+        $browser->waitFor('[dusk="new-child-modal"] [dusk=first_name]');
         // TODO(fkint): try to use assertSeeIn or within if it doesn't assert page-level conditions.
         if (isset($firstName)) {
             $browser->type('[dusk="new-child-modal"] [dusk=first_name]', $firstName);
