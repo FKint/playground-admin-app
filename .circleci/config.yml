@@ -130,7 +130,6 @@ workflows:
       - test-dusk:
           requires:
             - build-docker-images
-            - test
       - publish-latest:
           requires:
             - build-docker-images
