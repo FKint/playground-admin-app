@@ -63,5 +63,8 @@
 * `ssh root@admin.jokkebrok.be -L 22306:localhost:21306 -N`
 * Connect to MySQL at `localhost:22306`
 
+## Dev recommendations
+* Suggested pre-commit hook: `cd app && exec php-cs-fixer fix --diff --diff-format udiff && cd ..`
+
 ## License
 This project (and the Laravel framework too) is open-sourced software licensed under the [MIT license](http://opensource.org/licenses/MIT).
