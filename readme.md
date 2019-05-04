@@ -64,7 +64,23 @@
 * Connect to MySQL at `localhost:22306`
 
 ## Dev recommendations
-* Suggested pre-commit hook: `cd app && exec php-cs-fixer fix --diff --diff-format udiff && cd ..`
+* Suggested pre-commit hook: 
+
+```bash
+#!/bin/bash
+cd app
+git stash save --keep-index
+php-cs-fixer fix --dry-run --diff --diff-format udiff
+RESULT=$?
+git stash apply -q
+cd ..
+if [ "$RESULT" -eq "0" ]; then
+  exit 0;
+else
+  echo "PHP CS Fixer found errors which prevented this commit from succeeding.";
+  exit $RESULT;
+fi;
+```
 
 ## License
 This project (and the Laravel framework too) is open-sourced software licensed under the [MIT license](http://opensource.org/licenses/MIT).
