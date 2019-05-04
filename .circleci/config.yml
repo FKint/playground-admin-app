@@ -99,14 +99,26 @@ jobs:
           name: Load archived Docker images
           command: docker load -i /tmp/workspace/docker-app-test.tar
       - run:
-          name: Run Laravel Dusk tests
+          name: Prepare setup for Dusk tests
           command: |
+            touch /tmp/dusk/server.log
             docker network create tmp-dusk-network
-            docker run -d --name app-container --network tmp-dusk-network $IMAGE_NAME:app-test php artisan serve --host=app-container
+            docker run -d --name app-container -v "/tmp/dusk/screenshots:/var/www/tests/Browser/screenshots" -v "/tmp/dusk/console:/var/www/tests/Browser/console" -v "/tmp/dusk/server.log:/var/www/storage/laravel.log" --network tmp-dusk-network $IMAGE_NAME:app-test php artisan serve --host=app-container
             docker run -d --name selenium --network tmp-dusk-network --shm-size=2g selenium/standalone-chrome:3
             docker exec app-container curl --retry 10 --retry-connrefused http://app-container:8000 > /dev/null
             docker exec app-container curl --retry 10 --retry-connrefused http://selenium:4444 > /dev/null
-            docker exec app-container php artisan dusk
+      - run:
+          name: Run Dusk tests
+          command: docker exec app-container php artisan dusk
+      - store_artifacts:
+          path: /tmp/dusk/screenshots
+          destination: dusk-screenshots
+      - store_artifacts:
+          path: /tmp/dusk/console
+          destination: dusk-console
+      - store_artifacts:
+          path: /tmp/dusk/server.log
+          destination: dusk-log
 workflows:
   version: 2
   build-master:
