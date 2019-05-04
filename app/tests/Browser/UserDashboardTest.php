@@ -12,7 +12,7 @@ class UserDashboardTest extends DuskTestCase
     private $user1;
     private $year1, $year2, $year3;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $this->user1 = factory(\App\User::class)->create();

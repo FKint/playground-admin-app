@@ -8,21 +8,21 @@
   "license": "MIT",
   "type": "project",
   "require": {
-    "php": ">=7.2",
-    "doctrine/dbal": "^2.6",
-    "fzaninotto/faker": "~1.4",
-    "laravel/framework": "5.6.*",
-    "laravel/tinker": "~1.0",
-    "laravelcollective/html": "^5.5",
-    "nicolaslopezj/searchable": "1.*",
-    "yajra/laravel-datatables-oracle": "^8.0"
+    "php": "7.3.*",
+    "doctrine/dbal": "*",
+    "fzaninotto/faker": "*",
+    "laravel/framework": "5.8.*",
+    "laravel/tinker": "*",
+    "laravelcollective/html": "*",
+    "nicolaslopezj/searchable": "*",
+    "yajra/laravel-datatables-oracle": "*"
   },
   "require-dev": {
-    "facebook/webdriver": "^1.6",
-    "filp/whoops": "~2.0",
-    "laravel/dusk": "^3.0",
-    "mockery/mockery": "0.9.*",
-    "phpunit/phpunit": "~7.0"
+    "facebook/webdriver": "*",
+    "filp/whoops": "*",
+    "laravel/dusk": "*",
+    "mockery/mockery": "*",
+    "phpunit/phpunit": "*"
   },
   "autoload": {
     "classmap": [

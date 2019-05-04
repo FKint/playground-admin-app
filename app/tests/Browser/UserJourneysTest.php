@@ -15,7 +15,7 @@ class UserJourneysTest extends DuskTestCase
     private $ageGroup612, $ageGroupKls;
     private $existingFamily, $existingChild, $existingChildFamily;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         app(\DatabaseSeeder::class)->call(\InitialDataSeeder::class);
@@ -294,8 +294,8 @@ class UserJourneysTest extends DuskTestCase
 
             $transaction = $this->year->getActiveAdminSession()->transactions()->where('family_id', $this->existingFamily->id)->first();
             $this->assertNotNull($transaction);
-            $this->assertEquals("31.50", $transaction->amount_expected);
-            $this->assertEquals("31.50", $transaction->amount_paid);
+            $this->assertEquals("31.50", number_format($transaction->amount_expected, 2));
+            $this->assertEquals("31.50", number_format($transaction->amount_paid, 2));
 
             $this->assertEquals(5, $this->existingChildFamily->child_family_day_registrations()->count());
             $this->assertEquals(2, $child2Family1->child_family_day_registrations()->count());
@@ -343,7 +343,7 @@ class UserJourneysTest extends DuskTestCase
                 ->submitCloseAdminSessionFormSuccessfully();
             $adminSession = \App\AdminSession::where('responsible_name', 'The Admin')->first();
             $this->assertNotNull($adminSession);
-            $this->assertEquals("55.00", $adminSession->counted_cash);
+            $this->assertEquals("55.00", number_format($adminSession->counted_cash, 2));
             $this->assertEquals(2, $adminSession->transactions()->count());
             $newAdminSession = $this->year->getActiveAdminSession();
             $this->assertNotNull($newAdminSession);

@@ -38,7 +38,7 @@ class OrganizationAuthenticationTest extends TestCase
     private $readOnlyAPIRoutes;
     private $writeAPIRoutes;
 
-    public function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->actualOrganization = factory(Organization::class)->create();

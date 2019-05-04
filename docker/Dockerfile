@@ -1,3 +1,32 @@
+##################
+# Base PHP image #
+##################
+# Based on: https://github.com/laradock/php-fpm/blob/master/Dockerfile-73
+# and https://github.com/laradock/laradock/blob/master/php-fpm/Dockerfile
+FROM php:7.3-fpm as php-fpm
+ENV DEBIAN_FRONTEND noninteractive
+RUN apt-get update && \
+    pecl channel-update pecl.php.net && \
+    apt-get install -y --no-install-recommends \
+        apt-utils \
+        curl \
+        libmemcached-dev \
+        libz-dev \
+        libjpeg-dev \
+        libpng-dev \
+        libfreetype6-dev \
+        libssl-dev \
+        libmcrypt-dev \
+        libzip-dev zip unzip && \
+    rm -rf /var/lib/apt/lists/*
+RUN docker-php-ext-install pdo_mysql && \
+    docker-php-ext-configure gd \
+        --with-jpeg-dir=/usr/lib \
+        --with-freetype-dir=/usr/include/freetype2 && \
+    docker-php-ext-install gd && \
+    docker-php-ext-configure zip --with-libzip && \
+    docker-php-ext-install zip
+
 #################################
 # Composer PHP packages builder #
 #################################
@@ -40,7 +69,7 @@ RUN composer install --no-interaction --no-progress --optimize-autoloader
 ######################
 # PHP image: Testing #
 ######################
-FROM fkint/laravel-docker:latest as app-test
+FROM php-fpm as app-test
 WORKDIR /var/www
 COPY --chown=www-data:www-data --from=composer-installer-test /root/app .
 COPY --chown=www-data:www-data --from=npm-builder /root/app/public ./public
@@ -70,7 +99,7 @@ RUN composer install --no-interaction --no-progress --no-dev --optimize-autoload
 ###################
 # PHP image: PROD #
 ###################
-FROM fkint/laravel-docker:latest as app-prod
+FROM php-fpm as app-prod
 WORKDIR /var/www
 USER www-data
 COPY --chown=www-data:www-data --from=composer-installer /root/app .
