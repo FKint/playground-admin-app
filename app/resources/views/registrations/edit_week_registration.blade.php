@@ -147,7 +147,13 @@
             ['id' => 'new-saldo', 'pattern'=>"[0-9]+([\\.,][0-9]+)?", 'step'=>'0.01', 'readonly' => true]) }}
             {{ Form::close() }}
 
-            <button class="btn btn-default" id="btn-set-all-attending-today" dusk="btn-set-all-attending-today">Inchecken</button><br><br>
+            <button class="btn btn-default" id="btn-set-all-attending-today" dusk="btn-set-all-attending-today">Inchecken</button>
+
+            <span id="div-loading-indicator">
+                <i class="fa fa-spinner fa-spin" style="font-size:24px"></i> Loading...
+            </span>
+
+            <br><br>
             <button class="btn btn-primary" id="submit-registration-data">Opslaan</button>
             <button class="btn btn-primary" id="submit-registration-data-and-next" dusk="submit-registration-data-and-next">Opslaan en volgende</button><br>
             <button class="btn btn-default" id="btn-cancel">Annuleren</button><br><br>
@@ -162,18 +168,9 @@
         const today = new Date('{{ $today->format('Y-m-d') }}');
         // TODO(fkint): Improve asynchronous behavior (e.g. by using Promises)
         $(function () {
+
             let form = $('#register-payment-form');
             let table = $('#registration-table');
-
-            function clearRegistrationData() {
-                table.data('populating', parseInt(table.data('populating')) + 1);
-                table.find('input[type=checkbox]').prop('checked', false);
-                table.find('select').each(function () {
-                    this.selectedIndex = 0;
-                });
-                table.find('span.price').html(formatPrice(0));
-                table.data('populating', parseInt(table.data('populating')) - 1);
-            }
 
             function getRegistrationFormData() {
                 const data = {};
@@ -231,28 +228,12 @@
                 return data;
             }
 
-            function increaseNbRequests() {
-                table.data('nb-requests', parseInt(table.data('nb-requests')) + 1);
-            }
-
-            function decreaseNbRequests() {
-                table.data('nb-requests', parseInt(table.data('nb-requests')) - 1);
-            }
-
-            function requestsOutstanding() {
-                const nb_requests = parseInt(table.data('nb-requests'));
-                return nb_requests > 0;
-            }
-
-            function loadCurrentRegistrationData(callback) {
-                increaseNbRequests();
-                $.get('{{ route('api.registration_data', ['week'=>$week, 'family'=>$family]) }}',
-                    function (result) {
-                        decreaseNbRequests();
-                        callback(result);
-                    },
-                    "json"
-                );
+            function clearRegistrationData() {
+                table.find('input[type=checkbox]').prop('checked', false);
+                table.find('select').each(function () {
+                    this.selectedIndex = 0;
+                });
+                table.find('span.price').html(formatPrice(0));
             }
 
             function clearTransactionData() {
@@ -260,14 +241,8 @@
             }
 
             function populateRegistrationData(data) {
-                if (requestsOutstanding()) {
-                    console.log('requests outstanding');
-                    return;
-                }
-                table.data('populating', parseInt(table.data('populating')) + 1);
+                formManager.startPopulating();
                 clearRegistrationData();
-                console.log("Populating: ", data);
-                // TODO: assert that the children linked to this family have not been changed in the meantime
                 form.find('select[name=tariff_id]').val(data.tariff_id);
                 table.find('td.whole-week-registration').each(function () {
                     const child_id = $(this).data('child-id');
@@ -320,13 +295,11 @@
                     $(this).find('.registration-checkbox').prop('checked', activity_list_data.registered);
                     $(this).find('.price').html(formatPrice(activity_list_data.price));
                 });
-                table.data('populating', parseInt(table.data('populating')) - 1);
-
-
                 form.find("#saldo-difference").val(formatPriceWithoutSign(data.price_difference));
                 form.find("#previous-saldo").val(formatPriceWithoutSign(data.saldo));
                 form.find('#received-money').val(formatPriceWithoutSign(data.price_difference));
                 updateNewSaldo();
+                formManager.donePopulating();
             }
 
             function updateNewSaldo() {
@@ -335,6 +308,10 @@
                 const saldo_difference = parseFloat(form.find('#saldo-difference').val());
                 form.find('#new-saldo').val(formatPriceWithoutSign(previous_saldo + saldo_difference - received_money));
             }
+
+            $('#previous-saldo, #received-money').change(function () {
+                updateNewSaldo();
+            });
 
             $('#btn-set-all-attending-today').click(function () {
                 table.find('td.day-attendance').each(function () {
@@ -354,40 +331,111 @@
                 });
             });
 
-            $('#previous-saldo, #received-money').change(function () {
-                updateNewSaldo();
-            });
+            class FormManager{
+                constructor(busyListener, readyListener){
+                    this.populating = false;
+                    this.busyListener = busyListener;
+                    this.readyListener = readyListener;
+                    this.lastTaskData = null;
+                    this.noNewTasksAllowed = false;
+                    this.relevantTaskPending = false;
+                }
+                isPopulating(){
+                    return this.populating;
+                }
+                startPopulating(){
+                    if(this.populating){
+                        throw "cannot initiate multiple population processes at once"
+                    }
+                    this.populating = true;
+                }
+                donePopulating(){
+                    this.populating = false;
+                }
+                canStartNewTask(){
+                    return !this.noNewTasksAllowed;
+                }
+                startTask(data, blocking = false){
+                    if(!this.canStartNewTask()){
+                        throw "No new tasks allowed.";
+                    }
+                    if(blocking){
+                        this.noNewTasksAllowed = true;
+                    }
+                    const previouslyBusy = this.isBusy();
+                    this.relevantTaskPending = true;
+                    this.lastTaskData = data;
+                    if(!previouslyBusy){
+                        this.startWorking();
+                    }
+                }
+                endTask(data){
+                    if(data === this.lastTaskData){
+                        this.noNewTasksAllowed = false;
+                        this.relevantTaskPending = false;
+                        if(!this.isBusy()){
+                            this.stopWorking();
+                        }
+                        return true;
+                    }
+                    console.log("last task data: ", this.lastTaskData, "current data: ", data);
+                    return false;
+                }
+                startWorking(){
+                    this.busyListener();
+                }
+                stopWorking(){
+                    this.readyListener();
+                }
+                isBusy(){
+                    return this.relevantTaskPending;
+                }
+            }
+            function showSpinner(){
+                $('#div-loading-indicator').show();
+                console.log('busy');
+            }
+            function hideSpinner(){
+                $('#div-loading-indicator').hide();
+                console.log('done');
+            }
+            const formManager = new FormManager(showSpinner, hideSpinner);
 
-            function populateCurrentRegistrationData() {
-                loadCurrentRegistrationData(populateRegistrationData);
+            function loadCurrentRegistrationData() {
+                console.log("loading current registration data");
+                formManager.startTask(null, true);
+                return $.get('{{ route('api.registration_data', ['week'=>$week, 'family'=>$family]) }}', null, "json")
+                    .done((data) => {
+                        if(!formManager.endTask(null)){
+                            throw "Loading initial data may never be pre-emptied."
+                        }
+                        return data;
+                    });
             }
 
-            function populateUpdatedRegistrationPrices() {
+            function loadAndPopulateUpdatedRegistrationPrices() {
                 const data = getRegistrationFormData();
                 console.log("sending registration data (no submit)", data);
-                increaseNbRequests();
-                $.post('{{ route('api.simulate_submit_registration_data', [
-            'week_id' => $week->id, 'family_id' => $family->id]) }}',
-                    data, function (response) {
+                formManager.startTask(data);
+                return $.post('{{ route('api.simulate_submit_registration_data', ['week_id' => $week->id, 'family_id' => $family->id]) }}', data, null, "json")
+                    .done((response) => {
                         console.log("got prices data back", response);
-                        decreaseNbRequests();
-                        populateRegistrationData(response);
-                    }
-                );
+                        if(formManager.endTask(data)){
+                            populateRegistrationData(response);
+                        }
+                    });
             }
 
-            function submitRegistrationData(done) {
+            function submitRegistrationData() {
                 const data = getRegistrationFormData();
                 console.log("sending registration data: ", data);
-                increaseNbRequests();
-                $.post('{{ route('api.submit_registration_data', ['week' => $week, 'family' => $family]) }}',
-                    data, function (response) {
+                formManager.startTask(data, true);
+                return $.post('{{ route('api.submit_registration_data', ['week' => $week, 'family' => $family]) }}', data, null, "json")
+                    .done((response) => {
                         console.log('Submitted registration data, got following back: ', response);
-                        decreaseNbRequests();
-                        populateRegistrationData(response);
-                        clearTransactionData();
-                        if (done !== null) {
-                            done();
+                        if(formManager.endTask(data)){
+                            populateRegistrationData(response);
+                            clearTransactionData();
                         }
                     });
             }
@@ -406,14 +454,15 @@
                 window.location.href = '{!! route('internal.registrations') !!}';
             });
 
-            function refreshRegistrationPrices(){
-                if (parseInt(table.data('populating')) === 0) {
-                    populateUpdatedRegistrationPrices();
+            table.on('change', '.registration-setting', () => {
+                if(!formManager.isPopulating()) {
+                    loadAndPopulateUpdatedRegistrationPrices();
                 }
-            }
-            table.on('change', '.registration-setting', refreshRegistrationPrices);
+            });
 
-            populateCurrentRegistrationData();
+            loadCurrentRegistrationData()
+                .done(data => populateRegistrationData(data))
+                .fail(() => alert('an error occurred'));
         });
     </script>
 @endpush
