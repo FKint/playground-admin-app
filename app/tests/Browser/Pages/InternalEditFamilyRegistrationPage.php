@@ -50,10 +50,19 @@ class InternalEditFamilyRegistrationPage extends InternalPage
         $browser->assertSee("Wijzig registratie voor familie " . $this->familyId . ": " . $guardianName);
     }
 
+    protected function getWeekRegistrationForChildSelector($childId)
+    {
+        return 'td.whole-week-registration[data-child-id="' . $childId . '"] input.registration-checkbox';
+    }
+
     public function selectWeekRegistrationForChild(Browser $browser, $childId)
     {
-        $selector = 'td.whole-week-registration[data-child-id="' . $childId . '"] input.registration-checkbox';
-        $browser->check($selector);
+        $browser->check($this->getWeekRegistrationForChildSelector($childId));
+    }
+    
+    public function unselectWeekRegistrationForChild(Browser $browser, $childId)
+    {
+        $browser->uncheck($this->getWeekRegistrationForChildSelector($childId));
     }
 
     protected function getDayRegistrationForChildSelector($childId, $weekdayId)
@@ -64,6 +73,11 @@ class InternalEditFamilyRegistrationPage extends InternalPage
     public function selectDayRegistrationForChild(Browser $browser, $childId, $weekdayId)
     {
         $browser->check($this->getDayRegistrationForChildSelector($childId, $weekdayId));
+    }
+
+    public function unselectDayRegistrationForChild(Browser $browser, $childId, $weekdayId)
+    {
+        $browser->uncheck($this->getDayRegistrationForChildSelector($childId, $weekdayId));
     }
 
     public function assertDayRegistrationForChild(Browser $browser, $childId, $weekdayId)
@@ -132,7 +146,7 @@ class InternalEditFamilyRegistrationPage extends InternalPage
     {
         $browser->assertSee($name);
     }
-    
+
     public function assertDontSeeActivityList(Browser $browser, $name)
     {
         $browser->assertDontSee($name);

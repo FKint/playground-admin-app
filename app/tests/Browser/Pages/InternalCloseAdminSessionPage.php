@@ -32,6 +32,7 @@ class InternalCloseAdminSessionPage extends InternalPage
     {
         $this->enterAdminSessionFormData($browser, "close-admin-session-form", $responsibleName, $actualIncome, $remarks);
     }
+    
     public function submitCloseAdminSessionFormSuccessfully(Browser $browser)
     {
         $browser->click('@submit')

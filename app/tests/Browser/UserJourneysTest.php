@@ -346,6 +346,28 @@ class UserJourneysTest extends DuskTestCase
             $this->assertNotNull($newAdminSession);
             $this->assertEquals(0, $newAdminSession->transactions()->count());
             $browser->assertSeeAdminSession($adminSession->id, "The Admin", 2, "56.50", "55.00", "-1.50", "Dropped some coins and didn't find all of them.");
+
+            $browser->navigateToRegistrationsPage($lastDate)
+                ->navigateToRegistrationsWithDatePage($date)
+                ->navigateToRegisterFindFamilyPage($playgroundDay->week_id)
+                ->enterFindFamilyFormData("Reinoud")
+                ->selectFindFamilySuggestion("Reinoud Declercq")
+                ->assertOnEditFamilyRegistrationPage($playgroundDay->week_id, $this->existingFamily->id, "Veronique Baeten")
+                ->unselectWeekRegistrationForChild($this->existingChild->id)
+                ->unselectDayRegistrationForChild($child2->id, $wednesday->id)
+                ->pause(5000) // TODO(fkint): add a loading indicator to the page instead of waiting until this literal text appears
+                ->selectWeekRegistrationForChild($this->existingChild->id)
+                ->selectDayRegistrationForChild($child2->id, $wednesday->id)
+                ->pause(5000) // TODO(fkint): add a loading indicator to the page instead of waiting until this literal text appears
+                ->assertExpectedAmount("-1.00") // only supplements are cancelled
+                ->unselectWeekRegistrationForChild($this->existingChild->id)
+                ->unselectDayRegistrationForChild($child2->id, $wednesday->id)
+                ->pause(5000) // TODO(fkint): add a loading indicator to the page instead of waiting until this literal text appears
+                ->assertExpectedAmount("-26.50")
+                ->assertPaidFieldContent("-26.50")
+                ->submitRegistrationFormAndNavigateToNext()
+                ->navigateToDashboardPage()
+                ->assertSeeAdminSession($newAdminSession->id, null, 1, "-26.50", null, null, null);
         });
     }
 

@@ -62,13 +62,25 @@ class InternalDashboardPage extends InternalPage
     public function assertSeeAdminSession(Browser $browser, $adminSessionId, $responsibleName, $nbTransactions, $expectedIncome, $actualIncome, $error, $remarks)
     {
         $selector = '[dusk="admin-sessions-table"] tr[data-admin-session-id="' . $adminSessionId . '"] ';
-        $browser->waitFor($selector)
-            ->assertSeeIn($selector . '[data-field="responsible_name"]', $responsibleName)
-            ->assertSeeIn($selector . '[data-field="nb_transactions"]', $nbTransactions)
-            ->assertSeeIn($selector . '[data-field="expected_income"]', $expectedIncome)
-            ->assertSeeIn($selector . '[data-field="actual_income"]', $actualIncome)
-            ->assertSeeIn($selector . '[data-field="error"]', $error)
-            ->assertSeeIn($selector . '[data-field="remarks"]', $remarks);
+        $browser->waitFor($selector);
+        if (!is_null($responsibleName)) {
+            $browser->assertSeeIn($selector . '[data-field="responsible_name"]', $responsibleName);
+        }
+        if (!is_null($nbTransactions)) {
+            $browser->assertSeeIn($selector . '[data-field="nb_transactions"]', $nbTransactions);
+        }
+        if (!is_null($expectedIncome)) {
+            $browser->assertSeeIn($selector . '[data-field="expected_income"]', $expectedIncome);
+        }
+        if (!is_null($actualIncome)) {
+            $browser->assertSeeIn($selector . '[data-field="actual_income"]', $actualIncome);
+        }
+        if (!is_null($error)) {
+            $browser->assertSeeIn($selector . '[data-field="error"]', $error);
+        }
+        if (!is_null($remarks)) {
+            $browser->assertSeeIn($selector . '[data-field="remarks"]', $remarks);
+        }
     }
 
     public function closeAdminSession(Browser $browser)
