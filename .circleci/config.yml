@@ -12,7 +12,9 @@ jobs:
     steps:
       - checkout
       - run: composer global require friendsofphp/php-cs-fixer
-      - run: cd app && php-cs-fixer fix --dry-run --diff --diff-format udiff
+      - run: |
+        export PATH="$PATH:$HOME/.composer/vendor/bin"
+        cd app && php-cs-fixer fix --dry-run --diff --diff-format udiff
   build-docker-images:
     executor: docker-publisher
     steps:
