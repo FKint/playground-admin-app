@@ -18,7 +18,8 @@ use App\Year;
 use Tests\TestCase;
 
 class OrganizationAuthenticationTest extends TestCase
-{  private $actualUser;
+{
+    private $actualUser;
     private $actualOrganization;
     private $actualYear;
     private $actualFamily;
