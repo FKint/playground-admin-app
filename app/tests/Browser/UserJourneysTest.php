@@ -333,6 +333,19 @@ class UserJourneysTest extends DuskTestCase
             $this->assertEquals(1, $activityList->child_families()->count());
             $participatingChildFamily = $activityList->child_families()->first();
             $this->assertEquals($child3->id, $participatingChildFamily->child_id);
+
+            $browser->navigateToDashboardPage()
+                ->closeAdminSession()
+                ->enterCloseAdminSessionFormData("The Admin", "55.00", "Dropped some coins and didn't find all of them.")
+                ->submitCloseAdminSessionFormSuccessfully();
+            $adminSession = \App\AdminSession::where('responsible_name', 'The Admin')->first();
+            $this->assertNotNull($adminSession);
+            $this->assertEquals("55.00", $adminSession->counted_cash);
+            $this->assertEquals(2, $adminSession->transactions()->count());
+            $newAdminSession = $this->year->getActiveAdminSession();
+            $this->assertNotNull($newAdminSession);
+            $this->assertEquals(0, $newAdminSession->transactions()->count());
+            $browser->assertSeeAdminSession($adminSession->id, "The Admin", 2, "56.50", "55.00", "-1.50", "Dropped some coins and didn't find all of them.");
         });
     }
 

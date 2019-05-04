@@ -58,4 +58,22 @@ class InternalDashboardPage extends InternalPage
     {
         $browser->assertDontSeeLink($name);
     }
+
+    public function assertSeeAdminSession(Browser $browser, $adminSessionId, $responsibleName, $nbTransactions, $expectedIncome, $actualIncome, $error, $remarks)
+    {
+        $selector = '[dusk="admin-sessions-table"] tr[data-admin-session-id="' . $adminSessionId . '"] ';
+        $browser->waitFor($selector)
+            ->assertSeeIn($selector . '[data-field="responsible_name"]', $responsibleName)
+            ->assertSeeIn($selector . '[data-field="nb_transactions"]', $nbTransactions)
+            ->assertSeeIn($selector . '[data-field="expected_income"]', $expectedIncome)
+            ->assertSeeIn($selector . '[data-field="actual_income"]', $actualIncome)
+            ->assertSeeIn($selector . '[data-field="error"]', $error)
+            ->assertSeeIn($selector . '[data-field="remarks"]', $remarks);
+    }
+
+    public function closeAdminSession(Browser $browser)
+    {
+        $browser->clickLink('Huidige kassa afsluiten')
+            ->on(new InternalCloseAdminSessionPage($this->yearId));
+    }
 }

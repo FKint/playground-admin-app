@@ -162,4 +162,19 @@ abstract class InternalPage extends BasePage
             }
         }
     }
+
+    public function enterAdminSessionFormData(Browser $browser, $duskSelector, $responsibleName, $actualIncome, $remarks)
+    {
+        $browser->waitFor("@" . $duskSelector);
+        $fullSelector = '[dusk="' . $duskSelector . '"] ';
+        if (!is_null($responsibleName)) {
+            $browser->type($fullSelector . '[dusk="responsible_name"]', $responsibleName);
+        }
+        if (!is_null($actualIncome)) {
+            $browser->type($fullSelector . '[dusk="counted_cash"]', $actualIncome);
+        }
+        if (!is_null($remarks)) {
+            $browser->type($fullSelector . '[dusk="remarks"]', $remarks);
+        }
+    }
 }
