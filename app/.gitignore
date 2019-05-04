@@ -9,3 +9,6 @@ Homestead.yaml
 composer.phar
 npm-debug.log
 yarn-error.log
+
+.php_cs.cache
+.php_cs

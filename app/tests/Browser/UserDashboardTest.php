@@ -10,7 +10,9 @@ use Tests\DuskTestCase;
 class UserDashboardTest extends DuskTestCase
 {
     private $user1;
-    private $year1, $year2, $year3;
+    private $year1;
+    private $year2;
+    private $year3;
 
     public function setUp(): void
     {

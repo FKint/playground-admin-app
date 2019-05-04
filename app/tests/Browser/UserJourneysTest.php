@@ -11,9 +11,13 @@ class UserJourneysTest extends DuskTestCase
 {
     private $user;
     private $year;
-    private $normalTariff, $socialTariff;
-    private $ageGroup612, $ageGroupKls;
-    private $existingFamily, $existingChild, $existingChildFamily;
+    private $normalTariff;
+    private $socialTariff;
+    private $ageGroup612;
+    private $ageGroupKls;
+    private $existingFamily;
+    private $existingChild;
+    private $existingChildFamily;
 
     public function setUp(): void
     {
@@ -261,9 +265,13 @@ class UserJourneysTest extends DuskTestCase
             $child3 = factory(\App\Child::class)->create(['year_id' => $this->year->id, 'first_name' => 'Wouter', 'last_name' => 'Sanders', 'age_group_id' => $this->ageGroupKls->id]);
             $child3->families()->syncWithoutDetaching([$family2->id => ['year_id' => $this->year->id]]);
 
-            $lastDate = $this->year->playground_days()->get()->map(function ($playgroundDay) {return $playgroundDay->date();})->max();
+            $lastDate = $this->year->playground_days()->get()->map(function ($playgroundDay) {
+                return $playgroundDay->date();
+            })->max();
             $date = new \DateTimeImmutable("2018-07-11"); // Wednesday of the second week
-            $playgroundDay = $this->year->playground_days()->get()->filter(function ($playgroundDay) use ($date) {return $playgroundDay->date()->format('Y-m-d') === $date->format('Y-m-d');})->first();
+            $playgroundDay = $this->year->playground_days()->get()->filter(function ($playgroundDay) use ($date) {
+                return $playgroundDay->date()->format('Y-m-d') === $date->format('Y-m-d');
+            })->first();
 
             $monday = $this->year->week_days()->where('name', 'Maandag')->firstOrFail();
             $tuesday = $this->year->week_days()->where('name', 'Dinsdag')->firstOrFail();

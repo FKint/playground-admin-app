@@ -49,7 +49,7 @@ class ListsController extends Controller
             0,
             "Kind " . $child_family->child->full_name() . " uitgeschreven van lijst " . $activity_list->name . " (ID: " . $activity_list->id . ")"
         );
-        return array("success" => true);
+        return ["success" => true];
     }
 
     public function getListChildFamilySuggestions(Request $request, Year $year, ActivityList $list)
@@ -75,17 +75,17 @@ class ListsController extends Controller
             0,
             "Kind " . $child_family->child->full_name() . " ingeschreven op lijst " . $activity_list->name . " (ID: " . $activity_list->id . ")"
         );
-        return array("success" => true);
+        return ["success" => true];
     }
 
     protected function addTransaction(Year $year, Family $family, $expected, $paid, string $remarks)
     {
-        $transaction = new Transaction(array(
+        $transaction = new Transaction([
             'amount_paid' => $paid,
             'amount_expected' => $expected,
             'remarks' => $remarks,
             'year_id' => $year->id
-        ));
+        ]);
         $admin_session = $year->getActiveAdminSession();
         $transaction->admin_session()->associate($admin_session);
         $transaction->family()->associate($family);

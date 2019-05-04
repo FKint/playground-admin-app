@@ -73,5 +73,4 @@ class YearPolicy
     {
         return $this->update($user, $year);
     }
-
 }

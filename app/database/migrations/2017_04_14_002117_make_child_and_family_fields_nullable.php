@@ -16,10 +16,10 @@ class MakeChildAndFamilyFieldsNullable extends Migration
         Schema::table('children', function (Blueprint $table) {
             $table->string('remarks')->nullable()->change();
         });
-        Schema::table('families', function(Blueprint $table){
+        Schema::table('families', function (Blueprint $table) {
             $table->string('remarks')->nullable()->change();
         });
-        Schema::table('families', function(Blueprint $table){
+        Schema::table('families', function (Blueprint $table) {
             $table->string('contact')->nullable()->change();
         });
     }
@@ -34,9 +34,10 @@ class MakeChildAndFamilyFieldsNullable extends Migration
         Schema::table('children', function (Blueprint $table) {
             $table->string('remarks')->change();
         });
-        Schema::table('families', function(Blueprint $table){
+        Schema::table('families', function (Blueprint $table) {
             $table->string('remarks')->change();
-        }); Schema::table('families', function(Blueprint $table){
+        });
+        Schema::table('families', function (Blueprint $table) {
             $table->string('contact')->change();
         });
     }

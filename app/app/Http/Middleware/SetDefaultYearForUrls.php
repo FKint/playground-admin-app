@@ -18,7 +18,7 @@ class SetDefaultYearForUrls
     {
         if ($request->route()->hasParameter('year')) {
             URL::defaults(['year' => $request->route('year')->id]);
-        } else if ($request->user()) {
+        } elseif ($request->user()) {
             $lastYear = $request->user()->organization->years()->orderBy('created_at', 'DESC')->first();
             if ($lastYear) {
                 URL::defaults(['year' => $lastYear->id]);

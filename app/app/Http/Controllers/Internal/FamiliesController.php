@@ -142,5 +142,4 @@ class FamiliesController extends Controller
         $family->children()->syncWithoutDetaching([$child->id => ['year_id' => $year->id]]);
         return $family;
     }
-
 }

@@ -155,8 +155,10 @@ class UpdateRegistrationsStructure extends Migration
             $table->integer('supplement_id')->unsigned()->index();
             $table->foreign('supplement_id')->references('id')->on('supplements');
 
-            $table->unique(['child_family_day_registration_id', 'supplement_id'],
-                'child_family_playground_day_supplement_unique');
+            $table->unique(
+                ['child_family_day_registration_id', 'supplement_id'],
+                'child_family_playground_day_supplement_unique'
+            );
 
             $table->timestamps();
         });

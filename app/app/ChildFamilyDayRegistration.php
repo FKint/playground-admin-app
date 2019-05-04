@@ -14,7 +14,8 @@ class ChildFamilyDayRegistration extends Model
             Supplement::class,
             'child_family_day_registration_supplements',
             'child_family_day_registration_id',
-            'supplement_id');
+            'supplement_id'
+        );
     }
 
     public function playground_day()
@@ -41,5 +42,4 @@ class ChildFamilyDayRegistration extends Model
     {
         return $this->hasMany(ChildFamilyDayRegistrationSupplement::class);
     }
-
 }

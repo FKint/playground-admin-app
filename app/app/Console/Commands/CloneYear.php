@@ -58,7 +58,7 @@ class CloneYear extends Command
         // get last date
         $last_day = $this->ask_date('Last day');
         // get list of exception days
-        $exception_days = array();
+        $exception_days = [];
         while ($this->ask('Do you want to add an exception day (remove a date from the calendar)?') == 'y') {
             $exception_days[] = $this->ask_date('Exception day');
         }

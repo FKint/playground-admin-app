@@ -48,13 +48,13 @@ class ChildrenController extends Controller
     {
         $this->authorize('create_child', $year);
         $data = $request->validated();
-        $data = array(
+        $data = [
             'first_name' => ucfirst($data['first_name']),
             'last_name' => ucfirst($data['last_name']),
             'birth_year' => $data['birth_year'],
             'age_group_id' => $data['age_group_id'],
             'remarks' => $data['remarks'],
-        );
+        ];
 
         $child = new Child($data);
         $child->year()->associate($year);
@@ -158,14 +158,14 @@ class ChildrenController extends Controller
     {
         $this->authorize('create_child', $year);
         $data = $request->validated();
-        $data = array(
+        $data = [
             'first_name' => ucfirst($data['first_name']),
             'last_name' => ucfirst($data['last_name']),
             'birth_year' => $data['birth_year'],
             'age_group_id' => $data['age_group_id'],
             'remarks' => $data['remarks'],
             'year_id' => $year->id
-        );
+        ];
         $child = Child::create($data);
         $child->save();
         return $child;

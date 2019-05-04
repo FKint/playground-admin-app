@@ -11,7 +11,6 @@ use Yajra\DataTables\DataTables;
 
 class AdminSessionsController extends Controller
 {
-
     public function showCloseAdminSession(Year $year)
     {
         $admin_session = $year->getActiveAdminSession();
@@ -25,12 +24,12 @@ class AdminSessionsController extends Controller
     {
         $admin_session = $year->getActiveAdminSession();
         $validated_data = $request->validated();
-        $data = array(
+        $data = [
             "responsible_name" => $validated_data['responsible_name'],
             "counted_cash" => $validated_data['counted_cash'],
             "session_end" => Carbon::now(),
             "remarks" => $validated_data['remarks']
-        );
+        ];
         $admin_session->update($data);
         $admin_session->save();
         $new_admin_session = new AdminSession();
