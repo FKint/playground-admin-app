@@ -287,7 +287,7 @@ class UserJourneysTest extends DuskTestCase
                 ->selectSupplementForChild($this->existingChild->id, $monday->id, $supplementIceCream->id)
                 ->selectSupplementForChild($child2->id, $wednesday->id, $supplementIceCream->id)
                 ->checkInChild($child2->id, $wednesday->id)
-                ->pause(5000) // TODO(fkint): add a loading indicator to the page instead of waiting until this literal text appears
+                ->waitUntilRequestsSettled()
                 ->assertExpectedAmount("31.50")
                 ->assertPaidFieldContent("31.50")
                 ->submitRegistrationFormAndNavigateToNext();
@@ -327,7 +327,7 @@ class UserJourneysTest extends DuskTestCase
                 ->selectActivityListRegistrationForChild($child3->id, $activityList->id)
                 ->checkInChild($child3->id, $tuesday->id)
                 ->checkInChild($child2->id, $tuesday->id)
-                ->pause(5000) // TODO(fkint): add a loading indicator to the page instead of waiting until this literal text appears
+                ->waitUntilRequestsSettled()
                 ->assertExpectedAmount("27.39")
                 ->enterPaidField("25")
                 ->assertNewSaldo("2.39")
@@ -359,14 +359,14 @@ class UserJourneysTest extends DuskTestCase
                 ->assertChildNotCheckedIn($this->existingChild->id, $monday->id)
                 ->unselectWeekRegistrationForChild($this->existingChild->id)
                 ->unselectDayRegistrationForChild($child2->id, $wednesday->id)
-                ->pause(5000) // TODO(fkint): add a loading indicator to the page instead of waiting until this literal text appears
+                ->waitUntilRequestsSettled()
                 ->selectWeekRegistrationForChild($this->existingChild->id)
                 ->selectDayRegistrationForChild($child2->id, $wednesday->id)
-                ->pause(5000) // TODO(fkint): add a loading indicator to the page instead of waiting until this literal text appears
+                ->waitUntilRequestsSettled()
                 ->assertExpectedAmount("-1.00") // only supplements are cancelled
                 ->unselectWeekRegistrationForChild($this->existingChild->id)
                 ->unselectDayRegistrationForChild($child2->id, $wednesday->id)
-                ->pause(5000) // TODO(fkint): add a loading indicator to the page instead of waiting until this literal text appears
+                ->waitUntilRequestsSettled()
                 ->assertExpectedAmount("-26.50")
                 ->enterPaidField("-24.50")
                 ->submitRegistrationFormAndNavigateToNext()

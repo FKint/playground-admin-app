@@ -149,7 +149,7 @@
 
             <button class="btn btn-default" id="btn-set-all-attending-today" dusk="btn-set-all-attending-today">Inchecken</button>
 
-            <span id="div-loading-indicator">
+            <span id="loading-indicator" dusk="loading-indicator">
                 <i class="fa fa-spinner fa-spin" style="font-size:24px"></i> Loading...
             </span>
 
@@ -378,7 +378,6 @@
                         }
                         return true;
                     }
-                    console.log("last task data: ", this.lastTaskData, "current data: ", data);
                     return false;
                 }
                 startWorking(){
@@ -392,17 +391,14 @@
                 }
             }
             function showSpinner(){
-                $('#div-loading-indicator').show();
-                console.log('busy');
+                $('#loading-indicator').show();
             }
             function hideSpinner(){
-                $('#div-loading-indicator').hide();
-                console.log('done');
+                $('#loading-indicator').hide();
             }
             const formManager = new FormManager(showSpinner, hideSpinner);
 
             function loadCurrentRegistrationData() {
-                console.log("loading current registration data");
                 formManager.startTask(null, true);
                 return $.get('{{ route('api.registration_data', ['week'=>$week, 'family'=>$family]) }}', null, "json")
                     .done((data) => {
@@ -415,11 +411,9 @@
 
             function loadAndPopulateUpdatedRegistrationPrices() {
                 const data = getRegistrationFormData();
-                console.log("sending registration data (no submit)", data);
                 formManager.startTask(data);
                 return $.post('{{ route('api.simulate_submit_registration_data', ['week_id' => $week->id, 'family_id' => $family->id]) }}', data, null, "json")
                     .done((response) => {
-                        console.log("got prices data back", response);
                         if(formManager.endTask(data)){
                             populateRegistrationData(response);
                         }
@@ -428,11 +422,9 @@
 
             function submitRegistrationData() {
                 const data = getRegistrationFormData();
-                console.log("sending registration data: ", data);
                 formManager.startTask(data, true);
                 return $.post('{{ route('api.submit_registration_data', ['week' => $week, 'family' => $family]) }}', data, null, "json")
                     .done((response) => {
-                        console.log('Submitted registration data, got following back: ', response);
                         if(formManager.endTask(data)){
                             populateRegistrationData(response);
                             clearTransactionData();
@@ -441,12 +433,12 @@
             }
 
             $('#submit-registration-data').click(function () {
-                submitRegistrationData(function () {
+                submitRegistrationData().done(() => {
                     window.location.href = '{!! route('internal.registrations') !!}';
                 });
             });
             $('#submit-registration-data-and-next').click(function () {
-                submitRegistrationData(function(){
+                submitRegistrationData().done(() => {
                     window.location.href = '{!! route('internal.show_find_family_registration', ['week' => $week]) !!}';
                 });
             });
