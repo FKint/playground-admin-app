@@ -394,7 +394,8 @@ class UserJourneysTest extends DuskTestCase
         $this->browse(function (Browser $browser) {
             $browser->loginAs($this->user)
                 ->visit(new InternalDashboardPage($this->year->id))
-                ->navigateToSettingsPage();
+                ->navigateToSettingsPage()
+                ->screenshot("settings_page");
         });
     }
 }

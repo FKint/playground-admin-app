@@ -106,7 +106,7 @@ jobs:
           command: |
             mkdir -p /tmp/dusk && touch /tmp/dusk/server.log
             docker network create tmp-dusk-network
-            docker run -d --name app-container -v "/tmp/dusk/screenshots:/var/www/tests/Browser/screenshots" -v "/tmp/dusk/console:/var/www/tests/Browser/console" -v "/tmp/dusk/server.log:/var/www/storage/laravel.log" --network tmp-dusk-network $IMAGE_NAME:app-test php artisan serve --host=app-container
+            docker run -d --name app-container -v "/tmp/dusk/screenshots:/var/www/tests/Browser/screenshots" -v "/tmp/dusk/console:/var/www/tests/Browser/console" -v "/tmp/dusk/server.log:/var/www/storage/logs/laravel.log" --network tmp-dusk-network $IMAGE_NAME:app-test php artisan serve --host=app-container
             docker run -d --name selenium --network tmp-dusk-network --shm-size=2g selenium/standalone-chrome:3
             docker exec app-container curl --retry 10 --retry-connrefused http://app-container:8000 > /dev/null
             docker exec app-container curl --retry 10 --retry-connrefused http://selenium:4444 > /dev/null
