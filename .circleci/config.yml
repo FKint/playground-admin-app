@@ -19,8 +19,11 @@ jobs:
             echo "$CIRCLE_SHA1" > .circle-sha1
       - restore_cache:
           keys:
-            - docker-images-2019041500-{{ checksum ".circle-branch" }}
-            - docker-images-2019041500
+            - docker-images-2019050400-{{ checksum "docker/Dockerfile" }}-{{ checksum "app/composer.lock" }}-{{ checksum "app/yarn.lock" }}-{{ checksum ".circle-branch" }}
+            - docker-images-2019050400-{{ checksum "docker/Dockerfile" }}-{{ checksum "app/composer.lock" }}-{{ checksum "app/yarn.lock" }}
+            - docker-images-2019050400-{{ checksum "docker/Dockerfile" }}-{{ checksum "app/composer.lock" }}
+            - docker-images-2019050400-{{ checksum "docker/Dockerfile" }}
+            - docker-images-2019050400
       - run:
           name: Load cached layers
           command: |
@@ -45,7 +48,7 @@ jobs:
             docker save -o /tmp/docker-app-test.tar $IMAGE_NAME:app-test
             docker save -o /tmp/docker-prod.tar $IMAGE_NAME:app-prod $IMAGE_NAME:nginx-prod
       - save_cache:
-          key: docker-images-2019041500-{{ checksum ".circle-branch" }}-{{ checksum ".circle-sha1" }}
+          key: docker-images-2019050400-{{ checksum "docker/Dockerfile" }}-{{ checksum "app/composer.lock" }}-{{ checksum "app/yarn.lock" }}-{{ checksum ".circle-branch" }}-{{ checksum ".circle-sha1" }}
           paths:
             - /tmp/docker-images.tar
       - persist_to_workspace:
