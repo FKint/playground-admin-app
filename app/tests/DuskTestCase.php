@@ -14,6 +14,14 @@ abstract class DuskTestCase extends BaseTestCase
     use CreatesApplication;
     use DatabaseMigrations;
     use ProvidesBrowser;
+    use ReplaceSqliteDropForeignWithNoop;
+
+
+    public function __construct(?string $name = null, array $data = [], string $dataName = '')
+    {
+        parent::__construct($name, $data, $dataName);
+        $this->hotfixSqlite();
+    }
 
     /**
      * Prepare for Dusk test execution.
@@ -23,10 +31,9 @@ abstract class DuskTestCase extends BaseTestCase
      */
     public static function prepare()
     {
-        // static::startChromeDriver();
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         parent::tearDown();
         

@@ -18,7 +18,7 @@ class CloneYearTest extends TestCase
 {
     protected $year;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $this->year = factory(Year::class)->create();
