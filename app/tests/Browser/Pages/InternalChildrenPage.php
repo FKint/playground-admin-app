@@ -76,7 +76,6 @@ class InternalChildrenPage extends InternalPage
 
     public function assertSeeChildEntryInTable(Browser $browser, $childId, $firstName, $lastName)
     {
-        // TODO(fkint): Use a better selector verifying that $firstName and $lastName appear together in a row.
         $selector = '[dusk="children-table"] tr[data-child-id="' . $childId . '"] ';
         $browser->waitFor($selector)
             ->assertSeeIn($selector . '[data-field="first_name"]', $firstName)
