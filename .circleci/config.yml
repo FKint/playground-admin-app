@@ -71,7 +71,7 @@ jobs:
           command: |
             docker tag $IMAGE_NAME:app-prod "$IMAGE_NAME:app-prod-$CIRCLE_BRANCH-$CIRCLE_SHA1"
             docker push $IMAGE_NAME:app-prod
-            docker push $IMAGE_NAME:app-prod-$CIRCLE_BRANCH-CIRCLE_SHA1
+            docker push $IMAGE_NAME:app-prod-$CIRCLE_BRANCH-$CIRCLE_SHA1
             docker tag $IMAGE_NAME:nginx-prod "$IMAGE_NAME:nginx-prod-$CIRCLE_BRANCH-$CIRCLE_SHA1"
             docker push $IMAGE_NAME:nginx-prod
             docker push $IMAGE_NAME:nginx-prod-$CIRCLE_BRANCH-$CIRCLE_SHA1
