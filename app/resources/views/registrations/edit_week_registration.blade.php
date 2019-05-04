@@ -147,7 +147,7 @@
             ['id' => 'new-saldo', 'pattern'=>"[0-9]+([\\.,][0-9]+)?", 'step'=>'0.01', 'readonly' => true]) }}
             {{ Form::close() }}
 
-            <button class="btn btn-default" id="btn-set-all-attending-today">Inchecken</button><br><br>
+            <button class="btn btn-default" id="btn-set-all-attending-today" dusk="btn-set-all-attending-today">Inchecken</button><br><br>
             <button class="btn btn-primary" id="submit-registration-data">Opslaan</button>
             <button class="btn btn-primary" id="submit-registration-data-and-next" dusk="submit-registration-data-and-next">Opslaan en volgende</button><br>
             <button class="btn btn-default" id="btn-cancel">Annuleren</button><br><br>

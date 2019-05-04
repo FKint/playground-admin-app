@@ -16,7 +16,7 @@ abstract class InternalPage extends BasePage
 
     abstract protected function getRouteName();
 
-    protected function getRouteParams()
+    protected function getRouteParams($includeQueryParams = true)
     {
         return ['year' => $this->yearId];
     }
@@ -28,7 +28,7 @@ abstract class InternalPage extends BasePage
      */
     public function url()
     {
-        return route($this->getRouteName(), $this->getRouteParams());
+        return route($this->getRouteName(), $this->getRouteParams(true));
     }
 
     /**
@@ -39,7 +39,7 @@ abstract class InternalPage extends BasePage
      */
     public function assert(Browser $browser)
     {
-        $browser->assertRouteIs($this->getRouteName(), $this->getRouteParams());
+        $browser->assertRouteIs($this->getRouteName(), $this->getRouteParams(false));
     }
 
     /**

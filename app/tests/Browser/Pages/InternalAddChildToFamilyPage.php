@@ -24,9 +24,9 @@ class InternalAddChildToFamilyPage extends InternalPage
         return 'internal.show_add_child_to_family';
     }
 
-    protected function getRouteParams()
+    protected function getRouteParams($includeQueryParams = true)
     {
-        $params = parent::getRouteParams();
+        $params = parent::getRouteParams($includeQueryParams);
         $params['family'] = $this->familyId;
         return $params;
     }

@@ -24,9 +24,9 @@ class InternalActivityListPage extends InternalPage
         return 'internal.show_list';
     }
 
-    protected function getRouteParams()
+    protected function getRouteParams($includeQueryParams = true)
     {
-        $params = parent::getRouteParams();
+        $params = parent::getRouteParams($includeQueryParams);
         $params['list'] = $this->activityListId;
         return $params;
     }

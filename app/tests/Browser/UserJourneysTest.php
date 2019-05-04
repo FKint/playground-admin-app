@@ -4,6 +4,7 @@ namespace Tests\Browser;
 
 use Laravel\Dusk\Browser;
 use Tests\Browser\Pages\InternalDashboardPage;
+use Tests\Browser\Pages\InternalEditFamilyRegistrationPage;
 use Tests\DuskTestCase;
 
 class UserJourneysTest extends DuskTestCase
@@ -285,7 +286,6 @@ class UserJourneysTest extends DuskTestCase
                 ->selectDayAgeGroupForChild($child2->id, $monday->id, $this->ageGroupKls->id)
                 ->selectSupplementForChild($this->existingChild->id, $monday->id, $supplementIceCream->id)
                 ->selectSupplementForChild($child2->id, $wednesday->id, $supplementIceCream->id)
-                ->checkInChild($this->existingChild->id, $wednesday->id)
                 ->checkInChild($child2->id, $wednesday->id)
                 ->pause(5000) // TODO(fkint): add a loading indicator to the page instead of waiting until this literal text appears
                 ->assertExpectedAmount("31.50")
@@ -308,6 +308,9 @@ class UserJourneysTest extends DuskTestCase
             $this->assertNotNull($mondayRegistrationChild2);
             $this->assertFalse((bool) $mondayRegistrationChild2->attended);
             $this->assertEquals(0, $mondayRegistrationChild2->supplements()->count());
+            $mondayRegistrationExistingChild = $this->existingChildFamily->child_family_day_registrations()->where(['week_day_id' => $wednesday->id])->first();
+            $this->assertNotNull($mondayRegistrationExistingChild);
+            $this->assertFalse((bool) $mondayRegistrationExistingChild->attended);
 
             $activityList = factory(\App\ActivityList::class)->create(['year_id' => $this->year->id, 'name' => 'Kid Rock', 'show_on_attendance_form' => true, 'price' => "0.89"]);
             $activityList2 = factory(\App\ActivityList::class)->create(['year_id' => $this->year->id, 'name' => 'Swimming', 'show_on_attendance_form' => false]);
@@ -347,12 +350,13 @@ class UserJourneysTest extends DuskTestCase
             $this->assertEquals(0, $newAdminSession->transactions()->count());
             $browser->assertSeeAdminSession($adminSession->id, "The Admin", 2, "56.50", "55.00", "-1.50", "Dropped some coins and didn't find all of them.");
 
-            $browser->navigateToRegistrationsPage($lastDate)
-                ->navigateToRegistrationsWithDatePage($date)
-                ->navigateToRegisterFindFamilyPage($playgroundDay->week_id)
-                ->enterFindFamilyFormData("Reinoud")
-                ->selectFindFamilySuggestion("Reinoud Declercq")
-                ->assertOnEditFamilyRegistrationPage($playgroundDay->week_id, $this->existingFamily->id, "Veronique Baeten")
+            $browser->visit(new InternalEditFamilyRegistrationPage($this->year->id, $playgroundDay->week_id, $this->existingFamily->id, $date))
+                ->assertChildCheckedIn($child2->id, $wednesday->id)
+                ->assertChildNotCheckedIn($this->existingChild->id, $wednesday->id)
+                ->checkInChildrenToday()
+                ->assertChildCheckedIn($child2->id, $wednesday->id)
+                ->assertChildCheckedIn($this->existingChild->id, $wednesday->id)
+                ->assertChildNotCheckedIn($this->existingChild->id, $monday->id)
                 ->unselectWeekRegistrationForChild($this->existingChild->id)
                 ->unselectDayRegistrationForChild($child2->id, $wednesday->id)
                 ->pause(5000) // TODO(fkint): add a loading indicator to the page instead of waiting until this literal text appears
@@ -364,10 +368,19 @@ class UserJourneysTest extends DuskTestCase
                 ->unselectDayRegistrationForChild($child2->id, $wednesday->id)
                 ->pause(5000) // TODO(fkint): add a loading indicator to the page instead of waiting until this literal text appears
                 ->assertExpectedAmount("-26.50")
-                ->assertPaidFieldContent("-26.50")
+                ->enterPaidField("-24.50")
                 ->submitRegistrationFormAndNavigateToNext()
                 ->navigateToDashboardPage()
-                ->assertSeeAdminSession($newAdminSession->id, null, 1, "-26.50", null, null, null);
+                ->assertSeeAdminSession($newAdminSession->id, null, 1, "-24.50", null, null, null);
+
+            $browser->navigateToRegistrationsPage($lastDate)
+                ->navigateToRegistrationsWithDatePage($date)
+                ->navigateToRegisterFindFamilyPage($playgroundDay->week_id)
+                ->enterFindFamilyFormData("Reinoud")
+                ->selectFindFamilySuggestion("Reinoud Declercq")
+                ->assertOnEditFamilyRegistrationPage($playgroundDay->week_id, $this->existingFamily->id, "Veronique Baeten")
+                ->navigateToTransactionHistory()
+                ->assertSaldo("-2.00");
         });
     }
 

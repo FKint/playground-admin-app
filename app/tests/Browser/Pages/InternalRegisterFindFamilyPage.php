@@ -24,9 +24,9 @@ class InternalRegisterFindFamilyPage extends InternalPage
         return 'internal.show_find_family_registration';
     }
 
-    protected function getRouteParams()
+    protected function getRouteParams($includeQueryParams = true)
     {
-        $params = parent::getRouteParams();
+        $params = parent::getRouteParams($includeQueryParams);
         $params['week'] = $this->weekId;
         return $params;
     }
@@ -58,9 +58,9 @@ class InternalRegisterFindFamilyPage extends InternalPage
         });
     }
 
-    public function assertOnEditFamilyRegistrationPage(Browser $browser, $weekId, $familyId, $guardianName)
+    public function assertOnEditFamilyRegistrationPage(Browser $browser, $weekId, $familyId, $guardianName, $today = null)
     {
-        $browser->on(new InternalEditFamilyRegistrationPage($this->yearId, $weekId, $familyId))
+        $browser->on(new InternalEditFamilyRegistrationPage($this->yearId, $weekId, $familyId, $today))
             ->assertSeeGuardianName($guardianName);
     }
 }

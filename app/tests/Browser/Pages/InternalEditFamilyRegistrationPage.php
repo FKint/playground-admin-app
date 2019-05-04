@@ -8,12 +8,14 @@ class InternalEditFamilyRegistrationPage extends InternalPage
 {
     protected $weekId;
     protected $familyId;
+    protected $today;
 
-    public function __construct($yearId, $weekId, $familyId)
+    public function __construct($yearId, $weekId, $familyId, \DateTimeImmutable $today = null)
     {
         parent::__construct($yearId);
         $this->weekId = $weekId;
         $this->familyId = $familyId;
+        $this->today = $today;
     }
     /**
      * Get the route name for the page.
@@ -25,11 +27,14 @@ class InternalEditFamilyRegistrationPage extends InternalPage
         return 'internal.show_edit_registration';
     }
 
-    protected function getRouteParams()
+    protected function getRouteParams($includeQueryParams = true)
     {
-        $params = parent::getRouteParams();
+        $params = parent::getRouteParams($includeQueryParams);
         $params['family'] = $this->familyId;
         $params['week'] = $this->weekId;
+        if ($includeQueryParams && !is_null($this->today)) {
+            $params['today'] = $this->today->format('Y-m-d');
+        }
         return $params;
     }
 
@@ -42,7 +47,9 @@ class InternalEditFamilyRegistrationPage extends InternalPage
     public function assert(Browser $browser)
     {
         parent::assert($browser);
-        $browser->assertSee("Wijzig registratie voor familie " . $this->familyId);
+        $browser->assertSee("Wijzig registratie voor familie " . $this->familyId)
+            ->pause(2000);
+        // TODO(fkint): wait until data is loaded from the server
     }
 
     public function assertSeeGuardianName(Browser $browser, $guardianName)
@@ -59,7 +66,7 @@ class InternalEditFamilyRegistrationPage extends InternalPage
     {
         $browser->check($this->getWeekRegistrationForChildSelector($childId));
     }
-    
+
     public function unselectWeekRegistrationForChild(Browser $browser, $childId)
     {
         $browser->uncheck($this->getWeekRegistrationForChildSelector($childId));
@@ -102,10 +109,29 @@ class InternalEditFamilyRegistrationPage extends InternalPage
         $browser->check($selector);
     }
 
+    protected function getChildCheckinSelector($childId, $weekdayId)
+    {
+        return 'tr[data-week-day-id="' . $weekdayId . '"] td.day-attendance[data-child-id="' . $childId . '"] input.attendance-checkbox';
+    }
+
     public function checkInChild(Browser $browser, $childId, $weekdayId)
     {
-        $selector = 'tr[data-week-day-id="' . $weekdayId . '"] td.day-attendance[data-child-id="' . $childId . '"] input.attendance-checkbox';
-        $browser->check($selector);
+        $browser->check($this->getChildCheckinSelector($childId, $weekdayId));
+    }
+
+    public function assertChildCheckedIn(Browser $browser, $childId, $weekdayId)
+    {
+        $browser->assertChecked($this->getChildCheckinSelector($childId, $weekdayId));
+    }
+
+    public function assertChildNotCheckedIn(Browser $browser, $childId, $weekdayId)
+    {
+        $browser->assertNotChecked($this->getChildCheckinSelector($childId, $weekdayId));
+    }
+
+    public function checkInChildrenToday(Browser $browser)
+    {
+        $browser->click("@btn-set-all-attending-today");
     }
 
     public function selectActivityListRegistrationForChild(Browser $browser, $childId, $activityListId)
@@ -150,5 +176,11 @@ class InternalEditFamilyRegistrationPage extends InternalPage
     public function assertDontSeeActivityList(Browser $browser, $name)
     {
         $browser->assertDontSee($name);
+    }
+
+    public function navigateToTransactionHistory(Browser $browser)
+    {
+        $browser->clickLink("Transactiegeschiedenis")
+            ->on(new InternalFamilyTransactionsPage($this->yearId, $this->familyId));
     }
 }

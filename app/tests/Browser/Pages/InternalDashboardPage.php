@@ -14,9 +14,9 @@ class InternalDashboardPage extends InternalPage
         $this->dateParam = $dateParam;
     }
 
-    protected function getRouteParams()
+    protected function getRouteParams($includeQueryParams = true)
     {
-        $params = parent::getRouteParams();
+        $params = parent::getRouteParams($includeQueryParams);
         if ($this->dateParam) {
             $params['date'] = $this->dateParam->format('Y-m-d');
         }

@@ -80,7 +80,7 @@ class FamilyWeekRegistration extends Model
                     $day_data['registered'] = !$child_data['whole_week_registered'];
                     $day_data['age_group_id'] = $child_family_day_registration->age_group_id;
                     $day_data['day_part_id'] = $child_family_day_registration->day_part_id;
-                    $day_data['attended'] = $child_family_day_registration->attended;
+                    $day_data['attended'] = (bool)$child_family_day_registration->attended;
                     foreach ($child_family_day_registration->supplements as $supplement) {
                         $day_data['supplements'][$supplement->id] = [
                             'ordered' => true,
@@ -90,6 +90,7 @@ class FamilyWeekRegistration extends Model
                     $day_data['registered'] = false;
                     $day_data['age_group_id'] = $child->age_group_id;
                     $day_data['day_part_id'] = $default_day_part->id;
+                    $day_data['attended'] = false;
                 }
                 $child_data['days'][$playground_day->week_day_id] = $day_data;
             }

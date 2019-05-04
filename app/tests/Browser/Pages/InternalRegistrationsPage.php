@@ -24,9 +24,9 @@ class InternalRegistrationsPage extends InternalPage
         return 'internal.registrations_for_date';
     }
 
-    protected function getRouteParams()
+    protected function getRouteParams($includeQueryParams = true)
     {
-        $params = parent::getRouteParams();
+        $params = parent::getRouteParams($includeQueryParams);
         $params['date'] = $this->date->format('Y-m-d');
         return $params;
     }
