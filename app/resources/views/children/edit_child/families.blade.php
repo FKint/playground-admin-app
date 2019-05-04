@@ -1,6 +1,6 @@
 <div id="existing-child-families">
     <h4>Huidige voogden</h4>
-    <table class="table" id="child-families-table">
+    <table class="table" id="child-families-table" dusk="current-families">
         <thead>
         <tr>
             <th>Voogd ID</th>
@@ -28,7 +28,7 @@
 <div id="link-existing-child-family">
     <h4>Kind aan een bestaande voogd linken</h4>
     <form class="typeahead" role="search">
-        <div class="form-group">
+        <div class="form-group" dusk="family-search-typeahead">
             <input type="search" id="family-search" name="q" class="form-control" placeholder="Search"
                    autocomplete="off">
         </div>
@@ -36,7 +36,7 @@
 </div>
 <div id="link-new-child-family">
     <h4>Kind aan een nieuwe voogd linken</h4>
-    {{ Form::open(['class' => 'form-horizontal', 'id' => 'link-new-family']) }}
+    {{ Form::open(['class' => 'form-horizontal', 'id' => 'link-new-family', 'dusk' => 'link-new-family']) }}
     @include('forms.family', ['submit_text' => 'Voogd toevoegen'])
     {{ Form::close() }}
 </div>

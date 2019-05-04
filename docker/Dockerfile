@@ -29,6 +29,22 @@ COPY app/resources/assets /root/app/resources/assets
 COPY app/webpack.mix.js /root/app/webpack.mix.js
 RUN yarn run production
 
+##########################################################################
+# Run install scripts using cached vendor folder and current source code #
+##########################################################################
+FROM composer-builder-test as composer-installer-test
+WORKDIR /root/app
+COPY app .
+RUN composer install --no-interaction --no-progress --optimize-autoloader
+
+######################
+# PHP image: Testing #
+######################
+FROM fkint/laravel-docker:latest as app-test
+WORKDIR /var/www
+COPY --chown=www-data:www-data --from=composer-installer-test /root/app .
+COPY --chown=www-data:www-data --from=npm-builder /root/app/public ./public
+
 ##############
 # Nginx PROD #
 ##############
@@ -56,28 +72,10 @@ RUN composer install --no-interaction --no-progress --no-dev --optimize-autoload
 ###################
 FROM fkint/laravel-docker:latest as app-prod
 WORKDIR /var/www
-COPY --from=composer-installer /root/app .
-COPY --from=npm-builder /root/app/public ./public
+USER www-data
+COPY --chown=www-data:www-data --from=composer-installer /root/app .
+COPY --chown=www-data:www-data --from=npm-builder /root/app/public ./public
 # TODO(fkint): find a good way to run "php artisan config:cache" after
 # the env file is in the image (cannot do here as the env file is a 
 # volume)
 RUN php artisan route:cache
-VOLUME ["/var/www/storage", "/var/www/.env"]
-
-##########################################################################
-# Run install scripts using cached vendor folder and current source code #
-##########################################################################
-FROM composer-builder-test as composer-installer-test
-WORKDIR /root/app
-COPY app .
-RUN composer install --no-interaction --no-progress --optimize-autoloader
-
-######################
-# PHP image: Testing #
-######################
-FROM fkint/laravel-docker:latest as app-test
-WORKDIR /var/www
-COPY app .
-COPY --from=composer-installer-test /root/app .
-COPY --from=npm-builder /root/app/public ./public
-RUN mkdir /var/www/storage/testing && touch /var/www/storage/testing/sqlite

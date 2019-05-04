@@ -6,7 +6,7 @@
     Failure: <span id="child-details-error-summary"></span>
     <ul id="child-details-error-list"></ul>
 </div>
-{{ Form::model($child, ['class' => 'form-horizontal', 'id' => 'edit-child-form']) }}
+{{ Form::model($child, ['class' => 'form-horizontal', 'id' => 'edit-child-form', 'dusk' => 'edit-child-form']) }}
 @include('forms.child')
 {{ Form::close() }}
 

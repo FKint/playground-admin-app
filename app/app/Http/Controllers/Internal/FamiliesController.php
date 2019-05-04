@@ -9,6 +9,7 @@ use App\Http\Requests\SaveChildRequest;
 use App\Http\Requests\UpdateFamilyInfoRequest;
 use App\Year;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Yajra\DataTables\DataTables;
 
 class FamiliesController extends Controller
@@ -113,13 +114,14 @@ class FamiliesController extends Controller
     {
         $query = $request->input('q');
         $children = $year->children()
-            ->search($query)
+            ->search($query, 0)
             ->groupBy('children.id')
             ->with('child_families')
             ->with('families')
             ->whereDoesntHave("families", function ($query) use ($family) {
                 $query->where('family_id', '=', $family->id);
             })
+            ->limit(5)
             ->get();
         return $children;
     }

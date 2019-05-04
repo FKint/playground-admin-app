@@ -1,5 +1,5 @@
 @push('modals')
-    <div class="modal fade" tabindex="-1" role="dialog" id="edit-family-modal">
+    <div class="modal fade" tabindex="-1" role="dialog" id="edit-family-modal" dusk="edit-family-modal">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -12,7 +12,7 @@
 
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Sluiten</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal" dusk="btn-close-edit-family">Sluiten</button>
                 </div>
             </div><!-- /.modal-content -->
         </div><!-- /.modal-dialog -->

@@ -1,0 +1,86 @@
+<?php
+
+namespace Tests\Browser\Pages;
+
+use Laravel\Dusk\Browser;
+
+class InternalFamiliesPage extends InternalPage
+{
+    /**
+     * Get the route name for the page.
+     *
+     * @return string
+     */
+    public function getRouteName()
+    {
+        return 'internal.families';
+    }
+
+    /**
+     * Assert that the browser is on the page.
+     *
+     * @param  Browser  $browser
+     * @return void
+     */
+    public function assert(Browser $browser)
+    {
+        parent::assert($browser);
+        $browser->assertSeeLink("Nieuwe voogd toevoegen");
+    }
+
+    /**
+     * Get the element shortcuts for the page.
+     *
+     * @return array
+     */
+    public function elements()
+    {
+        return [
+            '@element' => '#selector',
+        ];
+    }
+
+    public function navigateToAddFamilyPage(Browser $browser)
+    {
+        $browser->clickLink("Nieuwe voogd toevoegen")->on(new InternalAddFamilyPage($this->yearId));
+    }
+
+    public function assertSeeFamilyEntryInTable(Browser $browser, $familyId, $guardianFirstName, $guardianLastName)
+    {
+        // TODO(fkint): Use a better selector verifying that $guardianFirstName and $guardianLastName appear together in a row.
+        // Ideally make a DataTables component to re-use this for other pages
+        $selector = '[dusk="families-table"] tr[data-family-id="' . $familyId . '"] ';
+        $browser->waitFor($selector)
+            ->assertSeeIn($selector . ' [data-field="guardian_first_name"]', $guardianFirstName)
+            ->assertSeeIn($selector . ' [data-field="guardian_last_name"]', $guardianLastName);
+    }
+    public function assertDontSeeFamilyEntryInTable(Browser $browser, $familyId)
+    {
+        $selector = '[dusk="families-table"] tr[data-family-id="' . $familyId . '"] ';
+        $browser->waitUntilMissing($selector);
+    }
+
+    public function navigateToEditFamily(Browser $browser, $familyId)
+    {
+        $selector = 'a.btn-edit-family[data-family-id="' . $familyId . '"]';
+        $browser->click($selector);
+    }
+
+    public function enterEditFamilyFormData(Browser $browser, $guardianFirstName, $guardianLastName, $tariffId, $remarks, $contact)
+    {
+        $this->enterFamilyFormData($browser, "edit-family-form", $guardianFirstName, $guardianLastName, $tariffId, $remarks, $contact);
+    }
+
+    public function submitEditFamilyFormSuccessfully(Browser $browser)
+    {
+        $browser->click('[dusk="edit-family-form"] [dusk=submit]')
+            ->waitForText("Wijzigingen opgeslagen.");
+    }
+
+    public function closeEditFamilyDialog(Browser $browser)
+    {
+        $browser->click("@btn-close-edit-family")
+            ->waitUntilMissing("@edit-family-form");
+    }
+
+}

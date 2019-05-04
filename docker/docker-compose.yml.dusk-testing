@@ -6,17 +6,15 @@ services:
       context: .
       dockerfile: docker/Dockerfile
       target: app-test
-    command: 
-      - sh
-      - -c
-      - |
-        php artisan serve --host=app-container &
-        curl --retry 10 --retry-connrefused http://app-container:8000 > /dev/null
-        curl --retry 10 --retry-connrefused http://selenium:4444 > /dev/null
-        php artisan dusk
+    command: php artisan serve --host=app-container
     working_dir: /var/www
     volumes:
-      - ./app:/var/www
+      - ./app/app:/var/www/app
+      - ./app/config:/var/www/config
+      - ./app/database:/var/www/database
+      - ./app/resources:/var/www/resources
+      - ./app/routes:/var/www/routes
+      - ./app/tests:/var/www/tests
       - .laravel.env.dusk.example:/var/www/.env
     depends_on:
       - selenium 

@@ -3,8 +3,9 @@
 namespace Tests\Browser\Pages;
 
 use Laravel\Dusk\Browser;
+use Laravel\Dusk\Page as BasePage;
 
-class HomePage extends Page
+class LoginPage extends BasePage
 {
     /**
      * Get the URL for the page.
@@ -13,7 +14,7 @@ class HomePage extends Page
      */
     public function url()
     {
-        return '/';
+        return '/login';
     }
 
     /**
@@ -24,7 +25,7 @@ class HomePage extends Page
      */
     public function assert(Browser $browser)
     {
-        //
+        $browser->assertPathIs($this->url());
     }
 
     /**
@@ -37,5 +38,19 @@ class HomePage extends Page
         return [
             '@element' => '#selector',
         ];
+    }
+
+    /**
+     * Submit the login form.
+     * 
+     * @param   \Laravel\Dusk\Browser   $browser
+     * @param   string  $name
+     * @return  void
+     */
+    public function submitLoginForm(Browser $browser, $emailAddress, $password)
+    {
+        $browser->type('email', $emailAddress)
+            ->type('password', $password)
+            ->press('Login');
     }
 }

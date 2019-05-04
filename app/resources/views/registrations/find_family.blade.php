@@ -7,7 +7,7 @@
         <div class="form-group">
             <label for="week" class="col-sm-2 control-label">Selecteer week: </label>
             <div class="col-sm-10">
-                <select id="week" name="week" class="form-control">
+                <select id="week" name="week" class="form-control" dusk="week">
                     @foreach($year->weeks as $w)
                         <option value="{{ $w->id }}" @if($w->id == $week->id) selected @endif>
                             Week {{ $w->id }}: {{ $w->first_day()->date()->format('d-m-Y') }}
@@ -17,7 +17,7 @@
                 </select>
             </div>
         </div>
-        <div class="form-group">
+        <div class="form-group" dusk="family-search-typeahead">
             <label for="q" class="col-sm-2 control-label">Zoek familie: </label>
             <div class="col-sm-10">
                 <input type="search" id="family-search" name="q" class="typeahead form-control" placeholder="Search"

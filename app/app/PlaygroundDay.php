@@ -3,7 +3,6 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Log;
 
 class PlaygroundDay extends Model
 {
@@ -12,7 +11,7 @@ class PlaygroundDay extends Model
      *
      * @var array
      */
-    protected $fillable = ['week_day_id'];
+    protected $fillable = ['week_day_id', 'year_id', 'week_id'];
 
     public function week()
     {

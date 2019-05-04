@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Log;
 
 class FamilyWeekRegistration extends Model
 {
@@ -28,7 +29,7 @@ class FamilyWeekRegistration extends Model
     {
         return ChildFamilyWeekRegistration::where([
             ['family_id', '=', $this->family_id],
-            ['week_id', '=', $this->week_id]
+            ['week_id', '=', $this->week_id],
         ]);
     }
 
@@ -43,43 +44,43 @@ class FamilyWeekRegistration extends Model
         return FamilyWeekRegistration::computeTotalWeekPrice($registration_data);
     }
 
-
     public static function getRegistrationDataArray(Week $week, Family $family)
     {
         $family_week_registration = $family->family_week_registrations()
             ->where('week_id', '=', $week->id)
             ->first();
         $result = [
-            'children' => []
+            'children' => [],
         ];
         $default_day_part = $week->year->getDefaultDayPart();
+        Log::info("Default day part: " . json_encode($default_day_part));
         $result['tariff_id'] = $family_week_registration ? $family_week_registration->tariff_id : $family->tariff_id;
         foreach ($family->child_families as $child_family) {
             $child = $child_family->child;
             $child_data = [
                 'days' => [],
-                'activity_lists' => []
+                'activity_lists' => [],
             ];
             $child_family_week_registration = $family_week_registration ?
-                $family_week_registration
-                    ->child_family_week_registrations()
-                    ->where('child_id', '=', $child->id)
-                    ->first()
-                : null;
-            $child_data['whole_week_registered'] = (bool)$child_family_week_registration && $child_family_week_registration->whole_week_price;
+            $family_week_registration
+                ->child_family_week_registrations()
+                ->where('child_id', '=', $child->id)
+                ->first()
+            : null;
+            $child_data['whole_week_registered'] = (bool) $child_family_week_registration && $child_family_week_registration->whole_week_price;
             foreach ($week->playground_days as $playground_day) {
                 $day_data = ['supplements' => []];
                 $child_family_day_registration = $child_family_week_registration
-                    ? $child_family_week_registration
-                        ->child_family_day_registrations()
-                        ->where('week_day_id', '=', $playground_day->week_day_id)
-                        ->first()
-                    : null;
+                ? $child_family_week_registration
+                    ->child_family_day_registrations()
+                    ->where('week_day_id', '=', $playground_day->week_day_id)
+                    ->first()
+                : null;
                 if ($child_family_day_registration) {
                     $day_data['registered'] = !$child_data['whole_week_registered'];
                     $day_data['age_group_id'] = $child_family_day_registration->age_group_id;
                     $day_data['day_part_id'] = $child_family_day_registration->day_part_id;
-                    $day_data['attended'] = $child_family_day_registration->attended;
+                    $day_data['attended'] = (bool)$child_family_day_registration->attended;
                     foreach ($child_family_day_registration->supplements as $supplement) {
                         $day_data['supplements'][$supplement->id] = [
                             'ordered' => true,
@@ -89,12 +90,13 @@ class FamilyWeekRegistration extends Model
                     $day_data['registered'] = false;
                     $day_data['age_group_id'] = $child->age_group_id;
                     $day_data['day_part_id'] = $default_day_part->id;
+                    $day_data['attended'] = false;
                 }
                 $child_data['days'][$playground_day->week_day_id] = $day_data;
             }
             foreach ($child_family->activity_lists as $activity_list) {
                 $child_data['activity_lists'][$activity_list->id] = [
-                    'registered' => true
+                    'registered' => true,
                 ];
             }
             $result['children'][$child->id] = $child_data;
@@ -199,7 +201,6 @@ class FamilyWeekRegistration extends Model
         FamilyWeekRegistration::computeActivityListPrices($week_registration_data);
         return $week_registration_data;
     }
-
 
     protected static function computeSupplementPrices(&$week_registration_data)
     {

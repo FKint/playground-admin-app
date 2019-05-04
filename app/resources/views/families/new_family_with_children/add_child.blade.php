@@ -18,12 +18,12 @@
         @endforeach
     </ul>
     <h3>Nieuw kind toevoegen</h3>
-    {{ Form::open(['class' => 'form-horizontal', 'id' => 'new-child-form']) }}
+    {{ Form::open(['class' => 'form-horizontal', 'id' => 'new-child-form', 'dusk' => 'new-child-form']) }}
     @include('forms.child')
     {{ Form::close() }}
     <h3>Bestaand kind toevoegen</h3>
     <form class="typeahead" role="search">
-        <div class="form-group">
+        <div class="form-group" dusk="child-search-typeahead">
             <input type="search" id="child-search" name="q" class="form-control" placeholder="Search"
                    autocomplete="off">
         </div>
@@ -77,7 +77,7 @@
                         suggestion: function (data) {
                             console.log(data);
                             return '<a href="#" class="list-group-item">' + data.first_name + ' '
-                                + data.last_name + '</a>';
+                                + data.last_name + ' (Huidige voogd(en): ' + _.join(_.map(data.families, function(family_entry){ return family_entry.guardian_full_name; }, ', ')) + ')</a>';
                         }
                     }
                 }).on('typeahead:select', function (event, suggestion) {

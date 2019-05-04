@@ -22,8 +22,10 @@ class RegistrationsController extends Controller
             ->whereDate('first_day_of_week', '<=', $upper_bound_date->format('Y-m-d'))
             ->orderByDesc('first_day_of_week')
             ->first();
-        if (!$week)
+        if (!$week) {
             return $year->playground_days()->first();
+        }
+
         $interval = $upper_bound_date->diff(\DateTime::createFromFormat('Y-m-d', $week->first_day_of_week));
         $week_days = $year->week_days()
             ->where('days_offset', '<=', $interval->days)
@@ -31,8 +33,10 @@ class RegistrationsController extends Controller
             ->get();
         foreach ($week_days as $week_day) {
             $playground_day = $week->playground_days()->where('playground_days.week_day_id', '=', $week_day->id)->first();
-            if ($playground_day)
+            if ($playground_day) {
                 return $playground_day;
+            }
+
         }
         return $week->playground_days()->first();
     }
@@ -46,8 +50,10 @@ class RegistrationsController extends Controller
     public function showDate(Request $request, Year $year, $date_str)
     {
         $date = \DateTimeImmutable::createFromFormat('Y-m-d', $date_str);
-        if (!$date)
+        if (!$date) {
             return $this->show($year);
+        }
+
         $playground_day = $year->getPlaygroundDayForDate($date);
 
         $filter = array();
@@ -60,7 +66,7 @@ class RegistrationsController extends Controller
             'playground_day' => $playground_day,
             'date' => $date,
             'selected_menu_item' => 'registrations',
-            'filter' => $filter
+            'filter' => $filter,
         ]);
     }
 
@@ -70,7 +76,7 @@ class RegistrationsController extends Controller
             $year->child_family_day_registrations()
                 ->where([
                     ['week_id', '=', $playground_day->week_id],
-                    ['week_day_id', '=', $playground_day->week_day_id]
+                    ['week_day_id', '=', $playground_day->week_day_id],
                 ])
                 ->with('child')
                 ->with('age_group')
@@ -83,7 +89,7 @@ class RegistrationsController extends Controller
     {
         return view('registrations.find_family', [
             'week' => $week,
-            'all_weeks' => $year->weeks()
+            'all_weeks' => $year->weeks(),
         ]);
     }
 
@@ -99,15 +105,17 @@ class RegistrationsController extends Controller
         return view('registrations.edit_week_registration', [
             'family' => $family,
             'week' => $week,
-            'today' => $today
+            'today' => $today,
         ]);
     }
 
     private function removeFamilyWeekRegistrationIfEmpty(Week $week, Family $family)
     {
         $family_week_registration = $family->family_week_registrations()->where('week_id', '=', $week->id)->first();
-        if (!$family_week_registration)
+        if (!$family_week_registration) {
             return;
+        }
+
         foreach ($family_week_registration->child_family_week_registrations()->get() as $child_family_week_registration) {
             if ($child_family_week_registration->is_empty()) {
                 $child_family_week_registration->delete();
@@ -126,7 +134,7 @@ class RegistrationsController extends Controller
             $family_week_registration = new FamilyWeekRegistration([
                 'family_id' => $family->id,
                 'week_id' => $week->id,
-                'year_id' => $year->id
+                'year_id' => $year->id,
             ]);
         }
 
@@ -149,7 +157,7 @@ class RegistrationsController extends Controller
                     'child_id' => $child->id,
                     'family_id' => $family->id,
                     'week_id' => $week->id,
-                    'year_id' => $year->id
+                    'year_id' => $year->id,
                 ]);
             }
             $child_data = $children_data[$child->id];
@@ -172,7 +180,7 @@ class RegistrationsController extends Controller
                             'family_id' => $family->id,
                             'week_id' => $week->id,
                             'week_day_id' => $playground_day->week_day_id,
-                            'year_id' => $year->id
+                            'year_id' => $year->id,
                         ]);
                     }
                     $day_part = null;
@@ -236,7 +244,7 @@ class RegistrationsController extends Controller
             'amount_paid' => $received_money,
             'amount_expected' => $expected_money,
             'remarks' => $data['transaction_remarks'],
-            'year_id' => $year->id
+            'year_id' => $year->id,
         ));
         $admin_session = $year->getActiveAdminSession();
         $transaction->admin_session()->associate($admin_session);
@@ -259,7 +267,6 @@ class RegistrationsController extends Controller
         return $this->getRegistrationData($year, $week, $family);
     }
 
-
     public function getRegistrationData(Year $year, Week $week, Family $family)
     {
         $this->removeFamilyWeekRegistrationIfEmpty($week, $family);
@@ -268,7 +275,6 @@ class RegistrationsController extends Controller
         $data['saldo'] = $family->getCurrentSaldo();
         return $data;
     }
-
 
     public function submitRegistrationDataForPrices(Request $request, Year $year, Week $week, Family $family)
     {

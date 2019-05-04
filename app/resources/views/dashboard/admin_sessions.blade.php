@@ -7,7 +7,7 @@
 </div>
 <div class="row"></div>
 <div class="row">
-    <table class="table table-bordered" id="admin-sessions-table">
+    <table class="table table-bordered" id="admin-sessions-table" dusk="admin-sessions-table">
         <thead>
         <tr>
             <th>Begin</th>
@@ -32,6 +32,9 @@
             processing: true,
             serverSide: false,
             ajax: '{!! route('api.datatables.admin_sessions') !!}',
+            createdRow(row, data, dataIndex){
+                $(row).attr('data-admin-session-id', data.id);
+            },
             columns: [
                 {
                     data: 'session_start',
@@ -53,33 +56,57 @@
                         return data;
                     }
                 },
-                {data: 'nb_transactions', name: 'nb_transactions'},
+                {
+                    data: 'nb_transactions', 
+                    name: 'nb_transactions',
+                    createdCell(td, cellData, rowData, row, col){
+                        $(td).attr('data-field', 'nb_transactions');
+                    },
+                },
                 {
                     data: 'expected_cash',
                     name: 'expected_cash',
                     render: function (data) {
                         return formatPrice(data);
-                    }
+                    },
+                    createdCell(td, cellData, rowData, row, col){
+                        $(td).attr('data-field', 'expected_income');
+                    },
                 },
                 {
                     data: 'counted_cash',
                     name: 'counted_cash',
                     render: function (data) {
                         return formatPrice(data);
-                    }
+                    },
+                    createdCell(td, cellData, rowData, row, col){
+                        $(td).attr('data-field', 'actual_income');
+                    },
                 },
                 {
                     data: 'error',
                     name: 'error',
                     render: function (data) {
                         return formatPrice(data);
-                    }
+                    },
+                    createdCell(td, cellData, rowData, row, col){
+                        $(td).attr('data-field', 'error');
+                    },
                 },
                 {
                     data: 'responsible_name',
-                    name: 'responsible_name'
+                    name: 'responsible_name',
+                    createdCell(td, cellData, rowData, row, col){
+                        $(td).attr('data-field', 'responsible_name');
+                    },
                 },
-                {data: 'remarks', name: 'remarks'},
+                {
+                    data: 'remarks', 
+                    name: 'remarks',
+                    createdCell(td, cellData, rowData, row, col){
+                        $(td).attr('data-field', 'remarks');
+                    },
+                },
                 {
                     data: 'id',
                     name: 'id',
@@ -88,7 +115,7 @@
                             return "";
                         }
                         return '<a href="{{ route('internal.show_edit_admin_session', ['admin_session_id' => 'SESSION_ID']) }}">Wijzigen</a>'.replace('SESSION_ID', data);
-                    }
+                    },
                 }
             ],
             order: [[0, 'desc']]
