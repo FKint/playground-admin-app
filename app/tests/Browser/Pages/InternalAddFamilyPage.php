@@ -28,8 +28,14 @@ class InternalAddFamilyPage extends InternalPage
         $browser->assertSee("Nieuwe voogd toevoegen");
     }
 
-    public function enterAddFamilyFormData(Browser $browser, $firstName = null, $lastName = null,
-        $tariffId = null, $remarks = null, $contact = null) {
+    public function enterAddFamilyFormData(
+        Browser $browser,
+        $firstName = null,
+        $lastName = null,
+        $tariffId = null,
+        $remarks = null,
+        $contact = null
+    ) {
         $this->enterFamilyFormData($browser, "new-family-form", $firstName, $lastName, $tariffId, $remarks, $contact);
     }
 

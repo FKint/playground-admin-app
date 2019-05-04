@@ -58,21 +58,24 @@ class InitialDataSeeder extends Seeder
 
     protected function seed_age_groups()
     {
-        $this->toddlers_id = \App\AgeGroup::create([
+        $this->toddlers_id = \App\AgeGroup::create(
+            [
                 'year_id' => $this->year->id,
                 'name' => 'Kleuters',
                 'abbreviation' => 'KLS',
                 'start_date' => (new DateTime())->setDate(2012, 1, 1),
                 'end_date' => (new DateTime())->setDate(2015, 1, 1)]
         )->id;
-        $this->middle_group_id = \App\AgeGroup::create([
+        $this->middle_group_id = \App\AgeGroup::create(
+            [
                 'year_id' => $this->year->id,
                 'name' => 'Grote',
                 'abbreviation' => '6-12',
                 'start_date' => (new DateTime())->setDate(2005, 1, 1),
                 'end_date' => (new DateTime())->setDate(2012, 1, 1)]
         )->id;
-        $this->teenagers_id = \App\AgeGroup::create([
+        $this->teenagers_id = \App\AgeGroup::create(
+            [
                 'year_id' => $this->year->id,
                 'name' => 'Tieners',
                 'abbreviation' => '12+',
@@ -164,5 +167,4 @@ class InitialDataSeeder extends Seeder
             "week_later_children" => 9.5
         ]);
     }
-
 }

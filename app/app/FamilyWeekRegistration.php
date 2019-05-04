@@ -7,7 +7,6 @@ use Illuminate\Support\Facades\Log;
 
 class FamilyWeekRegistration extends Model
 {
-
     protected $fillable = ['family_id', 'week_id', 'tariff_id', 'year_id'];
 
     public function tariff()
@@ -189,7 +188,7 @@ class FamilyWeekRegistration extends Model
                 }
             }
             if (!isset($child_data['activity_lists'])) {
-                $child_data['activity_lists'] = array();
+                $child_data['activity_lists'] = [];
             }
             foreach ($child_data['activity_lists'] as &$activity_list_data) {
                 FamilyWeekRegistration::setToBoolean($activity_list_data['registered']);

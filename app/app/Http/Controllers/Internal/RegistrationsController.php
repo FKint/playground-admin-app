@@ -36,7 +36,6 @@ class RegistrationsController extends Controller
             if ($playground_day) {
                 return $playground_day;
             }
-
         }
         return $week->playground_days()->first();
     }
@@ -56,7 +55,7 @@ class RegistrationsController extends Controller
 
         $playground_day = $year->getPlaygroundDayForDate($date);
 
-        $filter = array();
+        $filter = [];
         $filter['age_group_id'] = $request->input('filter_age_group_id');
         $filter['day_part_id'] = $request->input('filter_day_part_id');
         $filter['supplement_id'] = $request->input('filter_supplement_id');
@@ -240,12 +239,12 @@ class RegistrationsController extends Controller
         if (!$received_money) {
             $received_money = 0;
         }
-        $transaction = new Transaction(array(
+        $transaction = new Transaction([
             'amount_paid' => $received_money,
             'amount_expected' => $expected_money,
             'remarks' => $data['transaction_remarks'],
             'year_id' => $year->id,
-        ));
+        ]);
         $admin_session = $year->getActiveAdminSession();
         $transaction->admin_session()->associate($admin_session);
         $transaction->family()->associate($family);
@@ -286,5 +285,4 @@ class RegistrationsController extends Controller
         $data['saldo'] = $family->getCurrentSaldo();
         return $data;
     }
-
 }

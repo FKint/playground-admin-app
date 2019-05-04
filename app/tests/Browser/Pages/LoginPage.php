@@ -42,7 +42,7 @@ class LoginPage extends BasePage
 
     /**
      * Submit the login form.
-     * 
+     *
      * @param   \Laravel\Dusk\Browser   $browser
      * @param   string  $name
      * @return  void

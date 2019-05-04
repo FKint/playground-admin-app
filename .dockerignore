@@ -10,6 +10,7 @@ readme.md
 .git
 
 app/.env*
+app/.php_cs*
 app/node_modules
 app/vendor
 

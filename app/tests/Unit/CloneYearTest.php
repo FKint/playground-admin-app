@@ -29,7 +29,9 @@ class CloneYearTest extends TestCase
         $weekDays = array_map(
             function ($offset) {
                 return factory(WeekDay::class)->create(['year_id' => $this->year->id, 'days_offset' => $offset]);
-            }, [0, 1, 2, 3, 4]);
+            },
+            [0, 1, 2, 3, 4]
+        );
         $actualWeeks = array_map(function ($o) {
             return Week::findOrFail($o['id']);
         }, factory(Week::class, 8)->create(['year_id' => $this->year->id])->toArray());
@@ -48,9 +50,12 @@ class CloneYearTest extends TestCase
 
     public function testCloneYear()
     {
-        $new_year = $this->year->make_copy('Jokkebrok 2',
+        $new_year = $this->year->make_copy(
+            'Jokkebrok 2',
             \DateTimeImmutable::createFromFormat('Y-m-d', '2018-04-01'),
-            \DateTimeImmutable::createFromFormat('Y-m-d', '2018-04-15'), []);
+            \DateTimeImmutable::createFromFormat('Y-m-d', '2018-04-15'),
+            []
+        );
         $this->assertEquals(10, $new_year->playground_days()->count());
         $this->assertEquals($this->year->supplements()->count(), $new_year->supplements()->count());
         $this->assertEquals($this->year->age_groups()->count(), $new_year->age_groups()->count());

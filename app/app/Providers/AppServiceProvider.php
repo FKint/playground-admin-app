@@ -17,7 +17,7 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
         Schema::defaultStringLength(100);
-        DB::listen(function($query){
+        DB::listen(function ($query) {
             //Log::debug('Database query: '.$query->sql.' (binding: '.json_encode($query->bindings).') at '.$query->time);
         });
     }

@@ -82,5 +82,4 @@ class InternalFamiliesPage extends InternalPage
         $browser->click("@btn-close-edit-family")
             ->waitUntilMissing("@edit-family-form");
     }
-
 }

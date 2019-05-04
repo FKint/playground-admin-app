@@ -16,7 +16,6 @@ class ChangeTransactionReferenceToFamily extends Migration
         Schema::table("transactions", function (Blueprint $table) {
             $table->integer('family_id')->unsigned()->default(1);
             $table->foreign('family_id')->references('id')->on('families');
-
         });
         DB::table("transactions")->orderBy('id')->chunk(100, function ($transactions) {
             foreach ($transactions as $transaction) {
@@ -52,6 +51,5 @@ class ChangeTransactionReferenceToFamily extends Migration
             $table->integer('child_family_id')->unsigned()->index()->default(0);
             $table->foreign('child_family_id')->references('id')->on('child_families');
         });
-
     }
 }
