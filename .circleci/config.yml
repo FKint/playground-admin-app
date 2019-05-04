@@ -36,7 +36,7 @@ jobs:
       - run:
           name: Build Docker Layers
           command: |
-            BuildStages=("composer-builder" "composer-builder-test" "npm-builder" "composer-installer-test" "app-test" "nginx-prod" "nginx-dev" "composer-installer" "app-prod")
+            BuildStages=("php-fpm" "composer-builder" "composer-builder-test" "npm-builder" "composer-installer-test" "app-test" "nginx-prod" "nginx-dev" "composer-installer" "app-prod")
             StringOfImagesWithTags=""
             FullCacheString=""
             for stage in ${BuildStages[*]}; do
