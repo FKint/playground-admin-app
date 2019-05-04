@@ -180,8 +180,12 @@ class FamilyWeekRegistration extends Model
             foreach ($child_data['days'] as &$day_data) {
                 FamilyWeekRegistration::setToBoolean($day_data['registered']);
                 FamilyWeekRegistration::setToBoolean($day_data['attended']);
+                $registered_for_day_or_week = $child_data['whole_week_registered'] || $day_data['registered'];
+                $day_data['registered'] = !$child_data['whole_week_registered'] && $day_data['registered'];
+                $day_data['attended'] = $registered_for_day_or_week && $day_data['attended'];
                 foreach ($day_data['supplements'] as &$supplement) {
                     FamilyWeekRegistration::setToBoolean($supplement['ordered']);
+                    $supplement['ordered'] = $registered_for_day_or_week && $supplement['ordered'];
                 }
             }
             if (!isset($child_data['activity_lists'])) {

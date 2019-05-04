@@ -14,6 +14,7 @@ services:
       - ./app/resources:/var/www/resources
       - ./app/routes:/var/www/routes
       - .laravel.env.development:/var/www/.env
+      - dev_public:/var/www/public
     environment:
       - "DB_PORT=3306"
       - "DB_HOST=database"
@@ -29,10 +30,10 @@ services:
       dockerfile: docker/Dockerfile
       target: nginx-dev
     working_dir: /var/www
-    volumes:
-      - ./app/public:/var/www/public
     ports:
       - 21000:80
+    volumes:
+      - dev_public:/var/www/public
 
   # Database
   database:
@@ -57,3 +58,4 @@ services:
 
 volumes:
   dev_dbdata:
+  dev_public:

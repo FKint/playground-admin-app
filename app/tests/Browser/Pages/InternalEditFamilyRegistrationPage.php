@@ -47,9 +47,13 @@ class InternalEditFamilyRegistrationPage extends InternalPage
     public function assert(Browser $browser)
     {
         parent::assert($browser);
-        $browser->assertSee("Wijzig registratie voor familie " . $this->familyId)
-            ->pause(2000);
-        // TODO(fkint): wait until data is loaded from the server
+        $browser->assertSee("Wijzig registratie voor familie " . $this->familyId);
+        $this->waitUntilRequestsSettled($browser);
+    }
+
+    public function waitUntilRequestsSettled(Browser $browser)
+    {
+        $browser->waitUntilMissing("@loading-indicator");
     }
 
     public function assertSeeGuardianName(Browser $browser, $guardianName)
