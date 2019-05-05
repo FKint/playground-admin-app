@@ -36,7 +36,7 @@
 * **TODO: update the docker-compose script**
 * Install `certbot`:
     * `add-apt-repository ppa:certbot/certbot && apt-get update && apt-get install -y certbot && apt-get clean`
-    * `certbot certonly --authenticator standalone  -d admin.jokkebrok.be --pre-hook "docker-compose -f /root/playground-admin-app/docker/docker-compose.yml.production --project-name playgroundadminapp --project-dir /root/playground-admin-app stop" --post-hook "docker-compose -f /root/playground-admin-app/docker-compose.yml.production  --project-name playgroundadminapp --project-dir /root/playground-admin-app start"`
+    * `certbot certonly --authenticator standalone  -d admin.jokkebrok.be --pre-hook "docker-compose -f /root/playground-admin-app/docker/docker-compose.yml.production --project-name playgroundadminapp --project-dir /root/playground-admin-app stop" --post-hook "docker-compose -f /root/playground-admin-app/docker/docker-compose.yml.production  --project-name playgroundadminapp --project-dir /root/playground-admin-app start"`
     * Add `certbot renew` to cron.
 
 #### Configuration
