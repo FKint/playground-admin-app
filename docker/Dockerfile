@@ -80,7 +80,8 @@ COPY --chown=www-data:www-data --from=npm-builder /root/app/public ./public
 FROM nginx:1.14.2-alpine as nginx-prod
 ADD nginx/vhost.conf.production /etc/nginx/conf.d/default.conf
 WORKDIR /var/www
-COPY --from=npm-builder /root/app/public .
+COPY --chown=nginx:nginx app/public ./public
+COPY --chown=nginx:nginx --from=npm-builder /root/app/public ./public
 
 #############
 # Nginx DEV #

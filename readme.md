@@ -36,7 +36,7 @@
 * **TODO: update the docker-compose script**
 * Install `certbot`:
     * `add-apt-repository ppa:certbot/certbot && apt-get update && apt-get install -y certbot && apt-get clean`
-    * `certbot certonly --authenticator standalone  -d admin.jokkebrok.be --pre-hook "docker-compose -f /root/playground-admin-app/docker/docker-compose.yml.production --project-dir /root/playground-admin-app stop" --post-hook "docker-compose -f /root/playground-admin-app/docker-compose.yml.production  --project-dir /root/playground-admin-app start"`
+    * `certbot certonly --authenticator standalone  -d admin.jokkebrok.be --pre-hook "docker-compose -f /root/playground-admin-app/docker/docker-compose.yml.production --project-name playgroundadminapp --project-dir /root/playground-admin-app stop" --post-hook "docker-compose -f /root/playground-admin-app/docker-compose.yml.production  --project-name playgroundadminapp --project-dir /root/playground-admin-app start"`
     * Add `certbot renew` to cron.
 
 #### Configuration
@@ -49,11 +49,11 @@
 
 ## Update (docker-compose production) with longer downtime
 * `git pull`: This only affects the docker-compose.yml.production file. The images are pulled from Docker Hub.
-* `docker-compose -f docker/docker-compose.yml.production --project-dir . pull`
-* `docker-compose -f docker/docker-compose.yml.production --project-dir . up --build`
-* In the container: run `php artisan migrate`
-* In the container: run `php artisan config:cache`.
-* In the container: run `php artisan route:cache`.
+* `docker-compose -f docker/docker-compose.yml.production --project-name playgroundadminapp --project-dir . pull`
+* `docker-compose -f docker/docker-compose.yml.production --project-name playgroundadminapp --project-dir . up -d`
+* In the app container: run `php artisan migrate`
+* In the app container: run `php artisan config:cache`.
+* In the app container: run `php artisan route:cache`.
 
 ## Access PHPMyAdmin 
 * `ssh root@admin.jokkebrok.be -L 22001:localhost:21001 -N`
