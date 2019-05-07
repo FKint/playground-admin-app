@@ -108,7 +108,7 @@ jobs:
           when: always
           command: |
             mkdir -p /tmp/test-results/phpunit
-            docker cp app-test:/tmp/phpunit /tmp/test-results/phpunit/results.xml
+            docker cp app-test:/tmp/phpunit.xml /tmp/test-results/phpunit/results.xml
       - store_test_results:
           path: /tmp/test-results
       - store_artifacts:
