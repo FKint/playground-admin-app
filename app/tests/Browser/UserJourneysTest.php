@@ -122,6 +122,7 @@ class UserJourneysTest extends DuskTestCase
                 ->enterAddChildFormData('Sonja', 'Boonen', 2004, null, null)
                 ->submitAddChildFormSuccessfully();
             $newChild = \App\Child::where(['first_name' => 'Sonja', 'last_name' => 'Boonen'])->first();
+            $this->assertNotNull($newChild);
             $browser->assertSeeChildEntryInTable($newChild->id, 'Sonja', 'Boonen')
                 ->assertSeeEditChildDialogTabFamilies()
                 ->enterAddNewFamilyFormData('Erik', 'Bulcke', $this->socialTariff->id, 'Requires invoice', 'Call: +329878767875')
