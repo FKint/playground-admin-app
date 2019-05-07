@@ -44,13 +44,12 @@ class InternalChildrenPage extends InternalPage
     public function navigateToAddNewChildDialog(Browser $browser)
     {
         $browser->clickLink("Nieuw kind toevoegen")
-            ->waitFor("@new-child-modal");
+            ->waitFor("@new-child-modal")
+            ->waitFor('[dusk="new-child-modal"] [dusk="first_name"]:focus');
     }
 
     public function enterAddChildFormData(Browser $browser, $firstName, $lastName, $birthYear, $ageGroupId, $remarks)
     {
-        $browser->waitFor('[dusk="new-child-modal"] [dusk=first_name]');
-        // TODO(fkint): try to use assertSeeIn or within if it doesn't assert page-level conditions.
         if (isset($firstName)) {
             $browser->type('[dusk="new-child-modal"] [dusk=first_name]', $firstName);
         }
