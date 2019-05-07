@@ -62,7 +62,10 @@
         });
         const age_groups = {!! $year->age_groups !!};
         const new_child_form = $('#new-child-form');
-        new_child_form.find('input[name=first_name]').first().focus();
+        $('#new-child-modal').on('shown.bs.modal', function(e){
+            new_child_form.find('input[name=first_name]').first().focus();
+        });
+        
         new_child_form.find('input[name=birth_year]').change(function () {
             new_child_form.find('select[name=age_group_id]').val(0);
             const birth_year = parseInt($(this).val());
