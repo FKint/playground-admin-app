@@ -101,17 +101,18 @@ jobs:
           command: docker load -i /tmp/workspace/docker-app-test.tar
       - run:
           name: Run PHP Unit tests
-          command: docker run --name app-test $IMAGE_NAME:app-test vendor/bin/phpunit --log-junit /tmp/phpunit.xml
+          command: |
+            docker run --name app-test $IMAGE_NAME:app-test vendor/bin/phpunit --log-junit /tmp/phpunit.xml
       - run:
           name: Collect artifacts
           when: always
           command: |
-            mkdir -p /tmp/phpunit
-            docker cp app-test:/tmp/phpunit.xml /tmp/phpunit/junit.xml
+            mkdir -p /tmp/test-results/phpunit
+            docker cp app-test:/tmp/phpunit /tmp/test-results/phpunit/results.xml
       - store_test_results:
-          path: /tmp/phpunit/junit.xml
+          path: /tmp/test-results
       - store_artifacts:
-          path: /tmp/phpunit
+          path: /tmp/test-results
           destination: phpunit-data
   test-dusk:
     executor: docker-publisher
@@ -133,18 +134,22 @@ jobs:
             docker exec app-container curl --retry 10 --retry-connrefused http://selenium:4444 > /dev/null
       - run:
           name: Run Dusk tests
-          command: docker exec app-container php artisan dusk --log-junit /tmp/dusk.junit.xml
+          command: docker exec app-container php artisan dusk --log-junit /tmp/dusk.phpunit.xml
       - run:
           name: Collect artifacts
           when: always
           command: |
             mkdir -p /tmp/dusk
+            mkdir -p /tmp/test-results/dusk
             docker cp app-container:/var/www/tests/Browser/screenshots /tmp/dusk/screenshots
             docker cp app-container:/var/www/tests/Browser/console /tmp/dusk/console
-            docker cp app-container:/tmp/dusk.junit.xml /tmp/dusk/junit.xml
+            docker cp app-container:/tmp/dusk.phpunit.xml /tmp/test-results/dusk/results.xml
             docker cp app-container:/var/www/storage/logs /tmp/dusk/logs
       - store_test_results:
-          path: /tmp/dusk/junit.xml
+          path: /tmp/test-results
+      - store_artifacts:
+          path: /tmp/test-results
+          destination: phpunit-data
       - store_artifacts:
           path: /tmp/dusk
           destination: dusk-data
