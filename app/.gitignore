@@ -13,6 +13,6 @@ yarn-error.log
 .php_cs.cache
 .php_cs
 
-app/version_sha1
-app/version_timestamp
-app/version_github_link
+version_sha1
+version_timestamp
+version_github_link
