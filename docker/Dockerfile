@@ -105,7 +105,3 @@ WORKDIR /var/www
 USER www-data
 COPY --chown=www-data:www-data --from=composer-installer /root/app .
 COPY --chown=www-data:www-data --from=npm-builder /root/app/public ./public
-# TODO(fkint): find a good way to run "php artisan config:cache" after
-# the env file is in the image (cannot do here as the env file is a 
-# volume)
-RUN php artisan route:cache
