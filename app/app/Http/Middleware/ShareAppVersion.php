@@ -6,7 +6,7 @@ use Closure;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\App;
-use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\View;
 
 class ShareAppVersion
@@ -26,9 +26,9 @@ class ShareAppVersion
             $githubLink = 'https://github.com/FKint/playground-admin-app';
             if (App::environment('production')) {
                 try {
-                    $timestamp = Storage::get('version_timestamp');
-                    $sha1 = Storage::get('version_sha1');
-                    $githubLink = Storage::get('version_github_link');
+                    $timestamp = File::get(base_path('version_timestamp'));
+                    $sha1 = File::get(base_path('version_sha1'));
+                    $githubLink = File::get(base_path('version_github_link'));
                 } catch (\Illuminate\Contracts\Filesystem\FileNotFoundException $e) {
                     Log::error('Could not read version information: '.$e->getMessage());
                 }
@@ -36,7 +36,7 @@ class ShareAppVersion
 
             return [
                 'sha1' => $sha1,
-                'timestamp' =>  (new \DateTimeImmutable())->setTimestamp($timestamp)->format('Y-m-d H:i:s'),
+                'timestamp' =>  (new \DateTimeImmutable())->setTimestamp(intval($timestamp))->format('Y-m-d H:i:s'),
                 'github_link' => $githubLink,
             ];
         });
