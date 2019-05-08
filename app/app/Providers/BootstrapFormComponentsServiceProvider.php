@@ -2,8 +2,8 @@
 
 namespace App\Providers;
 
-use Illuminate\Support\ServiceProvider;
 use Collective\Html\FormFacade as Form;
+use Illuminate\Support\ServiceProvider;
 
 class BootstrapFormComponentsServiceProvider extends ServiceProvider
 {
