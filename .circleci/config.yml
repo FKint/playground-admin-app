@@ -29,7 +29,6 @@ jobs:
             echo "$CIRCLE_BRANCH" > .circle-branch
             echo "$CIRCLE_SHA1" > .circle-sha1
             echo "https://github.com/FKint/playground-admin-app/tree/$CIRCLE_SHA1" > ./app/version_github_link
-            cat ./app/version_github_link
             cp .circle-sha1 ./app/version_sha1
             date '+%s' > ./app/version_timestamp
       - restore_cache:
