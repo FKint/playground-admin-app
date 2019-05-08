@@ -68,6 +68,12 @@
     @yield('content')
 
 </div> <!-- /container -->
+<div class="container">
+    Version info: 
+    <a href="{{ $app_version['github_link'] }}">
+        {{ $app_version['sha1'] }} ({{ $app_version['timestamp'] }})
+    </a>
+</div>
 <script>
     window.Laravel = {!!  json_encode([
         'csrfToken' => csrf_token(),
