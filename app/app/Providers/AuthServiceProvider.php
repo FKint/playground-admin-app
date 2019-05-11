@@ -8,8 +8,8 @@ use App\Policies\ChildFamilyPolicy;
 use App\Policies\ChildPolicy;
 use App\Policies\YearPolicy;
 use App\Year;
-use Illuminate\Support\Facades\Gate;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
+use Illuminate\Support\Facades\Gate;
 
 class AuthServiceProvider extends ServiceProvider
 {

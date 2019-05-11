@@ -2,8 +2,8 @@
 
 namespace App\Policies;
 
-use App\User;
 use App\Child;
+use App\User;
 use App\Year;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
