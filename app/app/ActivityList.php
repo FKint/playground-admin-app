@@ -13,6 +13,8 @@ class ActivityList extends Model
      */
     protected $fillable = ['name', 'date', 'show_on_attendance_form', 'show_on_dashboard', 'price'];
 
+    protected $dates = ['date'];
+
     /**
      * Get all child families on this list.
      */

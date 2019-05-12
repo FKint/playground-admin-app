@@ -14,7 +14,7 @@ class AddYearTitle extends Migration
     public function up()
     {
         Schema::table('years', function (Blueprint $table) {
-            $table->text('title')->default('TODO');
+            $table->text('title')->nullable();
         });
     }
 

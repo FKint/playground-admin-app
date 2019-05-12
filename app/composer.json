@@ -9,6 +9,7 @@
   "type": "project",
   "require": {
     "php": "7.3.*",
+    "barryvdh/laravel-dompdf": "^0.8.4",
     "doctrine/dbal": "*",
     "fzaninotto/faker": "*",
     "laravel/framework": "5.8.*",

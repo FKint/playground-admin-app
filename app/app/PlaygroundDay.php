@@ -30,8 +30,7 @@ class PlaygroundDay extends Model
 
     public function date()
     {
-        $interval = new \DateInterval('P' . $this->week_day->days_offset . 'D');
-        return (new \DateTimeImmutable($this->week->first_day_of_week))->add($interval);
+        return $this->week->first_day_of_week->addDays($this->week_day->days_offset);
     }
 
     public function child_family_day_registrations()

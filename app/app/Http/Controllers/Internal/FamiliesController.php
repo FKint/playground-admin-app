@@ -9,7 +9,6 @@ use App\Http\Requests\SaveChildRequest;
 use App\Http\Requests\UpdateFamilyInfoRequest;
 use App\Year;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 use Yajra\DataTables\DataTables;
 
 class FamiliesController extends Controller
@@ -61,6 +60,137 @@ class FamiliesController extends Controller
     {
         return view('families.transactions.index')
             ->with('family', $family);
+    }
+
+    public function showChildFamilyInvoicePdf(Year $year, Family $family, Child $child)
+    {
+        $reference = $year->title.'-'.$family->id.'-'.$child->id;
+        $invoiceEntries = [];
+        $activities = $family->child_families()
+            ->where('child_id', $child->id)
+            ->firstOrFail()
+            ->activity_lists()
+            ->where('price', '>', 0)
+            ->get()
+            ->mapWithKeys(function ($activity) {
+                return [$activity->id => $activity];
+            })->all();
+        $invoicedActivities = array_fill_keys(array_keys($activities), false);
+        $tariff = $family->tariff;
+        foreach ($year->weeks as $week) {
+            $familyRegistrationData = \App\FamilyWeekRegistration::getRegistrationDataArray($week, $family);
+            $childRegistrationData = $familyRegistrationData['children'][$child->id];
+            if ($childRegistrationData['whole_week_registered']) {
+                $weekEntry = [
+                    'from' => $week->first_day(),
+                    'until' => $week->last_day(),
+                    'registration_price' => $childRegistrationData['whole_week_price'],
+                    'supplements' => $year->supplements()->get()->mapWithKeys(function ($supplement) {
+                        return [$supplement->id => 0];
+                    })->toArray(),
+                    'other' => ['total'=> 0, 'items' => []],
+                ];
+                foreach ($childRegistrationData['days'] as $weekDayId => $dayData) {
+                    foreach ($dayData['supplements'] as $supplementId => $supplementData) {
+                        if ($supplementData['ordered']) {
+                            $weekEntry['supplements'][$supplementId] += $supplementData['price'];
+                        }
+                    }
+                }
+                foreach ($activities as $activityId => $activity) {
+                    if ($invoicedActivities[$activityId]) {
+                        continue;
+                    }
+                    if (is_null($activity->date)) {
+                        continue;
+                    }
+                    if ($activity->date < $week->first_day()->date() || $activity->date >= $week->last_day()->date()->addDay()) {
+                        continue;
+                    }
+                    $invoicedActivities[$activityId] = true;
+                    $weekEntry['other']['total'] += $activity->price;
+                    $weekEntry['other']['items'][] = $activity;
+                }
+                $invoiceEntries[] = $weekEntry;
+            } else {
+                foreach ($childRegistrationData['days'] as $weekDayId => $dayData) {
+                    $playgroundDay = $week->playground_days()->where('week_day_id', $weekDayId)->firstOrFail();
+                    $nonEmpty = $dayData['registered'];
+                    $dayEntry = [
+                        'from' => $playgroundDay,
+                        'registration_price' => $dayData['day_price'],
+                        'supplements' => $year->supplements()->get()->mapWithKeys(function ($supplement) {
+                            return [$supplement->id => 0];
+                        })->toArray(),
+                        'other' => ['total' => 0, 'items' => []],
+                    ];
+                    foreach ($dayData['supplements'] as $supplementId => $supplementData) {
+                        if ($supplementData['ordered']) {
+                            $nonEmpty = true;
+                            $dayEntry['supplements'][$supplementId] += $supplementData['price'];
+                        }
+                    }
+                    foreach ($activities as $activityId => $activity) {
+                        if ($invoicedActivities[$activityId]) {
+                            continue;
+                        }
+                        \Log:: info('activity: '. json_encode($activity));
+                        if (is_null($activity->date)) {
+                            continue;
+                        }
+                        if (!$activity->date->isSameDay($playgroundDay->date())) {
+                            continue;
+                        }
+                        $invoicedActivities[$activityId] = true;
+                        $dayEntry['other']['total'] += $activity->price;
+                        $dayEntry['other']['items'][] = $activity;
+                        $nonEmpty = true;
+                    }
+                    if ($nonEmpty) {
+                        $invoiceEntries[] = $dayEntry;
+                    }
+                }
+            }
+        }
+        foreach ($activities as $activityId => $activity) {
+            if ($invoicedActivities[$activityId]) {
+                continue;
+            }
+            $invoiceEntries[] = [
+                'other' => ['total' => $activity->price, 'items' => [$activity]]
+            ];
+        }
+        $globalTotal = 0;
+        $footnotesRequired = false;
+        foreach ($invoiceEntries as &$entry) {
+            $entryTotal = 0;
+            if (isset($entry['registration_price'])) {
+                $entryTotal += $entry['registration_price'];
+            }
+            $entryTotal += $entry['other']['total'];
+            if (isset($entry['supplements'])) {
+                foreach ($entry['supplements'] as $supplementId => $supplementPrice) {
+                    $entryTotal += $supplementPrice;
+                }
+            }
+            $entry['total'] = $entryTotal;
+            $globalTotal += $entryTotal;
+
+            if (count($entry['other']['items'])) {
+                $footnotesRequired = true;
+            }
+        }
+        \Log::info("Computed invoice total for family: ". $family->id." child: ".$child->id.". Total: ".$globalTotal);
+        $pdf = \PDF::loadView('families.invoice.pdf', [
+            'child' => $child,
+            'family' => $family,
+            'year' => $year,
+            'reference' => $reference,
+            'invoice' => $invoiceEntries,
+            'total' => $globalTotal,
+            'footnotesRequired' => $footnotesRequired,
+            ]);
+        return $pdf->stream('invoice.pdf');
     }
 
     /**

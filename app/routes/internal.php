@@ -77,6 +77,8 @@ Route::prefix('{year}')
             ->name('load_edit_family_form');
         Route::get('/family/{family}/transactions', 'FamiliesController@showTransactions')
             ->name('show_family_transactions');
+        Route::get('/family/{family}/child/{child}/invoice', 'FamiliesController@showChildFamilyInvoicePdf')
+            ->name('show_child_family_invoice_pdf');
 
         // Edit registrations
         Route::get('/registrations/week/{week}/families/find', 'RegistrationsController@showFindFamily')
