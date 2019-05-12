@@ -132,7 +132,7 @@ class Year extends Model
             return null;
         }
 
-        $interval = $date->diff(\DateTime::createFromFormat('Y-m-d', $week->first_day_of_week));
+        $interval = $date->diff($week->first_day_of_week);
         $week_day = $this->week_days()
             ->where('days_offset', '=', $interval->days)
             ->first();

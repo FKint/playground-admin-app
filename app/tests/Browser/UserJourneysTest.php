@@ -269,7 +269,7 @@ class UserJourneysTest extends DuskTestCase
             $lastDate = $this->year->playground_days()->get()->map(function ($playgroundDay) {
                 return $playgroundDay->date();
             })->max();
-            $date = new \DateTimeImmutable("2018-07-11"); // Wednesday of the second week
+            $date = \Illuminate\Support\Carbon::create(2018, 7, 11); // Wednesday of the second week
             $playgroundDay = $this->year->playground_days()->get()->filter(function ($playgroundDay) use ($date) {
                 return $playgroundDay->date()->format('Y-m-d') === $date->format('Y-m-d');
             })->first();

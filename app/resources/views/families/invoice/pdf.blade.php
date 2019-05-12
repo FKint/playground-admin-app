@@ -72,7 +72,9 @@
         </div>
 
         <div class="organization_logo">
-            <img src="{{ 'data:image/jpeg;base64,'.base64_encode( $year->invoice_header_image ) }}" />
+            @if(!is_null($year->invoice_header_image))
+                <img src="{{ 'data:image/jpeg;base64,'.base64_encode( $year->invoice_header_image ) }}" />
+            @endif
         </div>
     </div>
 
@@ -164,7 +166,7 @@
                     @push('footnotes')
                     @foreach($entry['other']['items'] as $activity)
                     <li>
-                        Lijn {{ $loop->iteration }}:
+                        Lijn {{ $loop->parent->iteration }}:
                         @if(isset($activity->date))
                         {{ $activity->date->format('Y-m-d') }}
                         @endif

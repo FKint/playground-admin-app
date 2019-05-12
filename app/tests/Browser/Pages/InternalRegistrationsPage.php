@@ -9,7 +9,7 @@ class InternalRegistrationsPage extends InternalPage
 {
     protected $date;
 
-    public function __construct($yearId, \DateTimeImmutable $date)
+    public function __construct($yearId, \Illuminate\Support\Carbon $date)
     {
         parent::__construct($yearId);
         $this->date = $date;
@@ -43,7 +43,7 @@ class InternalRegistrationsPage extends InternalPage
         $browser->assertSee("Registraties");
     }
 
-    public function navigateToRegistrationsWithDatePage(Browser $browser, \DateTimeImmutable $date)
+    public function navigateToRegistrationsWithDatePage(Browser $browser, \Illuminate\Support\Carbon $date)
     {
         $browser->within(new DatePickerComponent('@registration-datepicker'), function ($browser) use ($date) {
             $browser->selectDate($date);

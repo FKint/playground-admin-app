@@ -1,6 +1,6 @@
 <div class="row">
     <div class="col-xs-12">
-        <table class="table table-bordered" id="family-children-table">
+        <table class="table table-bordered" id="family-children-table" dusk="family-children-table">
             <thead>
             <tr>
                 <th>Voornaam</th>
@@ -18,6 +18,13 @@
                     <td>{{ $child->birth_year }}</td>
                     <td>{{ $child->age_group->name }}</td>
                     <td>{{ $child->remarks }}</td>
+                    <td>
+                        <a 
+                            class="btn-child-family-invoice" 
+                            data-family-id="{{ $family->id }}" 
+                            data-child-id="{{ $child->id }}"
+                            href="{{ route('internal.show_child_family_invoice_pdf', ['child' => $child->id, 'family' => $family->id]) }}">Invoice</a>
+                    </td>
                 </tr>
             @endforeach
             </tbody>

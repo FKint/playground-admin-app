@@ -82,4 +82,19 @@ class InternalFamiliesPage extends InternalPage
         $browser->click("@btn-close-edit-family")
             ->waitUntilMissing("@edit-family-form");
     }
+
+    public function openFamilyChildrenDialog(Browser $browser, $familyId)
+    {
+        $selector = 'a.btn-show-family-children[data-family-id="'.$familyId.'"]';
+        $browser->waitFor($selector)
+            ->click($selector)
+            ->waitFor("@family-children-modal")
+            ->waitFor("@family-children-table");
+    }
+
+    public function navigateToChildFamilyInvoice(Browser $browser, $familyId, $childId)
+    {
+        $browser->assertPresent('a.btn-child-family-invoice[data-family-id="'.$familyId.'"][data-child-id="'.$childId.'"]');
+        $browser->visit(new InternalChildFamilyInvoicePage($this->yearId, $familyId, $childId));
+    }
 }

@@ -26,7 +26,7 @@ class RegistrationsController extends Controller
             return $year->playground_days()->first();
         }
 
-        $interval = $upper_bound_date->diff(\DateTime::createFromFormat('Y-m-d', $week->first_day_of_week));
+        $interval = $upper_bound_date->diff($week->first_day_of_week);
         $week_days = $year->week_days()
             ->where('days_offset', '<=', $interval->days)
             ->orderByDesc('days_offset')
@@ -42,7 +42,7 @@ class RegistrationsController extends Controller
 
     public function show(Year $year)
     {
-        $playground_day = RegistrationsController::getLastPlaygroundDayUntil($year, new \DateTimeImmutable());
+        $playground_day = RegistrationsController::getLastPlaygroundDayUntil($year, new \Illuminate\Support\Carbon());
         return redirect()->route('internal.registrations_for_date', ['date' => $playground_day->date()->format('Y-m-d')]);
     }
 

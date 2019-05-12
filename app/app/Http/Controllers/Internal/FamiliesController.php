@@ -62,7 +62,7 @@ class FamiliesController extends Controller
             ->with('family', $family);
     }
 
-    public function showChildFamilyInvoicePdf(Year $year, Family $family, Child $child)
+    protected function showChildFamilyInvoice(Year $year, Family $family, Child $child)
     {
         $reference = $year->title.'-'.$family->id.'-'.$child->id;
         $invoiceEntries = [];
@@ -181,7 +181,7 @@ class FamiliesController extends Controller
             }
         }
         \Log::info("Computed invoice total for family: ". $family->id." child: ".$child->id.". Total: ".$globalTotal);
-        $pdf = \PDF::loadView('families.invoice.pdf', [
+        return view('families.invoice.pdf', [
             'child' => $child,
             'family' => $family,
             'year' => $year,
@@ -190,7 +190,16 @@ class FamiliesController extends Controller
             'total' => $globalTotal,
             'footnotesRequired' => $footnotesRequired,
             ]);
-        return $pdf->stream('invoice.pdf');
+    }
+    
+    public function showChildFamilyInvoicePdf(Request $request, Year $year, Family $family, Child $child)
+    {
+        $view = $this->showChildFamilyInvoice($year, $family, $child);
+        if ($request->has('html') && $request->input('html')) {
+            return $view;
+        }
+        return \PDF::loadHtml($view->render())
+            ->stream('Uitnodiging tot betaling - '. $year->id.' '. $family->id.' '.$child->id.' '. $child->last_name.' '. $child->first_name);
     }
 
     /**
