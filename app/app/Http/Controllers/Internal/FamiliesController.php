@@ -30,6 +30,7 @@ class FamiliesController extends Controller
         $family = new Family($request->all());
         $family->year()->associate($year);
         $family->save();
+
         return redirect(route('internal.show_add_child_to_family', ['family' => $family]));
     }
 
@@ -46,6 +47,7 @@ class FamiliesController extends Controller
         $child->year()->associate($year);
         $child->save();
         $child->families()->syncWithoutDetaching([$family->id => ['year_id' => $year->id]]);
+
         return redirect(route('internal.show_add_child_to_family', ['family' => $family]));
     }
 
@@ -53,6 +55,7 @@ class FamiliesController extends Controller
     {
         $child_family = $family->child_families()->where('child_id', '=', $child->id)->firstOrFail();
         $child_family->delete();
+
         return redirect(route('internal.show_add_child_to_family', ['family' => $family]));
     }
 
@@ -62,150 +65,23 @@ class FamiliesController extends Controller
             ->with('family', $family);
     }
 
-    protected function showChildFamilyInvoice(Year $year, Family $family, Child $child)
-    {
-        $reference = $year->title.'-'.$family->id.'-'.$child->id;
-        $invoiceEntries = [];
-        $activities = $family->child_families()
-            ->where('child_id', $child->id)
-            ->firstOrFail()
-            ->activity_lists()
-            ->where('price', '>', 0)
-            ->get()
-            ->mapWithKeys(function ($activity) {
-                return [$activity->id => $activity];
-            })->all();
-        $invoicedActivities = array_fill_keys(array_keys($activities), false);
-        $tariff = $family->tariff;
-        foreach ($year->weeks as $week) {
-            $familyRegistrationData = \App\FamilyWeekRegistration::getRegistrationDataArray($week, $family);
-            $childRegistrationData = $familyRegistrationData['children'][$child->id];
-            if ($childRegistrationData['whole_week_registered']) {
-                $weekEntry = [
-                    'from' => $week->first_day(),
-                    'until' => $week->last_day(),
-                    'registration_price' => $childRegistrationData['whole_week_price'],
-                    'supplements' => $year->supplements()->get()->mapWithKeys(function ($supplement) {
-                        return [$supplement->id => 0];
-                    })->toArray(),
-                    'other' => ['total'=> 0, 'items' => []],
-                ];
-                foreach ($childRegistrationData['days'] as $weekDayId => $dayData) {
-                    foreach ($dayData['supplements'] as $supplementId => $supplementData) {
-                        if ($supplementData['ordered']) {
-                            $weekEntry['supplements'][$supplementId] += $supplementData['price'];
-                        }
-                    }
-                }
-                foreach ($activities as $activityId => $activity) {
-                    if ($invoicedActivities[$activityId]) {
-                        continue;
-                    }
-                    if (is_null($activity->date)) {
-                        continue;
-                    }
-                    if ($activity->date < $week->first_day()->date() || $activity->date >= $week->last_day()->date()->addDay()) {
-                        continue;
-                    }
-                    $invoicedActivities[$activityId] = true;
-                    $weekEntry['other']['total'] += $activity->price;
-                    $weekEntry['other']['items'][] = $activity;
-                }
-                $invoiceEntries[] = $weekEntry;
-            } else {
-                foreach ($childRegistrationData['days'] as $weekDayId => $dayData) {
-                    $playgroundDay = $week->playground_days()->where('week_day_id', $weekDayId)->firstOrFail();
-                    $nonEmpty = $dayData['registered'];
-                    $dayEntry = [
-                        'from' => $playgroundDay,
-                        'registration_price' => $dayData['day_price'],
-                        'supplements' => $year->supplements()->get()->mapWithKeys(function ($supplement) {
-                            return [$supplement->id => 0];
-                        })->toArray(),
-                        'other' => ['total' => 0, 'items' => []],
-                    ];
-                    foreach ($dayData['supplements'] as $supplementId => $supplementData) {
-                        if ($supplementData['ordered']) {
-                            $nonEmpty = true;
-                            $dayEntry['supplements'][$supplementId] += $supplementData['price'];
-                        }
-                    }
-                    foreach ($activities as $activityId => $activity) {
-                        if ($invoicedActivities[$activityId]) {
-                            continue;
-                        }
-                        \Log:: info('activity: '. json_encode($activity));
-                        if (is_null($activity->date)) {
-                            continue;
-                        }
-                        if (!$activity->date->isSameDay($playgroundDay->date())) {
-                            continue;
-                        }
-                        $invoicedActivities[$activityId] = true;
-                        $dayEntry['other']['total'] += $activity->price;
-                        $dayEntry['other']['items'][] = $activity;
-                        $nonEmpty = true;
-                    }
-                    if ($nonEmpty) {
-                        $invoiceEntries[] = $dayEntry;
-                    }
-                }
-            }
-        }
-        foreach ($activities as $activityId => $activity) {
-            if ($invoicedActivities[$activityId]) {
-                continue;
-            }
-            $invoiceEntries[] = [
-                'other' => ['total' => $activity->price, 'items' => [$activity]]
-            ];
-        }
-        $globalTotal = 0;
-        $footnotesRequired = false;
-        foreach ($invoiceEntries as &$entry) {
-            $entryTotal = 0;
-            if (isset($entry['registration_price'])) {
-                $entryTotal += $entry['registration_price'];
-            }
-            $entryTotal += $entry['other']['total'];
-            if (isset($entry['supplements'])) {
-                foreach ($entry['supplements'] as $supplementId => $supplementPrice) {
-                    $entryTotal += $supplementPrice;
-                }
-            }
-            $entry['total'] = $entryTotal;
-            $globalTotal += $entryTotal;
-
-            if (count($entry['other']['items'])) {
-                $footnotesRequired = true;
-            }
-        }
-        \Log::info("Computed invoice total for family: ". $family->id." child: ".$child->id.". Total: ".$globalTotal);
-        return view('families.invoice.pdf', [
-            'child' => $child,
-            'family' => $family,
-            'year' => $year,
-            'reference' => $reference,
-            'invoice' => $invoiceEntries,
-            'total' => $globalTotal,
-            'footnotesRequired' => $footnotesRequired,
-            ]);
-    }
-    
     public function showChildFamilyInvoicePdf(Request $request, Year $year, Family $family, Child $child)
     {
         $view = $this->showChildFamilyInvoice($year, $family, $child);
         if ($request->has('html') && $request->input('html')) {
             return $view;
         }
+
         return \PDF::loadHtml($view->render())
-            ->stream('Uitnodiging tot betaling - '. $year->id.' '. $family->id.' '.$child->id.' '. $child->last_name.' '. $child->first_name);
+            ->stream('Uitnodiging tot betaling - '.$year->id.' '.$family->id.' '.$child->id.' '.$child->last_name.' '.$child->first_name);
     }
 
     /**
      * @param Year $year
-     * @return mixed
+     *
      * @throws \Exception
+     *
+     * @return mixed
      */
     public function getFamilies(Year $year)
     {
@@ -257,28 +133,161 @@ class FamiliesController extends Controller
             ->groupBy('children.id')
             ->with('child_families')
             ->with('families')
-            ->whereDoesntHave("families", function ($query) use ($family) {
+            ->whereDoesntHave('families', function ($query) use ($family) {
                 $query->where('family_id', '=', $family->id);
             })
             ->limit(5)
             ->get();
+
         return $children;
     }
 
     public function getFamilySuggestions(Request $request, Year $year)
     {
         $query = $request->input('q');
-        $families = $year->families()
+
+        return $year->families()
             ->search($query)
             ->groupBy('families.id')
             ->with('children')
             ->get();
-        return $families;
     }
 
     public function addChildToFamily(Request $request, Year $year, Family $family, Child $child)
     {
         $family->children()->syncWithoutDetaching([$child->id => ['year_id' => $year->id]]);
+
         return $family;
+    }
+
+    protected function showChildFamilyInvoice(Year $year, Family $family, Child $child)
+    {
+        $reference = $year->title.'-'.$family->id.'-'.$child->id;
+        $invoiceEntries = [];
+        $activities = $family->child_families()
+            ->where('child_id', $child->id)
+            ->firstOrFail()
+            ->activity_lists()
+            ->where('price', '>', 0)
+            ->get()
+            ->mapWithKeys(function ($activity) {
+                return [$activity->id => $activity];
+            })->all();
+        $invoicedActivities = array_fill_keys(array_keys($activities), false);
+        $tariff = $family->tariff;
+        foreach ($year->weeks as $week) {
+            $familyRegistrationData = \App\FamilyWeekRegistration::getRegistrationDataArray($week, $family);
+            $childRegistrationData = $familyRegistrationData['children'][$child->id];
+            if ($childRegistrationData['whole_week_registered']) {
+                $weekEntry = [
+                    'from' => $week->first_day(),
+                    'until' => $week->last_day(),
+                    'registration_price' => $childRegistrationData['whole_week_price'],
+                    'supplements' => $year->supplements()->get()->mapWithKeys(function ($supplement) {
+                        return [$supplement->id => 0];
+                    })->toArray(),
+                    'other' => ['total' => 0, 'items' => []],
+                ];
+                foreach ($childRegistrationData['days'] as $weekDayId => $dayData) {
+                    foreach ($dayData['supplements'] as $supplementId => $supplementData) {
+                        if ($supplementData['ordered']) {
+                            $weekEntry['supplements'][$supplementId] += $supplementData['price'];
+                        }
+                    }
+                }
+                foreach ($activities as $activityId => $activity) {
+                    if ($invoicedActivities[$activityId]) {
+                        continue;
+                    }
+                    if (is_null($activity->date)) {
+                        continue;
+                    }
+                    if ($activity->date < $week->first_day()->date() || $activity->date >= $week->last_day()->date()->addDay()) {
+                        continue;
+                    }
+                    $invoicedActivities[$activityId] = true;
+                    $weekEntry['other']['total'] += $activity->price;
+                    $weekEntry['other']['items'][] = $activity;
+                }
+                $invoiceEntries[] = $weekEntry;
+            } else {
+                foreach ($childRegistrationData['days'] as $weekDayId => $dayData) {
+                    $playgroundDay = $week->playground_days()->where('week_day_id', $weekDayId)->firstOrFail();
+                    $nonEmpty = $dayData['registered'];
+                    $dayEntry = [
+                        'from' => $playgroundDay,
+                        'registration_price' => $dayData['day_price'],
+                        'supplements' => $year->supplements()->get()->mapWithKeys(function ($supplement) {
+                            return [$supplement->id => 0];
+                        })->toArray(),
+                        'other' => ['total' => 0, 'items' => []],
+                    ];
+                    foreach ($dayData['supplements'] as $supplementId => $supplementData) {
+                        if ($supplementData['ordered']) {
+                            $nonEmpty = true;
+                            $dayEntry['supplements'][$supplementId] += $supplementData['price'];
+                        }
+                    }
+                    foreach ($activities as $activityId => $activity) {
+                        if ($invoicedActivities[$activityId]) {
+                            continue;
+                        }
+                        \Log:: info('activity: '.json_encode($activity));
+                        if (is_null($activity->date)) {
+                            continue;
+                        }
+                        if (!$activity->date->isSameDay($playgroundDay->date())) {
+                            continue;
+                        }
+                        $invoicedActivities[$activityId] = true;
+                        $dayEntry['other']['total'] += $activity->price;
+                        $dayEntry['other']['items'][] = $activity;
+                        $nonEmpty = true;
+                    }
+                    if ($nonEmpty) {
+                        $invoiceEntries[] = $dayEntry;
+                    }
+                }
+            }
+        }
+        foreach ($activities as $activityId => $activity) {
+            if ($invoicedActivities[$activityId]) {
+                continue;
+            }
+            $invoiceEntries[] = [
+                'other' => ['total' => $activity->price, 'items' => [$activity]],
+            ];
+        }
+        $globalTotal = 0;
+        $footnotesRequired = false;
+        foreach ($invoiceEntries as &$entry) {
+            $entryTotal = 0;
+            if (isset($entry['registration_price'])) {
+                $entryTotal += $entry['registration_price'];
+            }
+            $entryTotal += $entry['other']['total'];
+            if (isset($entry['supplements'])) {
+                foreach ($entry['supplements'] as $supplementId => $supplementPrice) {
+                    $entryTotal += $supplementPrice;
+                }
+            }
+            $entry['total'] = $entryTotal;
+            $globalTotal += $entryTotal;
+
+            if (count($entry['other']['items'])) {
+                $footnotesRequired = true;
+            }
+        }
+        \Log::info('Computed invoice total for family: '.$family->id.' child: '.$child->id.'. Total: '.$globalTotal);
+
+        return view('families.invoice.pdf', [
+            'child' => $child,
+            'family' => $family,
+            'year' => $year,
+            'reference' => $reference,
+            'invoice' => $invoiceEntries,
+            'total' => $globalTotal,
+            'footnotesRequired' => $footnotesRequired,
+        ]);
     }
 }

@@ -20,14 +20,13 @@ class UserDashboardPage extends BasePage
     /**
      * Assert that the browser is on the page.
      *
-     * @param  Browser  $browser
-     * @return void
+     * @param Browser $browser
      */
     public function assert(Browser $browser)
     {
         $browser->assertPathIs($this->url())
             ->assertSee('Start')
-            ->assertSee("U heeft toegang tot de volgende jaargangen:");
+            ->assertSee('U heeft toegang tot de volgende jaargangen:');
     }
 
     /**
@@ -44,8 +43,9 @@ class UserDashboardPage extends BasePage
 
     /**
      * Asserts that a link to the provided year is shown on the dashboard.
-     * @param   Browser $browser
-     * @param   string  $yearName
+     *
+     * @param Browser $browser
+     * @param string  $yearName
      */
     public function assertShowsYear(Browser $browser, $yearName)
     {
@@ -54,8 +54,9 @@ class UserDashboardPage extends BasePage
 
     /**
      * Asserts that a link to the provided year is not shown on th dashboard.
-     * @param   Browser $browser
-     * @param   string  $yearName
+     *
+     * @param Browser $browser
+     * @param string  $yearName
      */
     public function assertDontShowYear(Browser $browser, $yearName)
     {
@@ -64,8 +65,9 @@ class UserDashboardPage extends BasePage
 
     /**
      * Navigates to a year dashboard shown on the user dashboard.
-     * @param   Browser $browser
-     * @param   string  $yearName
+     *
+     * @param Browser $browser
+     * @param string  $yearName
      */
     public function navigateToYearDashboard(Browser $browser, $yearName)
     {

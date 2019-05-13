@@ -17,6 +17,7 @@ class WeekDay extends Model
     {
         $new_week_day = $this->replicate();
         $new_week_day->year()->associate($year);
+
         return $new_week_day;
     }
 }

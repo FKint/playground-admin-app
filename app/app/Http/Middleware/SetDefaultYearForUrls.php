@@ -10,8 +10,9 @@ class SetDefaultYearForUrls
     /**
      * Handle an incoming request.
      *
-     * @param  \Illuminate\Http\Request $request
-     * @param  \Closure $next
+     * @param \Illuminate\Http\Request $request
+     * @param \Closure                 $next
+     *
      * @return mixed
      */
     public function handle($request, Closure $next)
@@ -24,6 +25,7 @@ class SetDefaultYearForUrls
                 URL::defaults(['year' => $lastYear->id]);
             }
         }
+
         return $next($request);
     }
 }

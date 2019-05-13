@@ -20,9 +20,10 @@ class DashboardController extends Controller
         if ($playground_day) {
             $year = $playground_day->week->year;
         }
+
         return view('dashboard.index')
             ->with('today_playground_day', $playground_day)
             ->with('year', $year)
-            ->with("selected_menu_item", "dashboard");
+            ->with('selected_menu_item', 'dashboard');
     }
 }

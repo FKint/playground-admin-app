@@ -23,8 +23,6 @@ class CloneYear extends Command
 
     /**
      * Create a new command instance.
-     *
-     * @return void
      */
     public function __construct()
     {
@@ -41,13 +39,12 @@ class CloneYear extends Command
                 $this->warn('Invalid date. Try again.');
             }
         }
+
         return $date;
     }
 
     /**
      * Execute the console command.
-     *
-     * @return void
      */
     public function handle()
     {
@@ -59,11 +56,11 @@ class CloneYear extends Command
         $last_day = $this->ask_date('Last day');
         // get list of exception days
         $exception_days = [];
-        while ($this->ask('Do you want to add an exception day (remove a date from the calendar)?') == 'y') {
+        while ('y' == $this->ask('Do you want to add an exception day (remove a date from the calendar)?')) {
             $exception_days[] = $this->ask_date('Exception day');
         }
         // will use same week days
         $new_year = $year->make_copy($description, $first_day, $last_day, $exception_days);
-        $this->info("Year cloned. New year id: " . $new_year->id);
+        $this->info('Year cloned. New year id: '.$new_year->id);
     }
 }

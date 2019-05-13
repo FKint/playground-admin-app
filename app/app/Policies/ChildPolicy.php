@@ -4,7 +4,6 @@ namespace App\Policies;
 
 use App\Child;
 use App\User;
-use App\Year;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
 class ChildPolicy
@@ -14,8 +13,9 @@ class ChildPolicy
     /**
      * Determine whether the user can view the child.
      *
-     * @param  \App\User $user
-     * @param  \App\Child $child
+     * @param \App\User  $user
+     * @param \App\Child $child
+     *
      * @return mixed
      */
     public function view(User $user, Child $child)
@@ -26,8 +26,9 @@ class ChildPolicy
     /**
      * Determine whether the user can update the child.
      *
-     * @param  \App\User $user
-     * @param  \App\Child $child
+     * @param \App\User  $user
+     * @param \App\Child $child
+     *
      * @return mixed
      */
     public function update(User $user, Child $child)
@@ -38,8 +39,9 @@ class ChildPolicy
     /**
      * Determine whether the user can delete the child.
      *
-     * @param  \App\User $user
-     * @param  \App\Child $child
+     * @param \App\User  $user
+     * @param \App\Child $child
+     *
      * @return mixed
      */
     public function delete(User $user, Child $child)

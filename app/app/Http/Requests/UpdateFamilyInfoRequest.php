@@ -24,11 +24,11 @@ class UpdateFamilyInfoRequest extends FormRequest
     public function rules()
     {
         return [
-            'guardian_first_name'=>'max:100',
-            'guardian_last_name'=>'max:100',
-            'tariff_id'=> 'exists:tariffs,id',
-            'remarks'=> '',
-            'contact'=>''
+            'guardian_first_name' => 'max:100',
+            'guardian_last_name' => 'max:100',
+            'tariff_id' => 'exists:tariffs,id',
+            'remarks' => '',
+            'contact' => '',
         ];
     }
 }

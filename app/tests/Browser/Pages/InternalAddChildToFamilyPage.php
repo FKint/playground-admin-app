@@ -14,37 +14,20 @@ class InternalAddChildToFamilyPage extends InternalPage
         parent::__construct($yearId);
         $this->familyId = $familyId;
     }
-    /**
-     * Get the route name for the page.
-     *
-     * @return string
-     */
-    protected function getRouteName()
-    {
-        return 'internal.show_add_child_to_family';
-    }
-
-    protected function getRouteParams($includeQueryParams = true)
-    {
-        $params = parent::getRouteParams($includeQueryParams);
-        $params['family'] = $this->familyId;
-        return $params;
-    }
 
     /**
      * Assert that the browser is on the page.
      *
-     * @param  Browser  $browser
-     * @return void
+     * @param Browser $browser
      */
     public function assert(Browser $browser)
     {
         parent::assert($browser);
-        $browser->assertSee("Kind toevoegen")
-            ->assertSee("Voogd:")
-            ->assertSee("Huidige kinderen")
-            ->assertSee("Nieuw kind toevoegen")
-            ->assertSee("Bestaand kind toevoegen");
+        $browser->assertSee('Kind toevoegen')
+            ->assertSee('Voogd:')
+            ->assertSee('Huidige kinderen')
+            ->assertSee('Nieuw kind toevoegen')
+            ->assertSee('Bestaand kind toevoegen');
     }
 
     /**
@@ -85,7 +68,7 @@ class InternalAddChildToFamilyPage extends InternalPage
 
     public function assertSeeGuardianName(Browser $browser, $guardianName)
     {
-        $browser->assertSee("Voogd: " . $guardianName);
+        $browser->assertSee('Voogd: '.$guardianName);
     }
 
     public function enterAddExistingChildFormData(Browser $browser, $input)
@@ -101,5 +84,23 @@ class InternalAddChildToFamilyPage extends InternalPage
             $browser->selectSuggestion($childName)
                 ->waitForReload();
         });
+    }
+
+    /**
+     * Get the route name for the page.
+     *
+     * @return string
+     */
+    protected function getRouteName()
+    {
+        return 'internal.show_add_child_to_family';
+    }
+
+    protected function getRouteParams($includeQueryParams = true)
+    {
+        $params = parent::getRouteParams($includeQueryParams);
+        $params['family'] = $this->familyId;
+
+        return $params;
     }
 }

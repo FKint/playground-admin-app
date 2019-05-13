@@ -15,6 +15,22 @@ class InternalFamilyTransactionsPage extends InternalPage
     }
 
     /**
+     * Assert that the browser is on the page.
+     *
+     * @param Browser $browser
+     */
+    public function assert(Browser $browser)
+    {
+        parent::assert($browser);
+        $browser->assertSee('Transactiegeschiedenis voor');
+    }
+
+    public function assertSaldo(Browser $browser, $saldo)
+    {
+        $browser->assertSee('Saldo: € '.$saldo);
+    }
+
+    /**
      * Get the route name for the page.
      *
      * @return string
@@ -28,23 +44,7 @@ class InternalFamilyTransactionsPage extends InternalPage
     {
         $params = parent::getRouteParams($includeQueryParams);
         $params['family'] = $this->familyId;
+
         return $params;
-    }
-
-    /**
-     * Assert that the browser is on the page.
-     *
-     * @param  Browser  $browser
-     * @return void
-     */
-    public function assert(Browser $browser)
-    {
-        parent::assert($browser);
-        $browser->assertSee("Transactiegeschiedenis voor");
-    }
-
-    public function assertSaldo(Browser $browser, $saldo)
-    {
-        $browser->assertSee("Saldo: € " . $saldo);
     }
 }

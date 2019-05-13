@@ -2,11 +2,13 @@
 
 $finder = PhpCsFixer\Finder::create()
     ->exclude('vendor')
+    ->exclude('storage/framework')
     ->in(__DIR__);
 
 return PhpCsFixer\Config::create()
     ->setRules([
         '@PSR2' => true,
-        'ordered_imports' => true,
+        '@PhpCsFixer' => true,
+        'multiline_whitespace_before_semicolons' => ['strategy' => 'no_multi_line'],
     ])
     ->setFinder($finder);

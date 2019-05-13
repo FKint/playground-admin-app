@@ -15,14 +15,13 @@ class Kernel extends ConsoleKernel
     protected $commands = [
         Commands\CreateAdminUser::class,
         Commands\CreateOrganization::class,
-        Commands\CloneYear::class
+        Commands\CloneYear::class,
     ];
 
     /**
      * Define the application's command schedule.
      *
-     * @param  \Illuminate\Console\Scheduling\Schedule $schedule
-     * @return void
+     * @param \Illuminate\Console\Scheduling\Schedule $schedule
      */
     protected function schedule(Schedule $schedule)
     {
@@ -32,8 +31,6 @@ class Kernel extends ConsoleKernel
 
     /**
      * Register the Closure based commands for the application.
-     *
-     * @return void
      */
     protected function commands()
     {

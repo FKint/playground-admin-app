@@ -25,11 +25,12 @@ class Year extends Model
 
     public function getActiveAdminSession()
     {
-        if ($this->admin_sessions()->count() == 0) {
+        if (0 == $this->admin_sessions()->count()) {
             $admin_session = new AdminSession();
             $admin_session->year()->associate($this);
             $admin_session->save();
         }
+
         return $this->admin_sessions()->whereNull('session_end')->firstOrFail();
     }
 
@@ -163,10 +164,12 @@ class Year extends Model
      * Makes a copy of the settings for age groups, day parts, week days, supplements and tariffs.
      * Generates dates between $first_day and $last_day on the week days (and generates weeks accordingly) except for
      * dates in $exception_days.
-     * @param string $description
+     *
+     * @param string            $description
      * @param DateTimeImmutable $first_day
      * @param DateTimeImmutable $last_day
-     * @param array $exception_days
+     * @param array             $exception_days
+     *
      * @return Model
      */
     public function make_copy(string $description, DateTimeImmutable $first_day, DateTimeImmutable $last_day, array $exception_days)
@@ -176,14 +179,13 @@ class Year extends Model
             // https://gist.github.com/stecman/0203410aa4da0ef01ea9
             $date = $date->setTime(0, 0, 0);
 
-            if ($date->format('N') == 1) {
+            if (1 == $date->format('N')) {
                 // If the date is already a Monday, return it as-is
                 return $date;
-            } else {
-                // Otherwise, return the date of the nearest Monday in the past
-                // This includes Sunday in the previous week instead of it being the start of a new week
-                return $date->modify('last monday');
             }
+            // Otherwise, return the date of the nearest Monday in the past
+            // This includes Sunday in the previous week instead of it being the start of a new week
+            return $date->modify('last monday');
         }
 
         $new_year = $this->replicate();
@@ -229,6 +231,7 @@ class Year extends Model
         $admin_session = new AdminSession();
         $admin_session->year()->associate($new_year);
         $admin_session->save();
+
         return $new_year;
     }
 }

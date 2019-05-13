@@ -7,6 +7,10 @@ use Tests\Browser\Pages\InternalDashboardPage;
 use Tests\Browser\Pages\UserDashboardPage;
 use Tests\DuskTestCase;
 
+/**
+ * @internal
+ * @coversNothing
+ */
 class UserDashboardTest extends DuskTestCase
 {
     private $user1;
@@ -26,15 +30,13 @@ class UserDashboardTest extends DuskTestCase
     }
 
     /**
-     * User dashboard shows links to relevant years
-     *
-     * @return void
+     * User dashboard shows links to relevant years.
      */
-    public function testUserDashboard_showsYearLinksAndCanNavigate()
+    public function testUserDashboardShowsYearLinksAndCanNavigate()
     {
         $this->browse(function (Browser $browser) {
             $browser->loginAs($this->user1)
-                ->visit(new UserDashboardPage)
+                ->visit(new UserDashboardPage())
                 ->assertShowsYear($this->year1->description)
                 ->assertShowsYear($this->year2->description)
                 ->assertDontShowYear($this->year3->description)

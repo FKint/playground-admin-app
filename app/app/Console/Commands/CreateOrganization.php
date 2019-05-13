@@ -23,8 +23,6 @@ class CreateOrganization extends Command
 
     /**
      * Create a new command instance.
-     *
-     * @return void
      */
     public function __construct()
     {
@@ -39,8 +37,8 @@ class CreateOrganization extends Command
     public function handle()
     {
         $result = Organization::create([
-            "full_name" => $this->argument('name'),
+            'full_name' => $this->argument('name'),
         ]);
-        $this->info("Organization added with ID " . $result["id"]);
+        $this->info('Organization added with ID '.$result['id']);
     }
 }

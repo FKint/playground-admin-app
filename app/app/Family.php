@@ -22,12 +22,12 @@ class Family extends Model
             'families.guardian_first_name' => 10,
             'families.guardian_last_name' => 10,
             'children.first_name' => 5,
-            'children.last_name' => 5
+            'children.last_name' => 5,
         ],
         'joins' => [
             'child_families' => ['families.id', 'child_families.family_id'],
-            'children' => ['child_families.child_id', 'children.id']
-        ]
+            'children' => ['child_families.child_id', 'children.id'],
+        ],
     ];
 
     /**
@@ -40,7 +40,7 @@ class Family extends Model
 
     public function guardian_full_name()
     {
-        return $this->guardian_first_name . " " . $this->guardian_last_name;
+        return $this->guardian_first_name.' '.$this->guardian_last_name;
     }
 
     public function child_families()
@@ -58,23 +58,22 @@ class Family extends Model
         return $this->hasMany(FamilyWeekRegistration::class);
     }
 
-
     public function getTotalCosts($cached = false)
     {
         if ($cached) {
             return $this->transactions()->sum('amount_expected');
-        } else {
-            $total_week_registrations_cost = 0;
-            foreach ($this->family_week_registrations as $week_registration) {
-                $total_week_registrations_cost += $week_registration->getTotalWeekPrice();
-            }
-            foreach ($this->child_families as $child_family) {
-                foreach ($child_family->activity_lists as $activity_list) {
-                    $total_week_registrations_cost += $activity_list->price;
-                }
-            }
-            return $total_week_registrations_cost;
         }
+        $total_week_registrations_cost = 0;
+        foreach ($this->family_week_registrations as $week_registration) {
+            $total_week_registrations_cost += $week_registration->getTotalWeekPrice();
+        }
+        foreach ($this->child_families as $child_family) {
+            foreach ($child_family->activity_lists as $activity_list) {
+                $total_week_registrations_cost += $activity_list->price;
+            }
+        }
+
+        return $total_week_registrations_cost;
     }
 
     public function getTotalPayments()
@@ -88,7 +87,6 @@ class Family extends Model
         // Positive if the family has debts.
         return $this->getTotalCosts($cached) - $this->getTotalPayments();
     }
-
 
     public function transactions()
     {

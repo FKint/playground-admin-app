@@ -9,6 +9,10 @@ use Tests\Browser\Pages\LoginPage;
 use Tests\Browser\Pages\UserDashboardPage;
 use Tests\DuskTestCase;
 
+/**
+ * @internal
+ * @coversNothing
+ */
 class LoginTest extends DuskTestCase
 {
     protected $user;
@@ -22,36 +26,35 @@ class LoginTest extends DuskTestCase
     /**
      * Logging in.
      *
-     * @return void
      * @throws \Throwable
      */
     public function testLogin()
     {
         $this->browse(function (Browser $browser) {
             // TODO(fkint): add visual diff
-            $browser->visit(new LoginPage)
-                ->submitLoginForm("play2@ground.com", "longer-password")
-                ->on(new UserDashboardPage);
+            $browser->visit(new LoginPage())
+                ->submitLoginForm('play2@ground.com', 'longer-password')
+                ->on(new UserDashboardPage());
         });
     }
 
-    public function testLogin_BadPassword()
+    public function testLoginBadPassword()
     {
         $this->browse(function (Browser $browser) {
-            $browser->visit(new LoginPage)
-                ->submitLoginForm("play2@ground.com", "invalid-password")
+            $browser->visit(new LoginPage())
+                ->submitLoginForm('play2@ground.com', 'invalid-password')
                 ->assertSee('These credentials do not match our records')
-                ->on(new LoginPage);
+                ->on(new LoginPage());
         });
     }
 
-    public function testLogin_InvalidUsername()
+    public function testLoginInvalidUsername()
     {
         $this->browse(function (Browser $browser) {
-            $browser->visit(new LoginPage)
-                ->submitLoginForm("no-such-user@ground.com", "longer-password")
+            $browser->visit(new LoginPage())
+                ->submitLoginForm('no-such-user@ground.com', 'longer-password')
                 ->assertSee('These credentials do not match our records')
-                ->on(new LoginPage);
+                ->on(new LoginPage());
         });
     }
 }

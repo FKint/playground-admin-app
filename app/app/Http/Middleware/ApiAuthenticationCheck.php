@@ -10,8 +10,9 @@ class ApiAuthenticationCheck
     /**
      * Handle an incoming request.
      *
-     * @param  \Illuminate\Http\Request $request
-     * @param  \Closure $next
+     * @param \Illuminate\Http\Request $request
+     * @param \Closure                 $next
+     *
      * @return mixed
      */
     public function handle($request, Closure $next)
@@ -19,6 +20,7 @@ class ApiAuthenticationCheck
         if (!Auth::check()) {
             abort(401, 'Forbidden.');
         }
+
         return $next($request);
     }
 }

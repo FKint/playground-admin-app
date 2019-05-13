@@ -16,7 +16,7 @@ class AdminSession extends Model
 
     public function getFinishedAttribute()
     {
-        return $this->session_end !== null;
+        return null !== $this->session_end;
     }
 
     public function getNbTransactionsAttribute()
@@ -30,6 +30,7 @@ class AdminSession extends Model
         if (!$earliest_transaction_datetime) {
             return $this->session_end;
         }
+
         return $earliest_transaction_datetime;
     }
 

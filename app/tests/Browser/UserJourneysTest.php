@@ -7,6 +7,10 @@ use Tests\Browser\Pages\InternalDashboardPage;
 use Tests\Browser\Pages\InternalEditFamilyRegistrationPage;
 use Tests\DuskTestCase;
 
+/**
+ * @internal
+ * @coversNothing
+ */
 class UserJourneysTest extends DuskTestCase
 {
     private $user;
@@ -34,10 +38,9 @@ class UserJourneysTest extends DuskTestCase
         $this->existingChild = factory(\App\Child::class)->create(['year_id' => $this->year->id, 'first_name' => 'Reinoud', 'last_name' => 'Declercq', 'age_group_id' => $this->ageGroupKls->id]);
         $this->existingChildFamily = factory(\App\ChildFamily::class)->create(['year_id' => $this->year->id, 'family_id' => $this->existingFamily->id, 'child_id' => $this->existingChild->id]);
     }
+
     /**
      * Test for creating a new family and managing associations with new and existing children.
-     *
-     * @return void
      */
     public function testCreateFamily()
     {
@@ -46,45 +49,43 @@ class UserJourneysTest extends DuskTestCase
                 ->visit(new InternalDashboardPage($this->year->id))
                 ->navigateToFamiliesPage()
                 ->navigateToAddFamilyPage()
-                ->enterAddFamilyFormData('Joran', 'De Wachter', $this->normalTariff->id, "Only speak English", "Dad: +4987676545652", "")
+                ->enterAddFamilyFormData('Joran', 'De Wachter', $this->normalTariff->id, 'Only speak English', 'Dad: +4987676545652', '')
             // TODO(fkint): split following call so we can use the actual Id after the entry has been inserted.
                 ->submitAddFamilySuccessfully(\App\Family::count() + 1)
                 ->assertSeeGuardianName('Joran De Wachter')
-                ->enterAddChildToFamilyFormData("Josje", "De Wachter", 2008, null, "Allergic to peanuts")
+                ->enterAddChildToFamilyFormData('Josje', 'De Wachter', 2008, null, 'Allergic to peanuts')
             // TODO(fkint): assert that age group 6-12 is selected
                 ->submitAddChildToFamilySuccessfully()
                 ->assertSeeCurrentChildName('Josje De Wachter')
-                ->enterAddChildToFamilyFormData("Joris", "Janssens", 2013, null, null)
+                ->enterAddChildToFamilyFormData('Joris', 'Janssens', 2013, null, null)
             // TODO(fkint): assert that age group KLS is selected
                 ->submitAddChildToFamilySuccessfully()
-                ->assertSeeCurrentChildName("Josje De Wachter")
-                ->assertSeeCurrentChildName("Joris Janssens")
+                ->assertSeeCurrentChildName('Josje De Wachter')
+                ->assertSeeCurrentChildName('Joris Janssens')
                 ->navigateToFamiliesPage()
                 ->navigateToAddFamilyPage()
-                ->enterAddFamilyFormData('Annelies', 'Vandenbroucke', $this->socialTariff->id, "", "", "")
+                ->enterAddFamilyFormData('Annelies', 'Vandenbroucke', $this->socialTariff->id, '', '', '')
                 ->submitAddFamilySuccessfully(\App\Family::count() + 1)
-                ->assertSeeGuardianName("Annelies Vandenbroucke")
-                ->enterAddChildToFamilyFormData("Rik", "Vandenbroucke", 2012, $this->ageGroup612->id, "")
+                ->assertSeeGuardianName('Annelies Vandenbroucke')
+                ->enterAddChildToFamilyFormData('Rik', 'Vandenbroucke', 2012, $this->ageGroup612->id, '')
                 ->submitAddChildToFamilySuccessfully()
-                ->assertSeeCurrentChildName("Rik Vandenbroucke")
-                ->enterAddExistingChildFormData("De Wachter")
-                ->selectAddExistingChildSuggestion("Joris Janssens")
-                ->assertSeeCurrentChildName("Joris Janssens")
-                ->assertSeeCurrentChildName("Rik Vandenbroucke")
-                ->assertDontSeeCurrentChildName("Josje De Wachter");
-            $child1 = \App\Child::where(['first_name' => "Josje", 'last_name' => "De Wachter"])->firstOrFail();
+                ->assertSeeCurrentChildName('Rik Vandenbroucke')
+                ->enterAddExistingChildFormData('De Wachter')
+                ->selectAddExistingChildSuggestion('Joris Janssens')
+                ->assertSeeCurrentChildName('Joris Janssens')
+                ->assertSeeCurrentChildName('Rik Vandenbroucke')
+                ->assertDontSeeCurrentChildName('Josje De Wachter');
+            $child1 = \App\Child::where(['first_name' => 'Josje', 'last_name' => 'De Wachter'])->firstOrFail();
             $this->assertEquals($this->ageGroup612->id, $child1->age_group_id);
-            $child2 = \App\Child::where(['first_name' => "Joris", 'last_name' => "Janssens"])->firstOrFail();
+            $child2 = \App\Child::where(['first_name' => 'Joris', 'last_name' => 'Janssens'])->firstOrFail();
             $this->assertEquals($this->ageGroupKls->id, $child2->age_group_id);
-            $child3 = \App\Child::where(['first_name' => "Rik", "last_name" => "Vandenbroucke"])->firstOrFail();
+            $child3 = \App\Child::where(['first_name' => 'Rik', 'last_name' => 'Vandenbroucke'])->firstOrFail();
             $this->assertEquals($this->ageGroup612->id, $child3->age_group_id);
         });
     }
 
     /**
      * Test for editing a family.
-     *
-     * @return void
      */
     public function testEditFamily()
     {
@@ -93,24 +94,22 @@ class UserJourneysTest extends DuskTestCase
             $browser->loginAs($this->user)
                 ->visit(new InternalDashboardPage($this->year->id))
                 ->navigateToFamiliesPage()
-                ->assertSeeFamilyEntryInTable($this->existingFamily->id, "Veronique", "Baeten")
-                ->assertSeeFamilyEntryInTable($newFamily->id, "Erica", "Van Heulen")
+                ->assertSeeFamilyEntryInTable($this->existingFamily->id, 'Veronique', 'Baeten')
+                ->assertSeeFamilyEntryInTable($newFamily->id, 'Erica', 'Van Heulen')
                 ->navigateToEditFamily($this->existingFamily->id)
-                ->enterEditFamilyFormData("Veronica", "Baetens", $this->socialTariff->id, "previously known as Veronique Baeten", "veronica@bs.com", "")
+                ->enterEditFamilyFormData('Veronica', 'Baetens', $this->socialTariff->id, 'previously known as Veronique Baeten', 'veronica@bs.com', '')
                 ->submitEditFamilyFormSuccessfully()
                 ->closeEditFamilyDialog()
-                ->assertSeeFamilyEntryInTable($this->existingFamily->id, "Veronica", "Baetens")
-                ->assertSeeFamilyEntryInTable($newFamily->id, "Erica", "Van Heulen");
+                ->assertSeeFamilyEntryInTable($this->existingFamily->id, 'Veronica', 'Baetens')
+                ->assertSeeFamilyEntryInTable($newFamily->id, 'Erica', 'Van Heulen');
         });
         $this->existingFamily->refresh();
-        $this->assertEquals("Veronica", $this->existingFamily->guardian_first_name);
-        $this->assertEquals("Baetens", $this->existingFamily->guardian_last_name);
+        $this->assertEquals('Veronica', $this->existingFamily->guardian_first_name);
+        $this->assertEquals('Baetens', $this->existingFamily->guardian_last_name);
     }
 
     /**
      * Test for creating a new child and managing associations with new and existing families.
-     *
-     * @return void
      */
     public function testCreateChild()
     {
@@ -128,10 +127,10 @@ class UserJourneysTest extends DuskTestCase
                 ->enterAddNewFamilyFormData('Erik', 'Bulcke', $this->socialTariff->id, 'Requires invoice', 'Call: +329878767875', '')
                 ->submitAddNewFamilySuccessfully('Erik Bulcke')
                 ->assertSeeCurrentFamily('Erik Bulcke')
-                ->enterAddExistingFamilyFormData("Reinoud")
-                ->selectAddExistingFamilySuggestion("Veronique Baeten")
-                ->assertSeeCurrentFamily("Erik Bulcke")
-                ->assertSeeCurrentFamily("Veronique Baeten");
+                ->enterAddExistingFamilyFormData('Reinoud')
+                ->selectAddExistingFamilySuggestion('Veronique Baeten')
+                ->assertSeeCurrentFamily('Erik Bulcke')
+                ->assertSeeCurrentFamily('Veronique Baeten');
             $this->assertNotNull($newChild);
             $this->assertEquals(2, $newChild->families()->count());
             $this->assertNotNull($newChild->families()->where(['guardian_first_name' => 'Veronique', 'guardian_last_name' => 'Baeten'])->first());
@@ -139,17 +138,17 @@ class UserJourneysTest extends DuskTestCase
             $this->assertNotNull($family2);
 
             $browser->deleteCurrentFamily($family2->id)
-                ->assertDontSeeCurrentFamily("Erik Bulcke");
+                ->assertDontSeeCurrentFamily('Erik Bulcke');
             $this->assertNull($newChild->families()->where(['guardian_first_name' => 'Erik', 'guardian_last_name' => 'Bulcke'])->first());
 
-            $browser->enterAddExistingFamilyFormData("Erik Bulcke")
-                ->selectAddExistingFamilySuggestion("Erik Bulcke")
-                ->assertSeeCurrentFamily("Erik Bulcke")
-                ->assertSeeCurrentFamily("Veronique Baeten");
+            $browser->enterAddExistingFamilyFormData('Erik Bulcke')
+                ->selectAddExistingFamilySuggestion('Erik Bulcke')
+                ->assertSeeCurrentFamily('Erik Bulcke')
+                ->assertSeeCurrentFamily('Veronique Baeten');
             $this->assertNotNull($newChild->families()->where(['guardian_first_name' => 'Erik', 'guardian_last_name' => 'Bulcke'])->first());
 
             $browser->navigateToEditCurrentFamilyDialog($family2->id)
-                ->enterEditFamilyForm("Jonas", null, null, null, null, null)
+                ->enterEditFamilyForm('Jonas', null, null, null, null, null)
                 ->submitEditFamilyFormSuccessfully();
             $family2->refresh();
             $this->assertEquals('Jonas', $family2->guardian_first_name);
@@ -159,8 +158,6 @@ class UserJourneysTest extends DuskTestCase
 
     /**
      * Test for editing a child.
-     *
-     * @return void
      */
     public function testEditChild()
     {
@@ -171,21 +168,21 @@ class UserJourneysTest extends DuskTestCase
             $browser->loginAs($this->user)
                 ->visit(new InternalDashboardPage($this->year->id))
                 ->navigateToChildrenPage()
-                ->assertSeeChildEntryInTable($this->existingChild->id, "Reinoud", "Declercq")
-                ->assertSeeChildEntryInTable($child2->id, "Jan", "Cornelis")
-                ->assertSeeChildEntryInTable($child3->id, "Piet", "Declercq")
+                ->assertSeeChildEntryInTable($this->existingChild->id, 'Reinoud', 'Declercq')
+                ->assertSeeChildEntryInTable($child2->id, 'Jan', 'Cornelis')
+                ->assertSeeChildEntryInTable($child3->id, 'Piet', 'Declercq')
                 ->navigateToEditChildDialog($this->existingChild->id)
-                ->enterEditChildFormData("Ronald", "De Clercq", 2005, null, null)
+                ->enterEditChildFormData('Ronald', 'De Clercq', 2005, null, null)
                 ->submitEditChildFormSuccessfully()
                 ->closeEditChildDialog()
             // TODO(fkint): add waiting period?
-                ->assertSeeChildEntryInTable($this->existingChild->id, "Ronald", "De Clercq")
-                ->assertSeeChildEntryInTable($child2->id, "Jan", "Cornelis")
-                ->assertSeeChildEntryInTable($child3->id, "Piet", "Declercq");
+                ->assertSeeChildEntryInTable($this->existingChild->id, 'Ronald', 'De Clercq')
+                ->assertSeeChildEntryInTable($child2->id, 'Jan', 'Cornelis')
+                ->assertSeeChildEntryInTable($child3->id, 'Piet', 'Declercq');
         });
         $this->existingChild->refresh();
-        $this->assertEquals("Ronald", $this->existingChild->first_name);
-        $this->assertEquals("De Clercq", $this->existingChild->last_name);
+        $this->assertEquals('Ronald', $this->existingChild->first_name);
+        $this->assertEquals('De Clercq', $this->existingChild->last_name);
         $this->assertEquals($this->ageGroupKls->id, $this->existingChild->age_group_id);
     }
 
@@ -203,51 +200,51 @@ class UserJourneysTest extends DuskTestCase
                 ->visit(new InternalDashboardPage($this->year->id))
                 ->navigateToActivityListsPage()
                 ->navigateToAddNewActivityListPage()
-                ->enterAddActivityListFormData("Kid Rock", "3.50", new \DateTimeImmutable('2018-07-23'), true, true)
+                ->enterAddActivityListFormData('Kid Rock', '3.50', new \DateTimeImmutable('2018-07-23'), true, true)
                 ->submitAddActivityListFormSuccessfully();
             $activityListKidRock = \App\ActivityList::where(['name' => 'Kid Rock'])->first();
             $this->assertNotNull($activityListKidRock);
             $browser->assertOnActivityListPage($activityListKidRock->id)
-                ->assertSeeActivityListDetails("Kid Rock", "3.50", "2018-07-23", true, true)
+                ->assertSeeActivityListDetails('Kid Rock', '3.50', '2018-07-23', true, true)
                 ->assertNoActivityParticipants();
 
             $browser->navigateToActivityListsPage()
                 ->navigateToAddNewActivityListPage()
-                ->enterAddActivityListFormData("Need medication", null, null, false, true)
+                ->enterAddActivityListFormData('Need medication', null, null, false, true)
                 ->submitAddActivityListFormSuccessfully();
             $activityListMedication = \App\ActivityList::where(['name' => 'Need medication'])->first();
             $this->assertNotNull($activityListMedication);
             $browser->assertOnActivityListPage($activityListMedication->id)
-                ->assertSeeActivityListDetails("Need medication", "", "", false, true)
+                ->assertSeeActivityListDetails('Need medication', '', '', false, true)
                 ->assertNoActivityParticipants()
-                ->enterAddParticipantFormData("Reinoud")
-                ->selectAddParticipantSuggestion("Reinoud Declercq")
-                ->assertActivityParticipant("Reinoud Declercq", "Veronique Baeten");
+                ->enterAddParticipantFormData('Reinoud')
+                ->selectAddParticipantSuggestion('Reinoud Declercq')
+                ->assertActivityParticipant('Reinoud Declercq', 'Veronique Baeten');
 
             $browser->navigateToActivityListsPage()
                 ->navigateToAddNewActivityListPage()
-                ->enterAddActivityListFormData("Past activity", "1.00", new \DateTimeImmutable("2018-07-02"), false, false)
+                ->enterAddActivityListFormData('Past activity', '1.00', new \DateTimeImmutable('2018-07-02'), false, false)
                 ->submitAddActivityListFormSuccessfully();
             $activityListPast = \App\ActivityList::where(['name' => 'Past activity'])->first();
             $this->assertNotNull($activityListPast);
             $browser->assertOnActivityListPage($activityListPast->id)
-                ->assertSeeActivityListDetails("Past activity", "1.00", "2018-07-02", false, false)
-                ->enterEditActivityListFormData("Past activity: swimming", null, null, null, null)
+                ->assertSeeActivityListDetails('Past activity', '1.00', '2018-07-02', false, false)
+                ->enterEditActivityListFormData('Past activity: swimming', null, null, null, null)
                 ->assertNoActivityParticipants()
-                ->enterAddParticipantFormData("Coucke")
-                ->selectAddParticipantSuggestion("Jan Cornelis")
-                ->assertActivityParticipant("Jan Cornelis", "Arnold Coucke")
-                ->enterAddParticipantFormData("Reinoud")
-                ->selectAddParticipantSuggestion("Reinoud Declercq")
-                ->assertActivityParticipant("Reinoud Declercq", "Veronique Baeten")
+                ->enterAddParticipantFormData('Coucke')
+                ->selectAddParticipantSuggestion('Jan Cornelis')
+                ->assertActivityParticipant('Jan Cornelis', 'Arnold Coucke')
+                ->enterAddParticipantFormData('Reinoud')
+                ->selectAddParticipantSuggestion('Reinoud Declercq')
+                ->assertActivityParticipant('Reinoud Declercq', 'Veronique Baeten')
                 ->deleteParticipant($this->existingChildFamily->id)
-                ->assertNotActivityParticipant("Reinoud Declercq")
-                ->assertActivityParticipant("Jan Cornelis", "Arnold Coucke");
+                ->assertNotActivityParticipant('Reinoud Declercq')
+                ->assertActivityParticipant('Jan Cornelis', 'Arnold Coucke');
 
             $browser->navigateToDashboardPage()
-                ->assertSeeActivityList("Need medication")
-                ->assertSeeActivityList("Kid Rock")
-                ->assertDontSeeActivityList("Past activity");
+                ->assertSeeActivityList('Need medication')
+                ->assertSeeActivityList('Kid Rock')
+                ->assertDontSeeActivityList('Past activity');
         });
     }
 
@@ -285,9 +282,9 @@ class UserJourneysTest extends DuskTestCase
                 ->navigateToRegistrationsPage($lastDate)
                 ->navigateToRegistrationsWithDatePage($date)
                 ->navigateToRegisterFindFamilyPage($playgroundDay->week_id)
-                ->enterFindFamilyFormData("Reinoud")
-                ->selectFindFamilySuggestion("Reinoud Declercq")
-                ->assertOnEditFamilyRegistrationPage($playgroundDay->week_id, $this->existingFamily->id, "Veronique Baeten")
+                ->enterFindFamilyFormData('Reinoud')
+                ->selectFindFamilySuggestion('Reinoud Declercq')
+                ->assertOnEditFamilyRegistrationPage($playgroundDay->week_id, $this->existingFamily->id, 'Veronique Baeten')
                 ->selectWeekRegistrationForChild($this->existingChild->id)
                 ->selectDayRegistrationForChild($child2->id, $wednesday->id)
                 ->selectDayAgeGroupForChild($child2->id, $wednesday->id, $this->ageGroupKls->id)
@@ -297,14 +294,14 @@ class UserJourneysTest extends DuskTestCase
                 ->selectSupplementForChild($child2->id, $wednesday->id, $supplementIceCream->id)
                 ->checkInChild($child2->id, $wednesday->id)
                 ->waitUntilRequestsSettled()
-                ->assertExpectedAmount("31.50")
-                ->assertPaidFieldContent("31.50")
+                ->assertExpectedAmount('31.50')
+                ->assertPaidFieldContent('31.50')
                 ->submitRegistrationFormAndNavigateToNext();
 
             $transaction = $this->year->getActiveAdminSession()->transactions()->where('family_id', $this->existingFamily->id)->first();
             $this->assertNotNull($transaction);
-            $this->assertEquals("31.50", number_format($transaction->amount_expected, 2));
-            $this->assertEquals("31.50", number_format($transaction->amount_paid, 2));
+            $this->assertEquals('31.50', number_format($transaction->amount_expected, 2));
+            $this->assertEquals('31.50', number_format($transaction->amount_paid, 2));
 
             $this->assertEquals(5, $this->existingChildFamily->child_family_day_registrations()->count());
             $this->assertEquals(2, $child2Family1->child_family_day_registrations()->count());
@@ -321,14 +318,14 @@ class UserJourneysTest extends DuskTestCase
             $this->assertNotNull($mondayRegistrationExistingChild);
             $this->assertFalse((bool) $mondayRegistrationExistingChild->attended);
 
-            $activityList = factory(\App\ActivityList::class)->create(['year_id' => $this->year->id, 'name' => 'Kid Rock', 'show_on_attendance_form' => true, 'price' => "0.89"]);
+            $activityList = factory(\App\ActivityList::class)->create(['year_id' => $this->year->id, 'name' => 'Kid Rock', 'show_on_attendance_form' => true, 'price' => '0.89']);
             $activityList2 = factory(\App\ActivityList::class)->create(['year_id' => $this->year->id, 'name' => 'Swimming', 'show_on_attendance_form' => false]);
 
-            $browser->enterFindFamilyFormData("Wouter Sanders")
-                ->selectFindFamilySuggestion("Arnold Coucke")
-                ->assertOnEditFamilyRegistrationPage($playgroundDay->week_id, $family2->id, "Arnold Coucke")
-                ->assertSeeActivityList("Kid Rock")
-                ->assertDontSeeActivityList("Swimming")
+            $browser->enterFindFamilyFormData('Wouter Sanders')
+                ->selectFindFamilySuggestion('Arnold Coucke')
+                ->assertOnEditFamilyRegistrationPage($playgroundDay->week_id, $family2->id, 'Arnold Coucke')
+                ->assertSeeActivityList('Kid Rock')
+                ->assertDontSeeActivityList('Swimming')
                 ->selectWeekRegistrationForChild($child3->id)
                 ->selectDayRegistrationForChild($child2->id, $tuesday->id)
                 ->assertDayRegistrationForChild($child2->id, $tuesday->id)
@@ -337,9 +334,9 @@ class UserJourneysTest extends DuskTestCase
                 ->checkInChild($child3->id, $tuesday->id)
                 ->checkInChild($child2->id, $tuesday->id)
                 ->waitUntilRequestsSettled()
-                ->assertExpectedAmount("27.39")
-                ->enterPaidField("25")
-                ->assertNewSaldo("2.39")
+                ->assertExpectedAmount('27.39')
+                ->enterPaidField('25')
+                ->assertNewSaldo('2.39')
                 ->submitRegistrationFormAndNavigateToNext();
 
             $this->assertEquals(1, $activityList->child_families()->count());
@@ -348,16 +345,16 @@ class UserJourneysTest extends DuskTestCase
 
             $browser->navigateToDashboardPage()
                 ->closeAdminSession()
-                ->enterCloseAdminSessionFormData("The Admin", "55.00", "Dropped some coins and didn't find all of them.")
+                ->enterCloseAdminSessionFormData('The Admin', '55.00', "Dropped some coins and didn't find all of them.")
                 ->submitCloseAdminSessionFormSuccessfully();
             $adminSession = \App\AdminSession::where('responsible_name', 'The Admin')->first();
             $this->assertNotNull($adminSession);
-            $this->assertEquals("55.00", number_format($adminSession->counted_cash, 2));
+            $this->assertEquals('55.00', number_format($adminSession->counted_cash, 2));
             $this->assertEquals(2, $adminSession->transactions()->count());
             $newAdminSession = $this->year->getActiveAdminSession();
             $this->assertNotNull($newAdminSession);
             $this->assertEquals(0, $newAdminSession->transactions()->count());
-            $browser->assertSeeAdminSession($adminSession->id, "The Admin", 2, "56.50", "55.00", "-1.50", "Dropped some coins and didn't find all of them.");
+            $browser->assertSeeAdminSession($adminSession->id, 'The Admin', 2, '56.50', '55.00', '-1.50', "Dropped some coins and didn't find all of them.");
 
             $browser->visit(new InternalEditFamilyRegistrationPage($this->year->id, $playgroundDay->week_id, $this->existingFamily->id, $date))
                 ->assertChildCheckedIn($child2->id, $wednesday->id)
@@ -372,31 +369,29 @@ class UserJourneysTest extends DuskTestCase
                 ->selectWeekRegistrationForChild($this->existingChild->id)
                 ->selectDayRegistrationForChild($child2->id, $wednesday->id)
                 ->waitUntilRequestsSettled()
-                ->assertExpectedAmount("-1.00") // only supplements are cancelled
+                ->assertExpectedAmount('-1.00') // only supplements are cancelled
                 ->unselectWeekRegistrationForChild($this->existingChild->id)
                 ->unselectDayRegistrationForChild($child2->id, $wednesday->id)
                 ->waitUntilRequestsSettled()
-                ->assertExpectedAmount("-26.50")
-                ->enterPaidField("-24.50")
+                ->assertExpectedAmount('-26.50')
+                ->enterPaidField('-24.50')
                 ->submitRegistrationFormAndNavigateToNext()
                 ->navigateToDashboardPage()
-                ->assertSeeAdminSession($newAdminSession->id, null, 1, "-24.50", null, null, null);
+                ->assertSeeAdminSession($newAdminSession->id, null, 1, '-24.50', null, null, null);
 
             $browser->navigateToRegistrationsPage($lastDate)
                 ->navigateToRegistrationsWithDatePage($date)
                 ->navigateToRegisterFindFamilyPage($playgroundDay->week_id)
-                ->enterFindFamilyFormData("Reinoud")
-                ->selectFindFamilySuggestion("Reinoud Declercq")
-                ->assertOnEditFamilyRegistrationPage($playgroundDay->week_id, $this->existingFamily->id, "Veronique Baeten")
+                ->enterFindFamilyFormData('Reinoud')
+                ->selectFindFamilySuggestion('Reinoud Declercq')
+                ->assertOnEditFamilyRegistrationPage($playgroundDay->week_id, $this->existingFamily->id, 'Veronique Baeten')
                 ->navigateToTransactionHistory()
-                ->assertSaldo("-2.00");
+                ->assertSaldo('-2.00');
         });
     }
 
     /**
      * Test for the settings page.
-     *
-     * @return void
      */
     public function testSettingsPage()
     {
@@ -404,7 +399,7 @@ class UserJourneysTest extends DuskTestCase
             $browser->loginAs($this->user)
                 ->visit(new InternalDashboardPage($this->year->id))
                 ->navigateToSettingsPage()
-                ->screenshot("settings_page");
+                ->screenshot('settings_page');
         });
     }
 }

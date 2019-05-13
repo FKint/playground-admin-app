@@ -8,8 +8,6 @@ class MakeActivityListNullable extends Migration
 {
     /**
      * Run the migrations.
-     *
-     * @return void
      */
     public function up()
     {
@@ -20,15 +18,13 @@ class MakeActivityListNullable extends Migration
 
     /**
      * Reverse the migrations.
-     *
-     * @return void
      */
     public function down()
     {
-        DB::table("activity_lists")->orderBy('id')->chunk(100, function ($activityLists) {
+        DB::table('activity_lists')->orderBy('id')->chunk(100, function ($activityLists) {
             foreach ($activityLists as $activityList) {
                 if (is_null($activityList->date)) {
-                    DB::table("activity_lists")->where('id', $activityList->id)
+                    DB::table('activity_lists')->where('id', $activityList->id)
                         ->update(['date' => '2000-01-01']);
                 }
             }

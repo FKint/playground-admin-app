@@ -14,8 +14,9 @@ class ShareAppVersion
     /**
      * Handle an incoming request.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Closure  $next
+     * @param \Illuminate\Http\Request $request
+     * @param \Closure                 $next
+     *
      * @return mixed
      */
     public function handle($request, Closure $next)
@@ -36,11 +37,12 @@ class ShareAppVersion
 
             return [
                 'sha1' => $sha1,
-                'timestamp' =>  (new \DateTimeImmutable())->setTimestamp(intval($timestamp))->format('Y-m-d H:i:s'),
+                'timestamp' => (new \DateTimeImmutable())->setTimestamp(intval($timestamp))->format('Y-m-d H:i:s'),
                 'github_link' => $githubLink,
             ];
         });
         View::share('app_version', $appVersion);
+
         return $next($request);
     }
 }

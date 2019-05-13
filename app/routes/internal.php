@@ -69,7 +69,6 @@ Route::prefix('{year}')
         Route::get('/family/{family}/child/{child}/remove', 'FamiliesController@showRemoveChildFromNewFamilyWithChildren')
             ->name('show_remove_child_from_new_family_with_children');
 
-
         // Families
         Route::get('/family/{family}/children/table', 'FamiliesController@loadFamilyChildrenTable')
             ->name('load_family_children');

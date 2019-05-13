@@ -6,6 +6,10 @@ use Laravel\Dusk\Browser;
 use Tests\Browser\Pages\InternalDashboardPage;
 use Tests\DuskTestCase;
 
+/**
+ * @internal
+ * @coversNothing
+ */
 class InternalDashboardTest extends DuskTestCase
 {
     // TODO(fkint): today's registrations
@@ -14,8 +18,6 @@ class InternalDashboardTest extends DuskTestCase
 
     /**
      * Check that the dashboard shows the name of the year somewhere.
-     *
-     * @return void
      */
     public function testShowsYearName()
     {
@@ -41,8 +43,8 @@ class InternalDashboardTest extends DuskTestCase
         $this->browse(function (Browser $browser) use ($user, $year) {
             $browser->loginAs($user)
                 ->visit(new InternalDashboardPage($year->id))
-                ->assertSee("The second user")
-                ->assertSee("The first user")
+                ->assertSee('The second user')
+                ->assertSee('The first user')
                 ->screenshot('internal_dashboard_with_cash_registry');
         });
     }

@@ -8,23 +8,21 @@ class UpdateRegistrationsStructure extends Migration
 {
     /**
      * Run the migrations.
-     *
-     * @return void
      */
     public function up()
     {
-        Schema::dropIfExists("day_registration_supplements");
-        Schema::dropIfExists("day_registrations");
-        Schema::dropIfExists("week_registrations");
-        Schema::dropIfExists("week_family_registrations");
-        Schema::dropIfExists("days");
-        Schema::dropIfExists("weeks");
+        Schema::dropIfExists('day_registration_supplements');
+        Schema::dropIfExists('day_registrations');
+        Schema::dropIfExists('week_registrations');
+        Schema::dropIfExists('week_family_registrations');
+        Schema::dropIfExists('days');
+        Schema::dropIfExists('weeks');
 
         Schema::table('child_families', function (Blueprint $table) {
             $table->unique(['child_id', 'family_id']);
         });
 
-        Schema::create("weeks", function (Blueprint $table) {
+        Schema::create('weeks', function (Blueprint $table) {
             $table->increments('id');
 
             $table->integer('year_id')->unsigned()->index();
@@ -34,11 +32,11 @@ class UpdateRegistrationsStructure extends Migration
 
             $table->unique(['year_id', 'week_number']);
 
-            $table->date("first_day_of_week");
+            $table->date('first_day_of_week');
 
             $table->timestamps();
         });
-        Schema::create("week_days", function (Blueprint $table) {
+        Schema::create('week_days', function (Blueprint $table) {
             $table->increments('id');
 
             $table->integer('days_offset');
@@ -47,7 +45,7 @@ class UpdateRegistrationsStructure extends Migration
 
             $table->timestamps();
         });
-        Schema::create("playground_days", function (Blueprint $table) {
+        Schema::create('playground_days', function (Blueprint $table) {
             $table->increments('id');
 
             $table->integer('week_id')->unsigned()->index();
@@ -60,7 +58,7 @@ class UpdateRegistrationsStructure extends Migration
 
             $table->timestamps();
         });
-        Schema::create("family_week_registrations", function (Blueprint $table) {
+        Schema::create('family_week_registrations', function (Blueprint $table) {
             $table->increments('id');
 
             $table->integer('family_id')->unsigned()->index();
@@ -76,7 +74,7 @@ class UpdateRegistrationsStructure extends Migration
 
             $table->timestamps();
         });
-        Schema::create("child_family_week_registrations", function (Blueprint $table) {
+        Schema::create('child_family_week_registrations', function (Blueprint $table) {
             $table->increments('id');
 
             $table->integer('child_id')->unsigned()->index();
@@ -104,7 +102,7 @@ class UpdateRegistrationsStructure extends Migration
 
             $table->timestamps();
         });
-        Schema::create("child_family_day_registrations", function (Blueprint $table) {
+        Schema::create('child_family_day_registrations', function (Blueprint $table) {
             $table->increments('id');
 
             $table->integer('child_id')->unsigned()->index();
@@ -142,7 +140,7 @@ class UpdateRegistrationsStructure extends Migration
 
             $table->timestamps();
         });
-        Schema::create("child_family_day_registration_supplements", function (Blueprint $table) {
+        Schema::create('child_family_day_registration_supplements', function (Blueprint $table) {
             $table->increments('id');
 
             $table->integer('child_family_day_registration_id')
@@ -166,18 +164,16 @@ class UpdateRegistrationsStructure extends Migration
 
     /**
      * Reverse the migrations.
-     *
-     * @return void
      */
     public function down()
     {
-        Schema::dropIfExists("child_family_day_registration_supplements");
-        Schema::dropIfExists("child_family_day_registrations");
-        Schema::dropIfExists("child_family_week_registrations");
-        Schema::dropIfExists("family_week_registrations");
-        Schema::dropIfExists("playground_days");
-        Schema::dropIfExists("week_days");
-        Schema::dropIfExists("weeks");
+        Schema::dropIfExists('child_family_day_registration_supplements');
+        Schema::dropIfExists('child_family_day_registrations');
+        Schema::dropIfExists('child_family_week_registrations');
+        Schema::dropIfExists('family_week_registrations');
+        Schema::dropIfExists('playground_days');
+        Schema::dropIfExists('week_days');
+        Schema::dropIfExists('weeks');
 
         Schema::create('weeks', function (Blueprint $table) {
             $table->increments('id');

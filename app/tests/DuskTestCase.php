@@ -16,29 +16,27 @@ abstract class DuskTestCase extends BaseTestCase
     use ProvidesBrowser;
     use ReplaceSqliteDropForeignWithNoop;
 
-
     public function __construct(?string $name = null, array $data = [], string $dataName = '')
     {
         parent::__construct($name, $data, $dataName);
         $this->hotfixSqlite();
     }
 
+    public function tearDown(): void
+    {
+        parent::tearDown();
+
+        // Close browser to remove session
+        static::closeAll();
+    }
+
     /**
      * Prepare for Dusk test execution.
      *
      * @beforeClass
-     * @return void
      */
     public static function prepare()
     {
-    }
-
-    public function tearDown(): void
-    {
-        parent::tearDown();
-        
-        // Close browser to remove session
-        static::closeAll();
     }
 
     /**
@@ -48,7 +46,7 @@ abstract class DuskTestCase extends BaseTestCase
      */
     protected function driver()
     {
-        $options = (new ChromeOptions)->addArguments([
+        $options = (new ChromeOptions())->addArguments([
             '--disable-gpu',
             '--headless',
             '--window-size=1920,1080',

@@ -20,8 +20,7 @@ class LoginPage extends BasePage
     /**
      * Assert that the browser is on the page.
      *
-     * @param  Browser  $browser
-     * @return void
+     * @param Browser $browser
      */
     public function assert(Browser $browser)
     {
@@ -43,9 +42,10 @@ class LoginPage extends BasePage
     /**
      * Submit the login form.
      *
-     * @param   \Laravel\Dusk\Browser   $browser
-     * @param   string  $name
-     * @return  void
+     * @param \Laravel\Dusk\Browser $browser
+     * @param string                $name
+     * @param mixed                 $emailAddress
+     * @param mixed                 $password
      */
     public function submitLoginForm(Browser $browser, $emailAddress, $password)
     {
