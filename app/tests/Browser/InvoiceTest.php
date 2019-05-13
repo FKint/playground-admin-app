@@ -96,10 +96,10 @@ class InvoiceTest extends DuskTestCase
                 ->selectSupplementForChild($childReinoudDeclercq->id, $tuesday->id, $supplementIceCream->id)
                 ->selectActivityListRegistrationForChild($childReinoudDeclercq->id, $activityListWithDate->id)
                 ->waitUntilRequestsSettled()
+                ->enterPaidField("0")
                 ->screenshot('invoices_registration_week_with_activity')
                 ->submitRegistrationFormAndNavigateToNext();
-            // TODO(fkint): mark payment as 0
-            // TODO(fkint): ensure that only the correct activities have been signed up for
+                
             $dateWeek1 = \Illuminate\Support\Carbon::create(2018, 7, 3);
             $playgroundDayWeek1 = $this->year->playground_days()->get()->filter(function ($playgroundDay) use ($dateWeek1) {
                 return $playgroundDay->date()->isSameDay($dateWeek1);
@@ -114,8 +114,8 @@ class InvoiceTest extends DuskTestCase
                 ->selectDayRegistrationForChild($childReinoudDeclercq->id, $wednesday->id)
                 ->selectSupplementForChild($childPietDeclercq->id, $wednesday->id, $supplementIceCream->id)
                 ->selectSupplementForChild($childReinoudDeclercq->id, $wednesday->id, $supplementIceCream->id)
-                // ->selectActivityListRegistrationForChild($childPietDeclercq->id, $activityListNoDate->id)
                 ->waitUntilRequestsSettled()
+                ->enterPaidField("0")
                 ->screenshot('invoices_registration_week_without_activity')
                 ->submitRegistrationFormAndNavigateToNext();
 
@@ -132,6 +132,7 @@ class InvoiceTest extends DuskTestCase
                 ->selectDayRegistrationForChild($childPietDeclercq->id, $wednesday->id)
                 ->selectDayRegistrationForChild($childReinoudDeclercq->id, $wednesday->id)
                 ->waitUntilRequestsSettled()
+                ->enterPaidField("0")
                 ->screenshot('invoices_registration_week_only_separate_days')
                 ->submitRegistrationFormAndNavigateToNext();
 
@@ -150,6 +151,7 @@ class InvoiceTest extends DuskTestCase
                 ->selectDayRegistrationForChild($childJanCornelis->id, $tuesday->id)
                 ->selectActivityListRegistrationForChild($childPietDeclercq->id, $activityListNoDate->id)
                 ->waitUntilRequestsSettled()
+                ->enterPaidField("0")
                 ->screenshot('invoices_registration_week_other_family')
                 ->submitRegistrationFormAndNavigateToNext();
 
@@ -157,41 +159,67 @@ class InvoiceTest extends DuskTestCase
                 ->navigateToFamiliesPage()
                 ->openFamilyChildrenDialog($familyVeroniqueBaeten->id)
                 ->navigateToChildFamilyInvoice($familyVeroniqueBaeten->id, $childReinoudDeclercq->id)
-                ->screenshot('invoice_family_veronique_child_reinoud');
-            // TODO(fkint): verify numbers shown
+                ->screenshot('invoice_family_veronique_child_reinoud')
+                ->assertTotal("€ 33.39")
+                ->assertLineParticipation(1, "€ 4.00")
+                ->assertLineSupplement(1, $supplementIceCream->id, "€ 0.50")
+                ->assertLineOther(1, "€ 0.00")
+                ->assertLineSubtotal(1, "€ 4.50")
+                ->assertLineParticipation(2, "€ 5.00")
+                ->assertLineSupplement(2, $supplementIceCream->id, "€ 0.00")
+                ->assertLineOther(2, "€ 0.00")
+                ->assertLineSubtotal(2, "€ 5.00")
+                ->assertLineParticipation(3, "€ 22.50")
+                ->assertLineSupplement(3, $supplementIceCream->id, "€ 0.50")
+                ->assertLineOther(3, "€ 0.89")
+                ->assertLineSubtotal(3, "€ 23.89");
             
             $browser->visit(new InternalDashboardPage($this->year->id))
                 ->navigateToFamiliesPage()
                 ->openFamilyChildrenDialog($familyVeroniqueBaeten->id)
                 ->navigateToChildFamilyInvoice($familyVeroniqueBaeten->id, $childPietDeclercq->id)
-                ->screenshot('invoice_family_veronique_child_piet');
-            // TODO(fkint): verify numbers shown
+                ->screenshot('invoice_family_veronique_child_piet')
+                ->assertTotal("€ 31.50")
+                ->assertLineParticipation(1, "€ 22.50")
+                ->assertLineSupplement(1, $supplementIceCream->id, "€ 0.50")
+                ->assertLineOther(1, "€ 0.00")
+                ->assertLineSubtotal(1, "€ 23.00")
+                ->assertLineParticipation(2, "€ 4.00")
+                ->assertLineSupplement(2, $supplementIceCream->id, "€ 0.00")
+                ->assertLineOther(2, "€ 0.00")
+                ->assertLineSubtotal(2, "€ 4.00")
+                ->assertLineParticipation(3, "€ 4.00")
+                ->assertLineSupplement(3, $supplementIceCream->id, "€ 0.50")
+                ->assertLineOther(3, "€ 0.00")
+                ->assertLineSubtotal(3, "€ 4.50");
 
             $browser->visit(new InternalDashboardPage($this->year->id))
                 ->navigateToFamiliesPage()
                 ->openFamilyChildrenDialog($familyEricaVanHeulen->id)
                 ->navigateToChildFamilyInvoice($familyEricaVanHeulen->id, $childPietDeclercq->id)
-                ->screenshot('invoice_family_erica_child_piet');
-            // TODO(fkint): verify numbers shown
+                ->screenshot('invoice_family_erica_child_piet')
+                ->assertTotal("€ 7.21")
+                ->assertLineParticipation(1, "€ 2.00")
+                ->assertLineSupplement(1, $supplementIceCream->id, "€ 0.00")
+                ->assertLineOther(1, "€ 0.00")
+                ->assertLineSubtotal(1, "€ 2.00")
+                ->assertLineOther(2, "€ 5.21")
+                ->assertLineSubtotal(2, "€ 5.21");
 
             $browser->visit(new InternalDashboardPage($this->year->id))
                 ->navigateToFamiliesPage()
                 ->openFamilyChildrenDialog($familyEricaVanHeulen->id)
                 ->navigateToChildFamilyInvoice($familyEricaVanHeulen->id, $childJanCornelis->id)
-                ->screenshot('invoice_family_erica_child_jan');
-            // TODO(fkint): verify numbers shown
+                ->screenshot('invoice_family_erica_child_jan')
+                ->assertTotal("€ 5.00")
+                ->assertLineParticipation(1, "€ 2.50")
+                ->assertLineSupplement(1, $supplementIceCream->id, "€ 0.00")
+                ->assertLineOther(1, "€ 0.00")
+                ->assertLineSubtotal(1, "€ 2.50")
+                ->assertLineParticipation(2, "€ 2.50")
+                ->assertLineSupplement(2, $supplementIceCream->id, "€ 0.00")
+                ->assertLineOther(2, "€ 0.00")
+                ->assertLineSubtotal(2, "€ 2.50");
         });
-        
-
-        // registrations:
-
-        // week with Ax full week, Ay separate
-        // week with Ay full week, Ax separate
-        // week with both Ay and Ax separate days
-        // verify sum of Ax and Ay equals A's balance
-        // $this->browse(function (Browser $browser) {
-        //     $browser->visit('/')
-        //             ->assertSee('Laravel');
-        // });
     }
 }

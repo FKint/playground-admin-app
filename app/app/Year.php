@@ -13,7 +13,7 @@ class Year extends Model
      *
      * @var array
      */
-    protected $fillable = ['description'];
+    protected $fillable = ['description', 'title'];
 
     /**
      * Get all weeks in this year.

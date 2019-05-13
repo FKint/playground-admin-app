@@ -46,4 +46,34 @@ class InternalChildFamilyInvoicePage extends InternalPage
     {
         parent::assert($browser);
     }
+    
+    public function assertTotal(Browser $browser, $total)
+    {
+        $browser->assertSeeIn("#invoice_total", $total);
+    }
+
+    public function assertLineSubtotal(Browser $browser, $lineId, $subtotal)
+    {
+        $browser->assertSeeIn('tr.invoice_entry[data-iteration-id="'.$lineId.'"] .subtotal', $subtotal);
+    }
+
+    public function assertLineParticipation(Browser $browser, $lineId, $participationTotal)
+    {
+        $browser->assertSeeIn('tr.invoice_entry[data-iteration-id="'.$lineId.'"] .registration_price', $participationTotal);
+    }
+
+    public function assertLineSupplement(Browser $browser, $lineId, $supplementId, $supplementTotal)
+    {
+        $browser->assertSeeIn('tr.invoice_entry[data-iteration-id="'.$lineId.'"] .supplement_price[data-supplement-id="'.$supplementId.'"]', $supplementTotal);
+    }
+
+    public function assertLineOther(Browser $browser, $lineId, $otherTotal)
+    {
+        $browser->assertSeeIn('tr.invoice_entry[data-iteration-id="'.$lineId.'"] .other_price', $otherTotal);
+    }
+
+    public function assertSocialContact(Browser $browser, $socialContact)
+    {
+        $browser->assertSeeIn("@social_contact", $socialContact);
+    }
 }
