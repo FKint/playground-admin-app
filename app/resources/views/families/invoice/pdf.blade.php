@@ -93,9 +93,9 @@
                 <th>Voornaam</th>
                 <td>{{ $child->first_name }}</td>
 
-                <td>
+                <td id="social_contact" dusk="social_contact">
                     @if($family->social_contact)
-                        $family->social_contact
+                        {{ $family->social_contact }}
                     @else
                         N/A
                     @endif
