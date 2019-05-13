@@ -110,7 +110,9 @@ abstract class InternalPage extends BasePage
         if (isset($contact)) {
             $browser->type('[dusk="' . $duskSelector . '"] [dusk=contact]', $contact);
         }
-        // TODO(fkint): fill in socialContact
+        if (!is_null($socialContact)) {
+            $browser->type('[dusk="'.$duskSelector.'"] [dusk=social_contact]', $socialContact);
+        }
     }
 
     protected function enterChildFormData(Browser $browser, $duskSelector, $firstName, $lastName, $birthYear, $ageGroupId, $remarks)

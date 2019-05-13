@@ -9,6 +9,7 @@
     {{ Form::bsDropdown('tariff_id', null, $year->getAllTariffsById(), (isset($readonly) && $readonly)?['readonly']:[]) }}
     {{ Form::bsTextarea('remarks', null, (isset($readonly) && $readonly)?['readonly']:[]) }}
     {{ Form::bsTextarea('contact', null, (isset($readonly) && $readonly)?['readonly']:[]) }}
+    {{ Form::bsTextarea('social_contact', null, (isset($readonly) && $readonly)?['readonly']:[]) }}
     @if(!isset($readonly) || !$readonly)
         {{ Form::bsSubmit(isset($submit_text) ? $submit_text : "Opslaan") }}
     @endif
