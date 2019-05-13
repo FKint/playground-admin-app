@@ -54,6 +54,10 @@ $factory->define(App\Year::class, function (Faker\Generator $faker, $params) {
     return [
         'description' => $faker->text(20),
         'organization_id' => $organization_id,
+        'title' => '2018',
+        'invoice_header_image' => null,
+        'invoice_header_text' => 'VZW\nThe Address\nThe Town',
+        'invoice_bank_account' => 'DE12 3421 3243 5988 2343',
     ];
 });
 

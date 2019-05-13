@@ -85,13 +85,13 @@ abstract class InternalPage extends BasePage
             ->on(new InternalActivityListsPage($this->yearId));
     }
 
-    public function navigateToRegistrationsPage(Browser $browser, \DateTimeImmutable $date)
+    public function navigateToRegistrationsPage(Browser $browser, \Illuminate\Support\Carbon $date)
     {
         $browser->clickLink("Registraties")
             ->on(new InternalRegistrationsPage($this->yearId, $date));
     }
 
-    protected function enterFamilyFormData(Browser $browser, $duskSelector, $guardianFirstName, $guardianLastName, $tariffId, $remarks, $contact)
+    protected function enterFamilyFormData(Browser $browser, $duskSelector, $guardianFirstName, $guardianLastName, $tariffId, $remarks, $contact, $socialContact)
     {
         // TODO(fkint): try to use assertSeeIn or within if it doesn't assert page-level conditions.
         $browser->waitFor("@" . $duskSelector);
@@ -109,6 +109,9 @@ abstract class InternalPage extends BasePage
         }
         if (isset($contact)) {
             $browser->type('[dusk="' . $duskSelector . '"] [dusk=contact]', $contact);
+        }
+        if (!is_null($socialContact)) {
+            $browser->type('[dusk="'.$duskSelector.'"] [dusk=social_contact]', $socialContact);
         }
     }
 

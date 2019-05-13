@@ -3,7 +3,6 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Log;
 
 class Week extends Model
 {
@@ -13,6 +12,8 @@ class Week extends Model
      * @var array
      */
     protected $fillable = ['year_id', 'week_number', 'first_day_of_week'];
+
+    protected $dates = ['first_day_of_week'];
 
     /**
      * Get the corresponding year.

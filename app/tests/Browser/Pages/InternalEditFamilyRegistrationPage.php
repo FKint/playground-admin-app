@@ -10,7 +10,7 @@ class InternalEditFamilyRegistrationPage extends InternalPage
     protected $familyId;
     protected $today;
 
-    public function __construct($yearId, $weekId, $familyId, \DateTimeImmutable $today = null)
+    public function __construct($yearId, $weekId, $familyId, \Illuminate\Support\Carbon $today = null)
     {
         parent::__construct($yearId);
         $this->weekId = $weekId;

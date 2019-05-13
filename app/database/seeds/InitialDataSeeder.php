@@ -47,7 +47,8 @@ class InitialDataSeeder extends Seeder
         $this->organization = \App\Organization::create(['full_name' => "Jokkebrok"]);
         $this->year = \App\Year::create([
             'organization_id' => $this->organization->id,
-            'description' => '2018'
+            'description' => '2018',
+            'title' => '2018',
         ]);
     }
 

@@ -42,7 +42,32 @@ class FamilyWeekRegistration extends Model
         $registration_data = FamilyWeekRegistration::getRegistrationDataArray($this->week, $this->family);
         return FamilyWeekRegistration::computeTotalWeekPrice($registration_data);
     }
-
+    /**
+     * @return [
+     *  'children' => array([
+     *      int => [
+     *          'days' => array([int => array([
+     *              'supplements' => array([int => array([
+     *                  'ordered' => bool,
+     *                  'price' => decimal,
+     *              ])]),
+     *              'registered' => bool,
+     *              'age_group_id' => int,
+     *              'day_part_id' => int,
+     *              'attended' => bool,
+     *              'day_price' => decimal,
+     *          ])]),
+     *          'activity_lists' => array([
+     *              'registered' => bool,
+     *              'price' => decimal,
+     *          ]),
+     *          'whole_week_registered' => bool,
+     *          'whole_week_price' => decimal,
+     *      ]
+     *  ]),
+     *  'tariff_id' => int,
+     * ]
+     */
     public static function getRegistrationDataArray(Week $week, Family $family)
     {
         $family_week_registration = $family->family_week_registrations()
@@ -52,7 +77,6 @@ class FamilyWeekRegistration extends Model
             'children' => [],
         ];
         $default_day_part = $week->year->getDefaultDayPart();
-        Log::info("Default day part: " . json_encode($default_day_part));
         $result['tariff_id'] = $family_week_registration ? $family_week_registration->tariff_id : $family->tariff_id;
         foreach ($family->child_families as $child_family) {
             $child = $child_family->child;
@@ -144,10 +168,12 @@ class FamilyWeekRegistration extends Model
             $first_week_child = false;
             foreach ($week->playground_days as $playground_day) {
                 $week_registration_data['children'][$child_id]['days'][$playground_day->week_day_id]['day_price'] = 0;
+                // TODO(fkint): verify that following line is needed/useful
                 $week_registration_data['children'][$child_id]['days'][$playground_day->week_day_id]['registered'] = false;
             }
         }
         foreach ($not_week_children as $nb_days => $child_ids) {
+            sort($child_ids);
             foreach ($child_ids as $child_id) {
                 $week_registration_data['children'][$child_id]['whole_week_price'] = 0;
                 foreach ($week->playground_days as $playground_day) {

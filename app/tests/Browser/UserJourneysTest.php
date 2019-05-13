@@ -46,7 +46,7 @@ class UserJourneysTest extends DuskTestCase
                 ->visit(new InternalDashboardPage($this->year->id))
                 ->navigateToFamiliesPage()
                 ->navigateToAddFamilyPage()
-                ->enterAddFamilyFormData('Joran', 'De Wachter', $this->normalTariff->id, "Only speak English", "Dad: +4987676545652")
+                ->enterAddFamilyFormData('Joran', 'De Wachter', $this->normalTariff->id, "Only speak English", "Dad: +4987676545652", "")
             // TODO(fkint): split following call so we can use the actual Id after the entry has been inserted.
                 ->submitAddFamilySuccessfully(\App\Family::count() + 1)
                 ->assertSeeGuardianName('Joran De Wachter')
@@ -61,7 +61,7 @@ class UserJourneysTest extends DuskTestCase
                 ->assertSeeCurrentChildName("Joris Janssens")
                 ->navigateToFamiliesPage()
                 ->navigateToAddFamilyPage()
-                ->enterAddFamilyFormData('Annelies', 'Vandenbroucke', $this->socialTariff->id, "", "")
+                ->enterAddFamilyFormData('Annelies', 'Vandenbroucke', $this->socialTariff->id, "", "", "")
                 ->submitAddFamilySuccessfully(\App\Family::count() + 1)
                 ->assertSeeGuardianName("Annelies Vandenbroucke")
                 ->enterAddChildToFamilyFormData("Rik", "Vandenbroucke", 2012, $this->ageGroup612->id, "")
@@ -96,7 +96,7 @@ class UserJourneysTest extends DuskTestCase
                 ->assertSeeFamilyEntryInTable($this->existingFamily->id, "Veronique", "Baeten")
                 ->assertSeeFamilyEntryInTable($newFamily->id, "Erica", "Van Heulen")
                 ->navigateToEditFamily($this->existingFamily->id)
-                ->enterEditFamilyFormData("Veronica", "Baetens", $this->socialTariff->id, "previously known as Veronique Baeten", "veronica@bs.com")
+                ->enterEditFamilyFormData("Veronica", "Baetens", $this->socialTariff->id, "previously known as Veronique Baeten", "veronica@bs.com", "")
                 ->submitEditFamilyFormSuccessfully()
                 ->closeEditFamilyDialog()
                 ->assertSeeFamilyEntryInTable($this->existingFamily->id, "Veronica", "Baetens")
@@ -125,7 +125,7 @@ class UserJourneysTest extends DuskTestCase
             $this->assertNotNull($newChild);
             $browser->assertSeeChildEntryInTable($newChild->id, 'Sonja', 'Boonen')
                 ->assertSeeEditChildDialogTabFamilies()
-                ->enterAddNewFamilyFormData('Erik', 'Bulcke', $this->socialTariff->id, 'Requires invoice', 'Call: +329878767875')
+                ->enterAddNewFamilyFormData('Erik', 'Bulcke', $this->socialTariff->id, 'Requires invoice', 'Call: +329878767875', '')
                 ->submitAddNewFamilySuccessfully('Erik Bulcke')
                 ->assertSeeCurrentFamily('Erik Bulcke')
                 ->enterAddExistingFamilyFormData("Reinoud")
@@ -149,7 +149,7 @@ class UserJourneysTest extends DuskTestCase
             $this->assertNotNull($newChild->families()->where(['guardian_first_name' => 'Erik', 'guardian_last_name' => 'Bulcke'])->first());
 
             $browser->navigateToEditCurrentFamilyDialog($family2->id)
-                ->enterEditFamilyForm("Jonas", null, null, null, null)
+                ->enterEditFamilyForm("Jonas", null, null, null, null, null)
                 ->submitEditFamilyFormSuccessfully();
             $family2->refresh();
             $this->assertEquals('Jonas', $family2->guardian_first_name);
@@ -269,7 +269,7 @@ class UserJourneysTest extends DuskTestCase
             $lastDate = $this->year->playground_days()->get()->map(function ($playgroundDay) {
                 return $playgroundDay->date();
             })->max();
-            $date = new \DateTimeImmutable("2018-07-11"); // Wednesday of the second week
+            $date = \Illuminate\Support\Carbon::create(2018, 7, 11); // Wednesday of the second week
             $playgroundDay = $this->year->playground_days()->get()->filter(function ($playgroundDay) use ($date) {
                 return $playgroundDay->date()->format('Y-m-d') === $date->format('Y-m-d');
             })->first();

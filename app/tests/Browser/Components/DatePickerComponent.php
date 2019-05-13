@@ -33,7 +33,7 @@ class DatePickerComponent extends BaseComponent
         $browser->assertVisible($this->selector());
     }
 
-    public function selectDate(Browser $browser, \DateTimeImmutable $date)
+    public function selectDate(Browser $browser, \Illuminate\Support\Carbon $date)
     {
         $browser->clear('input')
             ->keys('input', $date->format('Y-m-d'), ["{enter}", '']);
