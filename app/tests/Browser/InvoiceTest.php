@@ -64,18 +64,12 @@ class InvoiceTest extends DuskTestCase
                 ->submitAddActivityListFormSuccessfully();
             $activityListWithDate = \App\ActivityList::where(['name' => 'Kid Rock'])->firstOrFail();
             $browser->assertOnActivityListPage($activityListWithDate->id)
-                ->enterAddParticipantFormData("Reinoud")
-                ->selectAddParticipantSuggestion("Veronique")
-                ->enterAddParticipantFormData("Piet")
-                ->selectAddParticipantSuggestion("Veronique")
                 ->navigateToActivityListsPage()
                 ->navigateToAddNewActivityListPage()
                 ->enterAddActivityListFormData("T-shirt", "5.21", null, true, true)
                 ->submitAddActivityListFormSuccessfully();
             $activityListNoDate = \App\ActivityList::where(['name' => 'T-shirt'])->firstOrFail();
-            $browser->assertOnActivityListPage($activityListNoDate)
-                ->enterAddParticipantFormData("Piet")
-                ->selectAddParticipantSuggestion("Veronique");
+            $browser->assertOnActivityListPage($activityListNoDate->id);
 
 
             $lastDate = $this->year->playground_days()->get()->map(function ($playgroundDay) {
@@ -104,7 +98,8 @@ class InvoiceTest extends DuskTestCase
                 ->waitUntilRequestsSettled()
                 ->screenshot('invoices_registration_week_with_activity')
                 ->submitRegistrationFormAndNavigateToNext();
-            
+            // TODO(fkint): mark payment as 0
+            // TODO(fkint): ensure that only the correct activities have been signed up for
             $dateWeek1 = \Illuminate\Support\Carbon::create(2018, 7, 3);
             $playgroundDayWeek1 = $this->year->playground_days()->get()->filter(function ($playgroundDay) use ($dateWeek1) {
                 return $playgroundDay->date()->isSameDay($dateWeek1);
@@ -119,7 +114,7 @@ class InvoiceTest extends DuskTestCase
                 ->selectDayRegistrationForChild($childReinoudDeclercq->id, $wednesday->id)
                 ->selectSupplementForChild($childPietDeclercq->id, $wednesday->id, $supplementIceCream->id)
                 ->selectSupplementForChild($childReinoudDeclercq->id, $wednesday->id, $supplementIceCream->id)
-                ->selectActivityListRegistrationForChild($childPietDeclercq->id, $activityListNoDate->id)
+                // ->selectActivityListRegistrationForChild($childPietDeclercq->id, $activityListNoDate->id)
                 ->waitUntilRequestsSettled()
                 ->screenshot('invoices_registration_week_without_activity')
                 ->submitRegistrationFormAndNavigateToNext();
