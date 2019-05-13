@@ -28,18 +28,6 @@ class InternalFamiliesPage extends InternalPage
         $browser->assertSeeLink("Nieuwe voogd toevoegen");
     }
 
-    /**
-     * Get the element shortcuts for the page.
-     *
-     * @return array
-     */
-    public function elements()
-    {
-        return [
-            '@element' => '#selector',
-        ];
-    }
-
     public function navigateToAddFamilyPage(Browser $browser)
     {
         $browser->clickLink("Nieuwe voogd toevoegen")->on(new InternalAddFamilyPage($this->yearId));
@@ -66,9 +54,9 @@ class InternalFamiliesPage extends InternalPage
         $browser->click($selector);
     }
 
-    public function enterEditFamilyFormData(Browser $browser, $guardianFirstName, $guardianLastName, $tariffId, $remarks, $contact)
+    public function enterEditFamilyFormData(Browser $browser, $guardianFirstName, $guardianLastName, $tariffId, $remarks, $contact, $socialContact)
     {
-        $this->enterFamilyFormData($browser, "edit-family-form", $guardianFirstName, $guardianLastName, $tariffId, $remarks, $contact);
+        $this->enterFamilyFormData($browser, "edit-family-form", $guardianFirstName, $guardianLastName, $tariffId, $remarks, $contact, $socialContact);
     }
 
     public function submitEditFamilyFormSuccessfully(Browser $browser)
