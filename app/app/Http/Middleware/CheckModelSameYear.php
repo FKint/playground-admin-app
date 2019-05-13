@@ -9,9 +9,10 @@ class CheckModelSameYear
     /**
      * Handle an incoming request.
      *
-     * @param  \Illuminate\Http\Request $request
-     * @param  \Closure $next
-     * @param array $models
+     * @param \Illuminate\Http\Request $request
+     * @param \Closure                 $next
+     * @param array                    $models
+     *
      * @return mixed
      */
     public function handle($request, Closure $next, ...$models)
@@ -23,6 +24,7 @@ class CheckModelSameYear
                 abort(404);
             }
         });
+
         return $next($request);
     }
 }

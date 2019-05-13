@@ -19,16 +19,15 @@ class InternalSettingsPage extends InternalPage
     /**
      * Assert that the browser is on the page.
      *
-     * @param  Browser  $browser
-     * @return void
+     * @param Browser $browser
      */
     public function assert(Browser $browser)
     {
         parent::assert($browser);
-        $browser->assertSee("Werkingen")
-            ->assertSee("Extraatjes")
-            ->assertSee("Dagdelen")
-            ->assertSee("Tariefplannen");
+        $browser->assertSee('Werkingen')
+            ->assertSee('Extraatjes')
+            ->assertSee('Dagdelen')
+            ->assertSee('Tariefplannen');
     }
 
     /**

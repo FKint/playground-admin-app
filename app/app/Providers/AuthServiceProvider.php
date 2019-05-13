@@ -9,7 +9,6 @@ use App\Policies\ChildPolicy;
 use App\Policies\YearPolicy;
 use App\Year;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
-use Illuminate\Support\Facades\Gate;
 
 class AuthServiceProvider extends ServiceProvider
 {
@@ -21,18 +20,14 @@ class AuthServiceProvider extends ServiceProvider
     protected $policies = [
         Year::class => YearPolicy::class,
         Child::class => ChildPolicy::class,
-        ChildFamily::class => ChildFamilyPolicy::class
+        ChildFamily::class => ChildFamilyPolicy::class,
     ];
 
     /**
      * Register any authentication / authorization services.
-     *
-     * @return void
      */
     public function boot()
     {
         $this->registerPolicies();
-
-        //
     }
 }

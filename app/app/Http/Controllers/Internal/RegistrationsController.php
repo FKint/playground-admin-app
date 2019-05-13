@@ -37,12 +37,14 @@ class RegistrationsController extends Controller
                 return $playground_day;
             }
         }
+
         return $week->playground_days()->first();
     }
 
     public function show(Year $year)
     {
         $playground_day = RegistrationsController::getLastPlaygroundDayUntil($year, new \Illuminate\Support\Carbon());
+
         return redirect()->route('internal.registrations_for_date', ['date' => $playground_day->date()->format('Y-m-d')]);
     }
 
@@ -106,6 +108,43 @@ class RegistrationsController extends Controller
             'week' => $week,
             'today' => $today,
         ]);
+    }
+
+    public function submitRegistrationData(Request $request, Year $year, Week $week, Family $family)
+    {
+        $this->removeFamilyWeekRegistrationIfEmpty($week, $family);
+        $data = $request->all();
+        $data = FamilyWeekRegistration::cleanRegistrationData($data);
+
+        $old_saldo = $family->getCurrentSaldo();
+        $this->updateFamilyWeekRegistration($year, $week, $family, $data);
+
+        $new_saldo = $family->getCurrentSaldo();
+        $this->updateTransaction($year, $family, $data, $new_saldo - $old_saldo);
+
+        return $this->getRegistrationData($year, $week, $family);
+    }
+
+    public function getRegistrationData(Year $year, Week $week, Family $family)
+    {
+        $this->removeFamilyWeekRegistrationIfEmpty($week, $family);
+        $data = FamilyWeekRegistration::getRegistrationDataArray($week, $family);
+        $data['price_difference'] = 0;
+        $data['saldo'] = $family->getCurrentSaldo();
+
+        return $data;
+    }
+
+    public function submitRegistrationDataForPrices(Request $request, Year $year, Week $week, Family $family)
+    {
+        $this->removeFamilyWeekRegistrationIfEmpty($week, $family);
+        $data = $request->all();
+        $data = FamilyWeekRegistration::cleanRegistrationData($data);
+        $data = FamilyWeekRegistration::computeRegistrationPrices($week, $data);
+        $data['price_difference'] = FamilyWeekRegistration::computeTotalPriceDifference($family, $week, $data);
+        $data['saldo'] = $family->getCurrentSaldo();
+
+        return $data;
     }
 
     private function removeFamilyWeekRegistrationIfEmpty(Week $week, Family $family)
@@ -249,40 +288,5 @@ class RegistrationsController extends Controller
         $transaction->admin_session()->associate($admin_session);
         $transaction->family()->associate($family);
         $transaction->save();
-    }
-
-    public function submitRegistrationData(Request $request, Year $year, Week $week, Family $family)
-    {
-        $this->removeFamilyWeekRegistrationIfEmpty($week, $family);
-        $data = $request->all();
-        $data = FamilyWeekRegistration::cleanRegistrationData($data);
-
-        $old_saldo = $family->getCurrentSaldo();
-        $this->updateFamilyWeekRegistration($year, $week, $family, $data);
-
-        $new_saldo = $family->getCurrentSaldo();
-        $this->updateTransaction($year, $family, $data, $new_saldo - $old_saldo);
-
-        return $this->getRegistrationData($year, $week, $family);
-    }
-
-    public function getRegistrationData(Year $year, Week $week, Family $family)
-    {
-        $this->removeFamilyWeekRegistrationIfEmpty($week, $family);
-        $data = FamilyWeekRegistration::getRegistrationDataArray($week, $family);
-        $data['price_difference'] = 0;
-        $data['saldo'] = $family->getCurrentSaldo();
-        return $data;
-    }
-
-    public function submitRegistrationDataForPrices(Request $request, Year $year, Week $week, Family $family)
-    {
-        $this->removeFamilyWeekRegistrationIfEmpty($week, $family);
-        $data = $request->all();
-        $data = FamilyWeekRegistration::cleanRegistrationData($data);
-        $data = FamilyWeekRegistration::computeRegistrationPrices($week, $data);
-        $data['price_difference'] = FamilyWeekRegistration::computeTotalPriceDifference($family, $week, $data);
-        $data['saldo'] = $family->getCurrentSaldo();
-        return $data;
     }
 }

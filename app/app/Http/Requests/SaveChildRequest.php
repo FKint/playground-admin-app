@@ -28,7 +28,7 @@ class SaveChildRequest extends FormRequest
             'last_name' => 'required',
             'birth_year' => 'required|integer',
             'age_group_id' => 'required|exists:age_groups,id',
-            'remarks' => ''
+            'remarks' => '',
         ];
     }
 }

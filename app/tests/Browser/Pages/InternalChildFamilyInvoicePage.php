@@ -15,6 +15,7 @@ class InternalChildFamilyInvoicePage extends InternalPage
         $this->familyId = $familyId;
         $this->childId = $childId;
     }
+
     /**
      * Get the URL for the page.
      *
@@ -25,31 +26,19 @@ class InternalChildFamilyInvoicePage extends InternalPage
         return 'internal.show_child_family_invoice_pdf';
     }
 
-    protected function getRouteParams($includeQueryParams = true)
-    {
-        $params = parent::getRouteParams($includeQueryParams);
-        if ($includeQueryParams) {
-            $params['html'] = true;
-        }
-        $params['family'] = $this->familyId;
-        $params['child'] = $this->childId;
-        return $params;
-    }
-
     /**
      * Assert that the browser is on the page.
      *
-     * @param  Browser  $browser
-     * @return void
+     * @param Browser $browser
      */
     public function assert(Browser $browser)
     {
         parent::assert($browser);
     }
-    
+
     public function assertTotal(Browser $browser, $total)
     {
-        $browser->assertSeeIn("#invoice_total", $total);
+        $browser->assertSeeIn('#invoice_total', $total);
     }
 
     public function assertLineSubtotal(Browser $browser, $lineId, $subtotal)
@@ -74,6 +63,18 @@ class InternalChildFamilyInvoicePage extends InternalPage
 
     public function assertSocialContact(Browser $browser, $socialContact)
     {
-        $browser->assertSeeIn("@social_contact", $socialContact);
+        $browser->assertSeeIn('@social_contact', $socialContact);
+    }
+
+    protected function getRouteParams($includeQueryParams = true)
+    {
+        $params = parent::getRouteParams($includeQueryParams);
+        if ($includeQueryParams) {
+            $params['html'] = true;
+        }
+        $params['family'] = $this->familyId;
+        $params['child'] = $this->childId;
+
+        return $params;
     }
 }

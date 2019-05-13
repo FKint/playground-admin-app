@@ -19,56 +19,56 @@ class InternalFamiliesPage extends InternalPage
     /**
      * Assert that the browser is on the page.
      *
-     * @param  Browser  $browser
-     * @return void
+     * @param Browser $browser
      */
     public function assert(Browser $browser)
     {
         parent::assert($browser);
-        $browser->assertSeeLink("Nieuwe voogd toevoegen");
+        $browser->assertSeeLink('Nieuwe voogd toevoegen');
     }
 
     public function navigateToAddFamilyPage(Browser $browser)
     {
-        $browser->clickLink("Nieuwe voogd toevoegen")->on(new InternalAddFamilyPage($this->yearId));
+        $browser->clickLink('Nieuwe voogd toevoegen')->on(new InternalAddFamilyPage($this->yearId));
     }
 
     public function assertSeeFamilyEntryInTable(Browser $browser, $familyId, $guardianFirstName, $guardianLastName)
     {
         // TODO(fkint): Use a better selector verifying that $guardianFirstName and $guardianLastName appear together in a row.
         // Ideally make a DataTables component to re-use this for other pages
-        $selector = '[dusk="families-table"] tr[data-family-id="' . $familyId . '"] ';
+        $selector = '[dusk="families-table"] tr[data-family-id="'.$familyId.'"] ';
         $browser->waitFor($selector)
-            ->assertSeeIn($selector . ' [data-field="guardian_first_name"]', $guardianFirstName)
-            ->assertSeeIn($selector . ' [data-field="guardian_last_name"]', $guardianLastName);
+            ->assertSeeIn($selector.' [data-field="guardian_first_name"]', $guardianFirstName)
+            ->assertSeeIn($selector.' [data-field="guardian_last_name"]', $guardianLastName);
     }
+
     public function assertDontSeeFamilyEntryInTable(Browser $browser, $familyId)
     {
-        $selector = '[dusk="families-table"] tr[data-family-id="' . $familyId . '"] ';
+        $selector = '[dusk="families-table"] tr[data-family-id="'.$familyId.'"] ';
         $browser->waitUntilMissing($selector);
     }
 
     public function navigateToEditFamily(Browser $browser, $familyId)
     {
-        $selector = 'a.btn-edit-family[data-family-id="' . $familyId . '"]';
+        $selector = 'a.btn-edit-family[data-family-id="'.$familyId.'"]';
         $browser->click($selector);
     }
 
     public function enterEditFamilyFormData(Browser $browser, $guardianFirstName, $guardianLastName, $tariffId, $remarks, $contact, $socialContact)
     {
-        $this->enterFamilyFormData($browser, "edit-family-form", $guardianFirstName, $guardianLastName, $tariffId, $remarks, $contact, $socialContact);
+        $this->enterFamilyFormData($browser, 'edit-family-form', $guardianFirstName, $guardianLastName, $tariffId, $remarks, $contact, $socialContact);
     }
 
     public function submitEditFamilyFormSuccessfully(Browser $browser)
     {
         $browser->click('[dusk="edit-family-form"] [dusk=submit]')
-            ->waitForText("Wijzigingen opgeslagen.");
+            ->waitForText('Wijzigingen opgeslagen.');
     }
 
     public function closeEditFamilyDialog(Browser $browser)
     {
-        $browser->click("@btn-close-edit-family")
-            ->waitUntilMissing("@edit-family-form");
+        $browser->click('@btn-close-edit-family')
+            ->waitUntilMissing('@edit-family-form');
     }
 
     public function openFamilyChildrenDialog(Browser $browser, $familyId)
@@ -76,8 +76,8 @@ class InternalFamiliesPage extends InternalPage
         $selector = 'a.btn-show-family-children[data-family-id="'.$familyId.'"]';
         $browser->waitFor($selector)
             ->click($selector)
-            ->waitFor("@family-children-modal")
-            ->waitFor("@family-children-table");
+            ->waitFor('@family-children-modal')
+            ->waitFor('@family-children-table');
     }
 
     public function navigateToChildFamilyInvoice(Browser $browser, $familyId, $childId)

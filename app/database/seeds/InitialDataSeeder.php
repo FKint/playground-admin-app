@@ -4,10 +4,20 @@ use Illuminate\Database\Seeder;
 
 class InitialDataSeeder extends Seeder
 {
+    protected $organization;
+    protected $year;
+    protected $week_ids = [];
+    protected $week_day_ids = [];
+    protected $toddlers_id;
+    protected $middle_group_id;
+    protected $teenagers_id;
+    protected $home_id;
+    protected $whole_day_id;
+    protected $first_admin_session_id;
+
     /**
      * Run the database seeds.
      *
-     * @return void
      * @throws Exception
      */
     public function run()
@@ -21,17 +31,6 @@ class InitialDataSeeder extends Seeder
         $this->seed_tariffs();
     }
 
-    protected $organization;
-    protected $year;
-    protected $week_ids = [];
-    protected $week_day_ids = [];
-    protected $toddlers_id = null;
-    protected $middle_group_id = null;
-    protected $teenagers_id = null;
-    protected $home_id;
-    protected $whole_day_id;
-    protected $first_admin_session_id;
-
     public function weeks($week_id)
     {
         return \App\Week::findOrFail($this->week_ids[$week_id]);
@@ -44,7 +43,7 @@ class InitialDataSeeder extends Seeder
 
     protected function seed_organization_and_year()
     {
-        $this->organization = \App\Organization::create(['full_name' => "Jokkebrok"]);
+        $this->organization = \App\Organization::create(['full_name' => 'Jokkebrok']);
         $this->year = \App\Year::create([
             'organization_id' => $this->organization->id,
             'description' => '2018',
@@ -65,7 +64,7 @@ class InitialDataSeeder extends Seeder
                 'name' => 'Kleuters',
                 'abbreviation' => 'KLS',
                 'start_date' => (new DateTime())->setDate(2012, 1, 1),
-                'end_date' => (new DateTime())->setDate(2015, 1, 1)]
+                'end_date' => (new DateTime())->setDate(2015, 1, 1), ]
         )->id;
         $this->middle_group_id = \App\AgeGroup::create(
             [
@@ -73,7 +72,7 @@ class InitialDataSeeder extends Seeder
                 'name' => 'Grote',
                 'abbreviation' => '6-12',
                 'start_date' => (new DateTime())->setDate(2005, 1, 1),
-                'end_date' => (new DateTime())->setDate(2012, 1, 1)]
+                'end_date' => (new DateTime())->setDate(2012, 1, 1), ]
         )->id;
         $this->teenagers_id = \App\AgeGroup::create(
             [
@@ -81,7 +80,7 @@ class InitialDataSeeder extends Seeder
                 'name' => 'Tieners',
                 'abbreviation' => '12+',
                 'start_date' => (new DateTime())->setDate(2003, 1, 1),
-                'end_date' => (new DateTime())->setDate(2005, 1, 1)]
+                'end_date' => (new DateTime())->setDate(2005, 1, 1), ]
         )->id;
     }
 
@@ -89,14 +88,14 @@ class InitialDataSeeder extends Seeder
     {
         $this->whole_day_id = \App\DayPart::create([
             'year_id' => $this->year->id,
-            'name' => "Lunch",
+            'name' => 'Lunch',
             'order' => 1,
-            'default' => true
+            'default' => true,
         ])->id;
         $this->home_id = \App\DayPart::create([
             'year_id' => $this->year->id,
-            'name' => "Thuis",
-            'order' => 2
+            'name' => 'Thuis',
+            'order' => 2,
         ])->id;
     }
 
@@ -104,8 +103,8 @@ class InitialDataSeeder extends Seeder
     {
         factory(\App\Supplement::class)->create([
             'year_id' => $this->year->id,
-            'name' => "IJsje",
-            'price' => '0.50'
+            'name' => 'IJsje',
+            'price' => '0.50',
         ]);
     }
 
@@ -114,13 +113,13 @@ class InitialDataSeeder extends Seeder
      */
     protected function seed_dates()
     {
-        $week_day_names = ["Maandag", "Dinsdag", "Woensdag", "Donderdag", "Vrijdag"];
-        $holidays = ["2018-07-21"];
+        $week_day_names = ['Maandag', 'Dinsdag', 'Woensdag', 'Donderdag', 'Vrijdag'];
+        $holidays = ['2018-07-21'];
         for ($i = 0; $i < 5; ++$i) {
             $this->week_day_ids[] = \App\WeekDay::create([
                 'year_id' => $this->year->id,
                 'days_offset' => $i,
-                'name' => $week_day_names[$i]
+                'name' => $week_day_names[$i],
             ])->id;
         }
         $monday = (new DateTimeImmutable())->setDate(2018, 7, 2);
@@ -130,15 +129,15 @@ class InitialDataSeeder extends Seeder
             $this->week_ids[$i] = \App\Week::create([
                 'year_id' => $this->year->id,
                 'week_number' => 1 + $i,
-                'first_day_of_week' => $monday->format("Y-m-d")
+                'first_day_of_week' => $monday->format('Y-m-d'),
             ])->id;
             $week_day = $monday;
             for ($j = 0; $j < count($this->week_day_ids); ++$j) {
-                if (!in_array($week_day->format("Y-m-d"), $holidays)) {
+                if (!in_array($week_day->format('Y-m-d'), $holidays)) {
                     \App\PlaygroundDay::create([
                         'year_id' => $this->year->id,
                         'week_id' => $this->week_ids[$i],
-                        'week_day_id' => $this->week_day_ids[$j]
+                        'week_day_id' => $this->week_day_ids[$j],
                     ]);
                     $week_day = $week_day->add($day);
                 }
@@ -151,21 +150,21 @@ class InitialDataSeeder extends Seeder
     {
         \App\Tariff::create([
             'year_id' => $this->year->id,
-            "name" => "Normaal",
-            "abbreviation" => "NRML",
-            "day_first_child" => 5.00,
-            "day_later_children" => 4.00,
-            "week_first_child" => 22.5,
-            "week_later_children" => 18.5
+            'name' => 'Normaal',
+            'abbreviation' => 'NRML',
+            'day_first_child' => 5.00,
+            'day_later_children' => 4.00,
+            'week_first_child' => 22.5,
+            'week_later_children' => 18.5,
         ]);
         \App\Tariff::create([
             'year_id' => $this->year->id,
-            "name" => "Sociaal",
-            "abbreviation" => "SCL",
-            "day_first_child" => 2.5,
-            "day_later_children" => 2,
-            "week_first_child" => 12,
-            "week_later_children" => 9.5
+            'name' => 'Sociaal',
+            'abbreviation' => 'SCL',
+            'day_first_child' => 2.5,
+            'day_later_children' => 2,
+            'week_first_child' => 12,
+            'week_later_children' => 9.5,
         ]);
     }
 }

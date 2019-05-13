@@ -5,12 +5,15 @@ namespace Tests\Browser;
 use Laravel\Dusk\Browser;
 use Tests\DuskTestCase;
 
+/**
+ * @internal
+ * @coversNothing
+ */
 class ExampleTest extends DuskTestCase
 {
     /**
      * A basic browser test example.
      *
-     * @return void
      * @throws \Throwable
      */
     public function testBasicExample()

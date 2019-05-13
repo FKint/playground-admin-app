@@ -28,13 +28,14 @@ class AgeGroup extends Model
 
     public function full_abbreviation_and_name()
     {
-        return $this->abbreviation . " - " . $this->name;
+        return $this->abbreviation.' - '.$this->name;
     }
 
     public function make_copy($year)
     {
         $new_age_group = $this->replicate();
         $new_age_group->year()->associate($year);
+
         return $new_age_group;
     }
 }

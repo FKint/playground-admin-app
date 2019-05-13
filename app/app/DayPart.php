@@ -22,6 +22,7 @@ class DayPart extends Model
     {
         $new_day_part = $this->replicate();
         $new_day_part->year()->associate($year);
+
         return $new_day_part;
     }
 }

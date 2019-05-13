@@ -1,9 +1,7 @@
 <?php
 
 return [
-    /*
-     * DataTables search options.
-     */
+    // DataTables search options.
     'search' => [
         /*
          * Smart search will enclose search keyword with wildcard string "%keyword%".
@@ -11,9 +9,7 @@ return [
          */
         'smart' => true,
 
-        /*
-         * Multi-term search will explode search keyword using spaces resulting into multiple term search.
-         */
+        // Multi-term search will explode search keyword using spaces resulting into multiple term search.
         'multi_term' => true,
 
         /*
@@ -29,9 +25,7 @@ return [
         'use_wildcards' => false,
     ],
 
-    /*
-     * DataTables internal index id response column name.
-     */
+    // DataTables internal index id response column name.
     'index_column' => 'DT_Row_Index',
 
     /*
@@ -39,8 +33,8 @@ return [
      * This is where you can register your custom dataTables builder.
      */
     'engines' => [
-        'eloquent'   => \Yajra\DataTables\EloquentDataTable::class,
-        'query'      => \Yajra\DataTables\QueryDataTable::class,
+        'eloquent' => \Yajra\DataTables\EloquentDataTable::class,
+        'query' => \Yajra\DataTables\QueryDataTable::class,
         'collection' => \Yajra\DataTables\CollectionDataTable::class,
     ],
 
@@ -71,13 +65,9 @@ return [
      */
     'error' => env('DATATABLES_ERROR', null),
 
-    /*
-     * Default columns definition of dataTable utility functions.
-     */
+    // Default columns definition of dataTable utility functions.
     'columns' => [
-        /*
-         * List of columns hidden/removed on json response.
-         */
+        // List of columns hidden/removed on json response.
         'excess' => ['rn', 'row_num'],
 
         /*
@@ -92,9 +82,7 @@ return [
          */
         'raw' => ['action'],
 
-        /*
-         * List of columns are are forbidden from being searched/sorted.
-         */
+        // List of columns are are forbidden from being searched/sorted.
         'blacklist' => ['password', 'remember_token'],
 
         /*
@@ -104,12 +92,9 @@ return [
         'whitelist' => '*',
     ],
 
-    /*
-     * JsonResponse header and options config.
-     */
+    // JsonResponse header and options config.
     'json' => [
-        'header'  => [],
+        'header' => [],
         'options' => 0,
     ],
-
 ];

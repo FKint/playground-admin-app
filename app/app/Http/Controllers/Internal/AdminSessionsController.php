@@ -14,9 +14,10 @@ class AdminSessionsController extends Controller
     public function showCloseAdminSession(Year $year)
     {
         $admin_session = $year->getActiveAdminSession();
-        if ($admin_session == null) {
+        if (null == $admin_session) {
             return redirect()->route('internal.open_new_admin_session');
         }
+
         return view('admin_sessions.close_session');
     }
 
@@ -25,16 +26,17 @@ class AdminSessionsController extends Controller
         $admin_session = $year->getActiveAdminSession();
         $validated_data = $request->validated();
         $data = [
-            "responsible_name" => $validated_data['responsible_name'],
-            "counted_cash" => $validated_data['counted_cash'],
-            "session_end" => Carbon::now(),
-            "remarks" => $validated_data['remarks']
+            'responsible_name' => $validated_data['responsible_name'],
+            'counted_cash' => $validated_data['counted_cash'],
+            'session_end' => Carbon::now(),
+            'remarks' => $validated_data['remarks'],
         ];
         $admin_session->update($data);
         $admin_session->save();
         $new_admin_session = new AdminSession();
         $new_admin_session->year()->associate($year);
         $new_admin_session->save();
+
         return redirect()->route('internal.dashboard');
     }
 
@@ -45,13 +47,14 @@ class AdminSessionsController extends Controller
 
     public function showEditAdminSession(Year $year, AdminSession $adminSession)
     {
-        return view('admin_sessions.edit_session', ["admin_session" => $adminSession]);
+        return view('admin_sessions.edit_session', ['admin_session' => $adminSession]);
     }
 
     public function showSaveEditAdminSession(SaveAdminSessionRequest $request, Year $year, AdminSession $adminSession)
     {
         $validated_data = $request->validated();
         $adminSession->update($validated_data);
+
         return redirect(route('internal.dashboard'));
     }
 }

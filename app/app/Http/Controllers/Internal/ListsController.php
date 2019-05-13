@@ -47,9 +47,10 @@ class ListsController extends Controller
             $child_family->family,
             -$activity_list->price,
             0,
-            "Kind " . $child_family->child->full_name() . " uitgeschreven van lijst " . $activity_list->name . " (ID: " . $activity_list->id . ")"
+            'Kind '.$child_family->child->full_name().' uitgeschreven van lijst '.$activity_list->name.' (ID: '.$activity_list->id.')'
         );
-        return ["success" => true];
+
+        return ['success' => true];
     }
 
     public function getListChildFamilySuggestions(Request $request, Year $year, ActivityList $list)
@@ -58,10 +59,11 @@ class ListsController extends Controller
         $child_families = $year->child_families()->search($query)
             ->with('child')
             ->with('family')
-            ->whereDoesntHave("activity_lists", function ($query) use ($list) {
+            ->whereDoesntHave('activity_lists', function ($query) use ($list) {
                 $query->where('activity_lists.id', '=', $list->id);
             })
             ->get();
+
         return $child_families;
     }
 
@@ -73,9 +75,26 @@ class ListsController extends Controller
             $child_family->family,
             $activity_list->price,
             0,
-            "Kind " . $child_family->child->full_name() . " ingeschreven op lijst " . $activity_list->name . " (ID: " . $activity_list->id . ")"
+            'Kind '.$child_family->child->full_name().' ingeschreven op lijst '.$activity_list->name.' (ID: '.$activity_list->id.')'
         );
-        return ["success" => true];
+
+        return ['success' => true];
+    }
+
+    public function submitNewList(Request $request, Year $year)
+    {
+        $list = new ActivityList($this->getListData($request));
+        $list->year()->associate($year);
+        $list->save();
+
+        return redirect(route('internal.show_list', ['list' => $list]));
+    }
+
+    public function submitEditList(Request $request, Year $year, ActivityList $list)
+    {
+        $list->update($this->getListData($request));
+
+        return redirect(route('internal.show_list', ['list' => $list]));
     }
 
     protected function addTransaction(Year $year, Family $family, $expected, $paid, string $remarks)
@@ -84,7 +103,7 @@ class ListsController extends Controller
             'amount_paid' => $paid,
             'amount_expected' => $expected,
             'remarks' => $remarks,
-            'year_id' => $year->id
+            'year_id' => $year->id,
         ]);
         $admin_session = $year->getActiveAdminSession();
         $transaction->admin_session()->associate($admin_session);
@@ -94,31 +113,17 @@ class ListsController extends Controller
 
     protected function getListData(Request $request)
     {
-        $date = \DateTimeImmutable::createFromFormat("Y-m-d", $request->input('date'));
+        $date = \DateTimeImmutable::createFromFormat('Y-m-d', $request->input('date'));
         $price = $request->input('price');
-        $show_on_attendance_form = $request->input('show_on_attendance_form') === 'on';
-        $show_on_dashboard = $request->input('show_on_dashboard') === 'on';
-        $data = [
-            "name" => $request->input('name'),
-            "date" => $date ? $date->format("Y-m-d") : null,
-            "price" => $price,
-            "show_on_attendance_form" => $show_on_attendance_form,
-            "show_on_dashboard" => $show_on_dashboard,
+        $show_on_attendance_form = 'on' === $request->input('show_on_attendance_form');
+        $show_on_dashboard = 'on' === $request->input('show_on_dashboard');
+
+        return [
+            'name' => $request->input('name'),
+            'date' => $date ? $date->format('Y-m-d') : null,
+            'price' => $price,
+            'show_on_attendance_form' => $show_on_attendance_form,
+            'show_on_dashboard' => $show_on_dashboard,
         ];
-        return $data;
-    }
-
-    public function submitNewList(Request $request, Year $year)
-    {
-        $list = new ActivityList($this->getListData($request));
-        $list->year()->associate($year);
-        $list->save();
-        return redirect(route('internal.show_list', ['list' => $list]));
-    }
-
-    public function submitEditList(Request $request, Year $year, ActivityList $list)
-    {
-        $list->update($this->getListData($request));
-        return redirect(route('internal.show_list', ['list' => $list]));
     }
 }

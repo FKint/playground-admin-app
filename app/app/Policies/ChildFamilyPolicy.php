@@ -13,8 +13,9 @@ class ChildFamilyPolicy
     /**
      * Determine whether the user can view the childFamily.
      *
-     * @param  \App\User  $user
-     * @param  \App\ChildFamily  $childFamily
+     * @param \App\User        $user
+     * @param \App\ChildFamily $childFamily
+     *
      * @return mixed
      */
     public function view(User $user, ChildFamily $childFamily)
@@ -25,8 +26,9 @@ class ChildFamilyPolicy
     /**
      * Determine whether the user can update the childFamily.
      *
-     * @param  \App\User  $user
-     * @param  \App\ChildFamily  $childFamily
+     * @param \App\User        $user
+     * @param \App\ChildFamily $childFamily
+     *
      * @return mixed
      */
     public function update(User $user, ChildFamily $childFamily)
@@ -37,8 +39,9 @@ class ChildFamilyPolicy
     /**
      * Determine whether the user can delete the childFamily.
      *
-     * @param  \App\User  $user
-     * @param  \App\ChildFamily  $childFamily
+     * @param \App\User        $user
+     * @param \App\ChildFamily $childFamily
+     *
      * @return mixed
      */
     public function delete(User $user, ChildFamily $childFamily)

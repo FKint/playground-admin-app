@@ -1,7 +1,6 @@
 <?php
 
 return [
-
     /*
     |--------------------------------------------------------------------------
     | Default Database Connection Name
@@ -32,7 +31,6 @@ return [
     */
 
     'connections' => [
-
         'sqlite' => [
             'driver' => 'sqlite',
             'database' => env('DB_DATABASE', storage_path('database/database.sqlite')),
@@ -40,9 +38,9 @@ return [
         ],
 
         'sqlite_testing' => [
-            'driver'   => 'sqlite',
+            'driver' => 'sqlite',
             'database' => storage_path('testing/testing.sqlite'),
-            'prefix'   => '',
+            'prefix' => '',
         ],
 
         'mysql' => [
@@ -72,7 +70,6 @@ return [
             'schema' => 'public',
             'sslmode' => 'prefer',
         ],
-
     ],
 
     /*
@@ -100,7 +97,6 @@ return [
     */
 
     'redis' => [
-
         'client' => 'predis',
 
         'default' => [
@@ -109,7 +105,5 @@ return [
             'port' => env('REDIS_PORT', 6379),
             'database' => 0,
         ],
-
     ],
-
 ];

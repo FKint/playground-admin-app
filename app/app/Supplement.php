@@ -22,6 +22,7 @@ class Supplement extends Model
     {
         $new_supplement = $this->replicate();
         $new_supplement->year()->associate($year);
+
         return $new_supplement;
     }
 }

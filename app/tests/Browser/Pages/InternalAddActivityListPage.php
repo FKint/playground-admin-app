@@ -19,18 +19,17 @@ class InternalAddActivityListPage extends InternalPage
     /**
      * Assert that the browser is on the page.
      *
-     * @param  Browser  $browser
-     * @return void
+     * @param Browser $browser
      */
     public function assert(Browser $browser)
     {
         parent::assert($browser);
-        $browser->assertSee("Nieuwe lijst maken");
+        $browser->assertSee('Nieuwe lijst maken');
     }
 
     public function enterAddActivityListFormData(Browser $browser, $name, $price, $date, $showOnAttendanceForm, $showOnDashboard)
     {
-        $this->enterActivityListFormData($browser, "new-list-form", $name, $price, $date, $showOnAttendanceForm, $showOnDashboard);
+        $this->enterActivityListFormData($browser, 'new-list-form', $name, $price, $date, $showOnAttendanceForm, $showOnDashboard);
     }
 
     public function submitaddActivityListFormSuccessfully(Browser $browser)

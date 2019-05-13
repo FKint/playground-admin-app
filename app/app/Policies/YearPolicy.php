@@ -13,8 +13,9 @@ class YearPolicy
     /**
      * Determine whether the user can view the year.
      *
-     * @param  \App\User $user
-     * @param  \App\Year $year
+     * @param \App\User $user
+     * @param \App\Year $year
+     *
      * @return mixed
      */
     public function view(User $user, Year $year)
@@ -25,20 +26,23 @@ class YearPolicy
     /**
      * Determine whether the user can create years.
      *
-     * @param  \App\User $user
+     * @param \App\User $user
+     *
      * @return mixed
      */
     public function create(User $user)
     {
         dd('year create policy!');
+
         return false;
     }
 
     /**
      * Determine whether the user can update the year.
      *
-     * @param  \App\User $user
-     * @param  \App\Year $year
+     * @param \App\User $user
+     * @param \App\Year $year
+     *
      * @return mixed
      */
     public function update(User $user, Year $year)
@@ -49,13 +53,15 @@ class YearPolicy
     /**
      * Determine whether the user can delete the year.
      *
-     * @param  \App\User $user
-     * @param  \App\Year $year
+     * @param \App\User $user
+     * @param \App\Year $year
+     *
      * @return mixed
      */
     public function delete(User $user, Year $year)
     {
         dd('year delete policy!');
+
         return false;
     }
 

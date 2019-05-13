@@ -12,7 +12,6 @@
  */
 
 /** @var \Illuminate\Database\Eloquent\Factory $factory */
-
 use Illuminate\Support\Facades\Hash;
 
 $factory->define(App\User::class, function (Faker\Generator $faker, $params) {
@@ -26,7 +25,8 @@ $factory->define(App\User::class, function (Faker\Generator $faker, $params) {
     } else {
         $organization_id = factory(App\Organization::class)->create()->id;
     }
-    $result = [
+
+    return [
         'name' => $faker->name,
         'email' => $faker->unique()->safeEmail,
         'password' => $password,
@@ -34,23 +34,23 @@ $factory->define(App\User::class, function (Faker\Generator $faker, $params) {
         'admin' => false,
         'organization_id' => $organization_id,
     ];
-    return $result;
 });
 
-/** @var \Illuminate\Database\Eloquent\Factory $factory */
+// @var \Illuminate\Database\Eloquent\Factory $factory
 $factory->define(App\Organization::class, function (Faker\Generator $faker) {
     return [
         'full_name' => substr($faker->company, 0, 50),
     ];
 });
 
-/** @var \Illuminate\Database\Eloquent\Factory $factory */
+// @var \Illuminate\Database\Eloquent\Factory $factory
 $factory->define(App\Year::class, function (Faker\Generator $faker, $params) {
     if (key_exists('organization_id', $params)) {
         $organization_id = $params['organization_id'];
     } else {
         $organization_id = factory(\App\Organization::class)->create()->id;
     }
+
     return [
         'description' => $faker->text(20),
         'organization_id' => $organization_id,
@@ -61,7 +61,7 @@ $factory->define(App\Year::class, function (Faker\Generator $faker, $params) {
     ];
 });
 
-/** @var \Illuminate\Database\Eloquent\Factory $factory */
+// @var \Illuminate\Database\Eloquent\Factory $factory
 $factory->define(App\Family::class, function (Faker\Generator $faker, $params) {
     if (key_exists('year_id', $params)) {
         $year_id = $params['year_id'];
@@ -73,6 +73,7 @@ $factory->define(App\Family::class, function (Faker\Generator $faker, $params) {
     } else {
         $tariff_id = factory(\App\Tariff::class)->create(['year_id' => $year_id])->id;
     }
+
     return [
         'guardian_first_name' => $faker->firstName,
         'guardian_last_name' => $faker->lastName,
@@ -81,13 +82,14 @@ $factory->define(App\Family::class, function (Faker\Generator $faker, $params) {
     ];
 });
 
-/** @var \Illuminate\Database\Eloquent\Factory $factory */
+// @var \Illuminate\Database\Eloquent\Factory $factory
 $factory->define(App\ActivityList::class, function (Faker\Generator $faker, $params) {
     if (key_exists('year_id', $params)) {
         $year_id = $params['year_id'];
     } else {
         $year_id = factory(\App\Year::class)->create()->id;
     }
+
     return [
         'name' => $faker->text(100),
         'show_on_attendance_form' => $faker->boolean,
@@ -96,13 +98,14 @@ $factory->define(App\ActivityList::class, function (Faker\Generator $faker, $par
     ];
 });
 
-/** @var \Illuminate\Database\Eloquent\Factory $factory */
+// @var \Illuminate\Database\Eloquent\Factory $factory
 $factory->define(App\Tariff::class, function (Faker\Generator $faker, $params) {
     if (key_exists('year_id', $params)) {
         $year_id = $params['year_id'];
     } else {
         $year_id = factory(\App\Year::class)->create()->id;
     }
+
     return [
         'name' => $faker->text(100),
         'abbreviation' => $faker->text(20),
@@ -114,13 +117,14 @@ $factory->define(App\Tariff::class, function (Faker\Generator $faker, $params) {
     ];
 });
 
-/** @var \Illuminate\Database\Eloquent\Factory $factory */
+// @var \Illuminate\Database\Eloquent\Factory $factory
 $factory->define(App\Week::class, function (Faker\Generator $faker, $params) {
     if (key_exists('year_id', $params)) {
         $year_id = $params['year_id'];
     } else {
         $year_id = factory(\App\Year::class)->create()->id;
     }
+
     return [
         'year_id' => $year_id,
         'week_number' => $faker->unique()->numberBetween(1, 52),
@@ -128,7 +132,7 @@ $factory->define(App\Week::class, function (Faker\Generator $faker, $params) {
     ];
 });
 
-/** @var \Illuminate\Database\Eloquent\Factory $factory */
+// @var \Illuminate\Database\Eloquent\Factory $factory
 $factory->define(App\WeekDay::class, function (Faker\Generator $faker, $params) {
     if (key_exists('year_id', $params)) {
         $year_id = $params['year_id'];
@@ -140,6 +144,7 @@ $factory->define(App\WeekDay::class, function (Faker\Generator $faker, $params) 
     } else {
         $name = $faker->unique()->dayOfWeek();
     }
+
     return [
         'year_id' => $year_id,
         'days_offset' => $faker->numberBetween(0, 6),
@@ -147,7 +152,7 @@ $factory->define(App\WeekDay::class, function (Faker\Generator $faker, $params) 
     ];
 });
 
-/** @var \Illuminate\Database\Eloquent\Factory $factory */
+// @var \Illuminate\Database\Eloquent\Factory $factory
 $factory->define(App\PlaygroundDay::class, function (Faker\Generator $faker, $params) {
     if (key_exists('year_id', $params)) {
         $year_id = $params['year_id'];
@@ -164,6 +169,7 @@ $factory->define(App\PlaygroundDay::class, function (Faker\Generator $faker, $pa
     } else {
         $week_id = factory(\App\Week::class)->create(['year_id' => $year_id])->id;
     }
+
     return [
         'year_id' => $year_id,
         'week_id' => $week_id,
@@ -171,7 +177,7 @@ $factory->define(App\PlaygroundDay::class, function (Faker\Generator $faker, $pa
     ];
 });
 
-/** @var \Illuminate\Database\Eloquent\Factory $factory */
+// @var \Illuminate\Database\Eloquent\Factory $factory
 $factory->define(App\Child::class, function (Faker\Generator $faker, $params) {
     if (key_exists('year_id', $params)) {
         $year_id = $params['year_id'];
@@ -183,6 +189,7 @@ $factory->define(App\Child::class, function (Faker\Generator $faker, $params) {
     } else {
         $age_group_id = factory(\App\AgeGroup::class)->create(['year_id' => $year_id])->id;
     }
+
     return [
         'year_id' => $year_id,
         'first_name' => $faker->firstName,
@@ -192,13 +199,14 @@ $factory->define(App\Child::class, function (Faker\Generator $faker, $params) {
     ];
 });
 
-/** @var \Illuminate\Database\Eloquent\Factory $factory */
+// @var \Illuminate\Database\Eloquent\Factory $factory
 $factory->define(App\AgeGroup::class, function (Faker\Generator $faker, $params) {
     if (key_exists('year_id', $params)) {
         $year_id = $params['year_id'];
     } else {
         $year_id = factory(\App\Year::class)->create()->id;
     }
+
     return [
         'year_id' => $year_id,
         'name' => $faker->firstName,
@@ -208,13 +216,14 @@ $factory->define(App\AgeGroup::class, function (Faker\Generator $faker, $params)
     ];
 });
 
-/** @var \Illuminate\Database\Eloquent\Factory $factory */
+// @var \Illuminate\Database\Eloquent\Factory $factory
 $factory->define(App\DayPart::class, function (Faker\Generator $faker, $params) {
     if (key_exists('year_id', $params)) {
         $year_id = $params['year_id'];
     } else {
         $year_id = factory(\App\Year::class)->create()->id;
     }
+
     return [
         'year_id' => $year_id,
         'default' => false,
@@ -223,7 +232,7 @@ $factory->define(App\DayPart::class, function (Faker\Generator $faker, $params) 
     ];
 });
 
-/** @var \Illuminate\Database\Eloquent\Factory $factory */
+// @var \Illuminate\Database\Eloquent\Factory $factory
 $factory->define(App\ChildFamily::class, function (Faker\Generator $faker, $params) {
     if (key_exists('year_id', $params)) {
         $year_id = $params['year_id'];
@@ -240,6 +249,7 @@ $factory->define(App\ChildFamily::class, function (Faker\Generator $faker, $para
     } else {
         $child_id = factory(\App\Child::class)->create(['year_id' => $year_id])->id;
     }
+
     return [
         'year_id' => $year_id,
         'family_id' => $family_id,
@@ -247,13 +257,14 @@ $factory->define(App\ChildFamily::class, function (Faker\Generator $faker, $para
     ];
 });
 
-/** @var \Illuminate\Database\Eloquent\Factory $factory */
+// @var \Illuminate\Database\Eloquent\Factory $factory
 $factory->define(App\AdminSession::class, function (Faker\Generator $faker, $params) {
     if (key_exists('year_id', $params)) {
         $year_id = $params['year_id'];
     } else {
         $year_id = factory(\App\Year::class)->create()->id;
     }
+
     return [
         'year_id' => $year_id,
         'responsible_name' => $faker->firstName,
@@ -261,13 +272,14 @@ $factory->define(App\AdminSession::class, function (Faker\Generator $faker, $par
     ];
 });
 
-/** @var \Illuminate\Database\Eloquent\Factory $factory */
+// @var \Illuminate\Database\Eloquent\Factory $factory
 $factory->define(App\Supplement::class, function (Faker\Generator $faker, $params) {
     if (key_exists('year_id', $params)) {
         $year_id = $params['year_id'];
     } else {
         $year_id = factory(\App\Year::class)->create()->id;
     }
+
     return [
         'year_id' => $year_id,
         'name' => $faker->text(50),
@@ -291,6 +303,7 @@ $factory->define(App\Transaction::class, function (Faker\Generator $faker, $para
     } else {
         $admin_session_id = factory(\App\AdminSession::class)->create(['year_id' => $year_id]);
     }
+
     return [
         'family_id' => $family_id,
         'amount_paid' => $faker->numberBetween(-1000, 1000) / 100,

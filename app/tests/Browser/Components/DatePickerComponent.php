@@ -8,10 +8,12 @@ use Laravel\Dusk\Component as BaseComponent;
 class DatePickerComponent extends BaseComponent
 {
     protected $selector;
+
     public function __construct($selector)
     {
         $this->selector = $selector;
     }
+
     /**
      * Get the root selector for the component.
      *
@@ -25,8 +27,7 @@ class DatePickerComponent extends BaseComponent
     /**
      * Assert that the browser page contains the component.
      *
-     * @param  Browser  $browser
-     * @return void
+     * @param Browser $browser
      */
     public function assert(Browser $browser)
     {
@@ -36,6 +37,6 @@ class DatePickerComponent extends BaseComponent
     public function selectDate(Browser $browser, \Illuminate\Support\Carbon $date)
     {
         $browser->clear('input')
-            ->keys('input', $date->format('Y-m-d'), ["{enter}", '']);
+            ->keys('input', $date->format('Y-m-d'), ['{enter}', '']);
     }
 }

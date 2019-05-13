@@ -22,12 +22,12 @@ class ChildFamily extends Model
             'families.guardian_first_name' => 5,
             'families.guardian_last_name' => 5,
             'children.first_name' => 10,
-            'children.last_name' => 10
+            'children.last_name' => 10,
         ],
         'joins' => [
             'families' => ['child_families.family_id', 'families.id'],
-            'children' => ['child_families.child_id', 'children.id']
-        ]
+            'children' => ['child_families.child_id', 'children.id'],
+        ],
     ];
 
     /**

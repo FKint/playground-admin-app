@@ -19,18 +19,17 @@ class InternalActivityListsPage extends InternalPage
     /**
      * Assert that the browser is on the page.
      *
-     * @param  Browser  $browser
-     * @return void
+     * @param Browser $browser
      */
     public function assert(Browser $browser)
     {
         parent::assert($browser);
-        $browser->assertSee("Nieuwe lijst aanmaken");
+        $browser->assertSee('Nieuwe lijst aanmaken');
     }
 
     public function navigateToAddNewActivityListPage(Browser $browser)
     {
-        $browser->clickLink("Nieuwe lijst aanmaken")
+        $browser->clickLink('Nieuwe lijst aanmaken')
             ->on(new InternalAddActivityListPage($this->yearId));
     }
 }

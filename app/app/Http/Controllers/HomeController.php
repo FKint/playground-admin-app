@@ -9,8 +9,6 @@ class HomeController extends Controller
 {
     /**
      * Create a new controller instance.
-     *
-     * @return void
      */
     public function __construct()
     {
@@ -27,12 +25,14 @@ class HomeController extends Controller
         if (Auth::check()) {
             return redirect(route('internal.user_dashboard'));
         }
+
         return view('home');
     }
 
     public function logout()
     {
         Auth::logout();
+
         return redirect(route('home'));
     }
 }

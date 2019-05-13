@@ -24,8 +24,6 @@ class CreateAdminUser extends Command
 
     /**
      * Create a new command instance.
-     *
-     * @return void
      */
     public function __construct()
     {
@@ -44,19 +42,21 @@ class CreateAdminUser extends Command
             $password = $this->secret('Password?');
             if ($password !== $this->secret('Confirm?')) {
                 $this->info('Incorrect.');
+
                 continue;
             }
+
             break;
         }
         $hint = $this->ask('Hint?');
         User::create([
-            "name" => $this->argument('name'),
-            "email" => $this->argument('email'),
-            "password" => Hash::make($password), // HASH!
-            "remember_token" => $hint,
-            "admin" => true,
-            "organization_id" => $this->argument('organization_id')
+            'name' => $this->argument('name'),
+            'email' => $this->argument('email'),
+            'password' => Hash::make($password), // HASH!
+            'remember_token' => $hint,
+            'admin' => true,
+            'organization_id' => $this->argument('organization_id'),
         ]);
-        $this->info("User added!");
+        $this->info('User added!');
     }
 }

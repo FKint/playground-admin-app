@@ -9,8 +9,6 @@ class BootstrapFormComponentsServiceProvider extends ServiceProvider
 {
     /**
      * Bootstrap the application services.
-     *
-     * @return void
      */
     public function boot()
     {
@@ -24,11 +22,8 @@ class BootstrapFormComponentsServiceProvider extends ServiceProvider
 
     /**
      * Register the application services.
-     *
-     * @return void
      */
     public function register()
     {
-        //
     }
 }

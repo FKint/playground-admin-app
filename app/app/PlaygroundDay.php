@@ -58,10 +58,9 @@ class PlaygroundDay extends Model
 
     public function count_registrations_for_age_group($age_group)
     {
-        $result = $this->child_family_day_registrations()
+        return $this->child_family_day_registrations()
             ->where('age_group_id', $age_group->id)
             ->count();
-        return $result;
     }
 
     public function count_registrations()

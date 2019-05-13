@@ -19,13 +19,12 @@ class InternalAddFamilyPage extends InternalPage
     /**
      * Assert that the browser is on the page.
      *
-     * @param  Browser  $browser
-     * @return void
+     * @param Browser $browser
      */
     public function assert(Browser $browser)
     {
         parent::assert($browser);
-        $browser->assertSee("Nieuwe voogd toevoegen");
+        $browser->assertSee('Nieuwe voogd toevoegen');
     }
 
     public function enterAddFamilyFormData(
@@ -37,7 +36,7 @@ class InternalAddFamilyPage extends InternalPage
         $contact = null,
         $socialContact = null
     ) {
-        $this->enterFamilyFormData($browser, "new-family-form", $firstName, $lastName, $tariffId, $remarks, $contact, $socialContact);
+        $this->enterFamilyFormData($browser, 'new-family-form', $firstName, $lastName, $tariffId, $remarks, $contact, $socialContact);
     }
 
     public function submitAddFamilySuccessfully(Browser $browser, $newFamilyId)

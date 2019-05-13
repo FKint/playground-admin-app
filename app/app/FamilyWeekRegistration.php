@@ -3,7 +3,6 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Log;
 
 class FamilyWeekRegistration extends Model
 {
@@ -34,39 +33,41 @@ class FamilyWeekRegistration extends Model
 
     public function is_empty()
     {
-        return $this->child_family_week_registrations()->count() == 0;
+        return 0 == $this->child_family_week_registrations()->count();
     }
 
     public function getTotalWeekPrice()
     {
         $registration_data = FamilyWeekRegistration::getRegistrationDataArray($this->week, $this->family);
+
         return FamilyWeekRegistration::computeTotalWeekPrice($registration_data);
     }
+
     /**
      * @return [
-     *  'children' => array([
-     *      int => [
-     *          'days' => array([int => array([
-     *              'supplements' => array([int => array([
-     *                  'ordered' => bool,
-     *                  'price' => decimal,
-     *              ])]),
-     *              'registered' => bool,
-     *              'age_group_id' => int,
-     *              'day_part_id' => int,
-     *              'attended' => bool,
-     *              'day_price' => decimal,
-     *          ])]),
-     *          'activity_lists' => array([
-     *              'registered' => bool,
-     *              'price' => decimal,
-     *          ]),
-     *          'whole_week_registered' => bool,
-     *          'whole_week_price' => decimal,
-     *      ]
-     *  ]),
-     *  'tariff_id' => int,
-     * ]
+     *           'children' => array([
+     *           int => [
+     *           'days' => array([int => array([
+     *           'supplements' => array([int => array([
+     *           'ordered' => bool,
+     *           'price' => decimal,
+     *           ])]),
+     *           'registered' => bool,
+     *           'age_group_id' => int,
+     *           'day_part_id' => int,
+     *           'attended' => bool,
+     *           'day_price' => decimal,
+     *           ])]),
+     *           'activity_lists' => array([
+     *           'registered' => bool,
+     *           'price' => decimal,
+     *           ]),
+     *           'whole_week_registered' => bool,
+     *           'whole_week_price' => decimal,
+     *           ]
+     *           ]),
+     *           'tariff_id' => int,
+     *           ]
      */
     public static function getRegistrationDataArray(Week $week, Family $family)
     {
@@ -103,7 +104,7 @@ class FamilyWeekRegistration extends Model
                     $day_data['registered'] = !$child_data['whole_week_registered'];
                     $day_data['age_group_id'] = $child_family_day_registration->age_group_id;
                     $day_data['day_part_id'] = $child_family_day_registration->day_part_id;
-                    $day_data['attended'] = (bool)$child_family_day_registration->attended;
+                    $day_data['attended'] = (bool) $child_family_day_registration->attended;
                     foreach ($child_family_day_registration->supplements as $supplement) {
                         $day_data['supplements'][$supplement->id] = [
                             'ordered' => true,
@@ -125,6 +126,7 @@ class FamilyWeekRegistration extends Model
             $result['children'][$child->id] = $child_data;
         }
         FamilyWeekRegistration::computeRegistrationPrices($week, $result);
+
         return $result;
     }
 
@@ -140,7 +142,7 @@ class FamilyWeekRegistration extends Model
                 $nb_days = 0;
                 foreach ($child_data['days'] as $day_data) {
                     if ($day_data['registered']) {
-                        $nb_days++;
+                        ++$nb_days;
                     }
                 }
                 if (!array_key_exists($nb_days, $not_week_children)) {
@@ -220,6 +222,7 @@ class FamilyWeekRegistration extends Model
                 FamilyWeekRegistration::setToBoolean($activity_list_data['registered']);
             }
         }
+
         return $data;
     }
 
@@ -228,6 +231,7 @@ class FamilyWeekRegistration extends Model
         FamilyWeekRegistration::computeWeekRegistrationPrices($week, $week_registration_data);
         FamilyWeekRegistration::computeSupplementPrices($week_registration_data);
         FamilyWeekRegistration::computeActivityListPrices($week_registration_data);
+
         return $week_registration_data;
     }
 
@@ -276,6 +280,7 @@ class FamilyWeekRegistration extends Model
                 }
             }
         }
+
         return $total;
     }
 
@@ -293,6 +298,7 @@ class FamilyWeekRegistration extends Model
     {
         $week_difference = FamilyWeekRegistration::computeWeekPriceDifference($family, $week, $week_registration_data_with_prices);
         $activity_difference = FamilyWeekRegistration::computeActivityListPriceDifference($family, $week_registration_data_with_prices);
+
         return $week_difference + $activity_difference;
     }
 
@@ -311,6 +317,7 @@ class FamilyWeekRegistration extends Model
                 $total_difference += $difference;
             }
         }
+
         return $total_difference;
     }
 }

@@ -19,20 +19,15 @@ class RouteServiceProvider extends ServiceProvider
 
     /**
      * Define your route model bindings, pattern filters, etc.
-     *
-     * @return void
      */
     public function boot()
     {
-        //
         parent::boot();
         Route::model('year', App\Year::class);
     }
 
     /**
      * Define the routes for the application.
-     *
-     * @return void
      */
     public function map()
     {
@@ -41,16 +36,12 @@ class RouteServiceProvider extends ServiceProvider
         $this->mapWebRoutes();
 
         $this->mapInternalWebRoutes();
-
-        //
     }
 
     /**
      * Define the "web" routes for the application.
      *
      * These routes all receive session state, CSRF protection, etc.
-     *
-     * @return void
      */
     protected function mapWebRoutes()
     {
@@ -71,8 +62,6 @@ class RouteServiceProvider extends ServiceProvider
      * Define the "api" routes for the application.
      *
      * These routes are typically stateless.
-     *
-     * @return void
      */
     protected function mapApiRoutes()
     {

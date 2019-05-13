@@ -5,7 +5,6 @@ namespace App\Http;
 use App\Http\Middleware\AddYearVariableToTemplates;
 use App\Http\Middleware\ApiAuthenticationCheck;
 use App\Http\Middleware\CheckModelSameYear;
-use App\Http\Middleware\RedirectIfNotAdmin;
 use App\Http\Middleware\SetDefaultYearForUrls;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 
@@ -43,10 +42,9 @@ class Kernel extends HttpKernel
         ],
 
         'api' => [
-
         ],
         'internal' => [
-        ]
+        ],
     ];
 
     /**

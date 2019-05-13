@@ -14,6 +14,10 @@ use App\WeekDay;
 use App\Year;
 use Tests\TestCase;
 
+/**
+ * @internal
+ * @coversNothing
+ */
 class CloneYearTest extends TestCase
 {
     protected $year;
@@ -38,13 +42,13 @@ class CloneYearTest extends TestCase
 
         factory(DayPart::class)->create([
             'default' => true,
-            'year_id' => $this->year->id
+            'year_id' => $this->year->id,
         ]);
         factory(AdminSession::class)->create([
-            'year_id' => $this->year->id
+            'year_id' => $this->year->id,
         ]);
         factory(Supplement::class)->create([
-            'year_id' => $this->year->id
+            'year_id' => $this->year->id,
         ]);
     }
 

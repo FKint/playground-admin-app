@@ -22,12 +22,12 @@ class Child extends Model
             'children.first_name' => 10,
             'children.last_name' => 10,
             'families.guardian_first_name' => 5,
-            'families.guardian_last_name' => 5
+            'families.guardian_last_name' => 5,
         ],
         'joins' => [
             'child_families' => ['children.id', 'child_families.child_id'],
-            'families' => ['child_families.family_id', 'families.id']
-        ]
+            'families' => ['child_families.family_id', 'families.id'],
+        ],
     ];
 
     /**
@@ -40,11 +40,12 @@ class Child extends Model
 
     /**
      * Get the child families this child belongs to.
+     *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
     public function child_families()
     {
-        return $this->hasMany(ChildFamily::class, $foreignKey = "child_id");
+        return $this->hasMany(ChildFamily::class, $foreignKey = 'child_id');
     }
 
     public function families()
@@ -54,7 +55,7 @@ class Child extends Model
 
     public function full_name()
     {
-        return $this->first_name . " " . $this->last_name;
+        return $this->first_name.' '.$this->last_name;
     }
 
     public function getFullNameAttribute()

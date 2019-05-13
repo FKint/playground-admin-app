@@ -15,7 +15,7 @@ class Tariff extends Model
 
     public function full_abbreviation_and_name()
     {
-        return $this->abbreviation . " - " . $this->name;
+        return $this->abbreviation.' - '.$this->name;
     }
 
     public function year()
@@ -27,6 +27,7 @@ class Tariff extends Model
     {
         $new_tariff = $this->replicate();
         $new_tariff->year()->associate($year);
+
         return $new_tariff;
     }
 }

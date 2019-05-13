@@ -17,6 +17,10 @@ use App\WeekDay;
 use App\Year;
 use Tests\TestCase;
 
+/**
+ * @internal
+ * @coversNothing
+ */
 class OrganizationAuthenticationTest extends TestCase
 {
     private $actualUser;
@@ -151,103 +155,105 @@ class OrganizationAuthenticationTest extends TestCase
             // Post requests
             'create_new_child' => [function () {
                 return [
-                'route' => route('api.create_new_child', ['year' => $this->actualYear]),
-                'data' => [
-                    'first_name' => 'Jos',
-                    'last_name' => 'De Rudder',
-                    'birth_year' => 2010,
-                    'age_group_id' => $this->actualAgeGroup->id,
-                    'remarks' => '',
-                ],
-            ];
+                    'route' => route('api.create_new_child', ['year' => $this->actualYear]),
+                    'data' => [
+                        'first_name' => 'Jos',
+                        'last_name' => 'De Rudder',
+                        'birth_year' => 2010,
+                        'age_group_id' => $this->actualAgeGroup->id,
+                        'remarks' => '',
+                    ],
+                ];
             }],
             'add_family_to_child' => [function () {
                 return [
-                'route' => route('api.add_family_to_child', [
-                    'year' => $this->actualYear,
-                    'child' => $this->actualChild,
-                    'family' => $this->actualFamily,
-                ]),
-                'data' => [],
-            ];
+                    'route' => route('api.add_family_to_child', [
+                        'year' => $this->actualYear,
+                        'child' => $this->actualChild,
+                        'family' => $this->actualFamily,
+                    ]),
+                    'data' => [],
+                ];
             }],
             'remove_family_from_child' => [function () {
                 return [
-                'route' => route('api.remove_family_from_child', [
-                    'year' => $this->actualYear,
-                    'child' => $this->actualChildFamily->child->id,
-                    'family' => $this->actualChildFamily->family->id,
-                ]),
-                'data' => [],
-            ];
+                    'route' => route('api.remove_family_from_child', [
+                        'year' => $this->actualYear,
+                        'child' => $this->actualChildFamily->child->id,
+                        'family' => $this->actualChildFamily->family->id,
+                    ]),
+                    'data' => [],
+                ];
             }],
             'add_child_to_family' => [function () {
                 return [
-                'route' => route('api.add_child_to_family', [
-                    'year' => $this->actualYear,
-                    'child' => $this->otherChild->id,
-                    'family' => $this->emptyFamily->id,
-                ]),
-                'data' => [],
-            ];
+                    'route' => route('api.add_child_to_family', [
+                        'year' => $this->actualYear,
+                        'child' => $this->otherChild->id,
+                        'family' => $this->emptyFamily->id,
+                    ]),
+                    'data' => [],
+                ];
             }],
             'submit_registration_data' => [function () {
                 return [
-                'route' => route('api.submit_registration_data', [
-                    'year' => $this->actualYear,
-                    'week' => $this->actualWeeks[0],
-                    'family' => $this->emptyFamily,
-                ]),
-                'data' => [
-                    'children' => [],
-                    'tariff_id' => $this->actualTariffs[0]->id,
-                    'received_money' => 0,
-                    'transaction_remarks' => 0,
-                ],
-            ];
+                    'route' => route('api.submit_registration_data', [
+                        'year' => $this->actualYear,
+                        'week' => $this->actualWeeks[0],
+                        'family' => $this->emptyFamily,
+                    ]),
+                    'data' => [
+                        'children' => [],
+                        'tariff_id' => $this->actualTariffs[0]->id,
+                        'received_money' => 0,
+                        'transaction_remarks' => 0,
+                    ],
+                ];
             }],
             'simulate_submit_registration_data' => [function () {
                 return [
-                'route' => route('api.simulate_submit_registration_data', [
-                    'year' => $this->actualYear,
-                    'week' => $this->actualWeeks[0],
-                    'family' => $this->emptyFamily,
-                ]),
-                'data' => [
-                    'children' => [],
-                    'tariff_id' => $this->actualTariffs[0]->id,
-                    'received_money' => 0,
-                    'transaction_remarks' => 0,
-                ],
-            ];
+                    'route' => route('api.simulate_submit_registration_data', [
+                        'year' => $this->actualYear,
+                        'week' => $this->actualWeeks[0],
+                        'family' => $this->emptyFamily,
+                    ]),
+                    'data' => [
+                        'children' => [],
+                        'tariff_id' => $this->actualTariffs[0]->id,
+                        'received_money' => 0,
+                        'transaction_remarks' => 0,
+                    ],
+                ];
             }],
             'add_participant_to_list' => [function () {
                 return [
-                'route' => route('api.add_participant_to_list', [
-                    'year' => $this->actualYear,
-                    'activity_list' => $this->actualList,
-                    'child_family' => $this->immutableChildFamily,
-                ]),
-                'data' => [],
-            ];
+                    'route' => route('api.add_participant_to_list', [
+                        'year' => $this->actualYear,
+                        'activity_list' => $this->actualList,
+                        'child_family' => $this->immutableChildFamily,
+                    ]),
+                    'data' => [],
+                ];
             }],
             'remove_participant_from_list' => [function () {
                 return [
-                'route' => route('api.remove_participant_from_list', [
-                    'year' => $this->actualYear,
-                    'activity_list' => $this->actualList,
-                    'child_family' => $this->actualChildFamily,
-                ]),
-                'data' => [],
-            ];
+                    'route' => route('api.remove_participant_from_list', [
+                        'year' => $this->actualYear,
+                        'activity_list' => $this->actualList,
+                        'child_family' => $this->actualChildFamily,
+                    ]),
+                    'data' => [],
+                ];
             }],
         ];
     }
 
     /**
      * @dataProvider readOnlyAPIRoutes
+     *
+     * @param mixed $routeFunction
      */
-    public function testAPINotLoggedIn_ReadOnly($routeFunction)
+    public function testAPINotLoggedInReadOnly($routeFunction)
     {
         $this->assertGuest();
         $url = $routeFunction->bindTo($this)();
@@ -256,8 +262,10 @@ class OrganizationAuthenticationTest extends TestCase
 
     /**
      * @dataProvider writeAPIRoutes
+     *
+     * @param mixed $routeFunction
      */
-    public function testAPINotLoggedIn_Write($routeFunction)
+    public function testAPINotLoggedInWrite($routeFunction)
     {
         $this->assertGuest();
         $request_data = $routeFunction->bindTo($this)();
@@ -266,8 +274,10 @@ class OrganizationAuthenticationTest extends TestCase
 
     /**
      * @dataProvider readOnlyAPIRoutes
+     *
+     * @param mixed $routeFunction
      */
-    public function testAPINotAuthorized_ReadOnly($routeFunction)
+    public function testAPINotAuthorizedReadOnly($routeFunction)
     {
         $this->actingAs(factory(User::class)->create());
         $url = $routeFunction->bindTo($this)();
@@ -276,8 +286,10 @@ class OrganizationAuthenticationTest extends TestCase
 
     /**
      * @dataProvider writeAPIRoutes
+     *
+     * @param mixed $routeFunction
      */
-    public function testAPINotAuthorized_Write($routeFunction)
+    public function testAPINotAuthorizedWrite($routeFunction)
     {
         $this->actingAs(factory(User::class)->create());
         $request_data = $routeFunction->bindTo($this)();
@@ -286,8 +298,10 @@ class OrganizationAuthenticationTest extends TestCase
 
     /**
      * @dataProvider readOnlyAPIRoutes
+     *
+     * @param mixed $routeFunction
      */
-    public function testAPIAuthorized_ReadOnly($routeFunction)
+    public function testAPIAuthorizedReadOnly($routeFunction)
     {
         $this->actingAs($this->actualUser);
         $url = $routeFunction->bindTo($this)();
@@ -296,8 +310,10 @@ class OrganizationAuthenticationTest extends TestCase
 
     /**
      * @dataProvider writeAPIRoutes
+     *
+     * @param mixed $routeFunction
      */
-    public function testAPIAuthorized_Write($routeFunction)
+    public function testAPIAuthorizedWrite($routeFunction)
     {
         $this->actingAs($this->actualUser);
         $request_data = $routeFunction->bindTo($this)();
