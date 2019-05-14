@@ -43,6 +43,13 @@ return [
             'prefix' => '',
         ],
 
+        'sqlite_testing_phpunit' => [
+            'driver' => 'sqlite',
+            'database' => storage_path('testing/testing.sqlite'),
+            'prefix' => '',
+            'foreign_key_constraints' => true,
+        ],
+
         'mysql' => [
             'driver' => 'mysql',
             'host' => env('DB_HOST', '127.0.0.1'),

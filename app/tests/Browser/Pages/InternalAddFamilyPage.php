@@ -34,9 +34,10 @@ class InternalAddFamilyPage extends InternalPage
         $tariffId = null,
         $remarks = null,
         $contact = null,
-        $socialContact = null
+        $socialContact = null,
+        $needsInvoice = null
     ) {
-        $this->enterFamilyFormData($browser, 'new-family-form', $firstName, $lastName, $tariffId, $remarks, $contact, $socialContact);
+        $this->enterFamilyFormData($browser, 'new-family-form', $firstName, $lastName, $tariffId, $remarks, $contact, $socialContact, $needsInvoice);
     }
 
     public function submitAddFamilySuccessfully(Browser $browser, $newFamilyId)

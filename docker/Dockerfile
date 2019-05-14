@@ -43,6 +43,7 @@ RUN composer install --no-interaction --no-progress --no-dev --optimize-autoload
 FROM composer-builder as composer-builder-test
 WORKDIR /root/app
 COPY .laravel.env.dusk.example .env
+RUN mkdir -p ./storage/testing && touch ./storage/testing/testing.sqlite
 RUN composer install --no-interaction --no-progress --optimize-autoloader --no-scripts
 
 ##############################

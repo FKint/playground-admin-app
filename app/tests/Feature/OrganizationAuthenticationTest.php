@@ -31,6 +31,7 @@ class OrganizationAuthenticationTest extends TestCase
     private $actualChild;
     private $immutableChildFamily;
     private $actualChildFamily;
+    private $childFamilyOnList;
     private $actualList;
     private $actualTariffs;
     private $actualAgeGroup;
@@ -86,7 +87,8 @@ class OrganizationAuthenticationTest extends TestCase
             'year_id' => $this->actualYear->id,
         ]);
 
-        $this->actualList->child_families()->syncWithoutDetaching([$this->actualChildFamily->id => ['year_id' => $this->actualYear->id]]);
+        $this->childFamilyOnList = factory(ChildFamily::class)->create(['year_id' => $this->actualYear->id]);
+        $this->actualList->child_families()->syncWithoutDetaching([$this->childFamilyOnList->id => ['year_id' => $this->actualYear->id]]);
     }
 
     public function readOnlyAPIRoutes()
@@ -240,7 +242,7 @@ class OrganizationAuthenticationTest extends TestCase
                     'route' => route('api.remove_participant_from_list', [
                         'year' => $this->actualYear,
                         'activity_list' => $this->actualList,
-                        'child_family' => $this->actualChildFamily,
+                        'child_family' => $this->childFamilyOnList,
                     ]),
                     'data' => [],
                 ];
