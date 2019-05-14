@@ -297,7 +297,11 @@
                 });
                 form.find("#saldo-difference").val(formatPriceWithoutSign(data.price_difference));
                 form.find("#previous-saldo").val(formatPriceWithoutSign(data.saldo));
+                @if(!$family->needs_invoice)
                 form.find('#received-money').val(formatPriceWithoutSign(data.price_difference));
+                @else
+                form.find('#received-money').val(formatPriceWithoutSign(0));
+                @endif
                 updateNewSaldo();
                 formManager.donePopulating();
             }

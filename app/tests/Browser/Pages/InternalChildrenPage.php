@@ -87,9 +87,9 @@ class InternalChildrenPage extends InternalPage
             ->waitForText('Huidige voogden');
     }
 
-    public function enterAddNewFamilyFormData(Browser $browser, $guardianFirstName, $guardianLastName, $tariffId, $remarks, $contact, $socialContact)
+    public function enterAddNewFamilyFormData(Browser $browser, $guardianFirstName, $guardianLastName, $tariffId, $remarks, $contact, $socialContact, $needsInvoice)
     {
-        $this->enterFamilyFormData($browser, 'link-new-family', $guardianFirstName, $guardianLastName, $tariffId, $remarks, $contact, $socialContact);
+        $this->enterFamilyFormData($browser, 'link-new-family', $guardianFirstName, $guardianLastName, $tariffId, $remarks, $contact, $socialContact, $needsInvoice);
     }
 
     public function submitAddNewFamilySuccessfully(Browser $browser, $guardianFullName)
@@ -143,9 +143,9 @@ class InternalChildrenPage extends InternalPage
             ->waitFor('@edit-family-modal');
     }
 
-    public function enterEditFamilyForm(Browser $browser, $guardianFirstName, $guardianLastName, $tariffId, $remarks, $contact, $socialContact)
+    public function enterEditFamilyForm(Browser $browser, $guardianFirstName, $guardianLastName, $tariffId, $remarks, $contact, $socialContact, $needsInvoice)
     {
-        $this->enterFamilyFormData($browser, 'edit-family-form', $guardianFirstName, $guardianLastName, $tariffId, $remarks, $contact, $socialContact);
+        $this->enterFamilyFormData($browser, 'edit-family-form', $guardianFirstName, $guardianLastName, $tariffId, $remarks, $contact, $socialContact, $needsInvoice);
     }
 
     public function submitEditFamilyFormSuccessfully(Browser $browser)

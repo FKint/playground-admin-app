@@ -54,9 +54,9 @@ class InternalFamiliesPage extends InternalPage
         $browser->click($selector);
     }
 
-    public function enterEditFamilyFormData(Browser $browser, $guardianFirstName, $guardianLastName, $tariffId, $remarks, $contact, $socialContact)
+    public function enterEditFamilyFormData(Browser $browser, $guardianFirstName, $guardianLastName, $tariffId, $remarks, $contact, $socialContact, $needsInvoice)
     {
-        $this->enterFamilyFormData($browser, 'edit-family-form', $guardianFirstName, $guardianLastName, $tariffId, $remarks, $contact, $socialContact);
+        $this->enterFamilyFormData($browser, 'edit-family-form', $guardianFirstName, $guardianLastName, $tariffId, $remarks, $contact, $socialContact, $needsInvoice);
     }
 
     public function submitEditFamilyFormSuccessfully(Browser $browser)

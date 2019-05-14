@@ -36,7 +36,7 @@ class InvoiceTest extends DuskTestCase
                 ->visit(new InternalDashboardPage($this->year->id))
                 ->navigateToFamiliesPage()
                 ->navigateToAddFamilyPage()
-                ->enterAddFamilyFormData('Veronique', 'Baeten', $this->normalTariff->id, '', '', 'SUP')
+                ->enterAddFamilyFormData('Veronique', 'Baeten', $this->normalTariff->id, '', '', 'SUP', true)
                 ->submitAddFamilySuccessfully(1)
                 ->enterAddChildToFamilyFormData('Reinoud', 'Declercq', 2008, null, null)
                 ->submitAddChildToFamilySuccessfully()
@@ -44,7 +44,7 @@ class InvoiceTest extends DuskTestCase
                 ->submitAddChildToFamilySuccessfully()
                 ->navigateToFamiliesPage()
                 ->navigateToAddFamilyPage()
-                ->enterAddFamilyFormData('Erica', 'Van Heulen', $this->socialTariff->id, '', '', '')
+                ->enterAddFamilyFormData('Erica', 'Van Heulen', $this->socialTariff->id, '', '', '', true)
                 ->submitAddFamilySuccessfully(2)
                 ->enterAddChildToFamilyFormData('Jan', 'Cornelis', 2012, null, null)
                 ->submitAddChildToFamilySuccessfully()
@@ -98,7 +98,7 @@ class InvoiceTest extends DuskTestCase
                 ->selectSupplementForChild($childReinoudDeclercq->id, $tuesday->id, $supplementIceCream->id)
                 ->selectActivityListRegistrationForChild($childReinoudDeclercq->id, $activityListWithDate->id)
                 ->waitUntilRequestsSettled()
-                ->enterPaidField('0')
+                ->assertPaidFieldContent('0.00')
                 ->screenshot('invoices_registration_week_with_activity')
                 ->submitRegistrationFormAndNavigateToNext();
 
@@ -117,7 +117,7 @@ class InvoiceTest extends DuskTestCase
                 ->selectSupplementForChild($childPietDeclercq->id, $wednesday->id, $supplementIceCream->id)
                 ->selectSupplementForChild($childReinoudDeclercq->id, $wednesday->id, $supplementIceCream->id)
                 ->waitUntilRequestsSettled()
-                ->enterPaidField('0')
+                ->assertPaidFieldContent('0.00')
                 ->screenshot('invoices_registration_week_without_activity')
                 ->submitRegistrationFormAndNavigateToNext();
 
@@ -134,7 +134,7 @@ class InvoiceTest extends DuskTestCase
                 ->selectDayRegistrationForChild($childPietDeclercq->id, $wednesday->id)
                 ->selectDayRegistrationForChild($childReinoudDeclercq->id, $wednesday->id)
                 ->waitUntilRequestsSettled()
-                ->enterPaidField('0')
+                ->assertPaidFieldContent('0.00')
                 ->screenshot('invoices_registration_week_only_separate_days')
                 ->submitRegistrationFormAndNavigateToNext();
 
@@ -153,7 +153,7 @@ class InvoiceTest extends DuskTestCase
                 ->selectDayRegistrationForChild($childJanCornelis->id, $tuesday->id)
                 ->selectActivityListRegistrationForChild($childPietDeclercq->id, $activityListNoDate->id)
                 ->waitUntilRequestsSettled()
-                ->enterPaidField('0')
+                ->assertPaidFieldContent('0.00')
                 ->screenshot('invoices_registration_week_other_family')
                 ->submitRegistrationFormAndNavigateToNext();
 

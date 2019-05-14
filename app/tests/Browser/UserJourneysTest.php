@@ -49,7 +49,7 @@ class UserJourneysTest extends DuskTestCase
                 ->visit(new InternalDashboardPage($this->year->id))
                 ->navigateToFamiliesPage()
                 ->navigateToAddFamilyPage()
-                ->enterAddFamilyFormData('Joran', 'De Wachter', $this->normalTariff->id, 'Only speak English', 'Dad: +4987676545652', '')
+                ->enterAddFamilyFormData('Joran', 'De Wachter', $this->normalTariff->id, 'Only speak English', 'Dad: +4987676545652', '', null)
             // TODO(fkint): split following call so we can use the actual Id after the entry has been inserted.
                 ->submitAddFamilySuccessfully(\App\Family::count() + 1)
                 ->assertSeeGuardianName('Joran De Wachter')
@@ -64,7 +64,7 @@ class UserJourneysTest extends DuskTestCase
                 ->assertSeeCurrentChildName('Joris Janssens')
                 ->navigateToFamiliesPage()
                 ->navigateToAddFamilyPage()
-                ->enterAddFamilyFormData('Annelies', 'Vandenbroucke', $this->socialTariff->id, '', '', '')
+                ->enterAddFamilyFormData('Annelies', 'Vandenbroucke', $this->socialTariff->id, '', '', '', false)
                 ->submitAddFamilySuccessfully(\App\Family::count() + 1)
                 ->assertSeeGuardianName('Annelies Vandenbroucke')
                 ->enterAddChildToFamilyFormData('Rik', 'Vandenbroucke', 2012, $this->ageGroup612->id, '')
@@ -97,7 +97,7 @@ class UserJourneysTest extends DuskTestCase
                 ->assertSeeFamilyEntryInTable($this->existingFamily->id, 'Veronique', 'Baeten')
                 ->assertSeeFamilyEntryInTable($newFamily->id, 'Erica', 'Van Heulen')
                 ->navigateToEditFamily($this->existingFamily->id)
-                ->enterEditFamilyFormData('Veronica', 'Baetens', $this->socialTariff->id, 'previously known as Veronique Baeten', 'veronica@bs.com', '')
+                ->enterEditFamilyFormData('Veronica', 'Baetens', $this->socialTariff->id, 'previously known as Veronique Baeten', 'veronica@bs.com', '', null)
                 ->submitEditFamilyFormSuccessfully()
                 ->closeEditFamilyDialog()
                 ->assertSeeFamilyEntryInTable($this->existingFamily->id, 'Veronica', 'Baetens')
@@ -124,7 +124,7 @@ class UserJourneysTest extends DuskTestCase
             $this->assertNotNull($newChild);
             $browser->assertSeeChildEntryInTable($newChild->id, 'Sonja', 'Boonen')
                 ->assertSeeEditChildDialogTabFamilies()
-                ->enterAddNewFamilyFormData('Erik', 'Bulcke', $this->socialTariff->id, 'Requires invoice', 'Call: +329878767875', '')
+                ->enterAddNewFamilyFormData('Erik', 'Bulcke', $this->socialTariff->id, 'Requires invoice', 'Call: +329878767875', '', null)
                 ->submitAddNewFamilySuccessfully('Erik Bulcke')
                 ->assertSeeCurrentFamily('Erik Bulcke')
                 ->enterAddExistingFamilyFormData('Reinoud')
@@ -148,7 +148,7 @@ class UserJourneysTest extends DuskTestCase
             $this->assertNotNull($newChild->families()->where(['guardian_first_name' => 'Erik', 'guardian_last_name' => 'Bulcke'])->first());
 
             $browser->navigateToEditCurrentFamilyDialog($family2->id)
-                ->enterEditFamilyForm('Jonas', null, null, null, null, null)
+                ->enterEditFamilyForm('Jonas', null, null, null, null, null, null)
                 ->submitEditFamilyFormSuccessfully();
             $family2->refresh();
             $this->assertEquals('Jonas', $family2->guardian_first_name);

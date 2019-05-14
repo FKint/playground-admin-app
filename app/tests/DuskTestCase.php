@@ -25,7 +25,6 @@ abstract class DuskTestCase extends BaseTestCase
     public function tearDown(): void
     {
         parent::tearDown();
-
         // Close browser to remove session
         static::closeAll();
     }

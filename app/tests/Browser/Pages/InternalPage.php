@@ -105,27 +105,35 @@ abstract class InternalPage extends BasePage
         return ['year' => $this->yearId];
     }
 
-    protected function enterFamilyFormData(Browser $browser, $duskSelector, $guardianFirstName, $guardianLastName, $tariffId, $remarks, $contact, $socialContact)
+    protected function enterFamilyFormData(Browser $browser, $duskSelector, $guardianFirstName, $guardianLastName, $tariffId, $remarks, $contact, $socialContact, $needsInvoice)
     {
         // TODO(fkint): try to use assertSeeIn or within if it doesn't assert page-level conditions.
         $browser->waitFor('@'.$duskSelector);
+        $fullSelector = '[dusk="'.$duskSelector.'"] ';
         if (isset($guardianFirstName)) {
-            $browser->type('[dusk="'.$duskSelector.'"] [dusk=guardian_first_name]', $guardianFirstName);
+            $browser->type($fullSelector.'[dusk=guardian_first_name]', $guardianFirstName);
         }
         if (isset($guardianLastName)) {
-            $browser->type('[dusk="'.$duskSelector.'"] [dusk=guardian_last_name]', $guardianLastName);
+            $browser->type($fullSelector.'[dusk=guardian_last_name]', $guardianLastName);
         }
         if (isset($tariffId)) {
-            $browser->select('[dusk="'.$duskSelector.'"] [dusk=tariff_id]', $tariffId);
+            $browser->select($fullSelector.'[dusk=tariff_id]', $tariffId);
         }
         if (isset($remarks)) {
-            $browser->type('[dusk="'.$duskSelector.'"] [dusk=remarks]', $remarks);
+            $browser->type($fullSelector.'[dusk=remarks]', $remarks);
         }
         if (isset($contact)) {
-            $browser->type('[dusk="'.$duskSelector.'"] [dusk=contact]', $contact);
+            $browser->type($fullSelector.'[dusk=contact]', $contact);
         }
         if (!is_null($socialContact)) {
-            $browser->type('[dusk="'.$duskSelector.'"] [dusk=social_contact]', $socialContact);
+            $browser->type($fullSelector.'[dusk=social_contact]', $socialContact);
+        }
+        if (!is_null($needsInvoice)) {
+            if ($needsInvoice) {
+                $browser->check($fullSelector.'[dusk=needs_invoice]', $needsInvoice);
+            } else {
+                $browser->uncheck($fullSelector.'[dusk=needs_invoice]', $needsInvoice);
+            }
         }
     }
 
