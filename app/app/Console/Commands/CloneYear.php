@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Year;
+use Carbon\CarbonImmutable;
 use Illuminate\Console\Command;
 
 class CloneYear extends Command
@@ -34,7 +35,7 @@ class CloneYear extends Command
         $date = null;
         while (!$date) {
             $date_str = $this->ask(sprintf('[%s] Enter a date (yyyy-mm-dd): ', $description));
-            $date = \DateTimeImmutable::createFromFormat('Y-m-d', $date_str);
+            $date = CarbonImmutable::createFromFormat('Y-m-d', $date_str);
             if (!$date) {
                 $this->warn('Invalid date. Try again.');
             }
@@ -49,6 +50,8 @@ class CloneYear extends Command
     public function handle()
     {
         $year = Year::findOrFail($this->argument('year_id'));
+        $organization_id = $this->ask('Organization? ');
+        $title = $this->ask('Year title? ');
         $description = $this->ask('Year description? ');
         // get first date
         $first_day = $this->ask_date('First day');
@@ -60,7 +63,7 @@ class CloneYear extends Command
             $exception_days[] = $this->ask_date('Exception day');
         }
         // will use same week days
-        $new_year = $year->make_copy($description, $first_day, $last_day, $exception_days);
+        $new_year = $year->make_copy($organization_id, $title, $description, $first_day, $last_day, $exception_days);
         $this->info('Year cloned. New year id: '.$new_year->id);
     }
 }

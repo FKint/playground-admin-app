@@ -2,7 +2,9 @@
 
 namespace App;
 
-use DateInterval;
+use Carbon\Carbon;
+use Carbon\CarbonImmutable;
+use Carbon\CarbonInterval;
 use DateTimeImmutable;
 use Illuminate\Database\Eloquent\Model;
 
@@ -13,7 +15,7 @@ class Year extends Model
      *
      * @var array
      */
-    protected $fillable = ['description', 'title'];
+    protected $fillable = ['description', 'title', 'invoice_header_text', 'invoice_header_image', 'invoice_bank_account'];
 
     /**
      * Get all weeks in this year.
@@ -164,6 +166,7 @@ class Year extends Model
      * Makes a copy of the settings for age groups, day parts, week days, supplements and tariffs.
      * Generates dates between $first_day and $last_day on the week days (and generates weeks accordingly) except for
      * dates in $exception_days.
+     * Assumes that the week starts on a Monday.
      *
      * @param string            $description
      * @param DateTimeImmutable $first_day
@@ -172,30 +175,27 @@ class Year extends Model
      *
      * @return Model
      */
-    public function make_copy(string $description, DateTimeImmutable $first_day, DateTimeImmutable $last_day, array $exception_days)
+    public function make_copy(int $organization_id, string $title, string $description, CarbonImmutable $first_day, CarbonImmutable $last_day, array $exception_days)
     {
-        function getStartOfWeekDate(DateTimeImmutable $date)
+        function getStartOfWeekDate(CarbonImmutable $date)
         {
-            // https://gist.github.com/stecman/0203410aa4da0ef01ea9
-            $date = $date->setTime(0, 0, 0);
-
-            if (1 == $date->format('N')) {
-                // If the date is already a Monday, return it as-is
+            if (Carbon::MONDAY == $date->dayOfWeek) {
                 return $date;
             }
-            // Otherwise, return the date of the nearest Monday in the past
-            // This includes Sunday in the previous week instead of it being the start of a new week
-            return $date->modify('last monday');
+
+            return $date->previous(Carbon::MONDAY);
         }
 
         $new_year = $this->replicate();
+        $new_year->organization()->associate(\App\Organization::find($organization_id));
+        $new_year->title = $title;
         $new_year->description = $description;
         $new_year->save();
         foreach ($this->week_days as $week_day) {
             $week_day->make_copy($new_year)->save();
         }
         $current_day = $first_day;
-        $day_interval = DateInterval::createFromDateString('1 day');
+        $day_interval = CarbonInterval::day();
         while ($current_day <= $last_day) {
             $monday_of_week = getStartOfWeekDate($current_day);
             $day_number = $current_day->format('N') - 1;

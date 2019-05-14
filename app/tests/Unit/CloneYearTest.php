@@ -21,11 +21,13 @@ use Tests\TestCase;
 class CloneYearTest extends TestCase
 {
     protected $year;
+    protected $other_organization;
 
     public function setUp(): void
     {
         parent::setUp();
         $this->year = factory(Year::class)->create();
+        $this->other_organization = factory(\App\Organization::class)->create();
         factory(Family::class)->create(['year_id' => $this->year->id]);
         factory(ActivityList::class)->create(['year_id' => $this->year->id]);
         factory(Tariff::class, 2)->create(['year_id' => $this->year->id]);
@@ -55,16 +57,25 @@ class CloneYearTest extends TestCase
     public function testCloneYear()
     {
         $new_year = $this->year->make_copy(
+            $this->other_organization->id,
+            '2019',
             'Jokkebrok 2',
-            \DateTimeImmutable::createFromFormat('Y-m-d', '2018-04-01'),
-            \DateTimeImmutable::createFromFormat('Y-m-d', '2018-04-15'),
+            \Carbon\CarbonImmutable::createFromFormat('Y-m-d', '2018-04-01'),
+            \Carbon\CarbonImmutable::createFromFormat('Y-m-d', '2018-04-15'),
             []
         );
+        $this->assertEquals($this->other_organization->id, $new_year->organization_id);
+        $this->assertEquals('2019', $new_year->title);
+        $this->assertEquals('Jokkebrok 2', $new_year->description);
+        $this->assertEquals($this->year->invoice_header_text, $new_year->invoice_header_text);
+        $this->assertEquals($this->year->invoice_header_image, $new_year->invoice_header_image);
+        $this->assertEquals($this->year->invoice_bank_account, $new_year->invoice_bank_account);
         $this->assertEquals(10, $new_year->playground_days()->count());
         $this->assertEquals($this->year->supplements()->count(), $new_year->supplements()->count());
         $this->assertEquals($this->year->age_groups()->count(), $new_year->age_groups()->count());
         $this->assertEquals($this->year->day_parts()->count(), $new_year->day_parts()->count());
         $this->assertEquals($this->year->tariffs()->count(), $new_year->tariffs()->count());
         $this->assertEquals($this->year->week_days()->count(), $new_year->week_days()->count());
+        $this->assertTrue($new_year->playground_days()->firstOrFail()->date()->isSameDay(\Carbon\CarbonImmutable::create(2018, 4, 2)));
     }
 }
