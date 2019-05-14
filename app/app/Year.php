@@ -175,7 +175,7 @@ class Year extends Model
      *
      * @return Model
      */
-    public function make_copy(string $title, string $description, CarbonImmutable $first_day, CarbonImmutable $last_day, array $exception_days)
+    public function make_copy(int $organization_id, string $title, string $description, CarbonImmutable $first_day, CarbonImmutable $last_day, array $exception_days)
     {
         function getStartOfWeekDate(CarbonImmutable $date)
         {
@@ -187,6 +187,7 @@ class Year extends Model
         }
 
         $new_year = $this->replicate();
+        $new_year->organization()->associate(\App\Organization::find($organization_id));
         $new_year->title = $title;
         $new_year->description = $description;
         $new_year->save();

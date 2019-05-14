@@ -50,7 +50,8 @@ class CloneYear extends Command
     public function handle()
     {
         $year = Year::findOrFail($this->argument('year_id'));
-        $title = $this->ask('Year title?');
+        $organization_id = $this->ask('Organization? ');
+        $title = $this->ask('Year title? ');
         $description = $this->ask('Year description? ');
         // get first date
         $first_day = $this->ask_date('First day');
@@ -62,7 +63,7 @@ class CloneYear extends Command
             $exception_days[] = $this->ask_date('Exception day');
         }
         // will use same week days
-        $new_year = $year->make_copy($description, $first_day, $last_day, $exception_days);
+        $new_year = $year->make_copy($organization_id, $title, $description, $first_day, $last_day, $exception_days);
         $this->info('Year cloned. New year id: '.$new_year->id);
     }
 }

@@ -21,11 +21,13 @@ use Tests\TestCase;
 class CloneYearTest extends TestCase
 {
     protected $year;
+    protected $other_organization;
 
     public function setUp(): void
     {
         parent::setUp();
         $this->year = factory(Year::class)->create();
+        $this->other_organization = factory(\App\Organization::class)->create();
         factory(Family::class)->create(['year_id' => $this->year->id]);
         factory(ActivityList::class)->create(['year_id' => $this->year->id]);
         factory(Tariff::class, 2)->create(['year_id' => $this->year->id]);
@@ -55,12 +57,14 @@ class CloneYearTest extends TestCase
     public function testCloneYear()
     {
         $new_year = $this->year->make_copy(
+            $this->other_organization->id,
             '2019',
             'Jokkebrok 2',
             \Carbon\CarbonImmutable::createFromFormat('Y-m-d', '2018-04-01'),
             \Carbon\CarbonImmutable::createFromFormat('Y-m-d', '2018-04-15'),
             []
         );
+        $this->assertEquals($this->other_organization->id, $new_year->organization_id);
         $this->assertEquals('2019', $new_year->title);
         $this->assertEquals('Jokkebrok 2', $new_year->description);
         $this->assertEquals($this->year->invoice_header_text, $new_year->invoice_header_text);
