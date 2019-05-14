@@ -119,7 +119,7 @@
                     render: function (child_families, type, full, meta) {
                         let records = [];
                         for(let i = 0; i < child_families.length; ++i){
-                            records.push(child_families[i].child.full_name + "("+child_families[i].nb_registrations + " dagen)");
+                            records.push(child_families[i].child.full_name + " ("+child_families[i].nb_registrations + " dagen)");
                         }
                         return records.join(", ");
                     }

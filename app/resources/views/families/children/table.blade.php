@@ -8,6 +8,7 @@
                 <th>Geboortejaar</th>
                 <th>Werking</th>
                 <th>Belangrijk</th>
+                <th>Factuur</th>
             </tr>
             </thead>
             <tbody>
