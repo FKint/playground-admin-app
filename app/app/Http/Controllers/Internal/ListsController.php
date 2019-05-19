@@ -115,8 +115,8 @@ class ListsController extends Controller
     {
         $date = \DateTimeImmutable::createFromFormat('Y-m-d', $request->input('date'));
         $price = $request->input('price');
-        $show_on_attendance_form = $request->input('show_on_attendance_form');
-        $show_on_dashboard = $request->input('show_on_dashboard');
+        $show_on_attendance_form = (bool) $request->input('show_on_attendance_form');
+        $show_on_dashboard = (bool) $request->input('show_on_dashboard');
 
         return [
             'name' => $request->input('name'),
