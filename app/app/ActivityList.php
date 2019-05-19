@@ -2,10 +2,14 @@
 
 namespace App;
 
+use Carbon\Carbon;
+use Collective\Html\Eloquent\FormAccessible;
 use Illuminate\Database\Eloquent\Model;
 
 class ActivityList extends Model
 {
+    use FormAccessible;
+
     /**
      * The attributes that are mass assignable.
      *
@@ -26,5 +30,10 @@ class ActivityList extends Model
     public function year()
     {
         return $this->belongsTo(Year::class);
+    }
+
+    public function formDateAttribute($value)
+    {
+        return Carbon::parse($value)->format('Y-m-d');
     }
 }
