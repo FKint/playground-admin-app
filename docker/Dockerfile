@@ -103,6 +103,7 @@ RUN composer install --no-interaction --no-progress --no-dev --optimize-autoload
 ###################
 FROM php-fpm as app-prod
 WORKDIR /var/www
+RUN mkdir /var/www/.config && chown www-data:www-data /var/www/.config
 USER www-data
 COPY --chown=www-data:www-data --from=composer-installer /root/app .
 COPY --chown=www-data:www-data --from=npm-builder /root/app/public ./public

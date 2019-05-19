@@ -16,6 +16,7 @@ class Year extends Model
      * @var array
      */
     protected $fillable = ['description', 'title', 'invoice_header_text', 'invoice_header_image', 'invoice_bank_account'];
+    protected $hidden = ['invoice_header_image'];
 
     /**
      * Get all weeks in this year.

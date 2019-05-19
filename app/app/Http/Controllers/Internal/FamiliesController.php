@@ -73,7 +73,7 @@ class FamiliesController extends Controller
         }
 
         return \PDF::loadHtml($view->render())
-            ->download('Uitnodiging tot betaling - '.$year->id.' '.$family->id.' '.$child->id.' '.$child->last_name.' '.$child->first_name.'.pdf');
+            ->download('Uitnodiging tot betaling - '.$year->title.' '.$family->id.' '.$child->id.' '.$child->last_name.' '.$child->first_name.'.pdf');
     }
 
     /**
@@ -156,6 +156,7 @@ class FamiliesController extends Controller
     public function addChildToFamily(Request $request, Year $year, Family $family, Child $child)
     {
         $family->children()->syncWithoutDetaching([$child->id => ['year_id' => $year->id]]);
+        $family->refresh();
 
         return $family;
     }
