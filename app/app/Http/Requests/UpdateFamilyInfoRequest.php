@@ -29,6 +29,8 @@ class UpdateFamilyInfoRequest extends FormRequest
             'tariff_id' => 'exists:tariffs,id',
             'remarks' => '',
             'contact' => '',
+            'social_contact' => '',
+            'needs_invoice' => '',
         ];
     }
 }
