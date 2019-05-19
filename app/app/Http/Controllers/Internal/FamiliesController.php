@@ -73,7 +73,7 @@ class FamiliesController extends Controller
         }
 
         return \PDF::loadHtml($view->render())
-            ->download('Uitnodiging tot betaling - '.$year->id.' '.$family->id.' '.$child->id.' '.$child->last_name.' '.$child->first_name.'.pdf');
+            ->download('Uitnodiging tot betaling - '.$year->title.' '.$family->id.' '.$child->id.' '.$child->last_name.' '.$child->first_name.'.pdf');
     }
 
     /**
