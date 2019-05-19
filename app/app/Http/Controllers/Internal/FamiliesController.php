@@ -112,9 +112,6 @@ class FamiliesController extends Controller
     public function updateFamily(UpdateFamilyInfoRequest $request, Year $year, Family $family)
     {
         $validated = $request->validated();
-        if (!$request->has('needs_invoice')) {
-            $validated['needs_invoice'] = false;
-        }
         $family->update($validated);
     }
 
