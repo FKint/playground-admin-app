@@ -26,8 +26,6 @@ class TypeaheadComponent extends BaseComponent
 
     /**
      * Assert that the browser page contains the component.
-     *
-     * @param Browser $browser
      */
     public function assert(Browser $browser)
     {

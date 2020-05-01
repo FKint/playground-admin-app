@@ -13,6 +13,7 @@
 
 /** @var \Illuminate\Database\Eloquent\Factory $factory */
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 
 $factory->define(App\User::class, function (Faker\Generator $faker, $params) {
     if (key_exists('password', $params)) {
@@ -30,7 +31,7 @@ $factory->define(App\User::class, function (Faker\Generator $faker, $params) {
         'name' => $faker->name,
         'email' => $faker->unique()->safeEmail,
         'password' => $password,
-        'remember_token' => str_random(10),
+        'remember_token' => Str::random(10),
         'admin' => false,
         'organization_id' => $organization_id,
     ];

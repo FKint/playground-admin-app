@@ -13,8 +13,6 @@ use Yajra\DataTables\DataTables;
 class ChildrenController extends Controller
 {
     /**
-     * @param Year $year
-     *
      * @throws \Illuminate\Auth\Access\AuthorizationException
      *
      * @return $this
@@ -29,8 +27,6 @@ class ChildrenController extends Controller
     }
 
     /**
-     * @param Year $year
-     *
      * @throws \Illuminate\Auth\Access\AuthorizationException
      *
      * @return $this
@@ -44,9 +40,6 @@ class ChildrenController extends Controller
     }
 
     /**
-     * @param SaveChildRequest $request
-     * @param Year             $year
-     *
      * @throws \Illuminate\Auth\Access\AuthorizationException
      *
      * @return \Illuminate\Http\RedirectResponse
@@ -71,9 +64,6 @@ class ChildrenController extends Controller
     }
 
     /**
-     * @param Child $child
-     * @param Year  $year
-     *
      * @throws \Illuminate\Auth\Access\AuthorizationException
      *
      * @return $this
@@ -86,9 +76,6 @@ class ChildrenController extends Controller
     }
 
     /**
-     * @param Child $child
-     * @param Year  $year
-     *
      * @throws \Illuminate\Auth\Access\AuthorizationException
      *
      * @return $this
@@ -103,9 +90,6 @@ class ChildrenController extends Controller
     }
 
     /**
-     * @param Year  $year
-     * @param Child $child
-     *
      * @throws \Illuminate\Auth\Access\AuthorizationException
      *
      * @return $this
@@ -118,10 +102,6 @@ class ChildrenController extends Controller
     }
 
     /**
-     * @param Request $request
-     * @param Child   $child
-     * @param Year    $year
-     *
      * @throws \Illuminate\Auth\Access\AuthorizationException
      *
      * @return $this
@@ -136,9 +116,6 @@ class ChildrenController extends Controller
     }
 
     /**
-     * @param Child $child
-     * @param Year  $year
-     *
      * @throws \Illuminate\Auth\Access\AuthorizationException
      *
      * @return $this
@@ -153,8 +130,6 @@ class ChildrenController extends Controller
     }
 
     /**
-     * @param Year $year
-     *
      * @throws \Exception
      *
      * @return mixed
@@ -165,9 +140,6 @@ class ChildrenController extends Controller
     }
 
     /**
-     * @param SaveChildRequest $request
-     * @param Year             $year
-     *
      * @throws \Illuminate\Auth\Access\AuthorizationException
      *
      * @return mixed
@@ -191,10 +163,6 @@ class ChildrenController extends Controller
     }
 
     /**
-     * @param SaveChildRequest $request
-     * @param Child            $child
-     * @param Year             $year
-     *
      * @throws \Illuminate\Auth\Access\AuthorizationException
      *
      * @return \Illuminate\Http\JsonResponse
@@ -209,10 +177,6 @@ class ChildrenController extends Controller
     }
 
     /**
-     * @param Request $request
-     * @param Year    $year
-     * @param Child   $child
-     *
      * @throws \Illuminate\Auth\Access\AuthorizationException
      *
      * @return Family
@@ -246,11 +210,6 @@ class ChildrenController extends Controller
     }
 
     /**
-     * @param Request $request
-     * @param Year    $year
-     * @param Child   $child
-     * @param Family  $family
-     *
      * @throws \Illuminate\Auth\Access\AuthorizationException
      *
      * @return \Illuminate\Database\Eloquent\Model|static
@@ -264,11 +223,6 @@ class ChildrenController extends Controller
     }
 
     /**
-     * @param Request $request
-     * @param Year    $year
-     * @param Child   $child
-     * @param Family  $family
-     *
      * @throws \Illuminate\Auth\Access\AuthorizationException
      *
      * @return \Illuminate\Http\JsonResponse

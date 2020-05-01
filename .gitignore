@@ -12,3 +12,5 @@ migrations.sql
 raw-migrations
 
 certs/*
+
+.php_cs.cache

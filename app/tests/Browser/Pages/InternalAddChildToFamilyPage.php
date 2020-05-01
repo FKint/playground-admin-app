@@ -17,8 +17,6 @@ class InternalAddChildToFamilyPage extends InternalPage
 
     /**
      * Assert that the browser is on the page.
-     *
-     * @param Browser $browser
      */
     public function assert(Browser $browser)
     {

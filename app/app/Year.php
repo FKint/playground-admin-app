@@ -169,10 +169,8 @@ class Year extends Model
      * dates in $exception_days.
      * Assumes that the week starts on a Monday.
      *
-     * @param string            $description
      * @param DateTimeImmutable $first_day
      * @param DateTimeImmutable $last_day
-     * @param array             $exception_days
      *
      * @return Model
      */

@@ -416,7 +416,7 @@
             function loadAndPopulateUpdatedRegistrationPrices() {
                 const data = getRegistrationFormData();
                 formManager.startTask(data);
-                return $.post('{{ route('api.simulate_submit_registration_data', ['week_id' => $week->id, 'family_id' => $family->id]) }}', data, null, "json")
+                return $.post('{{ route('api.simulate_submit_registration_data', ['week' => $week->id, 'family' => $family->id]) }}', data, null, "json")
                     .done((response) => {
                         if(formManager.endTask(data)){
                             populateRegistrationData(response);

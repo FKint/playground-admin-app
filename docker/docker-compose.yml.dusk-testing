@@ -19,5 +19,5 @@ services:
     depends_on:
       - selenium 
   selenium:
-    image: selenium/standalone-chrome:3
+    image: selenium/standalone-chrome:3.141.59-20200409
     shm_size: 2gb

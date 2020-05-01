@@ -246,6 +246,11 @@
                 const child_id = $(this).attr('data-child-id');
                 showChildInfoModal(child_id);
             });
+
+            table_element.on('click', '.btn-show-family', function () {
+                const family_id = $(this).attr('data-family-id');
+                showFamilyChildrenModal(family_id);
+            });
         });
     </script>
 @endpush

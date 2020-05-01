@@ -10,7 +10,6 @@ class CheckModelSameYear
      * Handle an incoming request.
      *
      * @param \Illuminate\Http\Request $request
-     * @param \Closure                 $next
      * @param array                    $models
      *
      * @return mixed
