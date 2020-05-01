@@ -31,4 +31,4 @@ $.fn.datepicker.defaults.todayBtn = "linked";
 $.fn.datepicker.defaults.todayHighlight = true;
 $.fn.datepicker.defaults.weekStart = 1;
 
-window.moment = require('moment');
+window.moment = require('moment/moment');

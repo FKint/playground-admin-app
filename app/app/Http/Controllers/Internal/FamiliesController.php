@@ -77,8 +77,6 @@ class FamiliesController extends Controller
     }
 
     /**
-     * @param Year $year
-     *
      * @throws \Exception
      *
      * @return mixed

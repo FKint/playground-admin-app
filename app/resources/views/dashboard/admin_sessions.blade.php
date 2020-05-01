@@ -114,7 +114,7 @@
                         if(!full.finished){
                             return "";
                         }
-                        return '<a href="{{ route('internal.show_edit_admin_session', ['admin_session_id' => 'SESSION_ID']) }}">Wijzigen</a>'.replace('SESSION_ID', data);
+                        return '<a href="{{ route('internal.show_edit_admin_session', ['admin_session' => 'SESSION_ID']) }}">Wijzigen</a>'.replace('SESSION_ID', data);
                     },
                 }
             ],

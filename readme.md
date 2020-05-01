@@ -1,7 +1,5 @@
 [![CircleCI](https://circleci.com/gh/FKint/playground-admin-app/tree/master.svg?style=svg)](https://circleci.com/gh/FKint/playground-admin-app/tree/master)
 
-# Warning: this information is outdated
-
 # Playground admin web app using Laravel
 
 ## Development
@@ -14,8 +12,8 @@
 * Run `php artisan migrate:refresh --seed` to build the database tables and fill it with initial data. Run `php artisan migrate` if the database already exists and you only want to update the schema.
 * The web application runs on port 21000 (`http://localhost:21000`) of the host OS. PHPMyAdmin runs on port 21001 (`http://localhost:21001`).
 * The `vendor` and `node_modules` folders are not synchronized to the host file system. The best way to update these is to rebuild the containers after updating the `composer.json`, `composer.lock`, `package.json` or `yarn.lock` files. 
-* Updating the PHP packages (`composer.json` and `composer.lock`) is best done using a composer container: ```docker run -it -v "`pwd`/app:/app" composer /bin/sh```. This will also update the `vendor` folder on the host file system. Mount the individual files to speed up the process.
-* Updating the NPM packages (`package.json` or `yarn.lock`) is best done using a `node:8-alpine` container: ```docker run -it -v "`pwd`/app:/opt/app" node:8-alpine /bin/sh```. This will also update the `node_modules` folder on the host file system. Mount the individual files to speed up the process.
+* Updating the PHP packages (`composer.json` and `composer.lock`) is best done using a composer container: ```docker run -it -v "`pwd`/app:/app" composer /bin/sh```. This will also update the `vendor` folder on the host file system. Mount the individual files to speed up the process. Run `composer update`. *Note: check docker/Dockerfile for the exact composer image version.*
+* Updating the NPM packages (`package.json` or `yarn.lock`) is best done using a `node:12-alpine` container: ```docker run -it -v "`pwd`/app:/opt/app" node:12-alpine /bin/sh```. This will also update the `node_modules` folder on the host file system. Mount the individual files to speed up the process. *Note: check docker/Dockerfile for the exact node image version.*
 
 
 ### Run tests (local)
@@ -69,10 +67,8 @@
 ```bash
 #!/bin/bash
 cd app
-git stash save --keep-index
 php-cs-fixer fix --dry-run --diff --diff-format udiff
 RESULT=$?
-git stash apply -q
 cd ..
 if [ "$RESULT" -eq "0" ]; then
   exit 0;

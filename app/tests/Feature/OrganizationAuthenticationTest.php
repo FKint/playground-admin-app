@@ -40,8 +40,8 @@ class OrganizationAuthenticationTest extends TestCase
     private $actualPlaygroundDay;
     private $actualDayPart;
 
-    private $readOnlyAPIRoutes;
-    private $writeAPIRoutes;
+    private $readOnlyApiRoutes;
+    private $writeApiRoutes;
 
     protected function setUp(): void
     {
@@ -91,7 +91,7 @@ class OrganizationAuthenticationTest extends TestCase
         $this->actualList->child_families()->syncWithoutDetaching([$this->childFamilyOnList->id => ['year_id' => $this->actualYear->id]]);
     }
 
-    public function readOnlyAPIRoutes()
+    public function readOnlyApiRoutes()
     {
         return [
             // Datatables
@@ -151,7 +151,7 @@ class OrganizationAuthenticationTest extends TestCase
         ];
     }
 
-    public function writeAPIRoutes()
+    public function writeApiRoutes()
     {
         return [
             // Post requests
@@ -251,11 +251,11 @@ class OrganizationAuthenticationTest extends TestCase
     }
 
     /**
-     * @dataProvider readOnlyAPIRoutes
+     * @dataProvider readOnlyApiRoutes
      *
      * @param mixed $routeFunction
      */
-    public function testAPINotLoggedInReadOnly($routeFunction)
+    public function testApiNotLoggedInReadOnly($routeFunction)
     {
         $this->assertGuest();
         $url = $routeFunction->bindTo($this)();
@@ -267,7 +267,7 @@ class OrganizationAuthenticationTest extends TestCase
      *
      * @param mixed $routeFunction
      */
-    public function testAPINotLoggedInWrite($routeFunction)
+    public function testApiNotLoggedInWrite($routeFunction)
     {
         $this->assertGuest();
         $request_data = $routeFunction->bindTo($this)();
@@ -275,11 +275,11 @@ class OrganizationAuthenticationTest extends TestCase
     }
 
     /**
-     * @dataProvider readOnlyAPIRoutes
+     * @dataProvider readOnlyApiRoutes
      *
      * @param mixed $routeFunction
      */
-    public function testAPINotAuthorizedReadOnly($routeFunction)
+    public function testApiNotAuthorizedReadOnly($routeFunction)
     {
         $this->actingAs(factory(User::class)->create());
         $url = $routeFunction->bindTo($this)();
@@ -291,7 +291,7 @@ class OrganizationAuthenticationTest extends TestCase
      *
      * @param mixed $routeFunction
      */
-    public function testAPINotAuthorizedWrite($routeFunction)
+    public function testApiNotAuthorizedWrite($routeFunction)
     {
         $this->actingAs(factory(User::class)->create());
         $request_data = $routeFunction->bindTo($this)();
@@ -299,11 +299,11 @@ class OrganizationAuthenticationTest extends TestCase
     }
 
     /**
-     * @dataProvider readOnlyAPIRoutes
+     * @dataProvider readOnlyApiRoutes
      *
      * @param mixed $routeFunction
      */
-    public function testAPIAuthorizedReadOnly($routeFunction)
+    public function testApiAuthorizedReadOnly($routeFunction)
     {
         $this->actingAs($this->actualUser);
         $url = $routeFunction->bindTo($this)();
@@ -315,7 +315,7 @@ class OrganizationAuthenticationTest extends TestCase
      *
      * @param mixed $routeFunction
      */
-    public function testAPIAuthorizedWrite($routeFunction)
+    public function testApiAuthorizedWrite($routeFunction)
     {
         $this->actingAs($this->actualUser);
         $request_data = $routeFunction->bindTo($this)();

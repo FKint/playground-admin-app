@@ -68,7 +68,7 @@
             });
             table_element.on('click', '.btn-remove-child-family-list', function () {
                 const child_family_id = $(this).data('child-family-id');
-                $.post('{{ route('api.remove_participant_from_list', ['list' => $list, 'child_family' => 'CHILD_FAMILY_ID']) }}'
+                $.post('{{ route('api.remove_participant_from_list', ['activity_list' => $list, 'child_family' => 'CHILD_FAMILY_ID']) }}'
                     .replace('CHILD_FAMILY_ID', child_family_id)
                 ).done(function () {
                     table.ajax.reload();
@@ -106,7 +106,7 @@
                     }
                 }
             }).on('typeahead:selected', function (event, suggestion) {
-                $.post('{!! route('api.add_participant_to_list', ['list' => $list, 'child_family' => 'CHILD_FAMILY_ID']) !!}'
+                $.post('{!! route('api.add_participant_to_list', ['activity_list' => $list, 'child_family' => 'CHILD_FAMILY_ID']) !!}'
                     .replace('CHILD_FAMILY_ID', suggestion.id)
                 ).done(function () {
                     $('#child-family-search').typeahead('val', '');
