@@ -8,7 +8,7 @@ executors:
 jobs:
   php-linter:
     docker:
-      - image: circleci/php:7.3
+      - image: circleci/php:7.4
     steps:
       - checkout
       - run: composer global require friendsofphp/php-cs-fixer

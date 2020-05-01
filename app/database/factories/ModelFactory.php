@@ -11,10 +11,10 @@
 |
  */
 
-/** @var \Illuminate\Database\Eloquent\Factory $factory */
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 
+// @var \Illuminate\Database\Eloquent\Factory $factory
 $factory->define(App\User::class, function (Faker\Generator $faker, $params) {
     if (key_exists('password', $params)) {
         $password = $params['password'];
@@ -288,6 +288,7 @@ $factory->define(App\Supplement::class, function (Faker\Generator $faker, $param
     ];
 });
 
+// @var \Illuminate\Database\Eloquent\Factory $factory
 $factory->define(App\Transaction::class, function (Faker\Generator $faker, $params) {
     if (key_exists('year_id', $params)) {
         $year_id = $params['year_id'];
