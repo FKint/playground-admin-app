@@ -1,7 +1,5 @@
 [![CircleCI](https://circleci.com/gh/FKint/playground-admin-app/tree/master.svg?style=svg)](https://circleci.com/gh/FKint/playground-admin-app/tree/master)
 
-# Warning: this information is outdated
-
 # Playground admin web app using Laravel
 
 ## Development
