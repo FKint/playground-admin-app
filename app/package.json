@@ -22,7 +22,7 @@
     "laravel-mix": "^5.0.4",
     "less": "^3.11.1",
     "less-loader": "^4.1.0",
-    "lodash": "^4.17.12",
+    "lodash": "^4.17.19",
     "moment": "^2.22.2",
     "pdfmake": "^0.1.65",
     "vue-template-compiler": "^2.6.10",
