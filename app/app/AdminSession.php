@@ -2,10 +2,13 @@
 
 namespace App;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class AdminSession extends Model
 {
+    use HasFactory;
+
     protected $fillable = ['session_end', 'responsible_name', 'counted_cash', 'remarks'];
     protected $appends = ['nb_transactions', 'session_start', 'expected_cash', 'error', 'finished'];
 

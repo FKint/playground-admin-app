@@ -7,6 +7,7 @@ use App\AdminSession;
 use App\AgeGroup;
 use App\DayPart;
 use App\Family;
+use App\Organization;
 use App\Supplement;
 use App\Tariff;
 use App\Week;
@@ -26,32 +27,24 @@ class CloneYearTest extends TestCase
     public function setUp(): void
     {
         parent::setUp();
-        $this->year = factory(Year::class)->create();
-        $this->other_organization = factory(\App\Organization::class)->create();
-        factory(Family::class)->create(['year_id' => $this->year->id]);
-        factory(ActivityList::class)->create(['year_id' => $this->year->id]);
-        factory(Tariff::class, 2)->create(['year_id' => $this->year->id]);
-        factory(AgeGroup::class)->create(['year_id' => $this->year->id]);
-        $weekDays = array_map(
+        $this->year = Year::factory()->create();
+        $this->other_organization = Organization::factory()->create();
+        ActivityList::factory()->for($this->year)->create();
+        $tariffs = Tariff::factory()->count(2)->for($this->year)->create();
+        AgeGroup::factory()->for($this->year)->create();
+        array_map(
             function ($offset) {
-                return factory(WeekDay::class)->create(['year_id' => $this->year->id, 'days_offset' => $offset]);
+                return WeekDay::factory()->for($this->year)->create(['days_offset' => $offset]);
             },
             [0, 1, 2, 3, 4]
         );
-        $actualWeeks = array_map(function ($o) {
-            return Week::findOrFail($o['id']);
-        }, factory(Week::class, 8)->create(['year_id' => $this->year->id])->toArray());
-
-        factory(DayPart::class)->create([
+        Week::factory()->count(8)->for($this->year)->create();
+        DayPart::factory()->for($this->year)->create([
             'default' => true,
-            'year_id' => $this->year->id,
         ]);
-        factory(AdminSession::class)->create([
-            'year_id' => $this->year->id,
-        ]);
-        factory(Supplement::class)->create([
-            'year_id' => $this->year->id,
-        ]);
+        AdminSession::factory()->for($this->year)->create();
+        Supplement::factory()->for($this->year)->create();
+        Family::factory()->for($this->year)->for($tariffs[0])->create();
     }
 
     public function testCloneYear()

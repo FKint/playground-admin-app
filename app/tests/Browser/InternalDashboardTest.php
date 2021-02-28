@@ -21,8 +21,8 @@ class InternalDashboardTest extends DuskTestCase
      */
     public function testShowsYearName()
     {
-        $user = factory(\App\User::class)->create();
-        $year = factory(\App\Year::class)->create(['organization_id' => $user->organization_id, 'description' => 'The Year of the Pig']);
+        $user = \App\User::factory()->create();
+        $year = \App\Year::factory()->for($user->organization)->create(['description' => 'The Year of the Pig']);
         $this->browse(function (Browser $browser) use ($user, $year) {
             $browser->loginAs($user)
                 ->visit(new InternalDashboardPage($year->id))
@@ -32,13 +32,13 @@ class InternalDashboardTest extends DuskTestCase
 
     public function testCashRegisterShowsEntries()
     {
-        $user = factory(\App\User::class)->create();
-        $year = factory(\App\Year::class)->create(['organization_id' => $user->organization_id, 'description' => 'The Year of the Pig']);
-        $adminSession1 = factory(\App\AdminSession::class)->create(['year_id' => $year->id, 'responsible_name' => 'The first user']);
-        $transaction1 = factory(\App\Transaction::class)->create(['year_id' => $year->id, 'admin_session_id' => $adminSession1->id, 'created_at' => (new \DateTimeImmutable())->setISODate(2018, 3, 1)]);
-        $transaction2 = factory(\App\Transaction::class)->create(['year_id' => $year->id, 'admin_session_id' => $adminSession1->id]);
-        $adminSession2 = factory(\App\AdminSession::class)->create(['year_id' => $year->id, 'responsible_name' => 'The second user', 'session_end' => null]);
-        $transaction3 = factory(\App\Transaction::class)->create(['year_id' => $year->id, 'admin_session_id' => $adminSession2->id]);
+        $user = \App\User::factory()->create();
+        $year = \App\Year::factory()->create(['organization_id' => $user->organization_id, 'description' => 'The Year of the Pig']);
+        $adminSession1 = \App\AdminSession::factory()->create(['year_id' => $year->id, 'responsible_name' => 'The first user']);
+        $transaction1 = \App\Transaction::factory()->create(['year_id' => $year->id, 'admin_session_id' => $adminSession1->id, 'created_at' => (new \DateTimeImmutable())->setISODate(2018, 3, 1)]);
+        $transaction2 = \App\Transaction::factory()->create(['year_id' => $year->id, 'admin_session_id' => $adminSession1->id]);
+        $adminSession2 = \App\AdminSession::factory()->create(['year_id' => $year->id, 'responsible_name' => 'The second user', 'session_end' => null]);
+        $transaction3 = \App\Transaction::factory()->create(['year_id' => $year->id, 'admin_session_id' => $adminSession2->id]);
 
         $this->browse(function (Browser $browser) use ($user, $year) {
             $browser->loginAs($user)

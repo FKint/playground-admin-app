@@ -2,10 +2,13 @@
 
 namespace App;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class WeekDay extends Model
 {
+    use HasFactory;
+
     protected $fillable = ['year_id', 'days_offset', 'name'];
 
     public function year()

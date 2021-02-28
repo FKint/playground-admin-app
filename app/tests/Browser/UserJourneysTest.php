@@ -2,6 +2,8 @@
 
 namespace Tests\Browser;
 
+use Database\Seeders\DatabaseSeeder;
+use Database\Seeders\InitialDataSeeder;
 use Laravel\Dusk\Browser;
 use Tests\Browser\Pages\InternalDashboardPage;
 use Tests\Browser\Pages\InternalEditFamilyRegistrationPage;
@@ -26,17 +28,17 @@ class UserJourneysTest extends DuskTestCase
     public function setUp(): void
     {
         parent::setUp();
-        app(\DatabaseSeeder::class)->call(\InitialDataSeeder::class);
+        app(DatabaseSeeder::class)->call(InitialDataSeeder::class);
         $this->year = \App\Year::firstOrFail();
-        $this->user = factory(\App\User::class)->create(['organization_id' => $this->year->organization_id]);
+        $this->user = \App\User::factory()->create(['organization_id' => $this->year->organization_id]);
 
         $this->normalTariff = \App\Tariff::whereAbbreviation('NRML')->firstOrFail();
         $this->socialTariff = \App\Tariff::whereAbbreviation('SCL')->firstOrFail();
         $this->ageGroup612 = \App\AgeGroup::whereAbbreviation('6-12')->firstOrFail();
         $this->ageGroupKls = \App\AgeGroup::whereAbbreviation('KLS')->firstOrFail();
-        $this->existingFamily = factory(\App\Family::class)->create(['year_id' => $this->year->id, 'guardian_first_name' => 'Veronique', 'guardian_last_name' => 'Baeten', 'tariff_id' => $this->normalTariff->id]);
-        $this->existingChild = factory(\App\Child::class)->create(['year_id' => $this->year->id, 'first_name' => 'Reinoud', 'last_name' => 'Declercq', 'age_group_id' => $this->ageGroupKls->id]);
-        $this->existingChildFamily = factory(\App\ChildFamily::class)->create(['year_id' => $this->year->id, 'family_id' => $this->existingFamily->id, 'child_id' => $this->existingChild->id]);
+        $this->existingFamily = \App\Family::factory()->create(['year_id' => $this->year->id, 'guardian_first_name' => 'Veronique', 'guardian_last_name' => 'Baeten', 'tariff_id' => $this->normalTariff->id]);
+        $this->existingChild = \App\Child::factory()->create(['year_id' => $this->year->id, 'first_name' => 'Reinoud', 'last_name' => 'Declercq', 'age_group_id' => $this->ageGroupKls->id]);
+        $this->existingChildFamily = \App\ChildFamily::factory()->create(['year_id' => $this->year->id, 'family_id' => $this->existingFamily->id, 'child_id' => $this->existingChild->id]);
     }
 
     /**
@@ -89,7 +91,7 @@ class UserJourneysTest extends DuskTestCase
      */
     public function testEditFamily()
     {
-        $newFamily = factory(\App\Family::class)->create(['year_id' => $this->year->id, 'guardian_first_name' => 'Erica', 'guardian_last_name' => 'Van Heulen']);
+        $newFamily = \App\Family::factory()->for($this->year)->for($this->normalTariff)->create(['guardian_first_name' => 'Erica', 'guardian_last_name' => 'Van Heulen']);
         $this->browse(function (Browser $browser) use ($newFamily) {
             $browser->loginAs($this->user)
                 ->visit(new InternalDashboardPage($this->year->id))
@@ -98,6 +100,7 @@ class UserJourneysTest extends DuskTestCase
                 ->assertSeeFamilyEntryInTable($newFamily->id, 'Erica', 'Van Heulen')
                 ->navigateToEditFamily($this->existingFamily->id)
                 ->enterEditFamilyFormData('Veronica', 'Baetens', $this->socialTariff->id, 'previously known as Veronique Baeten', 'veronica@bs.com', '', null)
+                ->screenshot('testEditFamily_edit_family_form')
                 ->submitEditFamilyFormSuccessfully()
                 ->closeEditFamilyDialog()
                 ->assertSeeFamilyEntryInTable($this->existingFamily->id, 'Veronica', 'Baetens')
@@ -161,8 +164,8 @@ class UserJourneysTest extends DuskTestCase
      */
     public function testEditChild()
     {
-        $child2 = factory(\App\Child::class)->create(['year_id' => $this->year->id, 'first_name' => 'Jan', 'last_name' => 'Cornelis']);
-        $child3 = factory(\App\Child::class)->create(['year_id' => $this->year->id, 'first_name' => 'Piet', 'last_name' => 'Declercq']);
+        $child2 = \App\Child::factory()->for($this->year)->for($this->ageGroup612)->create(['first_name' => 'Jan', 'last_name' => 'Cornelis']);
+        $child3 = \App\Child::factory()->for($this->year)->for($this->ageGroup612)->create(['first_name' => 'Piet', 'last_name' => 'Declercq']);
 
         $this->browse(function (Browser $browser) use ($child2, $child3) {
             $browser->loginAs($this->user)
@@ -192,8 +195,8 @@ class UserJourneysTest extends DuskTestCase
     public function testCreateActivityList()
     {
         $this->browse(function (Browser $browser) {
-            $child2 = factory(\App\Child::class)->create(['year_id' => $this->year->id, 'first_name' => 'Jan', 'last_name' => 'Cornelis']);
-            $family2 = factory(\App\Family::class)->create(['year_id' => $this->year->id, 'guardian_first_name' => 'Arnold', 'guardian_last_name' => 'Coucke']);
+            $child2 = \App\Child::factory()->for($this->year)->for($this->ageGroup612)->create(['first_name' => 'Jan', 'last_name' => 'Cornelis']);
+            $family2 = \App\Family::factory()->for($this->year)->for($this->normalTariff)->create(['guardian_first_name' => 'Arnold', 'guardian_last_name' => 'Coucke']);
             $child2->families()->syncWithoutDetaching([$family2->id => ['year_id' => $this->year->id]]);
 
             $browser->loginAs($this->user)
@@ -254,13 +257,13 @@ class UserJourneysTest extends DuskTestCase
     public function testRegistrationsFlow()
     {
         $this->browse(function (Browser $browser) {
-            $child2 = factory(\App\Child::class)->create(['year_id' => $this->year->id, 'first_name' => 'Jan', 'last_name' => 'Cornelis', 'age_group_id' => $this->ageGroup612->id]);
-            $family2 = factory(\App\Family::class)->create(['year_id' => $this->year->id, 'guardian_first_name' => 'Arnold', 'guardian_last_name' => 'Coucke', 'tariff_id' => $this->normalTariff->id]);
+            $child2 = \App\Child::factory()->create(['year_id' => $this->year->id, 'first_name' => 'Jan', 'last_name' => 'Cornelis', 'age_group_id' => $this->ageGroup612->id]);
+            $family2 = \App\Family::factory()->create(['year_id' => $this->year->id, 'guardian_first_name' => 'Arnold', 'guardian_last_name' => 'Coucke', 'tariff_id' => $this->normalTariff->id]);
             $child2->families()->syncWithoutDetaching([$this->existingFamily->id => ['year_id' => $this->year->id]]);
             $child2Family1 = $child2->child_families()->firstOrFail();
             $child2->families()->syncWithoutDetaching([$family2->id => ['year_id' => $this->year->id]]);
             $child2Family2 = $family2->child_families()->firstOrFail();
-            $child3 = factory(\App\Child::class)->create(['year_id' => $this->year->id, 'first_name' => 'Wouter', 'last_name' => 'Sanders', 'age_group_id' => $this->ageGroupKls->id]);
+            $child3 = \App\Child::factory()->create(['year_id' => $this->year->id, 'first_name' => 'Wouter', 'last_name' => 'Sanders', 'age_group_id' => $this->ageGroupKls->id]);
             $child3->families()->syncWithoutDetaching([$family2->id => ['year_id' => $this->year->id]]);
 
             $lastDate = $this->year->playground_days()->get()->map(function ($playgroundDay) {
@@ -318,8 +321,8 @@ class UserJourneysTest extends DuskTestCase
             $this->assertNotNull($mondayRegistrationExistingChild);
             $this->assertFalse((bool) $mondayRegistrationExistingChild->attended);
 
-            $activityList = factory(\App\ActivityList::class)->create(['year_id' => $this->year->id, 'name' => 'Kid Rock', 'show_on_attendance_form' => true, 'price' => '0.89']);
-            $activityList2 = factory(\App\ActivityList::class)->create(['year_id' => $this->year->id, 'name' => 'Swimming', 'show_on_attendance_form' => false]);
+            $activityList = \App\ActivityList::factory()->create(['year_id' => $this->year->id, 'name' => 'Kid Rock', 'show_on_attendance_form' => true, 'price' => '0.89']);
+            $activityList2 = \App\ActivityList::factory()->create(['year_id' => $this->year->id, 'name' => 'Swimming', 'show_on_attendance_form' => false]);
 
             $browser->enterFindFamilyFormData('Wouter Sanders')
                 ->selectFindFamilySuggestion('Arnold Coucke')

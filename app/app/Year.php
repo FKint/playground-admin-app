@@ -6,10 +6,13 @@ use Carbon\Carbon;
 use Carbon\CarbonImmutable;
 use Carbon\CarbonInterval;
 use DateTimeImmutable;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Year extends Model
 {
+    use HasFactory;
+
     /**
      * The attributes that are mass assignable.
      *

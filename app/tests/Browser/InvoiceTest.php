@@ -2,6 +2,8 @@
 
 namespace Tests\Browser;
 
+use Database\Seeders\DatabaseSeeder;
+use Database\Seeders\InitialDataSeeder;
 use Laravel\Dusk\Browser;
 use Tests\Browser\Pages\InternalDashboardPage;
 use Tests\DuskTestCase;
@@ -15,10 +17,10 @@ class InvoiceTest extends DuskTestCase
     public function setUp(): void
     {
         parent::setUp();
-        app(\DatabaseSeeder::class)->call(\InitialDataSeeder::class);
+        app(DatabaseSeeder::class)->call(InitialDataSeeder::class);
 
         $this->year = \App\Year::firstOrFail();
-        $this->user = factory(\App\User::class)->create(['organization_id' => $this->year->organization_id]);
+        $this->user = \App\User::factory()->create(['organization_id' => $this->year->organization_id]);
 
         $this->normalTariff = \App\Tariff::whereAbbreviation('NRML')->firstOrFail();
         $this->socialTariff = \App\Tariff::whereAbbreviation('SCL')->firstOrFail();
