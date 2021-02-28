@@ -2,10 +2,10 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Seeder;
+use DateInterval;
 use DateTime;
 use DateTimeImmutable;
-use DateInterval;
+use Illuminate\Database\Seeder;
 
 class InitialDataSeeder extends Seeder
 {
@@ -78,7 +78,7 @@ class InitialDataSeeder extends Seeder
                 'abbreviation' => '6-12',
                 'start_date' => (new DateTime())->setDate(2005, 1, 1),
                 'end_date' => (new DateTime())->setDate(2012, 1, 1), ]
-            );
+        );
         $this->teenagers = \App\AgeGroup::create(
             [
                 'year_id' => $this->year->id,

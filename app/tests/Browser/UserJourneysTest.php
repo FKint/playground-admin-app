@@ -2,12 +2,12 @@
 
 namespace Tests\Browser;
 
+use Database\Seeders\DatabaseSeeder;
+use Database\Seeders\InitialDataSeeder;
 use Laravel\Dusk\Browser;
 use Tests\Browser\Pages\InternalDashboardPage;
 use Tests\Browser\Pages\InternalEditFamilyRegistrationPage;
 use Tests\DuskTestCase;
-use Database\Seeders\DatabaseSeeder;
-use Database\Seeders\InitialDataSeeder;
 
 /**
  * @internal

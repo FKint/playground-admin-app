@@ -48,122 +48,122 @@ class DummyDataSeeder extends InitialDataSeeder
     protected function seed_children()
     {
         $this->children['josephine_janssens'] = Child::factory()
-        ->for($this->year)
-        ->for($this->toddlers)
-        ->create([
-            'first_name' => 'Josephine',
-            'last_name' => 'Janssens',
-            'birth_year' => 2013,
-            'remarks' => 'First kid in the DB!',
-        ]);
+            ->for($this->year)
+            ->for($this->toddlers)
+            ->create([
+                'first_name' => 'Josephine',
+                'last_name' => 'Janssens',
+                'birth_year' => 2013,
+                'remarks' => 'First kid in the DB!',
+            ]);
         $this->children['eefje_janssens'] = Child::factory()
-        ->for($this->year)
-        ->for($this->toddlers)
-        ->create([
-            'first_name' => 'Eefje',
-            'last_name' => 'Janssens',
-            'birth_year' => 2013,
-            'remarks' => '!',
-        ]);
+            ->for($this->year)
+            ->for($this->toddlers)
+            ->create([
+                'first_name' => 'Eefje',
+                'last_name' => 'Janssens',
+                'birth_year' => 2013,
+                'remarks' => '!',
+            ]);
         $this->children['karen_duyck'] = Child::factory()
-        ->for($this->year)
-        ->for($this->middle_group)
-        ->create([
-            'first_name' => 'Karen',
-            'last_name' => 'Duyck',
-            'birth_year' => 2008,
-            'remarks' => '',
-        ]);
+            ->for($this->year)
+            ->for($this->middle_group)
+            ->create([
+                'first_name' => 'Karen',
+                'last_name' => 'Duyck',
+                'birth_year' => 2008,
+                'remarks' => '',
+            ]);
         $this->children['tom_maes'] = Child::factory()
-        ->for($this->year)
-        ->for($this->teenagers)
-        ->create([
-            'first_name' => 'Tom',
-            'last_name' => 'Maes',
-            'birth_year' => 2006,
-            'remarks' => '',
-        ]);
+            ->for($this->year)
+            ->for($this->teenagers)
+            ->create([
+                'first_name' => 'Tom',
+                'last_name' => 'Maes',
+                'birth_year' => 2006,
+                'remarks' => '',
+            ]);
         $this->children['erika_van_leemhuyzen'] = Child::factory()
-        ->for($this->year)
-        ->for($this->middle_group)
-        ->create([
-            'first_name' => 'Erika',
-            'last_name' => 'Van Leemhuyzen',
-            'birth_year' => 2009,
-            'remarks' => '',
-        ]);
+            ->for($this->year)
+            ->for($this->middle_group)
+            ->create([
+                'first_name' => 'Erika',
+                'last_name' => 'Van Leemhuyzen',
+                'birth_year' => 2009,
+                'remarks' => '',
+            ]);
         $this->children['tim_beert'] = Child::factory()
-        ->for($this->year)
-        ->for($this->middle_group)
-        ->create([
-            'first_name' => 'Tim',
-            'last_name' => 'Beert',
-            'birth_year' => 2010,
-            'remarks' => '',
-        ]);
+            ->for($this->year)
+            ->for($this->middle_group)
+            ->create([
+                'first_name' => 'Tim',
+                'last_name' => 'Beert',
+                'birth_year' => 2010,
+                'remarks' => '',
+            ]);
         $this->children['tom_beert'] = Child::factory()
-        ->for($this->year)
-        ->for($this->middle_group)
-        ->create([
-            'first_name' => 'Tom',
-            'last_name' => 'Beert',
-            'birth_year' => 2011,
-            'remarks' => '',
-        ]);
+            ->for($this->year)
+            ->for($this->middle_group)
+            ->create([
+                'first_name' => 'Tom',
+                'last_name' => 'Beert',
+                'birth_year' => 2011,
+                'remarks' => '',
+            ]);
         $this->children['jonas_beert'] = Child::factory()
-        ->for($this->year)
-        ->for($this->middle_group)
-        ->create([
-            'first_name' => 'Jonas',
-            'last_name' => 'Beert',
-            'birth_year' => 2007,
-            'remarks' => '',
-        ]);
+            ->for($this->year)
+            ->for($this->middle_group)
+            ->create([
+                'first_name' => 'Jonas',
+                'last_name' => 'Beert',
+                'birth_year' => 2007,
+                'remarks' => '',
+            ]);
         $this->children['lieven_devriendt'] = Child::factory()
-        ->for($this->year)
-        ->for($this->middle_group)
-        ->create([
-            'first_name' => 'Lieven',
-            'last_name' => 'Devriendt',
-            'birth_year' => 2006,
-            'remarks' => '',
-        ]);
+            ->for($this->year)
+            ->for($this->middle_group)
+            ->create([
+                'first_name' => 'Lieven',
+                'last_name' => 'Devriendt',
+                'birth_year' => 2006,
+                'remarks' => '',
+            ]);
         $this->children['ann_vanovertveldt'] = Child::factory()
-        ->for($this->year)
-        ->for($this->middle_group)
-        ->create([
-            'first_name' => 'Ann',
-            'last_name' => 'Vanovertveldt',
-            'birth_year' => 2011,
-            'remarks' => '',
-        ]);
+            ->for($this->year)
+            ->for($this->middle_group)
+            ->create([
+                'first_name' => 'Ann',
+                'last_name' => 'Vanovertveldt',
+                'birth_year' => 2011,
+                'remarks' => '',
+            ]);
         $this->children['johan_claeys'] = Child::factory()
-        ->for($this->year)
-        ->for($this->toddlers)
-        ->create([
-            'first_name' => 'Johan',
-            'last_name' => 'Claeys',
-            'birth_year' => 2013,
-            'remarks' => '',
-        ]);
+            ->for($this->year)
+            ->for($this->toddlers)
+            ->create([
+                'first_name' => 'Johan',
+                'last_name' => 'Claeys',
+                'birth_year' => 2013,
+                'remarks' => '',
+            ]);
         $this->children['driss_de_koninck'] = Child::factory()
-        ->for($this->year)
-        ->for($this->toddlers)
-        ->create([
-            'first_name' => 'Driss',
-            'last_name' => 'De Koninck',
-            'birth_year' => 2012,
-            'remarks' => '',
-        ]);
+            ->for($this->year)
+            ->for($this->toddlers)
+            ->create([
+                'first_name' => 'Driss',
+                'last_name' => 'De Koninck',
+                'birth_year' => 2012,
+                'remarks' => '',
+            ]);
         $this->children['veerle_christy'] = Child::factory()
-        ->for($this->year)
-        ->for($this->middle_group)
-        ->create([
-            'first_name' => 'Veerle',
-            'last_name' => 'Christy',
-            'birth_year' => 2010,
-            'remarks' => '',
-        ]);
+            ->for($this->year)
+            ->for($this->middle_group)
+            ->create([
+                'first_name' => 'Veerle',
+                'last_name' => 'Christy',
+                'birth_year' => 2010,
+                'remarks' => '',
+            ]);
     }
 
     protected function seed_child_families()
@@ -171,73 +171,73 @@ class DummyDataSeeder extends InitialDataSeeder
         $normal_tariff = \App\Tariff::where('name', '=', 'Normaal')->firstOrFail();
         $social_tariff = \App\Tariff::where('name', '=', 'Sociaal')->firstOrFail();
         $this->families['jozef_de_backer'] = \App\Family::factory()
-        ->for($this->year)
-        ->for($normal_tariff)
-        ->create([
-            'year_id' => $this->year->id,
-            'guardian_first_name' => 'Jozef',
-            'guardian_last_name' => 'De Backer',
-            'tariff_id' => $normal_tariff->id,
-            'remarks' => 'First family',
-            'contact' => '1207',
-        ]);
+            ->for($this->year)
+            ->for($normal_tariff)
+            ->create([
+                'year_id' => $this->year->id,
+                'guardian_first_name' => 'Jozef',
+                'guardian_last_name' => 'De Backer',
+                'tariff_id' => $normal_tariff->id,
+                'remarks' => 'First family',
+                'contact' => '1207',
+            ]);
         $child = \App\Child::where('first_name', '=', 'Josephine')->firstOrFail();
         $this->child_families['jozef_de_backer_josephine'] = \App\ChildFamily::factory()
-        ->for($this->year)
-        ->for($this->families['jozef_de_backer'])
-        ->for($child)
-        ->create();
+            ->for($this->year)
+            ->for($this->families['jozef_de_backer'])
+            ->for($child)
+            ->create();
         $child = \App\Child::where('first_name', '=', 'Eefje')->firstOrFail();
         $this->child_families['jozef_de_backer_eefje'] = \App\ChildFamily::factory()
-        ->for($this->year)
-        ->for($this->families['jozef_de_backer'])
-        ->for($child)
-        ->create();
+            ->for($this->year)
+            ->for($this->families['jozef_de_backer'])
+            ->for($child)
+            ->create();
         \App\Family::factory()
-        ->for($this->year)
-        ->for($normal_tariff)
-        ->create([
-            'guardian_first_name' => 'Heidi',
-            'guardian_last_name' => 'De Vriendt',
-            'remarks' => 'Second family',
-            'contact' => '999',
-        ]);
+            ->for($this->year)
+            ->for($normal_tariff)
+            ->create([
+                'guardian_first_name' => 'Heidi',
+                'guardian_last_name' => 'De Vriendt',
+                'remarks' => 'Second family',
+                'contact' => '999',
+            ]);
         \App\Family::factory()
-        ->for($this->year)
-        ->for($normal_tariff)
-        ->create([
-            'guardian_first_name' => 'Jonas',
-            'guardian_last_name' => 'De Keukeleire',
-            'remarks' => '',
-            'contact' => '112',
-        ]);
+            ->for($this->year)
+            ->for($normal_tariff)
+            ->create([
+                'guardian_first_name' => 'Jonas',
+                'guardian_last_name' => 'De Keukeleire',
+                'remarks' => '',
+                'contact' => '112',
+            ]);
         \App\Family::factory()
-        ->for($this->year)
-        ->for($normal_tariff)
-        ->create([
-            'guardian_first_name' => 'Erik',
-            'guardian_last_name' => 'Anthonissen',
-            'remarks' => '',
-            'contact' => '',
-        ]);
+            ->for($this->year)
+            ->for($normal_tariff)
+            ->create([
+                'guardian_first_name' => 'Erik',
+                'guardian_last_name' => 'Anthonissen',
+                'remarks' => '',
+                'contact' => '',
+            ]);
         \App\Family::factory()
-        ->for($this->year)
-        ->for($normal_tariff)
-        ->create([
-            'guardian_first_name' => 'Lieve',
-            'guardian_last_name' => 'Bouckaert',
-            'remarks' => '',
-            'contact' => '',
-        ]);
+            ->for($this->year)
+            ->for($normal_tariff)
+            ->create([
+                'guardian_first_name' => 'Lieve',
+                'guardian_last_name' => 'Bouckaert',
+                'remarks' => '',
+                'contact' => '',
+            ]);
         \App\Family::factory()
-        ->for($this->year)
-        ->for($social_tariff)
-        ->create([
-            'guardian_first_name' => 'Ann',
-            'guardian_last_name' => 'Meert',
-            'remarks' => '',
-            'contact' => '',
-        ]);
+            ->for($this->year)
+            ->for($social_tariff)
+            ->create([
+                'guardian_first_name' => 'Ann',
+                'guardian_last_name' => 'Meert',
+                'remarks' => '',
+                'contact' => '',
+            ]);
     }
 
     protected function seed_activity_lists()
