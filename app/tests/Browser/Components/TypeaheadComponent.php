@@ -34,7 +34,7 @@ class TypeaheadComponent extends BaseComponent
 
     public function typeQuery(Browser $browser, $input)
     {
-        $browser->type('@input', $input);
+        return $browser->type('@input', $input);
     }
 
     public function selectSuggestion(Browser $browser, $input)
