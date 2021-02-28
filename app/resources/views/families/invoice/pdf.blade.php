@@ -27,6 +27,7 @@
         table#invoice_info_table th {
             font-weight: bold;
             text-decoration: underline;
+            text-align: left;
         }
 
         div.invoice_details {
