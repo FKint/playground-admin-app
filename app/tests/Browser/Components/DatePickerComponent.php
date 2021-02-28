@@ -34,7 +34,9 @@ class DatePickerComponent extends BaseComponent
 
     public function selectDate(Browser $browser, \Illuminate\Support\Carbon $date)
     {
-        $browser->clear('input')
-            ->keys('input', $date->format('Y-m-d'), ['{enter}', '']);
+        $browser
+            ->clear('input')
+            ->keys('input', $date->format('Y-m-d'))
+            ->keys('input', '{enter}');
     }
 }

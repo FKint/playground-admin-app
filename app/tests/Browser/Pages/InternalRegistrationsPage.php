@@ -26,6 +26,12 @@ class InternalRegistrationsPage extends InternalPage
 
     public function navigateToRegistrationsWithDatePage(Browser $browser, \Illuminate\Support\Carbon $date)
     {
+        // $selector = '[dusk=registration-datepicker] input';
+        // // $browser->clear($selector)
+        // $browser->type($selector, $date->format('Y-m-d'));
+        // $browser->screenshot('after typing');
+        // $browser->keys($selector, '{enter}');
+        // $browser->on(new InternalRegistrationsPage($this->yearId, $date));
         $browser->within(new DatePickerComponent('@registration-datepicker'), function ($browser) use ($date) {
             $browser->selectDate($date);
         })->on(new InternalRegistrationsPage($this->yearId, $date));

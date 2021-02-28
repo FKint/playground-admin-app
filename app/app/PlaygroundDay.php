@@ -2,10 +2,13 @@
 
 namespace App;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class PlaygroundDay extends Model
 {
+    use HasFactory;
+
     /**
      * The attributes that are mass assignable.
      *
@@ -26,6 +29,11 @@ class PlaygroundDay extends Model
     public function week_day()
     {
         return $this->belongsTo(WeekDay::class);
+    }
+
+    public function weekDay()
+    {
+        return $this->week_day();
     }
 
     public function date()

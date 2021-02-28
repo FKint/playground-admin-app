@@ -30,7 +30,7 @@ class HomeTest extends DuskTestCase
      */
     public function testHomeAuthenticatedToUserDashboardPage()
     {
-        $user = factory(User::class)->create();
+        $user = User::factory()->create();
         $this->browse(function (Browser $browser) use ($user) {
             $browser->loginAs($user)
                 ->visit('/')

@@ -21,12 +21,12 @@ class UserDashboardTest extends DuskTestCase
     public function setUp(): void
     {
         parent::setUp();
-        $this->user1 = factory(\App\User::class)->create();
-        $this->year1 = factory(\App\Year::class)->create(['organization_id' => $this->user1->organization_id, 'description' => 'Year 1']);
-        $this->year2 = factory(\App\Year::class)->create(['organization_id' => $this->user1->organization_id, 'description' => 'Year 2']);
+        $this->user1 = \App\User::factory()->create();
+        $this->year1 = \App\Year::factory()->create(['organization_id' => $this->user1->organization_id, 'description' => 'Year 1']);
+        $this->year2 = \App\Year::factory()->create(['organization_id' => $this->user1->organization_id, 'description' => 'Year 2']);
 
-        $user2 = factory(\App\User::class)->create();
-        $this->year3 = factory(\App\Year::class)->create(['organization_id' => $user2->organization_id, 'description' => 'Year 3 for user 2']);
+        $user2 = \App\User::factory()->create();
+        $this->year3 = \App\Year::factory()->create(['organization_id' => $user2->organization_id, 'description' => 'Year 3 for user 2']);
     }
 
     /**

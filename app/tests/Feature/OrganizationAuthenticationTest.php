@@ -40,54 +40,44 @@ class OrganizationAuthenticationTest extends TestCase
     private $actualPlaygroundDay;
     private $actualDayPart;
 
-    private $readOnlyApiRoutes;
-    private $writeApiRoutes;
-
     protected function setUp(): void
     {
         parent::setUp();
-        $this->actualOrganization = factory(Organization::class)->create();
-        $this->actualUser = factory(User::class)->create(['organization_id' => $this->actualOrganization->id]);
-        $this->actualYear = factory(Year::class)->create(['organization_id' => $this->actualOrganization->id]);
-        $this->actualFamily = factory(Family::class)->create(['year_id' => $this->actualYear->id]);
-        $this->emptyFamily = factory(Family::class)->create(['year_id' => $this->actualYear->id]);
-        $this->actualList = factory(ActivityList::class)->create(['year_id' => $this->actualYear->id]);
-
-        $this->actualTariffs = array_map(function ($o) {
-            return Tariff::findOrFail($o['id']);
-        }, factory(Tariff::class, 2)->create(['year_id' => $this->actualYear->id])->toArray());
-        $this->actualAgeGroup = factory(AgeGroup::class)->create(['year_id' => $this->actualYear->id]);
+        $this->actualOrganization = Organization::factory()->create();
+        $this->actualUser = User::factory()->for($this->actualOrganization)->create();
+        $this->actualYear = Year::factory()->for($this->actualOrganization)->create();
+        $this->actualTariffs = Tariff::factory()->count(2)->for($this->actualYear)->create();
+        $this->actualFamily = Family::factory()->for($this->actualYear)->for($this->actualTariffs[0])->create();
+        $this->emptyFamily = Family::factory()->for($this->actualYear)->for($this->actualTariffs[1])->create();
+        $this->actualList = ActivityList::factory()->for($this->actualYear)->create();
+        $this->actualAgeGroup = AgeGroup::factory()->for($this->actualYear)->create();
 
         $this->actualWeekDays = array_map(
             function ($offset) {
-                return factory(WeekDay::class)->create(['year_id' => $this->actualYear->id, 'days_offset' => $offset]);
+                return WeekDay::factory()->for($this->actualYear)->create(['days_offset' => $offset]);
             },
             [0, 1, 2, 3, 4]
         );
 
-        $this->actualWeeks = array_map(function ($o) {
-            return Week::findOrFail($o['id']);
-        }, factory(Week::class, 8)->create(['year_id' => $this->actualYear->id])->toArray());
+        $this->actualWeeks = Week::factory()->count(8)->for($this->actualYear)->create();
 
-        $this->actualPlaygroundDay = factory(PlaygroundDay::class)->create([
-            'year_id' => $this->actualYear->id,
-            'week_id' => $this->actualWeeks[array_rand($this->actualWeeks)]->id,
-            'week_day_id' => $this->actualWeekDays[array_rand($this->actualWeekDays)]->id,
-        ]);
+        $this->actualPlaygroundDay = PlaygroundDay::factory()
+            ->for($this->actualYear)
+            ->for($this->actualWeeks[2])
+            ->for($this->actualWeekDays[1])
+            ->create();
 
-        $this->actualChild = factory(Child::class)->create([
-            'year_id' => $this->actualYear->id,
-        ]);
-        $this->actualChildFamily = factory(ChildFamily::class)->create(['year_id' => $this->actualYear->id]);
-        $this->otherChild = factory(Child::class)->create(['year_id' => $this->actualYear->id]);
-        $this->immutableChildFamily = factory(ChildFamily::class)->create(['year_id' => $this->actualYear->id]);
+        $this->actualChild = Child::factory()->for($this->actualYear)->for($this->actualAgeGroup)->create();
+        $this->actualChildFamily = ChildFamily::factory()->for($this->actualYear)->for($this->actualChild)->for($this->actualFamily)->create();
+        $this->otherChild = Child::factory()->for($this->actualYear)->for($this->actualAgeGroup)->create();
+        $this->immutableChildFamily = ChildFamily::factory()->for($this->actualYear)->for($this->otherChild)->for($this->actualFamily)->create();
 
-        $this->actualDayPart = factory(DayPart::class)->create([
+        $this->actualDayPart = DayPart::factory()->for($this->actualYear)->create([
             'default' => true,
-            'year_id' => $this->actualYear->id,
         ]);
 
-        $this->childFamilyOnList = factory(ChildFamily::class)->create(['year_id' => $this->actualYear->id]);
+        $child_for_list = Child::factory()->for($this->actualYear)->for($this->actualAgeGroup)->create();
+        $this->childFamilyOnList = ChildFamily::factory()->for($this->actualYear)->for($this->actualFamily)->for($child_for_list)->create();
         $this->actualList->child_families()->syncWithoutDetaching([$this->childFamilyOnList->id => ['year_id' => $this->actualYear->id]]);
     }
 
@@ -281,7 +271,7 @@ class OrganizationAuthenticationTest extends TestCase
      */
     public function testApiNotAuthorizedReadOnly($routeFunction)
     {
-        $this->actingAs(factory(User::class)->create());
+        $this->actingAs(User::factory()->create());
         $url = $routeFunction->bindTo($this)();
         $this->get($url)->assertStatus(403);
     }
@@ -293,7 +283,7 @@ class OrganizationAuthenticationTest extends TestCase
      */
     public function testApiNotAuthorizedWrite($routeFunction)
     {
-        $this->actingAs(factory(User::class)->create());
+        $this->actingAs(User::factory()->create());
         $request_data = $routeFunction->bindTo($this)();
         $response = $this->postJson($request_data['route'], $request_data['data'])->assertStatus(403);
     }

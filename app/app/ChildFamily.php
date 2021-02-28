@@ -2,12 +2,14 @@
 
 namespace App;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Nicolaslopezj\Searchable\SearchableTrait;
 
 class ChildFamily extends Model
 {
     use SearchableTrait;
+    use HasFactory;
     /**
      * The attributes that are mass assignable.
      *

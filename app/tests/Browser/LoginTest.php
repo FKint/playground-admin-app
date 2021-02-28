@@ -20,7 +20,7 @@ class LoginTest extends DuskTestCase
     public function setUp(): void
     {
         parent::setUp();
-        $this->user = factory(User::class)->create(['email' => 'play2@ground.com', 'password' => Hash::make('longer-password')]);
+        $this->user = User::factory()->create(['email' => 'play2@ground.com', 'password' => Hash::make('longer-password')]);
     }
 
     /**

@@ -1,5 +1,7 @@
 <?php
 
+namespace Database\Seeders;
+
 class TestDataSeeder extends InitialDataSeeder
 {
     protected function seed_dates()

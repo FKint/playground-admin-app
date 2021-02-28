@@ -2,12 +2,14 @@
 
 namespace App;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Nicolaslopezj\Searchable\SearchableTrait;
 
 class Child extends Model
 {
     use SearchableTrait;
+    use HasFactory;
     /**
      * The attributes that are mass assignable.
      *
@@ -36,6 +38,11 @@ class Child extends Model
     public function age_group()
     {
         return $this->belongsTo(AgeGroup::class);
+    }
+
+    public function ageGroup()
+    {
+        return $this->age_group();
     }
 
     /**
