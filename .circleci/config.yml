@@ -16,7 +16,7 @@ jobs:
           name: Run PHP-CS-Fixer
           command: |
             export PATH="$PATH:$HOME/.composer/vendor/bin"
-            cd app && php-cs-fixer fix --dry-run --diff --diff-format udiff
+            cd app && php-cs-fixer fix --dry-run --diff
   build-docker-images:
     executor: docker-publisher
     steps:

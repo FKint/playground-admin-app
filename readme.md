@@ -67,7 +67,7 @@
 ```bash
 #!/bin/bash
 cd app
-php-cs-fixer fix --dry-run --diff --diff-format udiff
+php-cs-fixer fix --dry-run --diff
 RESULT=$?
 cd ..
 if [ "$RESULT" -eq "0" ]; then
