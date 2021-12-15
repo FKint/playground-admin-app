@@ -7,7 +7,7 @@
 ### Local development instance
 
 * Copy `.env.example` to `.env` and `.laravel.env.development.example` to `.laravel.env.development`.
-* Run `docker-compose -f docker/docker-compose.yml.development --project-name development --project-dir . up --build`
+* Run `docker-compose -f docker/docker-compose.yml.development --project-name development --project-directory . up --build`
 * Open a shell in the container (e.g. `docker exec -it development_app_1 /bin/bash`)
 * Run `php artisan migrate:refresh --seed` to build the database tables and fill it with initial data. Run `php artisan migrate` if the database already exists and you only want to update the schema.
 * The web application runs on port 21000 (`http://localhost:21000`) of the host OS. PHPMyAdmin runs on port 21001 (`http://localhost:21001`).
@@ -17,7 +17,7 @@
 
 
 ### Run tests (local)
-* Run `docker-compose -f docker/docker-compose.yml.dusk-testing --project-name dusk-tests --project-dir . up --build` to set up the selenium container and the Laravel server.
+* Run `docker-compose -f docker/docker-compose.yml.dusk-testing --project-name dusk-tests --project-directory . up --build` to set up the selenium container and the Laravel server.
 * Dusk tests: in a separate terminal, run `docker exec -it dusk-tests_app-container_1 php artisan dusk`
 * Unit tests: in a separate terminal, run `docker exec -it dusk-tests_app-container_1 ./vendor/phpunit/phpunit/phpunit`
 
@@ -34,7 +34,7 @@
 * **TODO: update the docker-compose script**
 * Install `certbot`:
     * `add-apt-repository ppa:certbot/certbot && apt-get update && apt-get install -y certbot && apt-get clean`
-    * `certbot certonly --authenticator standalone  -d admin.jokkebrok.be --pre-hook "docker-compose -f /root/playground-admin-app/docker/docker-compose.yml.production --project-name playgroundadminapp --project-dir /root/playground-admin-app stop" --post-hook "docker-compose -f /root/playground-admin-app/docker/docker-compose.yml.production  --project-name playgroundadminapp --project-dir /root/playground-admin-app start"`
+    * `certbot certonly --authenticator standalone  -d admin.jokkebrok.be --pre-hook "docker-compose -f /root/playground-admin-app/docker/docker-compose.yml.production --project-name playgroundadminapp --project-directory /root/playground-admin-app stop" --post-hook "docker-compose -f /root/playground-admin-app/docker/docker-compose.yml.production  --project-name playgroundadminapp --project-directory /root/playground-admin-app start"`
     * Add `certbot renew` to cron.
 
 #### Configuration
