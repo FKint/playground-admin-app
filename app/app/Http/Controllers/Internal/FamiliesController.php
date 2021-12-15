@@ -231,7 +231,7 @@ class FamiliesController extends Controller
                         if ($invoicedActivities[$activityId]) {
                             continue;
                         }
-                        \Log:: info('activity: '.json_encode($activity));
+                        \Log::info('activity: '.json_encode($activity));
                         if (is_null($activity->date)) {
                             continue;
                         }
