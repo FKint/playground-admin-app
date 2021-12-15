@@ -5,8 +5,8 @@ $finder = PhpCsFixer\Finder::create()
     ->exclude('storage/framework')
     ->in(__DIR__);
 
-return PhpCsFixer\Config::create()
-    ->setRules([
+$config = new PhpCsFixer\Config();
+return $config->setRules([
         '@PSR2' => true,
         '@PhpCsFixer' => true,
         'multiline_whitespace_before_semicolons' => ['strategy' => 'no_multi_line'],
