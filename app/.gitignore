@@ -10,8 +10,7 @@ composer.phar
 npm-debug.log
 yarn-error.log
 
-.php_cs.cache
-.php_cs
+.php-cs-fixer.cache
 
 version_sha1
 version_timestamp
