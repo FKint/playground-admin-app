@@ -135,7 +135,7 @@ jobs:
           command: |
             docker network create tmp-dusk-network
             docker run -d --name app-container --network tmp-dusk-network $IMAGE_NAME:app-test php artisan serve --host=app-container
-            docker run -d --name selenium --network tmp-dusk-network --shm-size=2g selenium/standalone-chrome:3.141.59-20200409
+            docker run -d --name selenium --network tmp-dusk-network --shm-size=2g selenium/standalone-chrome:96.0
             docker exec app-container curl --retry 10 --retry-connrefused http://app-container:8000 > /dev/null
             docker exec app-container curl --retry 10 --retry-connrefused http://selenium:4444 > /dev/null
       - run:
