@@ -12,7 +12,7 @@ require('datatables.net-buttons/js/buttons.colVis');
 require('datatables.net-buttons-bs/js/buttons.bootstrap');
 
 $.extend(true, $.fn.dataTable.defaults, {
-    "language": {"url": "dataTables.Dutch.json"}
+    "language": {"url": "/dataTables.Dutch.json"}
 });
 
 const pdfMake = require('pdfmake/build/pdfmake.js');
