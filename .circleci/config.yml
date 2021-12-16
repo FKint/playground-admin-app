@@ -147,6 +147,9 @@ jobs:
           command: |
             mkdir -p /tmp/dusk
             mkdir -p /tmp/test-results/dusk
+            mkdir -p /tmp/logs
+            docker logs app-container > /tmp/logs/dusk-logs
+            docker logs selenium > /tmp/logs/selenium-logs
             docker cp app-container:/var/www/tests/Browser/screenshots /tmp/dusk/screenshots
             docker cp app-container:/var/www/tests/Browser/console /tmp/dusk/console
             docker cp app-container:/tmp/dusk.phpunit.xml /tmp/test-results/dusk/results.xml
@@ -159,6 +162,9 @@ jobs:
       - store_artifacts:
           path: /tmp/dusk
           destination: dusk-data
+      - store_artifacts:
+          path: /tmp/logs
+          destination: dusk-logs
 workflows:
   version: 2
   build-master:

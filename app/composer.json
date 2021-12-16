@@ -20,10 +20,8 @@
     "yajra/laravel-datatables-oracle": "*"
   },
   "require-dev": {
-    "php-webdriver/webdriver": "*",
-    "filp/whoops": "*",
     "laravel/dusk": "*",
-    "mockery/mockery": "*",
+    "mockery/mockery": "^1.4",
     "phpunit/phpunit": "*"
   },
   "autoload": {
