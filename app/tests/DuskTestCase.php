@@ -52,6 +52,7 @@ abstract class DuskTestCase extends BaseTestCase
             '--verbose',
             '--dns-prefetch-disable',
             '--no-proxy-server',
+            '--no-sandbox',
         ]);
 
         return RemoteWebDriver::create(
