@@ -48,7 +48,7 @@ class InternalActivityListPage extends InternalPage
 
     public function assertNoActivityParticipants(Browser $browser)
     {
-        $browser->waitForText('No data available in table');
+        $browser->waitForText('Geen resultaten aanwezig in de tabel');
     }
 
     public function assertActivityParticipant(Browser $browser, $participantName, $guardianName)
