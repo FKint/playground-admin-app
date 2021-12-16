@@ -43,8 +43,8 @@ class InternalDashboardTest extends DuskTestCase
         $this->browse(function (Browser $browser) use ($user, $year) {
             $browser->loginAs($user)
                 ->visit(new InternalDashboardPage($year->id))
-                ->assertSee('The second user')
-                ->assertSee('The first user')
+                ->waitForText('The second user')
+                ->waitForText('The first user')
                 ->screenshot('internal_dashboard_with_cash_registry');
         });
     }

@@ -36,8 +36,12 @@ class InternalFamiliesPage extends InternalPage
         // Ideally make a DataTables component to re-use this for other pages
         $selector = '[dusk="families-table"] tr[data-family-id="'.$familyId.'"] ';
         $browser->waitFor($selector)
-            ->assertSeeIn($selector.' [data-field="guardian_first_name"]', $guardianFirstName)
-            ->assertSeeIn($selector.' [data-field="guardian_last_name"]', $guardianLastName);
+            ->within($selector, function ($browser) use ($guardianFirstName, $guardianLastName) {
+                $browser->waitForText($guardianFirstName)
+                    ->waitForText($guardianLastName)
+                    ->assertSeeIn('[data-field="guardian_first_name"]', $guardianFirstName)
+                    ->assertSeeIn('[data-field="guardian_last_name"]', $guardianLastName);
+            });
     }
 
     public function assertDontSeeFamilyEntryInTable(Browser $browser, $familyId)

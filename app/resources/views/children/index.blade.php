@@ -55,7 +55,6 @@
         $(function () {
             const table_element = $('#children-table');
             const table = table_element.DataTable({
-                language: {url: '/dataTables.Dutch.lang'},
                 processing: true,
                 serverSide: false,
                 ajax: '{!! route('api.datatables.children') !!}',
