@@ -9,6 +9,7 @@ jobs:
   php-linter:
     docker:
       - image: circleci/php:8.0
+    resource_class: small
     steps:
       - checkout
       - run: 
@@ -22,6 +23,7 @@ jobs:
             tools/php-cs-fixer/vendor/bin/php-cs-fixer fix --dry-run --diff app
   build-docker-images:
     executor: docker-publisher
+    resource_class: small
     steps:
       - setup_remote_docker:
           version: 18.09.3
@@ -75,6 +77,7 @@ jobs:
             - docker-prod.tar
   publish-latest:
     executor: docker-publisher
+    resource_class: small
     steps:
       - attach_workspace:
           at: /tmp/workspace
@@ -97,6 +100,7 @@ jobs:
             docker push $IMAGE_NAME:nginx-prod-$CIRCLE_BRANCH-$CIRCLE_SHA1
   test:
     executor: docker-publisher
+    resource_class: small
     steps:
       - attach_workspace:
           at: /tmp/workspace
@@ -122,6 +126,7 @@ jobs:
           destination: phpunit-data
   test-dusk:
     executor: docker-publisher
+    resource_class: small
     steps:
       - attach_workspace:
           at: /tmp/workspace
