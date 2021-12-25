@@ -3,7 +3,7 @@
 ##################
 # Based on: https://github.com/laradock/php-fpm/blob/master/Dockerfile-74
 # and https://github.com/laradock/laradock/blob/master/php-fpm/Dockerfile
-FROM php:8.0.2-fpm as php-fpm
+FROM php:8.1.1-fpm as php-fpm
 ENV DEBIAN_FRONTEND noninteractive
 RUN apt-get update && \
     pecl channel-update pecl.php.net && \
@@ -30,7 +30,7 @@ RUN docker-php-ext-install pdo_mysql && \
 #################################
 # Composer PHP packages builder #
 #################################
-FROM composer:2.0 as composer-builder
+FROM composer:2.2.1 as composer-builder
 WORKDIR /root/app 
 COPY app/composer.json /root/app/composer.json
 COPY app/composer.lock /root/app/composer.lock
@@ -49,7 +49,7 @@ RUN composer install --no-interaction --no-progress --optimize-autoloader --no-s
 ##############################
 # NPM package Assets builder #
 ##############################
-FROM node:12-alpine as npm-builder
+FROM node:17.3.0-alpine3.14 as npm-builder
 RUN apk add yarn
 WORKDIR /root/app
 COPY app/yarn.lock /root/app/yarn.lock
@@ -78,7 +78,7 @@ COPY --chown=www-data:www-data --from=npm-builder /root/app/public ./public
 ##############
 # Nginx PROD #
 ##############
-FROM nginx:1.17.10-alpine as nginx-prod
+FROM nginx:1.20.2-alpine as nginx-prod
 ADD nginx/vhost.conf.production /etc/nginx/conf.d/default.conf
 WORKDIR /var/www
 COPY --chown=nginx:nginx app/public ./public
@@ -87,7 +87,7 @@ COPY --chown=nginx:nginx --from=npm-builder /root/app/public ./public
 #############
 # Nginx DEV #
 #############
-FROM nginx:1.17.10-alpine as nginx-dev
+FROM nginx:1.20.2-alpine as nginx-dev
 ADD nginx/vhost.conf.development /etc/nginx/conf.d/default.conf
 
 ##########################################################################
