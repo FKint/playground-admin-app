@@ -43,6 +43,7 @@
 * In the container: run `php artisan key:generate`.
 * In the container: run `php artisan migrate`.
 * In the container: run `php artisan config:cache`.
+* In the container: run `php artisan cache:clear`.
 * (Not supported yet) In the container: run `php artisan route:cache`.
 
 ## Update (docker-compose production) with longer downtime
