@@ -78,7 +78,7 @@ COPY --chown=www-data:www-data --from=npm-builder /root/app/public ./public
 ##############
 # Nginx PROD #
 ##############
-FROM nginx:1.17.10-alpine as nginx-prod
+FROM nginx:1.20.2-alpine as nginx-prod
 ADD nginx/vhost.conf.production /etc/nginx/conf.d/default.conf
 WORKDIR /var/www
 COPY --chown=nginx:nginx app/public ./public
@@ -87,7 +87,7 @@ COPY --chown=nginx:nginx --from=npm-builder /root/app/public ./public
 #############
 # Nginx DEV #
 #############
-FROM nginx:1.17.10-alpine as nginx-dev
+FROM nginx:1.20.2-alpine as nginx-dev
 ADD nginx/vhost.conf.development /etc/nginx/conf.d/default.conf
 
 ##########################################################################
