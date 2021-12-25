@@ -30,7 +30,7 @@ RUN docker-php-ext-install pdo_mysql && \
 #################################
 # Composer PHP packages builder #
 #################################
-FROM composer:2.0 as composer-builder
+FROM composer:2.2.1 as composer-builder
 WORKDIR /root/app 
 COPY app/composer.json /root/app/composer.json
 COPY app/composer.lock /root/app/composer.lock
