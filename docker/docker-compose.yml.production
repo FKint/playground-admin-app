@@ -33,7 +33,7 @@ services:
 
   # Database
   database:
-    image: mysql:5
+    image: mysql:8.0.27
     volumes:
       - dbdata:/var/lib/mysql
     ports:
@@ -46,12 +46,12 @@ services:
     restart: always
 
   cache:
-    image: redis:alpine
+    image: redis:6.2.6-alpine3.15
     restart: always
 
   # PHPMyAdmin
   phpmyadmin:
-    image: phpmyadmin/phpmyadmin:4.7
+    image: phpmyadmin/phpmyadmin:5.1.1
     environment:
       - "PMA_HOST=database"
     depends_on:
