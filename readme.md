@@ -69,7 +69,6 @@
 #!/bin/bash
 (cd app; php-cs-fixer fix --dry-run --diff)
 RESULT=$?
-cd ..
 if [ "$RESULT" -eq "0" ]; then
   exit 0;
 else

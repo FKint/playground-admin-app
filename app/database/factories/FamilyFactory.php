@@ -3,8 +3,6 @@
 namespace Database\Factories;
 
 use App\Family;
-use App\Tariff;
-use App\Year;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class FamilyFactory extends Factory
