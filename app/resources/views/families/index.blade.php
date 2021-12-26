@@ -28,6 +28,7 @@
                 <th data-class-name="export">Tarief</th>
                 <th data-class-name="export">Belangrijk</th>
                 <th data-class-name="export">Contact</th>
+                <th data-class-name="export">E-mail</th>
                 <th data-class-name="export">Saldo</th>
                 <th data-class-name="export">Kinderen detail</th>
                 <th>Kinderen</th>
@@ -105,6 +106,7 @@
                 },
                 {data: 'remarks', name: 'remarks'},
                 {data: 'contact', name: 'contact'},
+                {data: 'email', name: 'email', visible: false},
                 {
                     searchable: false,
                     name: 'saldo',

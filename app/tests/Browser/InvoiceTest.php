@@ -29,7 +29,9 @@ class InvoiceTest extends DuskTestCase
     }
 
     /**
-     * A Dusk test example.
+     * Create invoices.
+     *
+     * @group flaky
      */
     public function testInvoices()
     {

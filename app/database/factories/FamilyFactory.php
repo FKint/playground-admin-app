@@ -3,8 +3,6 @@
 namespace Database\Factories;
 
 use App\Family;
-use App\Tariff;
-use App\Year;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class FamilyFactory extends Factory
@@ -26,8 +24,7 @@ class FamilyFactory extends Factory
         return [
             'guardian_first_name' => $this->faker->firstName,
             'guardian_last_name' => $this->faker->lastName,
-            // 'tariff_id' => Tariff::factory()->,
-            // 'year_id' => $year_id,
+            'email' => $this->faker->unique()->safeEmail,
         ];
     }
 }

@@ -103,7 +103,7 @@ abstract class InternalPage extends BasePage
         return ['year' => $this->yearId];
     }
 
-    protected function enterFamilyFormData(Browser $browser, $duskSelector, $guardianFirstName, $guardianLastName, $tariffId, $remarks, $contact, $socialContact, $needsInvoice)
+    protected function enterFamilyFormData(Browser $browser, $duskSelector, $guardianFirstName, $guardianLastName, $tariffId, $remarks, $contact, $socialContact, $needsInvoice, $email = null)
     {
         // TODO(fkint): try to use assertSeeIn or within if it doesn't assert page-level conditions.
         $browser->waitFor('@'.$duskSelector);
@@ -132,6 +132,9 @@ abstract class InternalPage extends BasePage
             } else {
                 $browser->uncheck($fullSelector.'[dusk=needs_invoice]', $needsInvoice);
             }
+        }
+        if (!is_null($email)) {
+            $browser->type($fullSelector.'[dusk=email]', $email);
         }
     }
 

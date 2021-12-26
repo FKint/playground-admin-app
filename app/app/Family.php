@@ -16,13 +16,14 @@ class Family extends Model
      *
      * @var array
      */
-    protected $fillable = ['guardian_first_name', 'guardian_last_name', 'tariff_id', 'remarks', 'contact', 'social_contact', 'needs_invoice'];
+    protected $fillable = ['guardian_first_name', 'guardian_last_name', 'tariff_id', 'remarks', 'contact', 'social_contact', 'needs_invoice', 'email'];
     protected $appends = ['guardian_full_name', 'saldo'];
     protected $searchable = [
         'columns' => [
             'families.id' => 10,
             'families.guardian_first_name' => 10,
             'families.guardian_last_name' => 10,
+            'families.email' => 10,
             'children.first_name' => 5,
             'children.last_name' => 5,
         ],

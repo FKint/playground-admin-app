@@ -88,6 +88,8 @@ class UserJourneysTest extends DuskTestCase
 
     /**
      * Test for editing a family.
+     *
+     * @group flaky
      */
     public function testEditFamily()
     {
@@ -99,7 +101,7 @@ class UserJourneysTest extends DuskTestCase
                 ->assertSeeFamilyEntryInTable($this->existingFamily->id, 'Veronique', 'Baeten')
                 ->assertSeeFamilyEntryInTable($newFamily->id, 'Erica', 'Van Heulen')
                 ->navigateToEditFamily($this->existingFamily->id)
-                ->enterEditFamilyFormData('Veronica', 'Baetens', $this->socialTariff->id, 'previously known as Veronique Baeten', 'veronica@bs.com', '', null)
+                ->enterEditFamilyFormData('Veronica', 'Baetens', $this->socialTariff->id, 'previously known as Veronique Baeten', 'veronica@bs.com', '', null, 'veronica@bs.com')
                 ->screenshot('testEditFamily_edit_family_form')
                 ->submitEditFamilyFormSuccessfully()
                 ->closeEditFamilyDialog()
@@ -127,7 +129,7 @@ class UserJourneysTest extends DuskTestCase
             $this->assertNotNull($newChild);
             $browser->assertSeeChildEntryInTable($newChild->id, 'Sonja', 'Boonen')
                 ->assertSeeEditChildDialogTabFamilies()
-                ->enterAddNewFamilyFormData('Erik', 'Bulcke', $this->socialTariff->id, 'Requires invoice', 'Call: +329878767875', '', null)
+                ->enterAddNewFamilyFormData('Erik', 'Bulcke', $this->socialTariff->id, 'Requires invoice', 'Call: +329878767875', '', null, email: null)
                 ->submitAddNewFamilySuccessfully('Erik Bulcke')
                 ->assertSeeCurrentFamily('Erik Bulcke')
                 ->enterAddExistingFamilyFormData('Reinoud')
@@ -151,7 +153,7 @@ class UserJourneysTest extends DuskTestCase
             $this->assertNotNull($newChild->families()->where(['guardian_first_name' => 'Erik', 'guardian_last_name' => 'Bulcke'])->first());
 
             $browser->navigateToEditCurrentFamilyDialog($family2->id)
-                ->enterEditFamilyForm('Jonas', null, null, null, null, null, null)
+                ->enterEditFamilyForm('Jonas', null, null, null, null, null, null, null)
                 ->submitEditFamilyFormSuccessfully();
             $family2->refresh();
             $this->assertEquals('Jonas', $family2->guardian_first_name);
@@ -191,6 +193,8 @@ class UserJourneysTest extends DuskTestCase
 
     /**
      * Test for creating activity lists.
+     *
+     * @group flaky
      */
     public function testCreateActivityList()
     {
@@ -253,6 +257,8 @@ class UserJourneysTest extends DuskTestCase
 
     /**
      * Test for updating registrations.
+     *
+     * @group flaky
      */
     public function testRegistrationsFlow()
     {
