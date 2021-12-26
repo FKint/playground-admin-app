@@ -26,8 +26,7 @@ class FamilyFactory extends Factory
         return [
             'guardian_first_name' => $this->faker->firstName,
             'guardian_last_name' => $this->faker->lastName,
-            // 'tariff_id' => Tariff::factory()->,
-            // 'year_id' => $year_id,
+            'email' => $this->faker->unique()->safeEmail,
         ];
     }
 }
