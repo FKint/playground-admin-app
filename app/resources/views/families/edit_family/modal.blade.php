@@ -23,12 +23,13 @@
     <script>
         function showEditFamilyModal(family_id, update_callback) {
             closeAllModals();
+            const form_parent = $('#edit-family-modal-body');
+            form_parent.empty();
             // TODO: show spinning cog on modal while waiting for the form to load
             $('#edit-family-modal').modal('show');
 
             const edit_family_url = '{!! route('internal.load_edit_family_form', ['family' => 'FAMILY_ID']) !!}'
                 .replace('FAMILY_ID', family_id);
-            const form_parent = $('#edit-family-modal-body');
             form_parent
                 .data('url', edit_family_url)
                 .load(edit_family_url);
