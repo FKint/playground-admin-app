@@ -73,7 +73,7 @@ if [ "$RESULT" -eq "0" ]; then
   exit 0;
 else
   echo "PHP CS Fixer found errors which prevented this commit from succeeding.";
-  echo "Run `tools/php-cs-fixer/vendor/bin/php-cs-fixer fix app` to fix.";
+  echo "Run tools/php-cs-fixer/vendor/bin/php-cs-fixer fix app' to fix.";
   exit $RESULT;
 fi;
 ```
