@@ -67,7 +67,7 @@
 
 ```bash
 #!/bin/bash
-(cd app; php-cs-fixer fix --dry-run --diff)
+tools/php-cs-fixer/vendor/bin/php-cs-fixer fix --dry-run --diff app
 RESULT=$?
 if [ "$RESULT" -eq "0" ]; then
   exit 0;
