@@ -85,18 +85,17 @@ class InternalChildrenPage extends InternalPage
             ->waitForText('Huidige voogden');
     }
 
-    public function enterAddNewFamilyFormData(Browser $browser, $guardianFirstName, $guardianLastName, $tariffId, $remarks, $contact, $socialContact, $needsInvoice)
+    public function enterAddNewFamilyFormData(Browser $browser, $guardianFirstName, $guardianLastName, $tariffId, $remarks, $contact, $socialContact, $needsInvoice, $email)
     {
-        $this->enterFamilyFormData($browser, 'link-new-family', $guardianFirstName, $guardianLastName, $tariffId, $remarks, $contact, $socialContact, $needsInvoice);
+        $this->enterFamilyFormData($browser, 'link-new-family', $guardianFirstName, $guardianLastName, $tariffId, $remarks, $contact, $socialContact, $needsInvoice, $email);
     }
 
     public function submitAddNewFamilySuccessfully(Browser $browser, $guardianFullName)
     {
         $browser->click('[dusk="link-new-family"] [dusk=submit]')
-            ->waitForText($guardianFullName)
+            ->waitForText($guardianFullName);
         // TODO(fkint): find a better way to wait until the request has returned and the content can be updated.
         // Ideas: use a spinning loading icon that can be used for tests as well as for improve UX.
-;
     }
 
     public function assertSeeCurrentFamily(Browser $browser, $guardianFullName)
@@ -141,9 +140,9 @@ class InternalChildrenPage extends InternalPage
             ->waitFor('@edit-family-modal');
     }
 
-    public function enterEditFamilyForm(Browser $browser, $guardianFirstName, $guardianLastName, $tariffId, $remarks, $contact, $socialContact, $needsInvoice)
+    public function enterEditFamilyForm(Browser $browser, $guardianFirstName, $guardianLastName, $tariffId, $remarks, $contact, $socialContact, $needsInvoice, $email)
     {
-        $this->enterFamilyFormData($browser, 'edit-family-form', $guardianFirstName, $guardianLastName, $tariffId, $remarks, $contact, $socialContact, $needsInvoice);
+        $this->enterFamilyFormData($browser, 'edit-family-form', $guardianFirstName, $guardianLastName, $tariffId, $remarks, $contact, $socialContact, $needsInvoice, $email);
     }
 
     public function submitEditFamilyFormSuccessfully(Browser $browser)
