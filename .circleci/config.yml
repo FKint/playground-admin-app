@@ -15,10 +15,8 @@ jobs:
       - run: 
           name: Install PHP-CS-Fixer
           command: |
-            composer --version
-            composer selfupdate
             mkdir --parents tools/php-cs-fixer
-            composer require --working-dir=tools/php-cs-fixer friendsofphp/php-cs-fixer@3.4.0
+            composer require --working-dir=tools/php-cs-fixer friendsofphp/php-cs-fixer^3.3.0
       - run: 
           name: Run PHP-CS-Fixer
           command: |
