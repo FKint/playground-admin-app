@@ -31,6 +31,7 @@ class UpdateFamilyInfoRequest extends FormRequest
             'contact' => '',
             'social_contact' => '',
             'needs_invoice' => '',
+            'email' => '',
         ];
     }
 }
