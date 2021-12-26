@@ -24,7 +24,7 @@ class InternalEditFamilyRegistrationPage extends InternalPage
     public function assert(Browser $browser)
     {
         parent::assert($browser);
-        $browser->assertSee('Wijzig registratie voor familie '.$this->familyId);
+        $browser->waitForText('Wijzig registratie voor familie '.$this->familyId);
         $this->waitUntilRequestsSettled($browser);
     }
 
