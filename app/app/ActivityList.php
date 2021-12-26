@@ -7,8 +7,7 @@ use Collective\Html\Eloquent\FormAccessible;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class ActivityList extends Model
-{
+class ActivityList extends Model {
     use FormAccessible;
     use HasFactory;
 
