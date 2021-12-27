@@ -57,12 +57,13 @@ class FamiliesTest extends DuskTestCase
                     remarks: 'Only speak English',
                     contact: 'Dad: +4987676545652',
                     socialContact: '',
-                    needsInvoice: null,
+                    needsInvoice: true,
                     email: 'family2@test.com'
                 )
                 ->submitAddFamilySuccessfully(\App\Family::count() + 1);
         });
         $family = \App\Family::find(\App\Family::count());
-        $this->assertEquals($family->email, 'family2@test.com');
+        $this->assertEquals('family2@test.com', $family->email);
+        $this->assertEquals(true, (bool) $family->needs_invoice);
     }
 }

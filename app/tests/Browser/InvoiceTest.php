@@ -40,7 +40,13 @@ class InvoiceTest extends DuskTestCase
                 ->visit(new InternalDashboardPage($this->year->id))
                 ->navigateToFamiliesPage()
                 ->navigateToAddFamilyPage()
-                ->enterAddFamilyFormData('Veronique', 'Baeten', $this->normalTariff->id, '', '', 'SUP', true)
+                ->enterAddFamilyFormData(
+                    firstName: 'Veronique',
+                    lastName: 'Baeten',
+                    tariffId: $this->normalTariff->id,
+                    socialContact: 'SUP',
+                    needsInvoice: true
+                )
                 ->submitAddFamilySuccessfully(1)
                 ->enterAddChildToFamilyFormData('Reinoud', 'Declercq', 2008, null, null)
                 ->submitAddChildToFamilySuccessfully()
@@ -48,7 +54,12 @@ class InvoiceTest extends DuskTestCase
                 ->submitAddChildToFamilySuccessfully()
                 ->navigateToFamiliesPage()
                 ->navigateToAddFamilyPage()
-                ->enterAddFamilyFormData('Erica', 'Van Heulen', $this->socialTariff->id, '', '', '', true)
+                ->enterAddFamilyFormData(
+                    firstName: 'Erica',
+                    lastName: 'Van Heulen',
+                    tariffId: $this->socialTariff->id,
+                    needsInvoice: true
+                )
                 ->submitAddFamilySuccessfully(2)
                 ->enterAddChildToFamilyFormData('Jan', 'Cornelis', 2012, null, null)
                 ->submitAddChildToFamilySuccessfully()
