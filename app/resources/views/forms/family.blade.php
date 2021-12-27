@@ -11,7 +11,7 @@
     {{ Form::bsTextarea('remarks', 'Opmerkingen', (isset($readonly) && $readonly)?['readonly']:[]) }}
     {{ Form::bsTextarea('contact', 'Contactgegevens', (isset($readonly) && $readonly)?['readonly']:[]) }}
     {{ Form::bsTextarea('social_contact', 'Contact sociaal tarief', (isset($readonly) && $readonly)?['readonly']:[]) }}
-    {{ Form::bsCheckbox('needs_invoice', 'Factuur', (isset($readonly) && $readonly)?['readonly']:[]) }}
+    {{ Form::bsForcedChoiceRadio('needs_invoice', 'Betalingswijze', ['0' => 'Cash', '1' => 'Factuur'], (isset($readonly) && $readonly)?['readonly']:[]) }}
     @if(!isset($readonly) || !$readonly)
         {{ Form::bsSubmit(isset($submit_text) ? $submit_text : "Opslaan") }}
     @endif

@@ -25,9 +25,9 @@ class FamiliesController extends Controller
             ->with('all_tariffs_by_id', $year->getAllTariffsById());
     }
 
-    public function showSubmitNewFamilyWithChildren(Request $request, Year $year)
+    public function showSubmitNewFamilyWithChildren(UpdateFamilyInfoRequest $request, Year $year)
     {
-        $family = new Family($request->all());
+        $family = new Family($request->validated());
         $family->year()->associate($year);
         $family->save();
 
