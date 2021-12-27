@@ -26,6 +26,7 @@
                 <th data-class-name="export">Voornaam</th>
                 <th data-class-name="export">Naam</th>
                 <th data-class-name="export">Tarief</th>
+                <th data-class-name="export">Betaalwijze</th>
                 <th data-class-name="export">Belangrijk</th>
                 <th data-class-name="export">Contact</th>
                 <th data-class-name="export">E-mail</th>
@@ -103,6 +104,12 @@
                         'display': 'tariff.abbreviation'
                     },
                     name: 'tariff.id'
+                },
+                {
+                    data(row, type, val, meta) {
+                        return row.needs_invoice ? 'Factuur' : 'Cash';
+                    },
+                    name: 'needs_invoice'
                 },
                 {data: 'remarks', name: 'remarks'},
                 {data: 'contact', name: 'contact'},
