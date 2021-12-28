@@ -122,6 +122,11 @@ class InternalEditFamilyRegistrationPage extends InternalPage
             ->keys('@received_money', $amount, ['{enter}', '']);
     }
 
+    public function enterRemarksField(Browser $browser, $remarks)
+    {
+        $browser->type('@remarks', $remarks);
+    }
+
     public function assertNewSaldo(Browser $browser, $amount)
     {
         $browser->assertValue('@new_saldo', $amount);
@@ -131,6 +136,19 @@ class InternalEditFamilyRegistrationPage extends InternalPage
     {
         $browser->click('@submit-registration-data-and-next')
             ->on(new InternalRegisterFindFamilyPage($this->yearId, $this->weekId));
+    }
+
+    public function submitRegistrationFormAndExpectError(Browser $browser)
+    {
+        $browser->click('@submit-registration-data')
+            ->waitForText('Het ontvangen bedrag is niet gelijk aan het verwachte')
+            ->on($this);
+    }
+
+    public function submitRegistrationFormAndNavigate(Browser $browser, $date)
+    {
+        $browser->click('@submit-registration-data')
+            ->on(new InternalRegistrationsPage($this->yearId, $date));
     }
 
     public function assertSeeActivityList(Browser $browser, $name)

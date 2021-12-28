@@ -328,7 +328,8 @@ class UserJourneysTest extends DuskTestCase
                 ->checkInChild($child2->id, $wednesday->id)
                 ->waitUntilRequestsSettled()
                 ->assertExpectedAmount('31.50')
-                ->assertPaidFieldContent('31.50')
+                ->assertPaidFieldContent('0.00')
+                ->enterPaidField('31.50')
                 ->submitRegistrationFormAndNavigateToNext();
 
             $transaction = $this->year->getActiveAdminSession()->transactions()->where('family_id', $this->existingFamily->id)->first();
@@ -369,6 +370,7 @@ class UserJourneysTest extends DuskTestCase
                 ->waitUntilRequestsSettled()
                 ->assertExpectedAmount('27.39')
                 ->enterPaidField('25')
+                ->enterRemarksField('not enough cash')
                 ->assertNewSaldo('2.39')
                 ->submitRegistrationFormAndNavigateToNext();
 
@@ -408,6 +410,7 @@ class UserJourneysTest extends DuskTestCase
                 ->waitUntilRequestsSettled()
                 ->assertExpectedAmount('-26.50')
                 ->enterPaidField('-24.50')
+                ->enterRemarksField('remarks')
                 ->submitRegistrationFormAndNavigateToNext()
                 ->navigateToDashboardPage()
                 ->assertSeeAdminSession($newAdminSession->id, null, 1, '-24.50', null, null, null);

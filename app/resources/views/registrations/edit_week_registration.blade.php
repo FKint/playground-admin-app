@@ -167,7 +167,7 @@
         </div>
 
         <br><br>
-        <button class="btn btn-primary" id="submit-registration-data">Opslaan</button>
+        <button class="btn btn-primary" id="submit-registration-data" dusk="submit-registration-data">Opslaan</button>
         <button class="btn btn-primary" id="submit-registration-data-and-next"
             dusk="submit-registration-data-and-next">Opslaan en volgende</button><br>
         <button class="btn btn-default" id="btn-cancel">Annuleren</button><br><br>
