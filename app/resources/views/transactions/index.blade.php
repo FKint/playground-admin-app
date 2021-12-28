@@ -33,7 +33,6 @@ Transacties voor {{ $date->format('d-m-Y') }}
             <tr>
                 <th>ID</th>
                 <th>Tijdstip</th>
-                <th>Voogd ID</th>
                 <th>Voogd</th>
                 <th>Verwacht</th>
                 <th>Betaald</th>
@@ -50,7 +49,6 @@ Transacties voor {{ $date->format('d-m-Y') }}
                         id="transactions-table-family-id-filter" aria-controls="transactions-table"
                         placeholder="Voogd ID filter" />
                 </th>
-                <th></th>
                 <th></th>
                 <th></th>
                 <th></th>
@@ -110,8 +108,15 @@ Transacties voor {{ $date->format('d-m-Y') }}
                         return date.toLocaleDateString('nl-BE') + ' ' + date.toLocaleTimeString('nl-BE');
                     }
                 },
-                {data: 'family_id', name: 'family_id'},
-                {data: 'family_name', name: 'family_name', data: 'family.guardian_full_name', searchable: true},
+                {
+                    data: 'family',
+                    name: 'family',
+                    searchable: true,
+                    render(data, type, row, meta){
+                        const route = "{{ route('internal.show_edit_registration', ['family' => 'FAMILY', 'week' => $playground_day->week_id]) }}".replace('FAMILY', data.id);
+                        return '<a href="'+route+'">'+data.id+': ' + data.guardian_full_name + '</a>';
+                    }
+                },
                 {
                     data: 'amount_expected',
                     name: 'amount_expected',

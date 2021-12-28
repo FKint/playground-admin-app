@@ -17,6 +17,7 @@ class TransactionsController extends Controller
 
         return view('transactions.index', [
             'date' => $date,
+            'playground_day' => RegistrationsController::getLastPlaygroundDayUntil($year, $date),
         ]);
     }
 
