@@ -137,7 +137,7 @@ Voogden
                 exportOptions: {
                     columns: ':visible.export'
                 },
-            }, 'colvis'],
+            }, 'excel', 'colvis'],
             columns: [
                 {data: 'id', name: 'id'},
                 {

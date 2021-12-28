@@ -32,3 +32,5 @@ $.fn.datepicker.defaults.todayHighlight = true;
 $.fn.datepicker.defaults.weekStart = 1;
 
 window.moment = require('moment/moment');
+
+require('jszip');
