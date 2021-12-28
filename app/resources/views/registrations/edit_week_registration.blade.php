@@ -1,171 +1,176 @@
 @extends('layouts.internal')
 
 @push('styles')
-    <style>
-        #registration-table {
-            white-space: nowrap;
-            table-layout: auto;
-        }
+<style>
+    #registration-table {
+        white-space: nowrap;
+        table-layout: auto;
+    }
 
-        #registration-table-div {
-            overflow-x: scroll;
-        }
+    #registration-table-div {
+        overflow-x: scroll;
+    }
 
-        col.registration-child-col:nth-child(even) {
-            background-color: rgb(252, 252, 252);
-        }
+    col.registration-child-col:nth-child(even) {
+        background-color: rgb(252, 252, 252);
+    }
 
-        col.registration-child-col:nth-child(odd) {
-            background-color: rgb(240, 240, 240);
-        }
-    </style>
+    col.registration-child-col:nth-child(odd) {
+        background-color: rgb(240, 240, 240);
+    }
+</style>
 @endpush
 
 @section('content')
-    <h1>Wijzig registratie voor familie {{ $family->id }}: {{$family->guardian_full_name}}</h1>
-    <div class="row">
-        <div class="col-xs-9" id="registration-table-div">
-            <table id="registration-table" class="table table-condensed" data-populating="0" data-nb-requests="0">
-                <colgroup>
-                    <col style="font-weight:bold" span="2">
-                    @foreach($family->children as $child)
-                        <col span="4" class="registration-child-col">
-                    @endforeach
-                </colgroup>
-                <tr>
-                    <th colspan="2">Kind</th>
-                    @foreach($family->children as $child)
-                        <th colspan="4" class="th-child" data-child-id="{{ $child->id }}">
-                            {{ $child->first_name }} {{ $child->last_name }}
-                        </th>
-                    @endforeach
-                </tr>
-                <tr>
-                    <th colspan="2">Werking</th>
-                    @foreach($family->children as $child)
-                        <td colspan="4">
-                            {{ $child->age_group->name }}
-                        </td>
-                    @endforeach
-                </tr>
-                <tr>
-                    <th colspan="2">Week</th>
-                    @foreach($family->children as $child)
-                        <td colspan="4" data-child-id="{{$child->id}}" class="whole-week-registration">
-                            <input class="registration-checkbox registration-setting" title="Registreer voor volledige week"
-                                   type="checkbox"/>
-                            <span class="price">€ 0.00</span>
-                        </td>
-                    @endforeach
-                </tr>
-                @foreach($week->playground_days as $playground_day)
-                    <tr data-week-day-id="{{$playground_day->week_day->id}}"
-                        data-date="{{ $playground_day->date()->format('Y-m-d') }}"
-                        class="day-row">
-                        <td>{{ $playground_day->week_day->name }}</td>
-                        <td>{{ $playground_day->date()->format('Y-m-d') }}</td>
-                        @foreach($family->children as $child)
-                            <td class="day-registration" data-child-id="{{$child->id}}">
-                                <input class="registration-checkbox registration-setting" title="Registreer voor deze dag" type="checkbox"/>
-                                <span class="price">€ 0.00</span>
-                            </td>
-                            <td class="day-age-group" data-child-id="{{$child->id}}">
-                                <select class="age-group registration-setting" title="Werking">
-                                    @foreach($year->age_groups as $age_group)
-                                        <option value="{{ $age_group->id }}">{{ $age_group->abbreviation }}</option>
-                                    @endforeach
-                                </select>
-                            </td>
-                            <td class="day-day-part" data-child-id="{{$child->id}}">
-                                <select class="day-part registration-setting" title="Dagdeel">
-                                    @foreach($year->day_parts as $day_part)
-                                        <option value="{{ $day_part->id }}">{{ $day_part->name }}</option>
-                                    @endforeach
-                                </select>
-                            </td>
-                            <td class="day-attendance" data-child-id="{{$child->id}}">
-                                <input type="checkbox" title="Aanwezig" class="attendance-checkbox registration-setting"/>
-                            </td>
+<h1>Wijzig registratie voor familie {{ $family->id }}: {{$family->guardian_full_name}}</h1>
+<div class="row">
+    <div class="col-xs-9" id="registration-table-div">
+        <table id="registration-table" class="table table-condensed" data-populating="0" data-nb-requests="0">
+            <colgroup>
+                <col style="font-weight:bold" span="2">
+                @foreach($family->children as $child)
+                <col span="4" class="registration-child-col">
+                @endforeach
+            </colgroup>
+            <tr>
+                <th colspan="2">Kind</th>
+                @foreach($family->children as $child)
+                <th colspan="4" class="th-child" data-child-id="{{ $child->id }}">
+                    {{ $child->first_name }} {{ $child->last_name }}
+                </th>
+                @endforeach
+            </tr>
+            <tr>
+                <th colspan="2">Werking</th>
+                @foreach($family->children as $child)
+                <td colspan="4">
+                    {{ $child->age_group->name }}
+                </td>
+                @endforeach
+            </tr>
+            <tr>
+                <th colspan="2">Week</th>
+                @foreach($family->children as $child)
+                <td colspan="4" data-child-id="{{$child->id}}" class="whole-week-registration">
+                    <input class="registration-checkbox registration-setting" title="Registreer voor volledige week"
+                        type="checkbox" />
+                    <span class="price">€ 0.00</span>
+                </td>
+                @endforeach
+            </tr>
+            @foreach($week->playground_days as $playground_day)
+            <tr data-week-day-id="{{$playground_day->week_day->id}}"
+                data-date="{{ $playground_day->date()->format('Y-m-d') }}" class="day-row">
+                <td>{{ $playground_day->week_day->name }}</td>
+                <td>{{ $playground_day->date()->format('Y-m-d') }}</td>
+                @foreach($family->children as $child)
+                <td class="day-registration" data-child-id="{{$child->id}}">
+                    <input class="registration-checkbox registration-setting" title="Registreer voor deze dag"
+                        type="checkbox" />
+                    <span class="price">€ 0.00</span>
+                </td>
+                <td class="day-age-group" data-child-id="{{$child->id}}">
+                    <select class="age-group registration-setting" title="Werking">
+                        @foreach($year->age_groups as $age_group)
+                        <option value="{{ $age_group->id }}">{{ $age_group->abbreviation }}</option>
                         @endforeach
-                    </tr>
-                @endforeach
-                <tr>
-                    <th colspan="2">Extraatjes</th>
-                    @foreach($family->children as $child)
-                        <td colspan="4">
-                        </td>
-                    @endforeach
-                </tr>
-                @foreach($week->playground_days as $playground_day)
-                    @foreach($year->supplements as $supplement)
-                        <tr data-supplement-id="{{ $supplement->id }}"
-                            data-week-day-id="{{ $playground_day->week_day->id }}">
-                            <td>{{ $playground_day->week_day->name }}</td>
-                            <td>{{ $supplement->name }}</td>
-                            @foreach($family->children as $child)
-                                <td class="day-supplement" data-child-id="{{ $child->id }}">
-                                    <input class="registration-checkbox registration-setting" title="Extraatje bestellen" type="checkbox"/>
-                                    <span class="price">€ 0.00</span>
-                                </td>
-                                <td colspan="3"></td>
-                            @endforeach
-                        </tr>
-                    @endforeach
-                @endforeach
-                <tr>
-                    <th colspan="2">Lijsten</th>
-                    @foreach($family->children as $child)
-                        <td colspan="4">
-                        </td>
-                    @endforeach
-                </tr>
-                @foreach($year->activity_lists->where('show_on_attendance_form', '=', true) as $activity_list)
-                    <tr data-activity-list-id="{{ $activity_list->id }}">
-                        <td colspan="2">{{ $activity_list->name }}</td>
-                        @foreach($family->children as $child)
-                            <td class="activity-list-registration" data-child-id="{{ $child->id }}">
-                                <input class="registration-checkbox registration-setting" type="checkbox"/>
-                                <span class="price">€ 0.00</span>
-                            </td>
-                            <td colspan="3"></td>
+                    </select>
+                </td>
+                <td class="day-day-part" data-child-id="{{$child->id}}">
+                    <select class="day-part registration-setting" title="Dagdeel">
+                        @foreach($year->day_parts as $day_part)
+                        <option value="{{ $day_part->id }}">{{ $day_part->name }}</option>
                         @endforeach
-                    </tr>
+                    </select>
+                </td>
+                <td class="day-attendance" data-child-id="{{$child->id}}">
+                    <input type="checkbox" title="Aanwezig" class="attendance-checkbox registration-setting" />
+                </td>
                 @endforeach
-            </table>
-        </div>
-        <div class="col-xs-3">
-            {{ Form::open(['class' => 'form-horizontal', 'id' => 'register-payment-form']) }}
-            {{ Form::bsDropdown('tariff_id', 'Tarief', $year->getAllTariffsById(), ['readonly' => true, 'disabled' => true]) }}
-            {{ Form::bsNumber('saldo_difference', 'Verwachte bedrag',
-            ['id' => 'saldo-difference', 'pattern'=>"[0-9]+([\\.,][0-9]+)?", 'step'=>'0.01', 'readonly' => true]) }}
-            {{ Form::bsNumber('received_money', 'Betaald',
-            ['id' => 'received-money', 'pattern'=>"[0-9]+([\\.,][0-9]+)?", 'step'=>'0.01']) }}
-            {{ Form::bsText('remarks', 'Remarks', ['id' => 'remarks']) }}
-            {{ Form::bsNumber('previous_saldo', 'Vorig saldo',
-            ['id' => 'previous-saldo', 'pattern'=>"[0-9]+([\\.,][0-9]+)?", 'step'=>'0.01', 'readonly' => true]) }}
-            {{ Form::bsNumber('new_saldo', 'Nieuw saldo',
-            ['id' => 'new-saldo', 'pattern'=>"[0-9]+([\\.,][0-9]+)?", 'step'=>'0.01', 'readonly' => true]) }}
-            {{ Form::close() }}
-
-            <button class="btn btn-default" id="btn-set-all-attending-today" dusk="btn-set-all-attending-today">Inchecken</button>
-
-            <span id="loading-indicator" dusk="loading-indicator">
-                <i class="fa fa-spinner fa-spin" style="font-size:24px"></i> Loading...
-            </span>
-
-            <br><br>
-            <button class="btn btn-primary" id="submit-registration-data">Opslaan</button>
-            <button class="btn btn-primary" id="submit-registration-data-and-next" dusk="submit-registration-data-and-next">Opslaan en volgende</button><br>
-            <button class="btn btn-default" id="btn-cancel">Annuleren</button><br><br>
-            <a href="{{ route('internal.show_family_transactions', ['family' => $family]) }}"
-               class="btn btn-default">Transactiegeschiedenis</a>
-        </div>
+            </tr>
+            @endforeach
+            <tr>
+                <th colspan="2">Extraatjes</th>
+                @foreach($family->children as $child)
+                <td colspan="4">
+                </td>
+                @endforeach
+            </tr>
+            @foreach($week->playground_days as $playground_day)
+            @foreach($year->supplements as $supplement)
+            <tr data-supplement-id="{{ $supplement->id }}" data-week-day-id="{{ $playground_day->week_day->id }}">
+                <td>{{ $playground_day->week_day->name }}</td>
+                <td>{{ $supplement->name }}</td>
+                @foreach($family->children as $child)
+                <td class="day-supplement" data-child-id="{{ $child->id }}">
+                    <input class="registration-checkbox registration-setting" title="Extraatje bestellen"
+                        type="checkbox" />
+                    <span class="price">€ 0.00</span>
+                </td>
+                <td colspan="3"></td>
+                @endforeach
+            </tr>
+            @endforeach
+            @endforeach
+            <tr>
+                <th colspan="2">Lijsten</th>
+                @foreach($family->children as $child)
+                <td colspan="4">
+                </td>
+                @endforeach
+            </tr>
+            @foreach($year->activity_lists->where('show_on_attendance_form', '=', true) as $activity_list)
+            <tr data-activity-list-id="{{ $activity_list->id }}">
+                <td colspan="2">{{ $activity_list->name }}</td>
+                @foreach($family->children as $child)
+                <td class="activity-list-registration" data-child-id="{{ $child->id }}">
+                    <input class="registration-checkbox registration-setting" type="checkbox" />
+                    <span class="price">€ 0.00</span>
+                </td>
+                <td colspan="3"></td>
+                @endforeach
+            </tr>
+            @endforeach
+        </table>
     </div>
+    <div class="col-xs-3">
+        {{ Form::open(['class' => 'form-horizontal', 'id' => 'register-payment-form']) }}
+        {{ Form::bsDropdown('tariff_id', 'Tarief', $year->getAllTariffsById(), ['readonly' => true, 'disabled' => true])
+        }}
+        {{ Form::bsDropdown('needs_invoice', 'Betaal&shy;wijze', ['0' => 'Cash', '1' => 'Factuur'], ['readonly' => true,
+        'disabled' => true]) }}
+        {{ Form::bsNumber('saldo_difference', 'Verwachte bedrag',
+        ['id' => 'saldo-difference', 'pattern'=>"[0-9]+([\\.,][0-9]+)?", 'step'=>'0.01', 'readonly' => true]) }}
+        {{ Form::bsNumber('received_money', 'Betaald',
+        ['id' => 'received-money', 'pattern'=>"[0-9]+([\\.,][0-9]+)?", 'step'=>'0.01']) }}
+        {{ Form::bsText('remarks', 'Remarks', ['id' => 'remarks']) }}
+        {{ Form::bsNumber('previous_saldo', 'Vorig saldo',
+        ['id' => 'previous-saldo', 'pattern'=>"[0-9]+([\\.,][0-9]+)?", 'step'=>'0.01', 'readonly' => true]) }}
+        {{ Form::bsNumber('new_saldo', 'Nieuw saldo',
+        ['id' => 'new-saldo', 'pattern'=>"[0-9]+([\\.,][0-9]+)?", 'step'=>'0.01', 'readonly' => true]) }}
+        {{ Form::close() }}
+
+        <button class="btn btn-default" id="btn-set-all-attending-today"
+            dusk="btn-set-all-attending-today">Inchecken</button>
+
+        <span id="loading-indicator" dusk="loading-indicator">
+            <i class="fa fa-spinner fa-spin" style="font-size:24px"></i> Loading...
+        </span>
+
+        <br><br>
+        <button class="btn btn-primary" id="submit-registration-data">Opslaan</button>
+        <button class="btn btn-primary" id="submit-registration-data-and-next"
+            dusk="submit-registration-data-and-next">Opslaan en volgende</button><br>
+        <button class="btn btn-default" id="btn-cancel">Annuleren</button><br><br>
+        <a href="{{ route('internal.show_family_transactions', ['family' => $family]) }}"
+            class="btn btn-default">Transactiegeschiedenis</a>
+    </div>
+</div>
 @endsection
 
 @push('scripts')
-    <script>
-        const today = new Date('{{ $today->format('Y-m-d') }}');
+<script>
+    const today = new Date('{{ $today->format('Y-m-d') }}');
         // TODO(fkint): Improve asynchronous behavior (e.g. by using Promises)
         $(function () {
 
@@ -244,6 +249,7 @@
                 formManager.startPopulating();
                 clearRegistrationData();
                 form.find('select[name=tariff_id]').val(data.tariff_id);
+                form.find('select[name=needs_invoice]').val(data.needs_invoice);
                 table.find('td.whole-week-registration').each(function () {
                     const child_id = $(this).data('child-id');
                     $(this).find('.registration-checkbox').prop('checked', data.children[child_id].whole_week_registered);
@@ -460,5 +466,5 @@
                 .done(data => populateRegistrationData(data))
                 .fail(() => alert('an error occurred'));
         });
-    </script>
+</script>
 @endpush
