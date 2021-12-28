@@ -249,7 +249,9 @@
                 formManager.startPopulating();
                 clearRegistrationData();
                 form.find('select[name=tariff_id]').val(data.tariff_id);
-                form.find('select[name=needs_invoice]').val(data.needs_invoice);
+                const needs_invoice_select = form.find('select[name=needs_invoice]');
+                needs_invoice_select.val(data.needs_invoice);
+                needs_invoice_select.closest('.form-group').removeClass('bg-info bg-danger').addClass(data.needs_invoice?'bg-info':'bg-danger');
                 table.find('td.whole-week-registration').each(function () {
                     const child_id = $(this).data('child-id');
                     $(this).find('.registration-checkbox').prop('checked', data.children[child_id].whole_week_registered);
