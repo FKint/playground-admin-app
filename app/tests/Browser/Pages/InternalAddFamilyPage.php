@@ -33,7 +33,7 @@ class InternalAddFamilyPage extends InternalPage
         $remarks = null,
         $contact = null,
         $socialContact = null,
-        $needsInvoice = null,
+        $needsInvoice = false,
         $email = null
     ) {
         $this->enterFamilyFormData(

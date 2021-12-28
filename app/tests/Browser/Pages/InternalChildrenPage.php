@@ -85,7 +85,7 @@ class InternalChildrenPage extends InternalPage
             ->waitForText('Huidige voogden');
     }
 
-    public function enterAddNewFamilyFormData(Browser $browser, $guardianFirstName, $guardianLastName, $tariffId, $remarks, $contact, $socialContact, $needsInvoice, $email)
+    public function enterAddNewFamilyFormData(Browser $browser, $guardianFirstName, $guardianLastName, $tariffId, $remarks = null, $contact = null, $socialContact = null, $needsInvoice = false, $email = null)
     {
         $this->enterFamilyFormData($browser, 'link-new-family', $guardianFirstName, $guardianLastName, $tariffId, $remarks, $contact, $socialContact, $needsInvoice, $email);
     }
@@ -140,7 +140,7 @@ class InternalChildrenPage extends InternalPage
             ->waitFor('@edit-family-modal');
     }
 
-    public function enterEditFamilyForm(Browser $browser, $guardianFirstName, $guardianLastName, $tariffId, $remarks, $contact, $socialContact, $needsInvoice, $email)
+    public function enterEditFamilyForm(Browser $browser, $guardianFirstName = null, $guardianLastName = null, $tariffId = null, $remarks = null, $contact = null, $socialContact = null, $needsInvoice = false, $email = null)
     {
         $this->enterFamilyFormData($browser, 'edit-family-form', $guardianFirstName, $guardianLastName, $tariffId, $remarks, $contact, $socialContact, $needsInvoice, $email);
     }

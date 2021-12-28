@@ -9,7 +9,7 @@ use App\Http\Requests\SaveChildRequest;
 use App\Http\Requests\UpdateFamilyInfoRequest;
 use App\Year;
 use Illuminate\Http\Request;
-use Yajra\DataTables\DataTables;
+use Yajra\DataTables\Facades\DataTables;
 
 class FamiliesController extends Controller
 {
@@ -25,9 +25,9 @@ class FamiliesController extends Controller
             ->with('all_tariffs_by_id', $year->getAllTariffsById());
     }
 
-    public function showSubmitNewFamilyWithChildren(Request $request, Year $year)
+    public function showSubmitNewFamilyWithChildren(UpdateFamilyInfoRequest $request, Year $year)
     {
-        $family = new Family($request->all());
+        $family = new Family($request->validated());
         $family->year()->associate($year);
         $family->save();
 
@@ -83,19 +83,18 @@ class FamiliesController extends Controller
      */
     public function getFamilies(Year $year)
     {
-        return DataTables::make(
+        return DataTables::eloquent(
             $year->families()
                 ->with('children')
                 ->with('tariff')
                 ->with('child_families')
                 ->with('child_families.child')
-                ->get()
         )->make(true);
     }
 
     public function getFamilyTransactions(Year $year, Family $family)
     {
-        return DataTables::make(
+        return DataTables::eloquent(
             $family->transactions()->with('admin_session')
         )->make(true);
     }
@@ -115,7 +114,7 @@ class FamiliesController extends Controller
 
     public function getFamilyChildren(Year $year, Family $family)
     {
-        return DataTables::make($family->children)->make(true);
+        return DataTables::eloquent($family->children())->make(true);
     }
 
     public function loadFamilyChildrenTable(Request $request, Year $year, Family $family)

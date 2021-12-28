@@ -1,5 +1,5 @@
+<!DOCTYPE html>
 <html>
-
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <style type="text/css">
@@ -151,19 +151,19 @@
                 </td>
                 <td class="registration_price">
                     @if (isset($entry['registration_price']))
-                    € {{ number_format($entry['registration_price'], 2) }}
+                    &euro; {{ number_format($entry['registration_price'], 2) }}
                     @endif
                 </td>
                 @foreach ($year->supplements as $supplement)
                 <td class="supplement_price" data-supplement-id="{{ $supplement->id }}">
                     @if (isset($entry['supplements'][$supplement->id]))
-                    € {{ number_format($entry['supplements'][$supplement->id], 2) }}
+                    &euro; {{ number_format($entry['supplements'][$supplement->id], 2) }}
                     @endif
                 </td>
                 @endforeach
                 <td class="other_price">
                     @if(isset($entry['other']['total']))
-                    € {{ number_format($entry['other']['total'], 2) }}
+                    &euro; {{ number_format($entry['other']['total'], 2) }}
                     @push('footnotes')
                     @foreach($entry['other']['items'] as $activity)
                     <li>
@@ -171,21 +171,21 @@
                         @if(isset($activity->date))
                         {{ $activity->date->format('Y-m-d') }}
                         @endif
-                        {{ $activity->name }} (€ {{ number_format($activity->price, 2) }})
+                        {{ $activity->name }} (&euro; {{ number_format($activity->price, 2) }})
                     </li>
                     @endforeach
                     @endpush
                     @endif
                 </td>
                 <td class="subtotal">
-                    € {{ number_format($entry['total'], 2) }}
+                    &euro; {{ number_format($entry['total'], 2) }}
                 </td>
             </tr>
             @endforeach
         </table>
 
         <div id="invoice_details_total">
-            Totaal: <span id="invoice_total">€ {{ number_format($total, 2) }}</span>
+            Totaal: <span id="invoice_total">&euro; {{ number_format($total, 2) }}</span>
         </div>
     </div>
 

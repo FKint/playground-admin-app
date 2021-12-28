@@ -18,6 +18,7 @@ class BootstrapFormComponentsServiceProvider extends ServiceProvider
         Form::component('bsDropdown', 'components.form.dropdown', ['name', 'display_name' => null, 'choices' => [], 'attributes' => []]);
         Form::component('bsCheckbox', 'components.form.checkbox', ['name', 'display_name' => null, 'attributes' => []]);
         Form::component('bsSubmit', 'components.form.submit', ['text' => 'Opslaan']);
+        Form::component('bsForcedChoiceRadio', 'components.form.forced_choice_radio', ['name', 'display_name' => null, 'choices' => [], 'attributes' => []]);
     }
 
     /**

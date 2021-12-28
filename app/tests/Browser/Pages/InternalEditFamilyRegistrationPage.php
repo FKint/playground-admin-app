@@ -130,7 +130,6 @@ class InternalEditFamilyRegistrationPage extends InternalPage
     public function submitRegistrationFormAndNavigateToNext(Browser $browser)
     {
         $browser->click('@submit-registration-data-and-next')
-            ->waitForReload()
             ->on(new InternalRegisterFindFamilyPage($this->yearId, $this->weekId));
     }
 

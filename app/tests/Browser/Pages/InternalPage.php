@@ -29,7 +29,7 @@ abstract class InternalPage extends BasePage
      */
     public function assert(Browser $browser)
     {
-        $browser->assertRouteIs($this->getRouteName(), $this->getRouteParams(false));
+        $browser->waitForRoute($this->getRouteName(), $this->getRouteParams(false));
     }
 
     /**
@@ -107,35 +107,32 @@ abstract class InternalPage extends BasePage
     {
         // TODO(fkint): try to use assertSeeIn or within if it doesn't assert page-level conditions.
         $browser->waitFor('@'.$duskSelector);
-        $fullSelector = '[dusk="'.$duskSelector.'"] ';
-        if (isset($guardianFirstName)) {
-            $browser->type($fullSelector.'[dusk=guardian_first_name]', $guardianFirstName);
-        }
-        if (isset($guardianLastName)) {
-            $browser->type($fullSelector.'[dusk=guardian_last_name]', $guardianLastName);
-        }
-        if (isset($tariffId)) {
-            $browser->select($fullSelector.'[dusk=tariff_id]', $tariffId);
-        }
-        if (isset($remarks)) {
-            $browser->type($fullSelector.'[dusk=remarks]', $remarks);
-        }
-        if (isset($contact)) {
-            $browser->type($fullSelector.'[dusk=contact]', $contact);
-        }
-        if (!is_null($socialContact)) {
-            $browser->type($fullSelector.'[dusk=social_contact]', $socialContact);
-        }
-        if (!is_null($needsInvoice)) {
-            if ($needsInvoice) {
-                $browser->check($fullSelector.'[dusk=needs_invoice]', $needsInvoice);
-            } else {
-                $browser->uncheck($fullSelector.'[dusk=needs_invoice]', $needsInvoice);
+        $browser->within('@'.$duskSelector, function ($browser) use ($guardianFirstName, $guardianLastName, $tariffId, $remarks, $contact, $socialContact, $needsInvoice, $email) {
+            if (isset($guardianFirstName)) {
+                $browser->type('guardian_first_name', $guardianFirstName);
             }
-        }
-        if (!is_null($email)) {
-            $browser->type($fullSelector.'[dusk=email]', $email);
-        }
+            if (isset($guardianLastName)) {
+                $browser->type('guardian_last_name', $guardianLastName);
+            }
+            if (isset($tariffId)) {
+                $browser->select('tariff_id', $tariffId);
+            }
+            if (isset($remarks)) {
+                $browser->type('remarks', $remarks);
+            }
+            if (isset($contact)) {
+                $browser->type('contact', $contact);
+            }
+            if (!is_null($socialContact)) {
+                $browser->type('social_contact', $socialContact);
+            }
+            if (!is_null($needsInvoice)) {
+                $browser->radio('needs_invoice', $needsInvoice ? '1' : '0');
+            }
+            if (!is_null($email)) {
+                $browser->type('email', $email);
+            }
+        });
     }
 
     protected function enterChildFormData(Browser $browser, $duskSelector, $firstName, $lastName, $birthYear, $ageGroupId, $remarks)

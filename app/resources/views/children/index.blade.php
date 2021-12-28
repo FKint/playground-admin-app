@@ -2,26 +2,26 @@
 @include('children.new_child.modal')
 
 @section('title')
-    Kinderen
+Kinderen
 @endsection
 @push('styles')
-    <style>
-        .table {
-            table-layout: fixed;
-            word-wrap: break-word;
-        }
-    </style>
+<style>
+    .table {
+        table-layout: fixed;
+        word-wrap: break-word;
+    }
+</style>
 @endpush
 @section('content')
-    <div class="row">
-        <div class="col-xs-12">
-            <a href="#" class="btn btn-primary" id="btn-new-child">Nieuw kind toevoegen</a>
-        </div>
+<div class="row">
+    <div class="col-xs-12">
+        <a href="#" class="btn btn-primary" id="btn-new-child">Nieuw kind toevoegen</a>
     </div>
-    <div class="row">&nbsp;</div>
-    <div class="row">
-        <table class="table table-bordered" id="children-table" dusk="children-table">
-            <thead>
+</div>
+<div class="row">&nbsp;</div>
+<div class="row">
+    <table class="table table-bordered" id="children-table" dusk="children-table">
+        <thead>
             <tr>
                 <th data-class-name="export">Voornaam</th>
                 <th data-class-name="export">Naam</th>
@@ -45,14 +45,14 @@
                 <td></td>
                 <td></td>
             </tr>
-            </thead>
-        </table>
-    </div>
+        </thead>
+    </table>
+</div>
 @endsection
 
 @push('scripts')
-    <script>
-        $(function () {
+<script>
+    $(function () {
             const table_element = $('#children-table');
             const table = table_element.DataTable({
                 processing: true,
@@ -106,13 +106,16 @@
                 ]
             });
             $.fn.dataTable.ext.search.push(
-                function (settings, data, dataIndex) {
+                function (settings, data, dataIndex, rowData) {
+                    if(settings.nTable != table_element.get(0)){
+                        return true;
+                    }
                     const selected_remarks_value = $('#select-remarks').val();
                     if (selected_remarks_value === 'all') {
                         return true;
                     }
                     if (selected_remarks_value === 'yes') {
-                        return (data[4] && data[4].length > 0);
+                        return (rowData.remarks && rowData.remarks.length > 0);
                     }
                     return true;
                 }
@@ -142,5 +145,5 @@
                 showNewChildModal();
             });
         });
-    </script>
+</script>
 @endpush
