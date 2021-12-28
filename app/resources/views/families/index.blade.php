@@ -50,6 +50,7 @@ Voogden
                 <td></td>
                 <td></td>
                 <td>
+                    {{-- Needs Invoice --}}
                     <select id="families-table-needs-invoice-filter" aria-controls="families-table"
                         class="form-control input-xs families-table-filter">
                         <option value="">Alles</option>
@@ -60,6 +61,7 @@ Voogden
                 <td></td>
                 <td></td>
                 <td>
+                    {{-- Email --}}
                     <select id="families-table-email-filter" aria-controls="families-table"
                         class="form-control input-xs families-table-filter">
                         <option value="">Alles</option>
@@ -67,6 +69,7 @@ Voogden
                     </select>
                 </td>
                 <td>
+                    {{-- Saldo --}}
                     <select id="families-table-saldo-filter" aria-controls="families-table"
                         class="form-control input-xs families-table-filter">
                         <option value="">Alles</option>
