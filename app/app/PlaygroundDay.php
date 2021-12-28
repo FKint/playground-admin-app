@@ -15,6 +15,7 @@ class PlaygroundDay extends Model
      * @var array
      */
     protected $fillable = ['week_day_id', 'year_id', 'week_id'];
+    protected $appends = ['date'];
 
     public function week()
     {
