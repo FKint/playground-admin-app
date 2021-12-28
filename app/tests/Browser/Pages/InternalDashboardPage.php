@@ -77,6 +77,12 @@ class InternalDashboardPage extends InternalPage
             ->on(new InternalCloseAdminSessionPage($this->yearId));
     }
 
+    public function navigateToTransactionHistory(Browser $browser)
+    {
+        $browser->clickLink('Transacties vandaag')
+            ->on(new InternalTransactionHistoryPage($this->yearId));
+    }
+
     protected function getRouteParams($includeQueryParams = true)
     {
         $params = parent::getRouteParams($includeQueryParams);

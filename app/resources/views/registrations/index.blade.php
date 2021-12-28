@@ -52,7 +52,6 @@
         }
 
         const default_date = new Date({{ $date->format('Y') }}, {{ $date->format('m') }} - 1, {{ $date->format('d') }});
-        console.log(default_date);
         $('#registration-datepicker').datepicker()
             .datepicker('update', default_date)
             .on('changeDate', function (event) {

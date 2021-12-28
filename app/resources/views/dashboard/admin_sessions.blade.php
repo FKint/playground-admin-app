@@ -3,7 +3,8 @@
 @endif
 
 <div class="row">
-    <a href="{{ route('internal.close_admin_session') }}" class="btn btn-primary">Huidige kassa afsluiten.</a>
+    <a href="{{ route('internal.close_admin_session') }}" class="btn btn-primary">Huidige kassa afsluiten</a>
+    <a href="{{ route('internal.show_transactions_for_date') }}" class="btn btn-primary">Transacties vandaag</a>
 </div>
 <div class="row"></div>
 <div class="row">

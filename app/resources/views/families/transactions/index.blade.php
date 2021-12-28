@@ -36,7 +36,14 @@
             ajax: '{!! route('api.datatables.family_transactions', ['family'=>$family]) !!}',
             buttons: ['pdfHtml5'],
             columns: [
-                {data: 'created_at', name: 'created_at'},
+                {
+                    data: 'created_at', 
+                    name: 'created_at', 
+                    render: function(data, type, full, meta){
+                        const date = new Date(Date.parse(full.created_at));
+                        return date.toLocaleDateString('nl-BE') + ' ' + date.toLocaleTimeString('nl-BE');
+                    }
+                },
                 {
                     data: 'amount_expected',
                     name: 'amount_expected',
