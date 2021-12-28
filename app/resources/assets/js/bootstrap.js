@@ -3,6 +3,8 @@ window.$ = window.jQuery = require('jquery');
 
 require('bootstrap-less');
 
+window.JSZip = require('jszip');
+
 require('datatables.net');
 require('datatables.net-buttons');
 require('datatables.net-buttons/js/buttons.html5');
@@ -32,3 +34,4 @@ $.fn.datepicker.defaults.todayHighlight = true;
 $.fn.datepicker.defaults.weekStart = 1;
 
 window.moment = require('moment/moment');
+

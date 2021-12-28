@@ -89,6 +89,9 @@ COPY --chown=nginx:nginx --from=npm-builder /root/app/public ./public
 #############
 FROM nginx:1.20.2-alpine as nginx-dev
 ADD nginx/vhost.conf.development /etc/nginx/conf.d/default.conf
+WORKDIR /var/www
+COPY --chown=nginx:nginx app/public ./public
+COPY --chown=nginx:nginx --from=npm-builder /root/app/public ./public
 
 ##########################################################################
 # Run install scripts using cached vendor folder and current source code #
