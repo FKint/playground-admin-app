@@ -29,7 +29,7 @@ abstract class InternalPage extends BasePage
      */
     public function assert(Browser $browser)
     {
-        $browser->assertRouteIs($this->getRouteName(), $this->getRouteParams(false));
+        $browser->waitForRoute($this->getRouteName(), $this->getRouteParams(false));
     }
 
     /**
