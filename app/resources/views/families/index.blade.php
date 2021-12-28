@@ -32,7 +32,14 @@ Voogden
                 <th data-class-name="export">Belangrijk</th>
                 <th data-class-name="export">Contact</th>
                 <th data-class-name="export">E-mail</th>
-                <th data-class-name="export">Saldo</th>
+                <th data-class-name="export"
+                    title="Het bedrag dat de vereniging tegoed heeft van deze voogd. Positief: de voogd moet nog extra betalen. Negatief: de voogd moet geld terug krijgen.">
+                    Saldo
+                </th>
+                <th data-class-name="export"
+                    title="De totale prijs van alle registraties voor deze voogd (inclusief de reeds betaalde).">
+                    Totaal Verwacht
+                </th>
                 <th data-class-name="export">Kinderen detail</th>
                 <th>Kinderen</th>
                 <th>Wijzigen</th>
@@ -69,6 +76,7 @@ Voogden
                         <option value="positive">Positief</option>
                     </select>
                 </td>
+                <td></td>
                 <td></td>
                 <td></td>
                 <td></td>
@@ -150,7 +158,7 @@ Voogden
                     },
                     name: 'needs_invoice'
                 },
-                {data: 'remarks', name: 'remarks'},
+                {data: 'remarks', name: 'remarks', visible: false},
                 {data: 'contact', name: 'contact'},
                 {data: 'email', name: 'email', visible: false},
                 {
@@ -159,7 +167,14 @@ Voogden
                     data: 'saldo',
                     render: function (data) {
                         return formatPrice(data);
-                    }
+                    },
+                    visible: false,
+                }, {
+                    searchable: false,
+                    name: 'total_costs',
+                    data: 'total_costs',
+                    render: formatPrice,
+                    visible: false,
                 }, {
                     searchable: true,
                     name: 'children_details',
