@@ -1,7 +1,7 @@
 @extends('layouts.internal')
 
 @section('title')
-    Voogden
+Voogden
 @endsection
 @push('styles')
 <style>
@@ -12,15 +12,16 @@
 </style>
 @endpush
 @section('content')
-    <div class="row">
-        <div class="col-xs-12">
-            <a href="{!! route('internal.show_new_family_with_children') !!}" class="btn btn-primary">Nieuwe voogd toevoegen</a>
-        </div>
+<div class="row">
+    <div class="col-xs-12">
+        <a href="{!! route('internal.show_new_family_with_children') !!}" class="btn btn-primary">Nieuwe voogd
+            toevoegen</a>
     </div>
-    <div class="row">&nbsp;</div>
-    <div class="row">
-        <table class="table table-bordered" id="families-table" dusk="families-table">
-            <thead>
+</div>
+<div class="row">&nbsp;</div>
+<div class="row">
+    <table class="table table-bordered" id="families-table" dusk="families-table">
+        <thead>
             <tr>
                 <th data-class-name="export">ID</th>
                 <th data-class-name="export">Voornaam</th>
@@ -35,9 +36,45 @@
                 <th>Kinderen</th>
                 <th>Wijzigen</th>
             </tr>
-            </thead>
-        </table>
-    </div>
+            <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td>
+                    <select id="families-table-needs-invoice-filter" aria-controls="families-table"
+                        class="form-control input-xs families-table-filter">
+                        <option value="">Alles</option>
+                        <option value="1">Factuur</option>
+                        <option value="0">Cash</option>
+                    </select>
+                </td>
+                <td></td>
+                <td></td>
+                <td>
+                    <select id="families-table-email-filter" aria-controls="families-table"
+                        class="form-control input-xs families-table-filter">
+                        <option value="">Alles</option>
+                        <option value="empty">Leeg</option>
+                    </select>
+                </td>
+                <td>
+                    <select id="families-table-saldo-filter" aria-controls="families-table"
+                        class="form-control input-xs families-table-filter">
+                        <option value="">Alles</option>
+                        <option value="nonzero">Niet-nul</option>
+                        <option value="zero">Nul</option>
+                        <option value="negative">Negatief</option>
+                        <option value="positive">Positief</option>
+                    </select>
+                </td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+        </thead>
+    </table>
+</div>
 @endsection
 
 @push('scripts')
@@ -48,6 +85,7 @@
         const table = table_element.DataTable({
             processing: true,
             serverSide: false,
+            orderCellsTop: true,
             ajax: '{!! route('api.datatables.families') !!}',
             dom: 'Blfrtip',
             createdRow(row, data, dataIndex){
@@ -151,6 +189,44 @@
                 }
             ]
         });
+        function filterNeedsInvoice(data){
+            const needs_invoice_filter = $('#families-table-needs-invoice-filter').val();
+            if(needs_invoice_filter !== ''){
+                return parseInt(needs_invoice_filter) === parseInt(data.needs_invoice);
+            }
+            return true;
+        };
+        function filterEmail(data){
+            const email_filter = $('#families-table-email-filter').val();
+            switch(email_filter){
+                case 'empty':
+                    return data.email == '';
+            }
+            return true;
+        };
+        function filterSaldo(data){
+            const saldo_filter = $('#families-table-saldo-filter').val();
+            const saldo = parseFloat(data.saldo);
+            const eps = 0.005;
+            switch(saldo_filter){
+                case 'nonzero':
+                    return Math.abs(saldo - 0.0) > eps;
+                case 'zero':
+                    return Math.abs(saldo - 0.0) < eps;
+                case 'negative':
+                    return saldo < -eps;
+                case 'positive':
+                    return saldo > eps;
+                default:
+                    return true;
+            }
+        };
+        $.fn.dataTable.ext.search.push(
+            function(settings, searchData, index, rowData, counter){
+                return filterNeedsInvoice(rowData) && filterEmail(rowData) && filterSaldo(rowData);
+            }
+        );
+        $('.families-table-filter').change(function(){ table.draw(); });
         table_element.on('click', '.btn-show-family-children', function () {
             const family_id = $(this).data('family-id');
             showFamilyChildrenModal(family_id);
