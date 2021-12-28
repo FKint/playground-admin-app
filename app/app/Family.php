@@ -17,7 +17,7 @@ class Family extends Model
      * @var array
      */
     protected $fillable = ['guardian_first_name', 'guardian_last_name', 'tariff_id', 'remarks', 'contact', 'social_contact', 'needs_invoice', 'email'];
-    protected $appends = ['guardian_full_name', 'saldo'];
+    protected $appends = ['guardian_full_name', 'saldo', 'total_costs'];
     protected $searchable = [
         'columns' => [
             'families.id' => 10,
@@ -104,6 +104,11 @@ class Family extends Model
     public function getSaldoAttribute()
     {
         return $this->getCurrentSaldo(true);
+    }
+
+    public function getTotalCostsAttribute()
+    {
+        return $this->getTotalCosts(true);
     }
 
     public function year()
