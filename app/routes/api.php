@@ -41,6 +41,8 @@ Route::name('datatables.')->prefix('datatables')->group(function () {
     Route::get('/list/{list}/participants', 'ListsController@getListParticipants')
         ->name('list_participants')
         ->middleware('model_same_year:list');
+    Route::get('/transactions/{date}', 'TransactionsController@getTransactionsForDate')
+        ->name('transactions_for_date');
 });
 
 // Typeahead.js

@@ -28,4 +28,9 @@ class Transaction extends Model
     {
         return $this->belongsTo(AdminSession::class);
     }
+
+    public function year()
+    {
+        return $this->belongsTo(Year::class);
+    }
 }

@@ -45,6 +45,11 @@ class Year extends Model
         return $this->hasMany(AdminSession::class);
     }
 
+    public function transactions()
+    {
+        return $this->hasMany(Transaction::class);
+    }
+
     public function count_registrations_for_age_group($age_group)
     {
         return $this->weeks()

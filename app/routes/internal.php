@@ -95,6 +95,10 @@ Route::prefix('{year}')
         Route::post('/admin_session/{admin_session}/edit', 'AdminSessionsController@showSaveEditAdminSession')
             ->name('show_save_edit_admin_session');
 
+        // Transactions
+        Route::get('/transactions/{date?}', 'TransactionsController@showTransactionsForDate')
+            ->name('show_transactions_for_date');
+
         // Activity lists
         Route::get('/list/{list}', 'ListsController@showList')->name('show_list');
         Route::get('/lists/new', 'ListsController@showNewList')->name('show_create_new_list');
