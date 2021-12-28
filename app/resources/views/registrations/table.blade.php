@@ -117,6 +117,11 @@
                                 alignment: "left"
                             });
                         }
+                    }, {
+                        extend: 'csv',   
+                        exportOptions: {
+                            columns: ':visible.export'
+                        },
                     }, 'colvis'
                 ],
                 orderCellsTop: true,

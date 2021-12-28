@@ -109,6 +109,7 @@ Voogden
                     columns: ':visible.export'
                 },
                 title: "Gezinnen",
+                orientation: 'landscape',
                 customize: function (doc) {
                     doc.footer = function (page, pages) {
                         return {
@@ -131,6 +132,11 @@ Voogden
                     };
 
                 }
+            }, {
+                extend: 'csv',   
+                exportOptions: {
+                    columns: ':visible.export'
+                },
             }, 'colvis'],
             columns: [
                 {data: 'id', name: 'id'},

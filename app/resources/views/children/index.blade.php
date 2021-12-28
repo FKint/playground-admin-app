@@ -68,6 +68,11 @@ Kinderen
                         exportOptions: {
                             columns: '.export'
                         }
+                    }, {
+                        extend: 'csv',   
+                        exportOptions: {
+                            columns: ':visible.export'
+                        },
                     }
                 ],
                 orderCellsTop: true,
