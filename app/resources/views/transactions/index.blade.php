@@ -9,7 +9,7 @@ Transacties voor {{ $date->format('d-m-Y') }}
 <div class="row">
     <div class="col-xs-1 col-lg-1">
         <button class="btn btn-default pull-right">
-            <span class="glyphicon glyphicon-backward" id="btn-prev-day"></span>
+            <span class="glyphicon glyphicon-backward" id="btn-prev-day" dusk="navigate-to-previous-day"></span>
         </button>
     </div>
     <div class="col-xs-3 col-lg-3">
