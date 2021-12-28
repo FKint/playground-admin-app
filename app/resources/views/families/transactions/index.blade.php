@@ -34,7 +34,7 @@
             processing: true,
             serverSide: false,
             ajax: '{!! route('api.datatables.family_transactions', ['family'=>$family]) !!}',
-            buttons: ['pdfHtml5', 'csv'],
+            buttons: ['pdfHtml5', 'csv', 'excelHtml5'],
             columns: [
                 {data: 'created_at', name: 'created_at'},
                 {

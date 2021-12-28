@@ -38,6 +38,16 @@
                         exportOptions: {
                             columns: '.export'
                         }
+                    }, {
+                        extend: 'csv',
+                        exportOptions: {
+                            columns: '.export'
+                        }
+                    }, {
+                        extend: 'excelHtml5',
+                        exportOptions: {
+                            columns: '.export'
+                        }
                     }
                 ],
                 orderCellsTop: true,

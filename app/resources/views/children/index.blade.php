@@ -71,9 +71,14 @@ Kinderen
                     }, {
                         extend: 'csv',   
                         exportOptions: {
-                            columns: ':visible.export'
+                            columns: '.export'
                         },
-                    }
+                    }, {
+                        extend: 'excelHtml5',
+                        exportOptions: {
+                            columns: '.export'
+                        }
+                    },
                 ],
                 orderCellsTop: true,
                 columns: [

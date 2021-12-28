@@ -122,6 +122,11 @@
                         exportOptions: {
                             columns: ':visible.export'
                         },
+                    }, {
+                        extend: 'excelHtml5',
+                        exportOptions: {
+                            columns: ':visible.export'
+                        }
                     }, 'colvis'
                 ],
                 orderCellsTop: true,
