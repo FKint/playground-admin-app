@@ -9,19 +9,20 @@ use Yajra\DataTables\Facades\DataTables;
 
 class TransactionsController extends Controller
 {
-    public function showTransactionsForDate(Year $year, CarbonImmutable $date = null)
+    public function showTransactionsForDate(Year $year, $date = null)
     {
-        if (!isset($date)) {
-            $date = CarbonImmutable::now();
-        }
+        $date = isset($date)
+            ? CarbonImmutable::createFromFormat('Y-m-d', $date)
+            : CarbonImmutable::now();
 
         return view('transactions.index', [
             'date' => $date,
         ]);
     }
 
-    public function getTransactionsForDate(Year $year, CarbonImmutable $date)
+    public function getTransactionsForDate(Year $year, $date)
     {
+        $date = CarbonImmutable::createFromFormat('Y-m-d', $date);
         $startTime = $date->toMutable()->hour(0)->minute(0)->second(0)->microsecond(0);
         $endTime = $startTime->copy()->addDay();
 
