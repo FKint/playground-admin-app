@@ -67,7 +67,6 @@ class FamilyWeekRegistration extends Model
      *           ]
      *           ]),
      *           'tariff_id' => int,
-     *           'needs_invoice' => int,
      *           ]
      */
     public static function getRegistrationDataArray(Week $week, Family $family)
@@ -80,7 +79,6 @@ class FamilyWeekRegistration extends Model
         ];
         $default_day_part = $week->year->getDefaultDayPart();
         $result['tariff_id'] = $family_week_registration ? $family_week_registration->tariff_id : $family->tariff_id;
-        $result['needs_invoice'] = $family->needs_invoice;
         foreach ($family->child_families as $child_family) {
             $child = $child_family->child;
             $child_data = [

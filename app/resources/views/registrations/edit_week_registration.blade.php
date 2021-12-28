@@ -137,8 +137,12 @@
         {{ Form::open(['class' => 'form-horizontal', 'id' => 'register-payment-form']) }}
         {{ Form::bsDropdown('tariff_id', 'Tarief', $year->getAllTariffsById(), ['readonly' => true, 'disabled' => true])
         }}
-        {{ Form::bsDropdown('needs_invoice', 'Betaal&shy;wijze', ['0' => 'Cash', '1' => 'Factuur'], ['readonly' => true,
-        'disabled' => true]) }}
+        <div class="{{$family->needs_invoice?" bg-info":"bg-danger"}}">
+            {{ Form::bsDropdown('needs_invoice', 'Betaal&shy;wijze',
+            ['0' => 'Cash', '1' => 'Factuur'],
+            ['readonly' => true, 'disabled' => true],
+            $family->needs_invoice) }}
+        </div>
         {{ Form::bsNumber('saldo_difference', 'Verwachte bedrag',
         ['id' => 'saldo-difference', 'pattern'=>"[0-9]+([\\.,][0-9]+)?", 'step'=>'0.01', 'readonly' => true]) }}
         {{ Form::bsNumber('received_money', 'Betaald',
@@ -249,9 +253,6 @@
                 formManager.startPopulating();
                 clearRegistrationData();
                 form.find('select[name=tariff_id]').val(data.tariff_id);
-                const needs_invoice_select = form.find('select[name=needs_invoice]');
-                needs_invoice_select.val(data.needs_invoice);
-                needs_invoice_select.closest('.form-group').removeClass('bg-info bg-danger').addClass(data.needs_invoice?'bg-info':'bg-danger');
                 table.find('td.whole-week-registration').each(function () {
                     const child_id = $(this).data('child-id');
                     $(this).find('.registration-checkbox').prop('checked', data.children[child_id].whole_week_registered);
