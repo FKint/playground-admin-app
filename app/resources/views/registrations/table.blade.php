@@ -1,71 +1,71 @@
 <table class="table table-bordered" id="registrations-table">
     <thead>
-    <tr>
-        <th data-class-name="export">Voornaam</th>
-        <th data-class-name="export">Naam</th>
-        <th data-class-name="export">Werking</th>
-        <th data-class-name="export">Dagdeel</th>
-        <th data-class-name="export">Extraatjes</th>
-        <th data-class-name="export">Aanwezig</th>
-        <th data-class-name="no-export">Details - Kind</th>
-        <th data-class-name="no-export">Details - Familie</th>
-        <th data-class-name="no-export">Registratieformulier</th>
-    </tr>
-    <tr>
-        <td></td>
-        <td></td>
-        <td>
-            <select class="form-control input-sm registrations-table-filter" id="select-age-group">
-                <option value="all">Alle</option>
-                @foreach($year->age_groups as $age_group)
-                    <option value="{{ $age_group->id }}"
-                            @if(isset($filter['age_group_id']) && $filter['age_group_id'] == $age_group->id) selected @endif>
+        <tr>
+            <th data-class-name="export">Voornaam</th>
+            <th data-class-name="export">Naam</th>
+            <th data-class-name="export">Werking</th>
+            <th data-class-name="export">Dagdeel</th>
+            <th data-class-name="export">Extraatjes</th>
+            <th data-class-name="export">Aanwezig</th>
+            <th data-class-name="no-export">Details - Kind</th>
+            <th data-class-name="no-export">Details - Familie</th>
+            <th data-class-name="no-export">Registratieformulier</th>
+        </tr>
+        <tr>
+            <td></td>
+            <td></td>
+            <td>
+                <select class="form-control input-sm registrations-table-filter" id="select-age-group">
+                    <option value="all">Alle</option>
+                    @foreach($year->age_groups as $age_group)
+                    <option value="{{ $age_group->id }}" @if(isset($filter['age_group_id']) &&
+                        $filter['age_group_id']==$age_group->id) selected @endif>
                         {{ $age_group->name }}
                     </option>
-                @endforeach
-            </select>
-        </td>
-        <td>
-            <select class="form-control input-sm registrations-table-filter" id="select-daypart">
-                <option value="all">Alle</option>
-                @foreach($year->day_parts as $day_part)
-                    <option value="{{ $day_part->id }}"
-                            @if(isset($filter['day_part_id']) && $filter['day_part_id'] == $day_part->id) selected @endif>
+                    @endforeach
+                </select>
+            </td>
+            <td>
+                <select class="form-control input-sm registrations-table-filter" id="select-daypart">
+                    <option value="all">Alle</option>
+                    @foreach($year->day_parts as $day_part)
+                    <option value="{{ $day_part->id }}" @if(isset($filter['day_part_id']) &&
+                        $filter['day_part_id']==$day_part->id) selected @endif>
                         {{ $day_part->name }}
                     </option>
-                @endforeach
-            </select>
-        </td>
-        <td>
-            <select class="form-control input-sm registrations-table-filter" id="select-supplement">
-                <option value="all">Alle</option>
-                @foreach($year->supplements as $supplement)
-                    <option value="{{ $supplement->id }}"
-                            @if(isset($filter['supplement_id']) && $filter['supplement_id'] == $supplement->id) selected @endif>
+                    @endforeach
+                </select>
+            </td>
+            <td>
+                <select class="form-control input-sm registrations-table-filter" id="select-supplement">
+                    <option value="all">Alle</option>
+                    @foreach($year->supplements as $supplement)
+                    <option value="{{ $supplement->id }}" @if(isset($filter['supplement_id']) &&
+                        $filter['supplement_id']==$supplement->id) selected @endif>
                         {{ $supplement->name }}
                     </option>
-                @endforeach
-            </select>
-        </td>
-        <td>
-            <select class="form-control input-sm registrations-table-filter" id="select-attended">
-                <option value="all">Alle</option>
-                <option value="1" @if(isset($filter['present']) && $filter['present'] == "yes") selected @endif>Ja
-                </option>
-                <option value="0" @if(isset($filter['present']) && $filter['present'] == "no") selected @endif>Nee
-                </option>
-            </select>
-        </td>
-        <td></td>
-        <td></td>
-        <td></td>
-    </tr>
+                    @endforeach
+                </select>
+            </td>
+            <td>
+                <select class="form-control input-sm registrations-table-filter" id="select-attended">
+                    <option value="all">Alle</option>
+                    <option value="1" @if(isset($filter['present']) && $filter['present']=="yes" ) selected @endif>Ja
+                    </option>
+                    <option value="0" @if(isset($filter['present']) && $filter['present']=="no" ) selected @endif>Nee
+                    </option>
+                </select>
+            </td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
     </thead>
 </table>
 
 @push('scripts')
-    <script>
-        $(function () {
+<script>
+    $(function () {
             const table_element = $('#registrations-table');
             const table = table_element.DataTable({
                 processing: true,
@@ -202,40 +202,40 @@
                 ]
             });
 
-            $.fn.dataTable.ext.search.push(
-                function (settings, data, dataIndex) {
-                    const selected_age_group_id = $('#select-age-group').val();
-                    if (selected_age_group_id === 'all') {
-                        return true;
-                    }
-                    return (parseInt(data[2]) === parseInt(selected_age_group_id))
+            function filterAgeGroup(data){
+                const selected_age_group_id = $('#select-age-group').val();
+                if (selected_age_group_id === 'all') {
+                    return true;
                 }
-            );
-            $.fn.dataTable.ext.search.push(
-                function (settings, data, dataIndex) {
-                    const selected_day_part = $('#select-daypart').val();
-                    if (selected_day_part === 'all') {
-                        return true;
-                    }
-                    return parseInt(data[3]) === parseInt(selected_day_part);
+                return (parseInt(data.age_group_id) === parseInt(selected_age_group_id))
+            };
+            function filterDayPart(data){
+                const selected_day_part = $('#select-daypart').val();
+                if (selected_day_part === 'all') {
+                    return true;
                 }
-            );
-            $.fn.dataTable.ext.search.push(
-                function (settings, data, dataIndex) {
-                    const selected_supplement = $('#select-supplement').val();
-                    if (selected_supplement === 'all') {
-                        return true;
-                    }
-                    return _.split(data[4], ',').includes(selected_supplement);
+                return parseInt(data.day_part_id) === parseInt(selected_day_part);
+            };
+            function filterSupplement(data){
+                const selected_supplement = $('#select-supplement').val();
+                if (selected_supplement === 'all') {
+                    return true;
                 }
-            );
+                return data.supplements.includes(selected_supplement);
+            };
+            function filterAttended(data){
+                const selected_attended = $('#select-attended').val();
+                if (selected_attended === 'all') {
+                    return true;
+                }
+                return parseInt(data.attended) === parseInt(selected_attended);
+            };
             $.fn.dataTable.ext.search.push(
-                function (settings, data, dataIndex) {
-                    const selected_attended = $('#select-attended').val();
-                    if (selected_attended === 'all') {
+                function(settings, searchData, index, rowData, counter){
+                    if(settings.nTable != table_element.get(0)){
                         return true;
                     }
-                    return parseInt(data[5]) === parseInt(selected_attended);
+                    return filterAgeGroup(rowData) && filterDayPart(rowData) && filterSupplement(rowData) && filterAttended(rowData);
                 }
             );
             $('.registrations-table-filter').change(function () {
@@ -252,5 +252,5 @@
                 showFamilyChildrenModal(family_id);
             });
         });
-    </script>
+</script>
 @endpush

@@ -223,6 +223,9 @@ Voogden
         };
         $.fn.dataTable.ext.search.push(
             function(settings, searchData, index, rowData, counter){
+                if(settings.nTable != table_element.get(0)){
+                    return true;
+                }
                 return filterNeedsInvoice(rowData) && filterEmail(rowData) && filterSaldo(rowData);
             }
         );
