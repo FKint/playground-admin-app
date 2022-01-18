@@ -162,7 +162,7 @@
         </span>
 
         <div id="invalid-received-money-help" class="form-group hidden">
-            <span class="text-danger">Deze familie betaalt Cash. Het ontvangen bedrag is niet gelijk aan het verwachte
+            <span class="text-danger">Het ontvangen bedrag is niet gelijk aan het verwachte
                 bedrag. Vul een verklaring in bij "Opmerkingen".
         </div>
 
@@ -243,7 +243,7 @@
         }
 
         function showInvalidReceivedMoney(show){
-            const help_text =$('#invalid-received-money-help').closest('.form-group');
+            const help_text = $('#invalid-received-money-help').closest('.form-group');
             const remarks_input = $('#remarks').closest('.form-group');
             help_text.toggleClass('hidden', !show);
             remarks_input.toggleClass('has-error', show);
@@ -447,19 +447,15 @@
 
         function submitRegistrationData() {
             const data = getRegistrationFormData();
-            @if(!$family->needs_invoice)
             if(formManager.isPopulating()){
                 return $.Deferred().reject('Cannot submit while data is being fetched.');
             }
-            console.log('received: ', data.received_money);
-            console.log('saldo difference: ', data.saldo_difference);
             if(data.received_money != data.saldo_difference){
                 if(data.transaction_remarks.length == 0){
                     showInvalidReceivedMoney(true);
                     return $.Deferred().reject('Received unexpected amount of money. Please clarify in the remarks.');
                 }
             }
-            @endif
             formManager.startTask(data, true);
             return $.post('{{ route('api.submit_registration_data', ['week' => $week, 'family' => $family]) }}', data, null, "json")
                 .done((response) => {
