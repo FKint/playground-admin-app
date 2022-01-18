@@ -104,6 +104,9 @@ Transacties voor {{ $date->format('d-m-Y') }}
                     data: 'created_at', 
                     name: 'created_at', 
                     render: function(data, type, full, meta){
+                        if(type == 'sort'){
+                            return full.created_at;
+                        }
                         const date = new Date(Date.parse(full.created_at));
                         return date.toLocaleDateString('nl-BE') + ' ' + date.toLocaleTimeString('nl-BE');
                     }
