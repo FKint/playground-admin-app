@@ -2,25 +2,25 @@
     <h4>Huidige voogden</h4>
     <table class="table" id="child-families-table" dusk="current-families">
         <thead>
-        <tr>
-            <th>Voogd ID</th>
-            <th>Naam</th>
-            <th></th>
-        </tr>
+            <tr>
+                <th>Voogd ID</th>
+                <th>Naam</th>
+                <th></th>
+            </tr>
         </thead>
         @foreach($child->child_families as $child_family)
-            <tr>
-                <td>{{ $child_family->family->id }}</td>
-                <td>{{ $child_family->family->guardian_full_name() }}</td>
-                <td>
-                    <button class="btn btn-xs btn-edit-family" data-family-id="{{ $child_family->family->id }}">
-                        Wijzigen
-                    </button>
-                    <button class="btn btn-xs btn-remove-family" data-family-id="{{$child_family->family->id}}">
-                        Verwijderen
-                    </button>
-                </td>
-            </tr>
+        <tr>
+            <td>{{ $child_family->family->id }}</td>
+            <td>{{ $child_family->family->guardian_full_name() }}</td>
+            <td>
+                <button class="btn btn-xs btn-edit-family" data-family-id="{{ $child_family->family->id }}">
+                    Wijzigen
+                </button>
+                <button class="btn btn-xs btn-remove-family" data-family-id="{{$child_family->family->id}}">
+                    Verwijderen
+                </button>
+            </td>
+        </tr>
         @endforeach
     </table>
 </div>
@@ -30,13 +30,16 @@
     <form class="typeahead" role="search">
         <div class="form-group" dusk="family-search-typeahead">
             <input type="search" id="family-search" name="q" class="form-control" placeholder="Search"
-                   autocomplete="off">
+                autocomplete="off">
         </div>
     </form>
 </div>
 <div id="link-new-child-family">
     <h4>Kind aan een nieuwe voogd linken</h4>
     {{ Form::open(['class' => 'form-horizontal', 'id' => 'link-new-family', 'dusk' => 'link-new-family']) }}
+    <div id="link-new-family-error" class="form-group hidden alert alert-danger">
+        <span class="text-danger" id="link-new-family-error-text"></span>
+    </div>
     @include('forms.family', ['submit_text' => 'Voogd toevoegen'])
     {{ Form::close() }}
 </div>
@@ -112,13 +115,19 @@
         const form = $('#link-new-family');
         form.submit(function (event) {
             event.preventDefault();
+            $('#link-new-family-error').addClass('hidden');
             $.post(
                 '{!! route('internal.submit_link_new_child_family_form', ['child' => $child]) !!}',
                 form.serializeArray()
             ).done(function () {
                 reloadEditChildFamiliesDiv();
-            }).fail(function () {
-                alert('Failed!');
+            }).fail(function (data) {
+                let error_message = data.responseJSON.message;
+                for(const error in data.responseJSON.errors){
+                    error_message += " " + data.responseJSON.errors[error];
+                }
+            $('#link-new-family-error-text').text('Fout! ' + error_message);
+            $('#link-new-family-error').removeClass('hidden');
             });
         });
     });
