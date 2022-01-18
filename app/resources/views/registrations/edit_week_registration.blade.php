@@ -161,9 +161,13 @@
             <i class="fa fa-spinner fa-spin" style="font-size:24px"></i> Loading...
         </span>
 
-        <div id="invalid-received-money-help" class="form-group hidden">
-            <span class="text-danger">Deze familie betaalt Cash. Het ontvangen bedrag is niet gelijk aan het verwachte
+        <div id="invalid-received-money-cash-help" class="form-group hidden">
+            <span class="text-danger">Deze familie betaalt cash. Het ontvangen bedrag is niet gelijk aan het verwachte
                 bedrag. Vul een verklaring in bij "Opmerkingen".
+        </div>
+        <div id="invalid-received-money-invoice-help" class="form-group hidden">
+            <span class="text-danger">Deze familie betaalt met factuur. Het ontvangen bedrag is niet 0. Vul een
+                verklaring in bij "Opmerkingen".
         </div>
 
         <br><br>
@@ -242,8 +246,14 @@
             return data;
         }
 
-        function showInvalidReceivedMoney(show){
-            const help_text =$('#invalid-received-money-help').closest('.form-group');
+        function showInvalidReceivedMoneyCash(show){
+            const help_text = $('#invalid-received-money-cash-help').closest('.form-group');
+            const remarks_input = $('#remarks').closest('.form-group');
+            help_text.toggleClass('hidden', !show);
+            remarks_input.toggleClass('has-error', show);
+        }
+        function showInvalidReceivedMoneyInvoice(show){
+            const help_text = $('#invalid-received-money-invoice-help').closest('.form-group');
             const remarks_input = $('#remarks').closest('.form-group');
             help_text.toggleClass('hidden', !show);
             remarks_input.toggleClass('has-error', show);
@@ -255,7 +265,8 @@
                 this.selectedIndex = 0;
             });
             table.find('span.price').html(formatPrice(0));
-            showInvalidReceivedMoney(false);
+            showInvalidReceivedMoneyCash(false);
+            showInvalidReceivedMoneyInvoice(false);
         }
 
         function clearTransactionData() {
@@ -447,15 +458,21 @@
 
         function submitRegistrationData() {
             const data = getRegistrationFormData();
-            @if(!$family->needs_invoice)
             if(formManager.isPopulating()){
                 return $.Deferred().reject('Cannot submit while data is being fetched.');
             }
-            console.log('received: ', data.received_money);
-            console.log('saldo difference: ', data.saldo_difference);
-            if(data.received_money != data.saldo_difference){
+            const EPS = 0.005;
+            @if($family->needs_invoice)
+            if(Math.abs(data.received_money) > EPS){
                 if(data.transaction_remarks.length == 0){
-                    showInvalidReceivedMoney(true);
+                    showInvalidReceivedMoneyInvoice(true);
+                    return $.Deferred().reject('Received unexpected amount of money. Please clarify in the remarks.');
+                }
+            }
+            @else
+            if(Math.abs(data.received_money - data.saldo_difference) > EPS){
+                if(data.transaction_remarks.length == 0){
+                    showInvalidReceivedMoneyCash(true);
                     return $.Deferred().reject('Received unexpected amount of money. Please clarify in the remarks.');
                 }
             }
