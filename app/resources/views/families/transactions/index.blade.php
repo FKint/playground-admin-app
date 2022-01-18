@@ -1,18 +1,18 @@
 @extends('layouts.internal')
 
 @section('title')
-    Transactiegeschiedenis voor voogd {{ $family->id }} ({{ $family->guardian_full_name() }})
+Transactiegeschiedenis voor voogd {{ $family->id }} ({{ $family->guardian_full_name() }})
 @endsection
 @section('content')
-    <h1>Transactiegeschiedenis voor voogd {{ $family->id }} ({{ $family->guardian_full_name() }})</h1>
-    <div class="row">
-        <div class="col-xs-12">
-            Saldo: <b><span id="family-saldo">{{ $family->getCurrentSaldo() }}</span></b>
-        </div>
+<h1>Transactiegeschiedenis voor voogd {{ $family->id }} ({{ $family->guardian_full_name() }})</h1>
+<div class="row">
+    <div class="col-xs-12">
+        Saldo: <b><span id="family-saldo">{{ $family->getCurrentSaldo() }}</span></b>
     </div>
-    <div class="row">
-        <table class="table table-bordered" id="transactions-table">
-            <thead>
+</div>
+<div class="row">
+    <table class="table table-bordered" id="transactions-table">
+        <thead>
             <tr>
                 <th>Datum</th>
                 <th>Verwacht</th>
@@ -21,9 +21,9 @@
                 <th>Verantwoordelijke</th>
                 <th>Opmerkingen</th>
             </tr>
-            </thead>
-        </table>
-    </div>
+        </thead>
+    </table>
+</div>
 @endsection
 
 @push('scripts')
@@ -40,6 +40,9 @@
                     data: 'created_at', 
                     name: 'created_at', 
                     render: function(data, type, full, meta){
+                        if(type == 'sort'){
+                            return full.created_at;
+                        }
                         const date = new Date(Date.parse(full.created_at));
                         return date.toLocaleDateString('nl-BE') + ' ' + date.toLocaleTimeString('nl-BE');
                     }
