@@ -34,4 +34,16 @@ class UpdateFamilyInfoRequest extends FormRequest
             'email' => 'max:100',
         ];
     }
+
+    /**
+     * Get custom attributes for validator errors.
+     *
+     * @return array
+     */
+    public function attributes()
+    {
+        return [
+            'needs_invoice' => 'payment method',
+        ];
+    }
 }

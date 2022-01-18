@@ -6,6 +6,7 @@ use App\Child;
 use App\Family;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\SaveChildRequest;
+use App\Http\Requests\UpdateFamilyInfoRequest;
 use App\Year;
 use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables;
@@ -181,10 +182,10 @@ class ChildrenController extends Controller
      *
      * @return Family
      */
-    public function submitLinkNewChildFamilyForm(Request $request, Year $year, Child $child)
+    public function submitLinkNewChildFamilyForm(UpdateFamilyInfoRequest $request, Year $year, Child $child)
     {
         $this->authorize('create_family', $year);
-        $family = new Family($request->all());
+        $family = new Family($request->validated());
         $family->year()->associate($year);
         $family->save();
         $child->families()->syncWithoutDetaching([$family->id => ['year_id' => $year->id]]);
