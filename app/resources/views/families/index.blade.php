@@ -135,12 +135,14 @@ Voogden
             }, {
                 extend: 'csv',   
                 exportOptions: {
-                    columns: ':visible.export'
+                    columns: ':visible.export',
+                    orthogonal: 'export'
                 },
             }, {
                 extend: 'excelHtml5',
                 exportOptions: {
-                    columns: ':visible.export'
+                    columns: ':visible.export',
+                    orthogonal: 'export'
                 }
             }, 'colvis'],
             columns: [
@@ -179,7 +181,10 @@ Voogden
                     searchable: false,
                     name: 'saldo',
                     data: 'saldo',
-                    render: function (data) {
+                    render: function (data, type, row) {
+                        if(type == 'export'){
+                            return formatPriceWithoutSign(data);
+                        }
                         return formatPrice(data);
                     },
                     visible: false,
@@ -187,7 +192,12 @@ Voogden
                     searchable: false,
                     name: 'total_costs',
                     data: 'total_costs',
-                    render: formatPrice,
+                    render: function (data, type, row) {
+                        if(type == 'export'){
+                            return formatPriceWithoutSign(data);
+                        }
+                        return formatPrice(data);
+                    },
                     visible: false,
                 }, {
                     searchable: true,
