@@ -43,12 +43,7 @@ Transacties voor {{ $date->format('d-m-Y') }}
             <tr>
                 <th></th>
                 <th></th>
-                <th>
-                    <!-- Voogd ID -->
-                    <input class="form-control input-xs transactions-table-filter"
-                        id="transactions-table-family-id-filter" aria-controls="transactions-table"
-                        placeholder="Voogd ID filter" />
-                </th>
+                <th></th>
                 <th></th>
                 <th></th>
                 <th></th>
@@ -154,13 +149,6 @@ Transacties voor {{ $date->format('d-m-Y') }}
                 {data: 'remarks', name: 'remarks', searchable: true}
             ]
         });
-        function filterFamilyId(data){
-            const family_id_filter = $('#transactions-table-family-id-filter').val();
-            if(family_id_filter !== ''){
-                return parseInt(family_id_filter) === parseInt(data.family_id);
-            }
-            return true;
-        };
         function filterRemarks(data){
             const remarks_filter = $('#transactions-table-remarks-filter').val();
             if(parseInt(remarks_filter)>0){
@@ -173,7 +161,7 @@ Transacties voor {{ $date->format('d-m-Y') }}
                 if(settings.nTable != table_element.get(0)){
                     return true;
                 }
-                return filterFamilyId(rowData) && filterRemarks(rowData);
+                return filterRemarks(rowData);
             }
         );
         $('.transactions-table-filter').change(function(){ table.draw(); });
