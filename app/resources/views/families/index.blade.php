@@ -162,11 +162,8 @@ Voogden
                     },
                 },
                 {
-                    data: {
-                        '_': 'tariff.id',
-                        'display': 'tariff.abbreviation'
-                    },
-                    name: 'tariff.id'
+                    data: 'tariff.abbreviation',
+                    name: 'tariff',
                 },
                 {
                     data(row, type, val, meta) {
