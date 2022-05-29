@@ -4,7 +4,7 @@ executors:
     environment:
       IMAGE_NAME: jokkebrok/playground-php-app
     docker:
-      - image: circleci/buildpack-deps:stretch
+      - image: cimg/base:stable
 jobs:
   php-linter:
     docker:
