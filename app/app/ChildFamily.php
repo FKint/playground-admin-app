@@ -10,6 +10,7 @@ class ChildFamily extends Model
 {
     use SearchableTrait;
     use HasFactory;
+
     /**
      * The attributes that are mass assignable.
      *
