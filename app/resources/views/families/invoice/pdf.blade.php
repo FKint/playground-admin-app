@@ -3,6 +3,10 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <style type="text/css">
+        div.header {
+            overflow: auto;
+        }
+
         div.organization_details {
             width: 30%;
             float: left;
@@ -14,6 +18,10 @@
         }
         div.organization_logo img {
             width: 100%;
+        }
+
+        div.clear {
+            clear: both;
         }
 
         div.child_family_info {
@@ -77,6 +85,8 @@
                 <img src="{{ 'data:image/jpeg;base64,'.base64_encode( $year->invoice_header_image ) }}" />
             @endif
         </div>
+
+        <div class="clear"></div>
     </div>
 
     <h1>Uitnodiging tot betaling</h1>
