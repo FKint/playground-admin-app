@@ -63,6 +63,11 @@
 * Connect to MySQL at `localhost:22306`
 
 ## Dev recommendations
+
+### PHP Formatting
+* ```docker run -it -v "`pwd`:/project" composer /bin/sh```
+* ```composer install --working-dir=tools/php-cs-fixer```
+* ```tools/php-cs-fixer/vendor/bin/php-cs-fixer fix app```
 * Suggested pre-commit hook: 
 
 ```bash

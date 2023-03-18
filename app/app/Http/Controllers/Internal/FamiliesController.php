@@ -77,9 +77,9 @@ class FamiliesController extends Controller
     }
 
     /**
-     * @return mixed
-     *
      * @throws \Exception
+     *
+     * @return mixed
      */
     public function getFamilies(Year $year)
     {
