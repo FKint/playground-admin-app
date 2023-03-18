@@ -16,7 +16,7 @@ class Week extends Model
      */
     protected $fillable = ['year_id', 'week_number', 'first_day_of_week'];
 
-    protected $dates = ['first_day_of_week'];
+    protected $casts = ['first_day_of_week' => 'date'];
 
     /**
      * Get the corresponding year.

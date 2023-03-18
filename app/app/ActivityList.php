@@ -19,7 +19,7 @@ class ActivityList extends Model
      */
     protected $fillable = ['name', 'date', 'show_on_attendance_form', 'show_on_dashboard', 'price'];
 
-    protected $dates = ['date'];
+    protected $casts = ['date' => 'date'];
 
     /**
      * Get all child families on this list.

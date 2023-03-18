@@ -2,7 +2,6 @@
 
 namespace App;
 
-use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -40,7 +39,7 @@ class PlaygroundDay extends Model
 
     public function date()
     {
-        return Carbon::parse($this->week->first_day_of_week)->addDays($this->week_day->days_offset);
+        return $this->week->first_day_of_week->addDays($this->week_day->days_offset);
     }
 
     public function child_family_day_registrations()
