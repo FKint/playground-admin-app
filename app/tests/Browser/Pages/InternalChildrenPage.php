@@ -155,7 +155,8 @@ class InternalChildrenPage extends InternalPage
     {
         $selector = 'a.btn-edit-child[data-child-id="'.$childId.'"]';
         $browser->click($selector)
-            ->waitFor('[dusk="edit-child-modal"] [dusk="first_name"]:focus');
+            ->waitFor('@edit-child-modal')
+            ->waitFor('@edit-child-form');
     }
 
     public function enterEditChildFormData(Browser $browser, $firstName, $lastName, $birthYear, $ageGroupId, $remarks)
