@@ -2,7 +2,7 @@ version: 2.1
 executors:
   docker-publisher:
     environment:
-      IMAGE_NAME: jokkebrok/playground-php-app
+      IMAGE_NAME: fkint/playground-php-app
     docker:
       - image: cimg/base:stable
 jobs:
