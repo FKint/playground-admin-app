@@ -2,9 +2,6 @@
 
 namespace Database\Seeders;
 
-use DateInterval;
-use DateTime;
-use DateTimeImmutable;
 use Illuminate\Database\Seeder;
 
 class InitialDataSeeder extends Seeder
@@ -68,24 +65,24 @@ class InitialDataSeeder extends Seeder
                 'year_id' => $this->year->id,
                 'name' => 'Kleuters',
                 'abbreviation' => 'KLS',
-                'start_date' => (new DateTime())->setDate(2012, 1, 1),
-                'end_date' => (new DateTime())->setDate(2015, 1, 1), ]
+                'start_date' => (new \DateTime())->setDate(2012, 1, 1),
+                'end_date' => (new \DateTime())->setDate(2015, 1, 1), ]
         );
         $this->middle_group = \App\AgeGroup::create(
             [
                 'year_id' => $this->year->id,
                 'name' => 'Grote',
                 'abbreviation' => '6-12',
-                'start_date' => (new DateTime())->setDate(2005, 1, 1),
-                'end_date' => (new DateTime())->setDate(2012, 1, 1), ]
+                'start_date' => (new \DateTime())->setDate(2005, 1, 1),
+                'end_date' => (new \DateTime())->setDate(2012, 1, 1), ]
         );
         $this->teenagers = \App\AgeGroup::create(
             [
                 'year_id' => $this->year->id,
                 'name' => 'Tieners',
                 'abbreviation' => '12+',
-                'start_date' => (new DateTime())->setDate(2003, 1, 1),
-                'end_date' => (new DateTime())->setDate(2005, 1, 1), ]
+                'start_date' => (new \DateTime())->setDate(2003, 1, 1),
+                'end_date' => (new \DateTime())->setDate(2005, 1, 1), ]
         );
     }
 
@@ -126,9 +123,9 @@ class InitialDataSeeder extends Seeder
                 'name' => $week_day_names[$i],
             ]);
         }
-        $monday = (new DateTimeImmutable())->setDate(2018, 7, 2);
-        $day = new DateInterval('P01D');
-        $week = new DateInterval('P1W');
+        $monday = (new \DateTimeImmutable())->setDate(2018, 7, 2);
+        $day = new \DateInterval('P01D');
+        $week = new \DateInterval('P1W');
         for ($i = 0; $i < 6; ++$i) {
             $this->weeks[$i] = \App\Week::create([
                 'year_id' => $this->year->id,

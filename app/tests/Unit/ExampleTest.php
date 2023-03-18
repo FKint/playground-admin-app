@@ -6,6 +6,7 @@ use Tests\TestCase;
 
 /**
  * @internal
+ *
  * @coversNothing
  */
 class ExampleTest extends TestCase

@@ -8,6 +8,7 @@ use Tests\DuskTestCase;
 
 /**
  * @internal
+ *
  * @coversNothing
  */
 class InternalDashboardTest extends DuskTestCase

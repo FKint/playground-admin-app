@@ -12,6 +12,7 @@ use Tests\DuskTestCase;
 
 /**
  * @internal
+ *
  * @coversNothing
  */
 class TransactionsTest extends DuskTestCase

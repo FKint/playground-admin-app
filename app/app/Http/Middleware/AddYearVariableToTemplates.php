@@ -2,7 +2,6 @@
 
 namespace App\Http\Middleware;
 
-use Closure;
 use Illuminate\Support\Facades\View;
 
 class AddYearVariableToTemplates
@@ -14,7 +13,7 @@ class AddYearVariableToTemplates
      *
      * @return mixed
      */
-    public function handle($request, Closure $next)
+    public function handle($request, \Closure $next)
     {
         View::share(['year' => $request->route('year')]);
 

@@ -2,7 +2,6 @@
 
 namespace App\Http\Middleware;
 
-use Closure;
 use Illuminate\Support\Facades\Auth;
 
 class RedirectIfNotAdmin
@@ -15,7 +14,7 @@ class RedirectIfNotAdmin
      *
      * @return mixed
      */
-    public function handle($request, Closure $next, $guard = null)
+    public function handle($request, \Closure $next, $guard = null)
     {
         $user = Auth::user();
         if (!$user->admin) {

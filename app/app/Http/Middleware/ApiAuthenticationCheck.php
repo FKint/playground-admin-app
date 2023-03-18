@@ -2,7 +2,6 @@
 
 namespace App\Http\Middleware;
 
-use Closure;
 use Illuminate\Support\Facades\Auth;
 
 class ApiAuthenticationCheck
@@ -14,7 +13,7 @@ class ApiAuthenticationCheck
      *
      * @return mixed
      */
-    public function handle($request, Closure $next)
+    public function handle($request, \Closure $next)
     {
         if (!Auth::check()) {
             abort(401, 'Forbidden.');

@@ -11,6 +11,7 @@ use Tests\DuskTestCase;
 
 /**
  * @internal
+ *
  * @coversNothing
  */
 class LoginTest extends DuskTestCase

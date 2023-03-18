@@ -9,6 +9,7 @@ use Tests\DuskTestCase;
 
 /**
  * @internal
+ *
  * @coversNothing
  */
 class UserDashboardTest extends DuskTestCase

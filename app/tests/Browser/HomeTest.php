@@ -10,6 +10,7 @@ use Tests\DuskTestCase;
 
 /**
  * @internal
+ *
  * @coversNothing
  */
 class HomeTest extends DuskTestCase
