@@ -12,7 +12,8 @@
     "barryvdh/laravel-dompdf": "^2.0.0",
     "doctrine/dbal": "*",
     "fakerphp/faker": "^1.13",
-    "laravel/framework": "^8.29",
+    "laravel/framework": "^9.0",
+    "nunomaduro/collision":"^6.1",
     "laravel/tinker": "*",
     "laravel/ui": "^3.2",
     "laravelcollective/html": "*",
@@ -22,7 +23,7 @@
   "require-dev": {
     "laravel/dusk": "*",
     "mockery/mockery": "^1.4",
-    "phpunit/phpunit": "*"
+    "phpunit/phpunit": "^9"
   },
   "autoload": {
     "psr-4": {
