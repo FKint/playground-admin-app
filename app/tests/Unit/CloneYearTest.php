@@ -17,6 +17,7 @@ use Tests\TestCase;
 
 /**
  * @internal
+ *
  * @coversNothing
  */
 class CloneYearTest extends TestCase

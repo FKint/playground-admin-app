@@ -2,8 +2,6 @@
 
 namespace App\Http\Middleware;
 
-use Closure;
-
 class CheckModelSameYear
 {
     /**
@@ -14,7 +12,7 @@ class CheckModelSameYear
      *
      * @return mixed
      */
-    public function handle($request, Closure $next, ...$models)
+    public function handle($request, \Closure $next, ...$models)
     {
         $year = $request->route('year');
         collect($models)->each(function ($model) use ($request, $year) {

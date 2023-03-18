@@ -2,7 +2,6 @@
 
 namespace App\Http\Middleware;
 
-use Closure;
 use Illuminate\Support\Facades\URL;
 
 class SetDefaultYearForUrls
@@ -14,7 +13,7 @@ class SetDefaultYearForUrls
      *
      * @return mixed
      */
-    public function handle($request, Closure $next)
+    public function handle($request, \Closure $next)
     {
         if ($request->route()->hasParameter('year')) {
             URL::defaults(['year' => $request->route('year')->id]);

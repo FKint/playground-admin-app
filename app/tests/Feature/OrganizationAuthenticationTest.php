@@ -19,6 +19,7 @@ use Tests\TestCase;
 
 /**
  * @internal
+ *
  * @coversNothing
  */
 class OrganizationAuthenticationTest extends TestCase

@@ -5,7 +5,6 @@ namespace App;
 use Carbon\Carbon;
 use Carbon\CarbonImmutable;
 use Carbon\CarbonInterval;
-use DateTimeImmutable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -134,7 +133,7 @@ class Year extends Model
         return $this->hasMany(WeekDay::class);
     }
 
-    public function getPlaygroundDayForDate(DateTimeImmutable $date)
+    public function getPlaygroundDayForDate(\DateTimeImmutable $date)
     {
         $week = $this->weeks()
             ->whereDate('first_day_of_week', '<=', $date->format('Y-m-d'))
@@ -177,8 +176,8 @@ class Year extends Model
      * dates in $exception_days.
      * Assumes that the week starts on a Monday.
      *
-     * @param DateTimeImmutable $first_day
-     * @param DateTimeImmutable $last_day
+     * @param \DateTimeImmutable $first_day
+     * @param \DateTimeImmutable $last_day
      *
      * @return Model
      */

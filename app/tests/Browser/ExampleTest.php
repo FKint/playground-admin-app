@@ -7,6 +7,7 @@ use Tests\DuskTestCase;
 
 /**
  * @internal
+ *
  * @coversNothing
  */
 class ExampleTest extends DuskTestCase
