@@ -82,7 +82,7 @@ class OrganizationAuthenticationTest extends TestCase
         $this->actualList->child_families()->syncWithoutDetaching([$this->childFamilyOnList->id => ['year_id' => $this->actualYear->id]]);
     }
 
-    public function readOnlyApiRoutes()
+    public static function readOnlyApiRoutes()
     {
         return [
             // Datatables
@@ -142,7 +142,7 @@ class OrganizationAuthenticationTest extends TestCase
         ];
     }
 
-    public function writeApiRoutes()
+    public static function writeApiRoutes()
     {
         return [
             // Post requests
