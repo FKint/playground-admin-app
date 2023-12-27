@@ -13,7 +13,7 @@
 * The web application runs on port 21000 (`http://localhost:21000`) of the host OS. PHPMyAdmin runs on port 21001 (`http://localhost:21001`).
 * The `vendor` and `node_modules` folders are not synchronized to the host file system. The best way to update these is to rebuild the containers after updating the `composer.json`, `composer.lock`, `package.json` or `yarn.lock` files. 
 * Updating the PHP packages (`composer.json` and `composer.lock`) is best done using a composer container: ```docker run -it -v "`pwd`/app:/app" composer /bin/sh```. This will also update the `vendor` folder on the host file system. Mount the individual files to speed up the process. Run `composer update`. *Note: check docker/Dockerfile for the exact composer image version.*
-* Updating the NPM packages (`package.json` or `yarn.lock`) is best done using a `node:17.3.0-alpine3.14` container: ```docker run -it -v "`pwd`/app:/opt/app" node:17.3.0-alpine3.14 /bin/sh```. This will also update the `node_modules` folder on the host file system. Mount the individual files to speed up the process. Run `yarn upgrade`. *Note: check docker/Dockerfile for the exact node image version.*
+* Updating the NPM packages (`package.json` or `yarn.lock`) is best done using a `node:21.5.0-alpine3.18` container: ```docker run -it -v "`pwd`/app:/opt/app" node:21.5.0-alpine3.18 /bin/sh```. This will also update the `node_modules` folder on the host file system. Mount the individual files to speed up the process. Run `yarn upgrade`. *Note: check docker/Dockerfile for the exact node image version.*
 
 
 ### Run tests (local)
