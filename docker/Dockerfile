@@ -3,7 +3,7 @@
 ##################
 # Based on: https://github.com/laradock/php-fpm/blob/master/Dockerfile-74
 # and https://github.com/laradock/laradock/blob/master/php-fpm/Dockerfile
-FROM php:8.1.1-fpm as php-fpm
+FROM php:8.3.0-fpm as php-fpm
 ENV DEBIAN_FRONTEND noninteractive
 RUN apt-get update && \
     pecl channel-update pecl.php.net && \
@@ -30,7 +30,7 @@ RUN docker-php-ext-install pdo_mysql && \
 #################################
 # Composer PHP packages builder #
 #################################
-FROM composer:2.2.1 as composer-builder
+FROM composer:2.6.6 as composer-builder
 WORKDIR /root/app 
 COPY app/composer.json /root/app/composer.json
 COPY app/composer.lock /root/app/composer.lock
