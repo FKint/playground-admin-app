@@ -228,10 +228,11 @@
             };
             function filterSupplement(data){
                 const selected_supplement = $('#select-supplement').val();
+                const data_supplement_ids = _.map(data.supplements, d =>  d.id);
                 if (selected_supplement === 'all') {
                     return true;
                 }
-                return data.supplements.includes(selected_supplement);
+                return _.includes(data_supplement_ids, parseInt(selected_supplement));
             };
             function filterAttended(data){
                 const selected_attended = $('#select-attended').val();
