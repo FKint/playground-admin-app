@@ -30,11 +30,16 @@ class CloneYear extends Command
         parent::__construct();
     }
 
+    /**
+     * @param mixed $description
+     *
+     * @return CarbonImmutable
+     */
     public function ask_date($description)
     {
         $date = null;
         while (!$date) {
-            $date_str = $this->ask(sprintf('[%s] Enter a date (yyyy-mm-dd): ', $description));
+            $date_str = $this->ask(sprintf('[%s] Enter a date (yyyy-mm-dd)', $description));
             $date = CarbonImmutable::createFromFormat('Y-m-d', $date_str);
             if (!$date) {
                 $this->warn('Invalid date. Try again.');
@@ -50,9 +55,9 @@ class CloneYear extends Command
     public function handle()
     {
         $year = Year::findOrFail($this->argument('year_id'));
-        $organization_id = $this->ask('Organization? ');
-        $title = $this->ask('Year title? ');
-        $description = $this->ask('Year description? ');
+        $organization_id = $this->ask('Organization?');
+        $title = $this->ask('Year title?');
+        $description = $this->ask('Year description?');
         // get first date
         $first_day = $this->ask_date('First day');
         // get last date
