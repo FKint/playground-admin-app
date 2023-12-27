@@ -42,6 +42,11 @@ class PlaygroundDay extends Model
         return $this->week->first_day_of_week->addDays($this->week_day->days_offset);
     }
 
+    public function getDateAttribute()
+    {
+        return $this->date()->toImmutable();
+    }
+
     public function child_family_day_registrations()
     {
         return ChildFamilyDayRegistration::query()

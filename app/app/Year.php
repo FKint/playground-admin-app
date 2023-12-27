@@ -176,8 +176,7 @@ class Year extends Model
      * dates in $exception_days.
      * Assumes that the week starts on a Monday.
      *
-     * @param \DateTimeImmutable $first_day
-     * @param \DateTimeImmutable $last_day
+     * @param CarbonImmutable[] $exception_days
      *
      * @return Model
      */
@@ -191,6 +190,10 @@ class Year extends Model
 
             return $date->previous(Carbon::MONDAY);
         }
+
+        $isExceptionDay = function (CarbonImmutable $date) use ($exception_days) {
+            return count(array_filter($exception_days, fn ($d): bool => $d->isSameDay($date))) > 0;
+        };
 
         $new_year = $this->replicate();
         $new_year->organization()->associate(\App\Organization::find($organization_id));
@@ -206,7 +209,7 @@ class Year extends Model
             $monday_of_week = getStartOfWeekDate($current_day);
             $day_number = $current_day->format('N') - 1;
             $week_day = $new_year->week_days()->where('days_offset', '=', $day_number)->first();
-            if (!in_array($current_day, $exception_days) && $week_day) {
+            if (!$isExceptionDay($current_day) && $week_day) {
                 $week = $new_year->weeks()->where('first_day_of_week', $monday_of_week)->first();
                 if (!$week) {
                     $week = new Week(['week_number' => $new_year->weeks()->count(), 'first_day_of_week' => $monday_of_week]);
