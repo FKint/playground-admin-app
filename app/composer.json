@@ -8,7 +8,7 @@
   "license": "MIT",
   "type": "project",
   "require": {
-    "php": "^8.1",
+    "php": "^8.3",
     "barryvdh/laravel-dompdf": "^2.0.0",
     "doctrine/dbal": "^3.0",
     "fakerphp/faker": "^1.13",
@@ -23,7 +23,7 @@
   "require-dev": {
     "laravel/dusk": "*",
     "mockery/mockery": "^1.4",
-    "phpunit/phpunit": "^10.0"
+    "phpunit/phpunit": "^10.1"
   },
   "autoload": {
     "psr-4": {
@@ -59,7 +59,7 @@
     "preferred-install": "dist",
     "sort-packages": true,
     "platform": {
-      "php": "8.1.1"
+      "php": "8.3.0"
     },
     "allow-plugins": {
       "composer/package-versions-deprecated": true
