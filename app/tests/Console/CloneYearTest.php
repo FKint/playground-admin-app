@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Unit;
+namespace Tests\Console;
 
 use App\ActivityList;
 use App\AdminSession;
