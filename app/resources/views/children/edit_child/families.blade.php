@@ -36,12 +36,12 @@
 </div>
 <div id="link-new-child-family">
     <h4>Kind aan een nieuwe voogd linken</h4>
-    {{ Form::open(['class' => 'form-horizontal', 'id' => 'link-new-family', 'dusk' => 'link-new-family']) }}
+    {{ html()->form()->class('form-horizontal')->id('link-new-family').attributes(['dusk' => 'link-new-family'])->open() }}
     <div id="link-new-family-error" class="form-group hidden alert alert-danger">
         <span class="text-danger" id="link-new-family-error-text"></span>
     </div>
     @include('forms.family', ['submit_text' => 'Voogd toevoegen'])
-    {{ Form::close() }}
+    {{ html()->form()->close() }}
 </div>
 
 <script>

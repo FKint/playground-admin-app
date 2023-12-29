@@ -15,9 +15,9 @@
             </ul>
         </div>
     @endif
-    {{ Form::open(['class' => 'form-horizontal', 'id' => 'new-child-form']) }}
+    {{ html()->form()->class('form-horizontal')->id('new-child-form')->open() }}
     @include('forms.child')
-    {{ Form::close() }}
+    {{ html()->form()->close() }}
 
 @endsection
 

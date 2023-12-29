@@ -4,7 +4,7 @@
 @endsection
 @section('content')
     <h3>Kassa afsluiten</h3>
-    {{ Form::open(['class' => 'form-horizontal', 'id' => 'closes-admin-session-form', 'dusk' => 'close-admin-session-form']) }}
+    {{ html()->form()->id('closes-admin-session-form')->class('form-horizontal')->attributes(['dusk' => 'close-admin-session-form'])->open() }}
     @include('forms.admin_session')
-    {{ Form::close() }}
+    {{ html()->form()->close() }}
 @endsection

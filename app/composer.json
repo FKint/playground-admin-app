@@ -13,11 +13,11 @@
     "doctrine/dbal": "^3.0",
     "fakerphp/faker": "^1.13",
     "laravel/framework": "^10.0",
-    "nunomaduro/collision":"^6.1",
     "laravel/tinker": "*",
     "laravel/ui": "^4.2",
-    "laravelcollective/html": "*",
     "nicolaslopezj/searchable": "*",
+    "nunomaduro/collision": "^6.1",
+    "spatie/laravel-html": "^3.3",
     "yajra/laravel-datatables-oracle": "*"
   },
   "require-dev": {

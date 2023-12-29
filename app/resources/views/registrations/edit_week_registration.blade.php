@@ -134,7 +134,7 @@
         </table>
     </div>
     <div class="col-xs-3">
-        {{ Form::open(['class' => 'form-horizontal', 'id' => 'register-payment-form']) }}
+        {{ html()->form()->id('register-payment-form')->class('form-horizontal')->open() }}
         <x-form-elements.dropdown name="tariff_id" display-name="Tarief" 
             :choices="$year->getAllTariffsById()->all()" readonly disabled />
         <div class="{{$family->needs_invoice?" bg-info":"bg-danger"}}">
@@ -150,7 +150,7 @@
             pattern="[0-9]+([\\.,][0-9]+)?" step="0.01" readonly />
         <x-form-elements.number name="new_saldo" display-name="Nieuw saldo" id="new-saldo"
             pattern="[0-9]+([\\.,][0-9]+)?" step="0.01" readonly />
-        {{ Form::close() }}
+        {{ html()->form()->close() }}
 
         <button class="btn btn-default" id="btn-set-all-attending-today"
             dusk="btn-set-all-attending-today">Inchecken</button>

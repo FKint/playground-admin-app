@@ -6,9 +6,9 @@
     Failure: <span id="child-details-error-summary"></span>
     <ul id="child-details-error-list"></ul>
 </div>
-{{ Form::model($child, ['class' => 'form-horizontal', 'id' => 'edit-child-form', 'dusk' => 'edit-child-form']) }}
+{{ html()->modelForm($child)->class('form-horizontal')->id('edit-child-form')->attributes(['dusk' => 'edit-child-form'])->open() }}
 @include('forms.child')
-{{ Form::close() }}
+{{ html()->closeModelForm() }}
 
 <script>
     $(function () {

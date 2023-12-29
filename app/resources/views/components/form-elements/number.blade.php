@@ -1,7 +1,8 @@
 <div class="form-group">
-    {{ Form::label($name, $displayName, ['class' => 'col-md-3 control-label']) }}
+    {{ html()->label(contents: $displayName, for: $name)->class(['col-md-3', 'control-label']) }}
     <div class="col-md-9">
-        {{ Form::number($name, $value, 
-            $attributes->merge(['class' => 'form-control', 'dusk' => $name])->getAttributes()) }}
+        {{ html()->input(type: 'number', name: $name, value: $value)
+            ->class('form-control')
+            ->attributes($attributes->merge(['dusk' => $name])->getAttributes()) }}
     </div>
 </div>

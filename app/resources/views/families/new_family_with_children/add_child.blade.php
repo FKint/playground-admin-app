@@ -18,9 +18,9 @@
         @endforeach
     </ul>
     <h3>Nieuw kind toevoegen</h3>
-    {{ Form::open(['class' => 'form-horizontal', 'id' => 'new-child-form', 'dusk' => 'new-child-form']) }}
+    {{ html()->form()->class('form-horizontal')->id('new-child-form')->attributes(['dusk' => 'new-child-form'])->open() }}
     @include('forms.child')
-    {{ Form::close() }}
+    {{ html()->form()->close() }}
     <h3>Bestaand kind toevoegen</h3>
     <form class="typeahead" role="search">
         <div class="form-group" dusk="child-search-typeahead">

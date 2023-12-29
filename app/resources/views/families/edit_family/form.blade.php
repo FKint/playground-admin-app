@@ -6,9 +6,9 @@
     <ul id="family-details-error-list">
     </ul>
 </div>
-{{ Form::model($family, ['class' => 'form-horizontal', 'id' => 'edit-family-form', 'dusk' => 'edit-family-form']) }}
+{{ html()->modelForm($family)->class('form-horizontal')->id('edit-family-form')->attributes(['dusk' => 'edit-family-form'])->open() }}
 @include('forms.family', ['submit_text'=>'Opslaan'])
-{{ Form::close() }}
+{{ html()->form()->closeModelForm() }}
 
 <script>
     $(document).ready(function () {

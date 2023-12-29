@@ -12,9 +12,9 @@
                     Failure: <span id="new-child-error-summary"></span>
                     <ul id="new-child-errors-list"></ul>
                 </div>
-                {{ Form::open(['class' => 'form-horizontal', 'id' => 'new-child-form']) }}
+                {{ html()->form()->class('form-horizontal')->id('new-child-form')->open() }}
                 @include('forms.child')
-                {{ Form::close() }}
+                {{ html()->form()->close() }}
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal" id="btn-cancel-new-child">Sluiten
