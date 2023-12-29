@@ -5,6 +5,6 @@
 @section('content')
     <h1>Nieuwe lijst maken</h1>
     {{ html()->form()->class('form-horizontal')->id('new-list-form')->attributes(['dusk' => 'new-list-form'])->open() }}
-    @include('forms.list', ['with_id'=> false])
+    <x-form-contents.activity-list />
     {{ html()->form()->close() }}
 @endsection

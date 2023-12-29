@@ -1,20 +1,19 @@
 <?php
 
-namespace App\View\Components\FormElements;
+namespace App\View\Components\FormContents;
 
 use Illuminate\Contracts\View\View;
 use Illuminate\View\Component;
 
-class ForcedChoiceRadio extends Component
+class Family extends Component
 {
     /**
      * Create a new component instance.
      */
     public function __construct(
-        public string $name,
-        public string $displayName,
-        public array $choices,
         public bool $readonly = false,
+        public bool $withId = false,
+        public string $submitText = 'Opslaan'
     ) {}
 
     /**
@@ -22,6 +21,6 @@ class ForcedChoiceRadio extends Component
      */
     public function render(): \Closure|string|View
     {
-        return view('components.form-elements.forced-choice-radio');
+        return view('components.form-contents.family');
     }
 }

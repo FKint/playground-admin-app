@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\SaveChildRequest;
 use App\Http\Requests\UpdateFamilyInfoRequest;
 use App\Year;
+use Carbon\CarbonImmutable;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
 
@@ -200,7 +201,8 @@ class FamiliesController extends Controller
                     if (is_null($activity->date)) {
                         continue;
                     }
-                    if ($activity->date < $week->first_day()->date() || $activity->date >= $week->last_day()->date()->addDay()) {
+                    $activityDate = CarbonImmutable::createFromFormat('Y-m-d', $activity->date);
+                    if ($activityDate < $week->first_day()->date() || $activityDate >= $week->last_day()->date()->addDay()) {
                         continue;
                     }
                     $invoicedActivities[$activityId] = true;
@@ -234,7 +236,8 @@ class FamiliesController extends Controller
                         if (is_null($activity->date)) {
                             continue;
                         }
-                        if (!$activity->date->isSameDay($playgroundDay->date())) {
+                        $activityDate = CarbonImmutable::createFromFormat('Y-m-d', $activity->date);
+                        if (!$activityDate->isSameDay($playgroundDay->date())) {
                             continue;
                         }
                         $invoicedActivities[$activityId] = true;

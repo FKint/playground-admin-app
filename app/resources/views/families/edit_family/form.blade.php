@@ -7,7 +7,7 @@
     </ul>
 </div>
 {{ html()->modelForm($family)->class('form-horizontal')->id('edit-family-form')->attributes(['dusk' => 'edit-family-form'])->open() }}
-@include('forms.family', ['submit_text'=>'Opslaan'])
+<x-form-contents.family submit-text="Opslaan" />
 {{ html()->closeModelForm() }}
 
 <script>

@@ -179,7 +179,7 @@
                     <li>
                         Lijn {{ $loop->parent->iteration }}:
                         @if(isset($activity->date))
-                        {{ $activity->date->format('Y-m-d') }}
+                        {{ $activity->date }}
                         @endif
                         {{ $activity->name }} (&euro; {{ number_format($activity->price, 2) }})
                     </li>

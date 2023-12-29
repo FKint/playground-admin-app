@@ -19,7 +19,7 @@
     </ul>
     <h3>Nieuw kind toevoegen</h3>
     {{ html()->form()->class('form-horizontal')->id('new-child-form')->attributes(['dusk' => 'new-child-form'])->open() }}
-    @include('forms.child')
+    <x-form-contents.child />
     {{ html()->form()->close() }}
     <h3>Bestaand kind toevoegen</h3>
     <form class="typeahead" role="search">

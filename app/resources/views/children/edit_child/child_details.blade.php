@@ -7,7 +7,7 @@
     <ul id="child-details-error-list"></ul>
 </div>
 {{ html()->modelForm($child)->class('form-horizontal')->id('edit-child-form')->attributes(['dusk' => 'edit-child-form'])->open() }}
-@include('forms.child')
+<x-form-contents.child />
 {{ html()->closeModelForm() }}
 
 <script>
