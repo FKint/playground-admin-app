@@ -12,6 +12,7 @@ class Text extends Component
      */
     public function __construct(
         public string $name,
+        public bool $readonly = false,
         public ?string $displayName = null,
     ) {}
 

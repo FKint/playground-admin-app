@@ -8,7 +8,7 @@
 </div>
 {{ html()->modelForm($family)->class('form-horizontal')->id('edit-family-form')->attributes(['dusk' => 'edit-family-form'])->open() }}
 @include('forms.family', ['submit_text'=>'Opslaan'])
-{{ html()->form()->closeModelForm() }}
+{{ html()->closeModelForm() }}
 
 <script>
     $(document).ready(function () {

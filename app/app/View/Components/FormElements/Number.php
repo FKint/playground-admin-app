@@ -14,6 +14,7 @@ class Number extends Component
         public string $name,
         public ?string $displayName = null,
         public ?string $value = null,
+        public bool $readonly = false,
     ) {}
 
     /**

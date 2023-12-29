@@ -13,6 +13,7 @@ class TextArea extends Component
     public function __construct(
         public string $name,
         public ?string $displayName = null,
+        public bool $readonly = false,
     ) {}
 
     /**

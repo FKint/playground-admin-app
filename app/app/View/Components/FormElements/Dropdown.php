@@ -15,6 +15,7 @@ class Dropdown extends Component
         public ?string $displayName = null,
         public array $choices,
         public ?string $value = null,
+        public bool $readonly = false,
     ) {}
 
     /**

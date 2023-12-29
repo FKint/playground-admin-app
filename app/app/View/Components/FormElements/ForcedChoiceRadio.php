@@ -14,6 +14,7 @@ class ForcedChoiceRadio extends Component
         public string $name,
         public ?string $displayName = null,
         public array $choices,
+        public bool $readonly = false,
     ) {}
 
     /**
