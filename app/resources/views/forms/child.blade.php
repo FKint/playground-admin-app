@@ -1,13 +1,18 @@
 {{-- Parameters: Year $year --}}
 @extends('forms.form')
 
+@php
+    $isReadOnly = (isset($readonly) && $readonly);
+@endphp
+
 @section('form-content')
-    {{ Form::bsText('first_name', 'Voornaam', (isset($readonly) && $readonly)?['readonly']:[]) }}
-    {{ Form::bsText('last_name', 'Naam', (isset($readonly) && $readonly)?['readonly']:[]) }}
-    {{ Form::bsNumber('birth_year', 'Geboortejaar', (isset($readonly) && $readonly)?['readonly']:[]) }}
-    {{ Form::bsDropdown('age_group_id', 'Werking', ['0' => 'Werking'] + $year->getAllAgeGroupsById(), (isset($readonly) && $readonly)?['readonly']:[]) }}
-    {{ Form::bsTextarea('remarks', 'Opmerkingen', (isset($readonly) && $readonly)?['readonly']:[]) }}
-    @if(!isset($readonly) || !$readonly)
-        {{ Form::bsSubmit() }}
+    <x-form-elements.text name="first_name" display-name="Voornaam" :readonly="$isReadOnly" />
+    <x-form-elements.text name="last_name" display-name="Naam" :readonly="$isReadOnly" />
+    <x-form-elements.number name="birth_year" display-name="Geboortejaar" :readonly="$isReadOnly" />
+    <x-form-elements.dropdown name="age_group_id" display-name="Werking"
+        :choices="['0' => 'Werking'] + $year->getAllAgeGroupsById()" :readonly="$isReadOnly" />
+    <x-form-elements.text-area name="remarks" display-name="Opmerkingen" :readonly="$isReadOnly" />
+    @if(!$isReadOnly)
+        <x-form-elements.submit />
     @endif
 @endsection

@@ -1,18 +1,24 @@
 @extends('forms.form')
 
+@php
+    $isReadOnly = (isset($readonly) && $readonly);
+@endphp
+
 @section('form-content')
     @if(isset($with_id) && $with_id)
-        {{ Form::bsText('id', null, ['readonly']) }}
+        <x-form-elements.text name="id" readonly />
     @endif
-    {{ Form::bsText('guardian_first_name', 'Voornaam', (isset($readonly) && $readonly)?['readonly']:[]) }}
-    {{ Form::bsText('guardian_last_name', 'Naam', (isset($readonly) && $readonly)?['readonly']:[]) }}
-    {{ Form::bsDropdown('tariff_id', 'Tarief', $year->getAllTariffsById(), (isset($readonly) && $readonly)?['readonly']:[]) }}
-    {{ Form::bsForcedChoiceRadio('needs_invoice', 'Betalingswijze', ['0' => 'Cash', '1' => 'Factuur'], (isset($readonly) && $readonly)?['readonly']:[]) }}
-    {{ Form::bsText('email', 'E-mail', (isset($readonly) && $readonly)?['readonly']:[]) }}
-    {{ Form::bsTextarea('remarks', 'Opmerkingen', (isset($readonly) && $readonly)?['readonly']:[]) }}
-    {{ Form::bsTextarea('contact', 'Contactgegevens', (isset($readonly) && $readonly)?['readonly']:[]) }}
-    {{ Form::bsTextarea('social_contact', 'Contact sociaal tarief', (isset($readonly) && $readonly)?['readonly']:[]) }}
-    @if(!isset($readonly) || !$readonly)
-        {{ Form::bsSubmit(isset($submit_text) ? $submit_text : "Opslaan") }}
+    <x-form-elements.text name="guardian_first_name" display-name="Voornaam" :readonly="$isReadOnly" />
+    <x-form-elements.text name="guardian_last_name" display-name="Naam" :readonly="$isReadOnly" />
+    <x-form-elements.dropdown name="tariff_id" display-name="Tarief"
+        :choices="$year->getAllTariffsById()->all()" :readonly="$isReadOnly" />
+    <x-form-elements.forced-choice-radio name="needs_invoice" display-name="Betalingswijze"
+        :choices="['0' => 'Cash', '1' => 'Factuur']" :readonly="$isReadOnly" />
+    <x-form-elements.text name="email" display-name="E-mail" :readonly="$isReadOnly" />
+    <x-form-elements.text-area name="remarks" display-name="Opmerkingen" :readonly="$isReadOnly" />
+    <x-form-elements.text-area name="contact" display-name="Contactgegevens" :readonly="$isReadOnly" />
+    <x-form-elements.text-area name="social_contact" display-name="Contact sociaal tarief" :readonly="$isReadOnly" />
+    @if(!$isReadOnly)
+        <x-form-elements.submit :text="isset($submit_text) ? $submit_text : 'Opslaan'" />
     @endif
 @endsection
