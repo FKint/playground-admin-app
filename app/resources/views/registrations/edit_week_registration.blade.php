@@ -135,23 +135,21 @@
     </div>
     <div class="col-xs-3">
         {{ Form::open(['class' => 'form-horizontal', 'id' => 'register-payment-form']) }}
-        {{ Form::bsDropdown('tariff_id', 'Tarief', $year->getAllTariffsById(), ['readonly' => true, 'disabled' => true])
-        }}
+        <x-form-elements.dropdown name="tariff_id" display-name="Tarief" 
+            :choices="$year->getAllTariffsById()->all()" readonly disabled />
         <div class="{{$family->needs_invoice?" bg-info":"bg-danger"}}">
-            {{ Form::bsDropdown('needs_invoice', 'Betaal&shy;wijze',
-            ['0' => 'Cash', '1' => 'Factuur'],
-            ['readonly' => true, 'disabled' => true],
-            $family->needs_invoice) }}
+            <x-form-elements.dropdown name="needs_invoice" display-name="Betaal&shy;wijze" 
+                :choices="['0' => 'Cash', '1' => 'Factuur']" readonly disabled :value="$family->needs_invoice" />
         </div>
-        {{ Form::bsNumber('saldo_difference', 'Verwachte bedrag',
-        ['id' => 'saldo-difference', 'pattern'=>"[0-9]+([\\.,][0-9]+)?", 'step'=>'0.01', 'readonly' => true]) }}
-        {{ Form::bsNumber('received_money', 'Betaald',
-        ['id' => 'received-money', 'pattern'=>"[0-9]+([\\.,][0-9]+)?", 'step'=>'0.01'], '0.00') }}
-        {{ Form::bsText('remarks', 'Opmerkingen', ['id' => 'remarks']) }}
-        {{ Form::bsNumber('previous_saldo', 'Vorig saldo',
-        ['id' => 'previous-saldo', 'pattern'=>"[0-9]+([\\.,][0-9]+)?", 'step'=>'0.01', 'readonly' => true]) }}
-        {{ Form::bsNumber('new_saldo', 'Nieuw saldo',
-        ['id' => 'new-saldo', 'pattern'=>"[0-9]+([\\.,][0-9]+)?", 'step'=>'0.01', 'readonly' => true]) }}
+        <x-form-elements.number name="saldo_difference" display-name="Verwachte bedrag" id="saldo-difference" 
+            pattern="[0-9]+([\\.,][0-9]+)?" step="0.01" readonly />
+        <x-form-elements.number name="received_money" display-name="Betaald" id="received-money"
+            pattern="[0-9]+([\\.,][0-9]+)?" step="0.01" value="0.00" />
+        <x-form-elements.text name="remarks" display-name="Opmerkingen" id="remarks" />
+        <x-form-elements.number name="previous_saldo" display-name="Vorig saldo" id="previous-saldo"
+            pattern="[0-9]+([\\.,][0-9]+)?" step="0.01" readonly />
+        <x-form-elements.number name="new_saldo" display-name="Nieuw saldo" id="new-saldo"
+            pattern="[0-9]+([\\.,][0-9]+)?" step="0.01" readonly />
         {{ Form::close() }}
 
         <button class="btn btn-default" id="btn-set-all-attending-today"
