@@ -14,9 +14,9 @@ use Yajra\DataTables\DataTables;
 class ChildrenController extends Controller
 {
     /**
-     * @throws \Illuminate\Auth\Access\AuthorizationException
-     *
      * @return $this
+     *
+     * @throws \Illuminate\Auth\Access\AuthorizationException
      */
     public function show(Year $year)
     {
@@ -28,9 +28,9 @@ class ChildrenController extends Controller
     }
 
     /**
-     * @throws \Illuminate\Auth\Access\AuthorizationException
-     *
      * @return $this
+     *
+     * @throws \Illuminate\Auth\Access\AuthorizationException
      */
     public function showNewChild(Year $year)
     {
@@ -41,9 +41,9 @@ class ChildrenController extends Controller
     }
 
     /**
-     * @throws \Illuminate\Auth\Access\AuthorizationException
-     *
      * @return \Illuminate\Http\RedirectResponse
+     *
+     * @throws \Illuminate\Auth\Access\AuthorizationException
      */
     public function showSubmitNewChild(SaveChildRequest $request, Year $year)
     {
@@ -65,9 +65,9 @@ class ChildrenController extends Controller
     }
 
     /**
-     * @throws \Illuminate\Auth\Access\AuthorizationException
-     *
      * @return $this
+     *
+     * @throws \Illuminate\Auth\Access\AuthorizationException
      */
     public function showEditChild(Child $child, Year $year)
     {
@@ -77,9 +77,9 @@ class ChildrenController extends Controller
     }
 
     /**
-     * @throws \Illuminate\Auth\Access\AuthorizationException
-     *
      * @return $this
+     *
+     * @throws \Illuminate\Auth\Access\AuthorizationException
      */
     public function loadChildInfoForm(Year $year, Child $child)
     {
@@ -91,9 +91,9 @@ class ChildrenController extends Controller
     }
 
     /**
-     * @throws \Illuminate\Auth\Access\AuthorizationException
-     *
      * @return $this
+     *
+     * @throws \Illuminate\Auth\Access\AuthorizationException
      */
     public function loadEditChildForm(Year $year, Child $child)
     {
@@ -103,9 +103,9 @@ class ChildrenController extends Controller
     }
 
     /**
-     * @throws \Illuminate\Auth\Access\AuthorizationException
-     *
      * @return $this
+     *
+     * @throws \Illuminate\Auth\Access\AuthorizationException
      */
     public function loadEditFamiliesForm(Request $request, Year $year, Child $child)
     {
@@ -117,9 +117,9 @@ class ChildrenController extends Controller
     }
 
     /**
-     * @throws \Illuminate\Auth\Access\AuthorizationException
-     *
      * @return $this
+     *
+     * @throws \Illuminate\Auth\Access\AuthorizationException
      */
     public function loadLinkNewChildFamilyForm(Year $year, Child $child)
     {
@@ -131,9 +131,9 @@ class ChildrenController extends Controller
     }
 
     /**
-     * @throws \Exception
-     *
      * @return mixed
+     *
+     * @throws \Exception
      */
     public function getChildren(Year $year)
     {
@@ -141,9 +141,9 @@ class ChildrenController extends Controller
     }
 
     /**
-     * @throws \Illuminate\Auth\Access\AuthorizationException
-     *
      * @return mixed
+     *
+     * @throws \Illuminate\Auth\Access\AuthorizationException
      */
     public function submitNewChild(SaveChildRequest $request, Year $year)
     {
@@ -164,9 +164,9 @@ class ChildrenController extends Controller
     }
 
     /**
-     * @throws \Illuminate\Auth\Access\AuthorizationException
-     *
      * @return \Illuminate\Http\JsonResponse
+     *
+     * @throws \Illuminate\Auth\Access\AuthorizationException
      */
     public function submitEditChildForm(SaveChildRequest $request, Year $year, Child $child)
     {
@@ -178,9 +178,9 @@ class ChildrenController extends Controller
     }
 
     /**
-     * @throws \Illuminate\Auth\Access\AuthorizationException
-     *
      * @return Family
+     *
+     * @throws \Illuminate\Auth\Access\AuthorizationException
      */
     public function submitLinkNewChildFamilyForm(UpdateFamilyInfoRequest $request, Year $year, Child $child)
     {
@@ -211,9 +211,9 @@ class ChildrenController extends Controller
     }
 
     /**
-     * @throws \Illuminate\Auth\Access\AuthorizationException
-     *
      * @return \Illuminate\Database\Eloquent\Model|static
+     *
+     * @throws \Illuminate\Auth\Access\AuthorizationException
      */
     public function addChildFamily(Request $request, Year $year, Child $child, Family $family)
     {
@@ -224,9 +224,9 @@ class ChildrenController extends Controller
     }
 
     /**
-     * @throws \Illuminate\Auth\Access\AuthorizationException
-     *
      * @return \Illuminate\Http\JsonResponse
+     *
+     * @throws \Illuminate\Auth\Access\AuthorizationException
      */
     public function removeChildFamily(Request $request, Year $year, Child $child, Family $family)
     {

@@ -40,9 +40,8 @@ class LoginPage extends BasePage
     /**
      * Submit the login form.
      *
-     * @param string $name
-     * @param mixed  $emailAddress
-     * @param mixed  $password
+     * @param mixed $emailAddress
+     * @param mixed $password
      */
     public function submitLoginForm(Browser $browser, $emailAddress, $password)
     {

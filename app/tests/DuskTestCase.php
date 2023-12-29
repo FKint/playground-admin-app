@@ -34,14 +34,12 @@ abstract class DuskTestCase extends BaseTestCase
      *
      * @beforeClass
      */
-    public static function prepare()
-    {
-    }
+    public static function prepare() {}
 
     /**
      * Create the RemoteWebDriver instance.
      *
-     * @return \Facebook\WebDriver\Remote\RemoteWebDriver
+     * @return RemoteWebDriver
      */
     protected function driver()
     {
