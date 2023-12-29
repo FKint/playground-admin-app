@@ -3,6 +3,7 @@
 $finder = PhpCsFixer\Finder::create()
     ->exclude('vendor')
     ->exclude('storage/framework')
+    ->exclude('bootstrap/cache')
     ->in(__DIR__);
 
 $config = new PhpCsFixer\Config();

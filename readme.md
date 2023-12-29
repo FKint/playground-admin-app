@@ -67,7 +67,7 @@
 ### PHP Formatting
 * ```docker run -it -v "`pwd`:/project" composer /bin/sh```
 * ```composer install --working-dir=tools/php-cs-fixer```
-* ```tools/php-cs-fixer/vendor/bin/php-cs-fixer fix app```
+* ```tools/php-cs-fixer/vendor/bin/php-cs-fixer fix --config=app/.php-cs-fixer.dist.php```
 * Suggested pre-commit hook: 
 
 ```bash
@@ -78,7 +78,7 @@ if [ "$RESULT" -eq "0" ]; then
   exit 0;
 else
   echo "PHP CS Fixer found errors which prevented this commit from succeeding.";
-  echo "Run tools/php-cs-fixer/vendor/bin/php-cs-fixer fix app' to fix.";
+  echo "Run `tools/php-cs-fixer/vendor/bin/php-cs-fixer fix --config=app/.php-cs-fixer.dist.php` to fix.";
   exit $RESULT;
 fi;
 ```

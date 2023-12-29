@@ -36,7 +36,7 @@ class DummyDataSeeder extends InitialDataSeeder
 
     protected function children($child_id)
     {
-        return \App\Child::findOrFail($this->children[$child_id]->id);
+        return Child::findOrFail($this->children[$child_id]->id);
     }
 
     protected function child_families($child_family_id)
@@ -180,13 +180,13 @@ class DummyDataSeeder extends InitialDataSeeder
                 'remarks' => 'First family',
                 'contact' => '1207',
             ]);
-        $child = \App\Child::where('first_name', '=', 'Josephine')->firstOrFail();
+        $child = Child::where('first_name', '=', 'Josephine')->firstOrFail();
         $this->child_families['jozef_de_backer_josephine'] = \App\ChildFamily::factory()
             ->for($this->year)
             ->for($this->families['jozef_de_backer'])
             ->for($child)
             ->create();
-        $child = \App\Child::where('first_name', '=', 'Eefje')->firstOrFail();
+        $child = Child::where('first_name', '=', 'Eefje')->firstOrFail();
         $this->child_families['jozef_de_backer_eefje'] = \App\ChildFamily::factory()
             ->for($this->year)
             ->for($this->families['jozef_de_backer'])

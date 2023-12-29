@@ -196,7 +196,7 @@ class Year extends Model
         };
 
         $new_year = $this->replicate();
-        $new_year->organization()->associate(\App\Organization::find($organization_id));
+        $new_year->organization()->associate(Organization::find($organization_id));
         $new_year->title = $title;
         $new_year->description = $description;
         $new_year->save();
