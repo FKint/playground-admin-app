@@ -4,7 +4,8 @@
         @foreach ($choices as $choice_value => $choice_text)
             <div class="form-control">
                 {{ html()->radio(name: $name, value: $choice_value)
-                    ->attributes($attributes->merge(['dusk' => $name])->getAttributes()) }}
+                    ->attributes($attributes->merge(['dusk' => $name])->getAttributes())
+                    ->isReadOnly($readonly) }}
                 {{ $choice_text }}
             </div>
         @endforeach

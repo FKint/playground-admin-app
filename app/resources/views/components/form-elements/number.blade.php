@@ -3,6 +3,7 @@
     <div class="col-md-9">
         {{ html()->input(type: 'number', name: $name, value: $value)
             ->class('form-control')
-            ->attributes($attributes->merge(['dusk' => $name])->getAttributes()) }}
+            ->attributes($attributes->merge(['dusk' => $name])->getAttributes())
+            ->isReadOnly($readonly) }}
     </div>
 </div>

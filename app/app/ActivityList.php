@@ -3,13 +3,11 @@
 namespace App;
 
 use Carbon\Carbon;
-use Collective\Html\Eloquent\FormAccessible;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class ActivityList extends Model
 {
-    use FormAccessible;
     use HasFactory;
 
     /**
@@ -19,7 +17,7 @@ class ActivityList extends Model
      */
     protected $fillable = ['name', 'date', 'show_on_attendance_form', 'show_on_dashboard', 'price'];
 
-    protected $casts = ['date' => 'date'];
+    protected $casts = ['date' => 'datetime:Y-m-d'];
 
     /**
      * Get all child families on this list.

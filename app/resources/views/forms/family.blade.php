@@ -1,5 +1,7 @@
 @extends('forms.form')
 
+Family form!
+
 @php
     $isReadOnly = (isset($readonly) && $readonly);
 @endphp
@@ -8,6 +10,7 @@
     @if(isset($with_id) && $with_id)
         <x-form-elements.text name="id" readonly />
     @endif
+    Component
     <x-form-elements.text name="guardian_first_name" display-name="Voornaam" :readonly="$isReadOnly" />
     <x-form-elements.text name="guardian_last_name" display-name="Naam" :readonly="$isReadOnly" />
     <x-form-elements.dropdown name="tariff_id" display-name="Tarief"
