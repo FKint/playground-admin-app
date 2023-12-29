@@ -40,7 +40,7 @@
     <div id="link-new-family-error" class="form-group hidden alert alert-danger">
         <span class="text-danger" id="link-new-family-error-text"></span>
     </div>
-    @include('forms.family', ['submit_text' => 'Voogd toevoegen'])
+    <x-form-contents.family submit-text="Voogd toevoegen" />
     {{ html()->form()->close() }}
 </div>
 

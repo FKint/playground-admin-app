@@ -12,7 +12,7 @@ class Dropdown extends Component
      */
     public function __construct(
         public string $name,
-        public ?string $displayName = null,
+        public string $displayName,
         public array $choices,
         public ?string $value = null,
         public bool $readonly = false,

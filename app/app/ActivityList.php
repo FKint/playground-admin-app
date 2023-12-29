@@ -17,7 +17,7 @@ class ActivityList extends Model
      */
     protected $fillable = ['name', 'date', 'show_on_attendance_form', 'show_on_dashboard', 'price'];
 
-    protected $casts = ['date' => 'datetime:Y-m-d'];
+    protected $casts = ['date' => 'immutable_datetime:Y-m-d'];
 
     /**
      * Get all child families on this list.
@@ -32,7 +32,8 @@ class ActivityList extends Model
         return $this->belongsTo(Year::class);
     }
 
-    public function formDateAttribute($value)
+    // Return this as a string for easier population in eg. spatie/laravel-html.
+    public function getDateAttribute($value)
     {
         return Carbon::parse($value)->format('Y-m-d');
     }

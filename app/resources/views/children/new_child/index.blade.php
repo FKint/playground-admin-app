@@ -16,7 +16,7 @@
         </div>
     @endif
     {{ html()->form()->class('form-horizontal')->id('new-child-form')->open() }}
-    @include('forms.child')
+    <x-form-contents.child />
     {{ html()->form()->close() }}
 
 @endsection

@@ -10,14 +10,14 @@
 <div class="tab-content">
     <div role="tabpanel" class="tab-pane active" id="info-child-info-div">
         {{ html()->modelForm($child)->class('form-horizontal')->id('info-child-form')->open() }}
-        @include('forms.child', ['readonly'=>true])
+        <x-form-contents.child readonly />
         {{ html()->closeModelForm() }}
     </div>
     <div role="tabpanel" class="tab-pane" id="info-child-families-div">
         @foreach($child->child_families as $child_family)
             <h4>Voogd {{ $child_family->family->guardian_full_name() }}</h4>
             {{ html()->modelForm($child_family->family)->class('form-horizontal')->open() }}
-            @include('forms.family', ['readonly' => true, 'with_id' => true])
+            <x-form-contents.family readonly with-id />
             {{ html()->closeModelForm() }}
         @endforeach
     </div>
