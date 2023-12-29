@@ -9,16 +9,16 @@
 
 <div class="tab-content">
     <div role="tabpanel" class="tab-pane active" id="info-child-info-div">
-        {{ Form::model($child, ['class' => 'form-horizontal', 'id' => 'info-child-form']) }}
+        {{ html()->modelForm($child)->class('form-horizontal')->id('info-child-form')->open() }}
         @include('forms.child', ['readonly'=>true])
-        {{ Form::close() }}
+        {{ html()->closeModelForm() }}
     </div>
     <div role="tabpanel" class="tab-pane" id="info-child-families-div">
         @foreach($child->child_families as $child_family)
             <h4>Voogd {{ $child_family->family->guardian_full_name() }}</h4>
-            {{ Form::model($child_family->family, ['class'=>'form-horizontal']) }}
+            {{ html()->modelForm($child_family->family)->class('form-horizontal')->open() }}
             @include('forms.family', ['readonly' => true, 'with_id' => true])
-            {{ Form::close() }}
+            {{ html()->closeModelForm() }}
         @endforeach
     </div>
 </div>
