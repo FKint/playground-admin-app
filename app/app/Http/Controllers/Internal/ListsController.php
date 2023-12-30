@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers\Internal;
 
-use App\ActivityList;
-use App\ChildFamily;
-use App\Family;
 use App\Http\Controllers\Controller;
-use App\Transaction;
-use App\Year;
+use App\Models\ActivityList;
+use App\Models\ChildFamily;
+use App\Models\Family;
+use App\Models\Transaction;
+use App\Models\Year;
 use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables;
 

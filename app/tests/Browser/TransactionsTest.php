@@ -33,8 +33,8 @@ class TransactionsTest extends DuskTestCase
     {
         parent::setUp();
         app(DatabaseSeeder::class)->call(InitialDataSeeder::class);
-        $this->year = \App\Year::firstOrFail();
-        $this->user = \App\User::factory()->create(['organization_id' => $this->year->organization_id]);
+        $this->year = \App\Models\Year::firstOrFail();
+        $this->user = \App\Models\User::factory()->create(['organization_id' => $this->year->organization_id]);
 
         $this->adminSessionSwitchTime = Carbon::create(2020, 12, 1, 12, 0, 0)->toImmutable();
         $this->oldAdminSession = $this->year->getActiveAdminSession();
@@ -43,18 +43,18 @@ class TransactionsTest extends DuskTestCase
             'session_end' => $this->adminSessionSwitchTime,
             'remarks' => '', ]);
         $this->oldAdminSession->save();
-        $this->newAdminSession = new \App\AdminSession();
+        $this->newAdminSession = new \App\Models\AdminSession();
         $this->newAdminSession->year()->associate($this->year);
         $this->newAdminSession->created_at = $this->adminSessionSwitchTime;
         $this->newAdminSession->save(['timestamps' => false]);
 
-        $this->normalTariff = \App\Tariff::whereAbbreviation('NRML')->firstOrFail();
-        $this->socialTariff = \App\Tariff::whereAbbreviation('SCL')->firstOrFail();
+        $this->normalTariff = \App\Models\Tariff::whereAbbreviation('NRML')->firstOrFail();
+        $this->socialTariff = \App\Models\Tariff::whereAbbreviation('SCL')->firstOrFail();
 
         $this->firstPlaygroundDay = $this->year->playground_days()->firstOrFail();
 
-        $this->family1 = \App\Family::factory()->create(['year_id' => $this->year->id, 'guardian_first_name' => 'Veronique', 'guardian_last_name' => 'Baeten', 'tariff_id' => $this->normalTariff->id, 'needs_invoice' => false]);
-        $this->family2 = \App\Family::factory()->create(['year_id' => $this->year->id, 'guardian_first_name' => 'Ro', 'guardian_last_name' => 'Bot', 'tariff_id' => $this->normalTariff->id, 'needs_invoice' => false]);
+        $this->family1 = \App\Models\Family::factory()->create(['year_id' => $this->year->id, 'guardian_first_name' => 'Veronique', 'guardian_last_name' => 'Baeten', 'tariff_id' => $this->normalTariff->id, 'needs_invoice' => false]);
+        $this->family2 = \App\Models\Family::factory()->create(['year_id' => $this->year->id, 'guardian_first_name' => 'Ro', 'guardian_last_name' => 'Bot', 'tariff_id' => $this->normalTariff->id, 'needs_invoice' => false]);
 
         $this->lastDate = Carbon::create(2018, 8, 10);
     }
@@ -98,15 +98,15 @@ class TransactionsTest extends DuskTestCase
     private function createTransaction($timestamp, $family, $adminSession, $amountPaid, $amountExpected, $remarks)
     {
         // Unguard Eloquent model to overwrite created_at and updated_at.
-        \App\Transaction::unguard();
-        $transaction = new \App\Transaction(['amount_paid' => 3.5,
+        \App\Models\Transaction::unguard();
+        $transaction = new \App\Models\Transaction(['amount_paid' => 3.5,
             'amount_expected' => 3.5,
             'remarks' => $remarks, 'created_at' => $timestamp, 'updated_at' => $timestamp, ]);
         $transaction->admin_session()->associate($adminSession);
         $transaction->year()->associate($this->year);
         $transaction->family()->associate($family);
         $transaction->save();
-        \App\Transaction::reguard();
+        \App\Models\Transaction::reguard();
         $transaction->refresh();
         $this->assertEquals($timestamp, $transaction->created_at);
 

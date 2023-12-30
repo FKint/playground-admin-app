@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Internal;
 
 use App\Http\Controllers\Controller;
-use App\Year;
+use App\Models\Year;
 use Carbon\CarbonImmutable;
 use Yajra\DataTables\Facades\DataTables;
 

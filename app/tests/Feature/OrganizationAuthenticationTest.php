@@ -2,19 +2,19 @@
 
 namespace Tests\Feature;
 
-use App\ActivityList;
-use App\AgeGroup;
-use App\Child;
-use App\ChildFamily;
-use App\DayPart;
-use App\Family;
-use App\Organization;
-use App\PlaygroundDay;
-use App\Tariff;
-use App\User;
-use App\Week;
-use App\WeekDay;
-use App\Year;
+use App\Models\ActivityList;
+use App\Models\AgeGroup;
+use App\Models\Child;
+use App\Models\ChildFamily;
+use App\Models\DayPart;
+use App\Models\Family;
+use App\Models\Organization;
+use App\Models\PlaygroundDay;
+use App\Models\Tariff;
+use App\Models\User;
+use App\Models\Week;
+use App\Models\WeekDay;
+use App\Models\Year;
 use Tests\TestCase;
 
 /**

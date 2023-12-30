@@ -2,7 +2,7 @@
 
 namespace Tests\Browser;
 
-use App\User;
+use App\Models\User;
 use Laravel\Dusk\Browser;
 use Tests\Browser\Pages\LoginPage;
 use Tests\Browser\Pages\UserDashboardPage;

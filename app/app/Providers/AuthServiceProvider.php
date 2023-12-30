@@ -2,12 +2,12 @@
 
 namespace App\Providers;
 
-use App\Child;
-use App\ChildFamily;
+use App\Models\Child;
+use App\Models\ChildFamily;
+use App\Models\Year;
 use App\Policies\ChildFamilyPolicy;
 use App\Policies\ChildPolicy;
 use App\Policies\YearPolicy;
-use App\Year;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 
 class AuthServiceProvider extends ServiceProvider

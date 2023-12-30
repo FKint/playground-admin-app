@@ -2,7 +2,7 @@
 
 namespace Database\Factories;
 
-use App\ActivityList;
+use App\Models\ActivityList;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class ActivityListFactory extends Factory

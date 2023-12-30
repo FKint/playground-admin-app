@@ -2,7 +2,7 @@
 
 namespace Database\Factories;
 
-use App\Tariff;
+use App\Models\Tariff;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class TariffFactory extends Factory

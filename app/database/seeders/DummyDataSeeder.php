@@ -2,7 +2,7 @@
 
 namespace Database\Seeders;
 
-use App\Child;
+use App\Models\Child;
 
 class DummyDataSeeder extends InitialDataSeeder
 {
@@ -31,7 +31,7 @@ class DummyDataSeeder extends InitialDataSeeder
 
     protected function families($family_id)
     {
-        return \App\Family::findOrFail($this->families[$family_id]->id);
+        return \App\Models\Family::findOrFail($this->families[$family_id]->id);
     }
 
     protected function children($child_id)
@@ -41,7 +41,7 @@ class DummyDataSeeder extends InitialDataSeeder
 
     protected function child_families($child_family_id)
     {
-        return \App\ChildFamily::findOrFail($this->child_families[$child_family_id]->id);
+        return \App\Models\ChildFamily::findOrFail($this->child_families[$child_family_id]->id);
     }
 
     protected function seed_children()
@@ -167,9 +167,9 @@ class DummyDataSeeder extends InitialDataSeeder
 
     protected function seed_child_families()
     {
-        $normal_tariff = \App\Tariff::where('name', '=', 'Normaal')->firstOrFail();
-        $social_tariff = \App\Tariff::where('name', '=', 'Sociaal')->firstOrFail();
-        $this->families['jozef_de_backer'] = \App\Family::factory()
+        $normal_tariff = \App\Models\Tariff::where('name', '=', 'Normaal')->firstOrFail();
+        $social_tariff = \App\Models\Tariff::where('name', '=', 'Sociaal')->firstOrFail();
+        $this->families['jozef_de_backer'] = \App\Models\Family::factory()
             ->for($this->year)
             ->for($normal_tariff)
             ->create([
@@ -181,18 +181,18 @@ class DummyDataSeeder extends InitialDataSeeder
                 'contact' => '1207',
             ]);
         $child = Child::where('first_name', '=', 'Josephine')->firstOrFail();
-        $this->child_families['jozef_de_backer_josephine'] = \App\ChildFamily::factory()
+        $this->child_families['jozef_de_backer_josephine'] = \App\Models\ChildFamily::factory()
             ->for($this->year)
             ->for($this->families['jozef_de_backer'])
             ->for($child)
             ->create();
         $child = Child::where('first_name', '=', 'Eefje')->firstOrFail();
-        $this->child_families['jozef_de_backer_eefje'] = \App\ChildFamily::factory()
+        $this->child_families['jozef_de_backer_eefje'] = \App\Models\ChildFamily::factory()
             ->for($this->year)
             ->for($this->families['jozef_de_backer'])
             ->for($child)
             ->create();
-        \App\Family::factory()
+        \App\Models\Family::factory()
             ->for($this->year)
             ->for($normal_tariff)
             ->create([
@@ -201,7 +201,7 @@ class DummyDataSeeder extends InitialDataSeeder
                 'remarks' => 'Second family',
                 'contact' => '999',
             ]);
-        \App\Family::factory()
+        \App\Models\Family::factory()
             ->for($this->year)
             ->for($normal_tariff)
             ->create([
@@ -210,7 +210,7 @@ class DummyDataSeeder extends InitialDataSeeder
                 'remarks' => '',
                 'contact' => '112',
             ]);
-        \App\Family::factory()
+        \App\Models\Family::factory()
             ->for($this->year)
             ->for($normal_tariff)
             ->create([
@@ -219,7 +219,7 @@ class DummyDataSeeder extends InitialDataSeeder
                 'remarks' => '',
                 'contact' => '',
             ]);
-        \App\Family::factory()
+        \App\Models\Family::factory()
             ->for($this->year)
             ->for($normal_tariff)
             ->create([
@@ -228,7 +228,7 @@ class DummyDataSeeder extends InitialDataSeeder
                 'remarks' => '',
                 'contact' => '',
             ]);
-        \App\Family::factory()
+        \App\Models\Family::factory()
             ->for($this->year)
             ->for($social_tariff)
             ->create([
@@ -241,7 +241,7 @@ class DummyDataSeeder extends InitialDataSeeder
 
     protected function seed_activity_lists()
     {
-        $this->activity_list = \App\ActivityList::factory()->for($this->year)->create([
+        $this->activity_list = \App\Models\ActivityList::factory()->for($this->year)->create([
             'name' => "Zwembad O'Town",
             'date' => '2018-07-06',
             'show_on_attendance_form' => true,
@@ -333,7 +333,7 @@ class DummyDataSeeder extends InitialDataSeeder
 
     protected function seed_users()
     {
-        \App\User::factory()->for($this->organization)->create([
+        \App\Models\User::factory()->for($this->organization)->create([
             'email' => 'admin@playground.com',
             'password' => bcrypt('secret'),
         ]);

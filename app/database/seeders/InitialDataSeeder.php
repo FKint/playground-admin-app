@@ -35,18 +35,18 @@ class InitialDataSeeder extends Seeder
 
     public function weeks($week_id)
     {
-        return \App\Week::findOrFail($week_id);
+        return \App\Models\Week::findOrFail($week_id);
     }
 
     public function week_days($week_day_id)
     {
-        return \App\WeekDay::findOrFail($week_day_id);
+        return \App\Models\WeekDay::findOrFail($week_day_id);
     }
 
     protected function seed_organization_and_year()
     {
-        $this->organization = \App\Organization::create(['full_name' => 'Jokkebrok']);
-        $this->year = \App\Year::create([
+        $this->organization = \App\Models\Organization::create(['full_name' => 'Jokkebrok']);
+        $this->year = \App\Models\Year::create([
             'organization_id' => $this->organization->id,
             'description' => '2018',
             'title' => '2018',
@@ -55,12 +55,12 @@ class InitialDataSeeder extends Seeder
 
     protected function seed_admin_sessions()
     {
-        $this->first_admin_session = \App\AdminSession::create(['year_id' => $this->year->id, 'responsible_name' => 'Dummy']);
+        $this->first_admin_session = \App\Models\AdminSession::create(['year_id' => $this->year->id, 'responsible_name' => 'Dummy']);
     }
 
     protected function seed_age_groups()
     {
-        $this->toddlers = \App\AgeGroup::create(
+        $this->toddlers = \App\Models\AgeGroup::create(
             [
                 'year_id' => $this->year->id,
                 'name' => 'Kleuters',
@@ -68,7 +68,7 @@ class InitialDataSeeder extends Seeder
                 'start_date' => (new \DateTime())->setDate(2012, 1, 1),
                 'end_date' => (new \DateTime())->setDate(2015, 1, 1), ]
         );
-        $this->middle_group = \App\AgeGroup::create(
+        $this->middle_group = \App\Models\AgeGroup::create(
             [
                 'year_id' => $this->year->id,
                 'name' => 'Grote',
@@ -76,7 +76,7 @@ class InitialDataSeeder extends Seeder
                 'start_date' => (new \DateTime())->setDate(2005, 1, 1),
                 'end_date' => (new \DateTime())->setDate(2012, 1, 1), ]
         );
-        $this->teenagers = \App\AgeGroup::create(
+        $this->teenagers = \App\Models\AgeGroup::create(
             [
                 'year_id' => $this->year->id,
                 'name' => 'Tieners',
@@ -88,13 +88,13 @@ class InitialDataSeeder extends Seeder
 
     protected function seed_day_parts()
     {
-        $this->whole_day = \App\DayPart::create([
+        $this->whole_day = \App\Models\DayPart::create([
             'year_id' => $this->year->id,
             'name' => 'Lunch',
             'order' => 1,
             'default' => true,
         ]);
-        $this->home = \App\DayPart::create([
+        $this->home = \App\Models\DayPart::create([
             'year_id' => $this->year->id,
             'name' => 'Thuis',
             'order' => 2,
@@ -103,7 +103,7 @@ class InitialDataSeeder extends Seeder
 
     protected function seed_supplements()
     {
-        \App\Supplement::factory()->for($this->year)->create([
+        \App\Models\Supplement::factory()->for($this->year)->create([
             'name' => 'IJsje',
             'price' => '0.50',
         ]);
@@ -117,7 +117,7 @@ class InitialDataSeeder extends Seeder
         $week_day_names = ['Maandag', 'Dinsdag', 'Woensdag', 'Donderdag', 'Vrijdag'];
         $holidays = ['2018-07-21'];
         for ($i = 0; $i < 5; ++$i) {
-            $this->week_days[] = \App\WeekDay::create([
+            $this->week_days[] = \App\Models\WeekDay::create([
                 'year_id' => $this->year->id,
                 'days_offset' => $i,
                 'name' => $week_day_names[$i],
@@ -127,7 +127,7 @@ class InitialDataSeeder extends Seeder
         $day = new \DateInterval('P01D');
         $week = new \DateInterval('P1W');
         for ($i = 0; $i < 6; ++$i) {
-            $this->weeks[$i] = \App\Week::create([
+            $this->weeks[$i] = \App\Models\Week::create([
                 'year_id' => $this->year->id,
                 'week_number' => 1 + $i,
                 'first_day_of_week' => $monday->format('Y-m-d'),
@@ -135,7 +135,7 @@ class InitialDataSeeder extends Seeder
             $week_day = $monday;
             for ($j = 0; $j < count($this->week_days); ++$j) {
                 if (!in_array($week_day->format('Y-m-d'), $holidays)) {
-                    \App\PlaygroundDay::create([
+                    \App\Models\PlaygroundDay::create([
                         'year_id' => $this->year->id,
                         'week_id' => $this->weeks[$i]->id,
                         'week_day_id' => $this->week_days[$j]->id,
@@ -149,7 +149,7 @@ class InitialDataSeeder extends Seeder
 
     protected function seed_tariffs()
     {
-        \App\Tariff::create([
+        \App\Models\Tariff::create([
             'year_id' => $this->year->id,
             'name' => 'Normaal',
             'abbreviation' => 'NRML',
@@ -158,7 +158,7 @@ class InitialDataSeeder extends Seeder
             'week_first_child' => 22.5,
             'week_later_children' => 18.5,
         ]);
-        \App\Tariff::create([
+        \App\Models\Tariff::create([
             'year_id' => $this->year->id,
             'name' => 'Sociaal',
             'abbreviation' => 'SCL',
