@@ -137,7 +137,8 @@ class InternalChildrenPage extends InternalPage
     {
         $selector = 'button.btn-edit-family[data-family-id="'.$familyId.'"]';
         $browser->click($selector)
-            ->waitFor('@edit-family-modal');
+            ->waitFor('@edit-family-modal')
+            ->waitFor('@edit-family-form');
     }
 
     public function enterEditFamilyForm(Browser $browser, $guardianFirstName = null, $guardianLastName = null, $tariffId = null, $remarks = null, $contact = null, $socialContact = null, $needsInvoice = false, $email = null)
