@@ -30,16 +30,16 @@ class UserJourneysTest extends DuskTestCase
     {
         parent::setUp();
         app(DatabaseSeeder::class)->call(InitialDataSeeder::class);
-        $this->year = \App\Year::firstOrFail();
-        $this->user = \App\User::factory()->create(['organization_id' => $this->year->organization_id]);
+        $this->year = \App\Models\Year::firstOrFail();
+        $this->user = \App\Models\User::factory()->create(['organization_id' => $this->year->organization_id]);
 
-        $this->normalTariff = \App\Tariff::whereAbbreviation('NRML')->firstOrFail();
-        $this->socialTariff = \App\Tariff::whereAbbreviation('SCL')->firstOrFail();
-        $this->ageGroup612 = \App\AgeGroup::whereAbbreviation('6-12')->firstOrFail();
-        $this->ageGroupKls = \App\AgeGroup::whereAbbreviation('KLS')->firstOrFail();
-        $this->existingFamily = \App\Family::factory()->create(['year_id' => $this->year->id, 'guardian_first_name' => 'Veronique', 'guardian_last_name' => 'Baeten', 'tariff_id' => $this->normalTariff->id]);
-        $this->existingChild = \App\Child::factory()->create(['year_id' => $this->year->id, 'first_name' => 'Reinoud', 'last_name' => 'Declercq', 'age_group_id' => $this->ageGroupKls->id]);
-        $this->existingChildFamily = \App\ChildFamily::factory()->create(['year_id' => $this->year->id, 'family_id' => $this->existingFamily->id, 'child_id' => $this->existingChild->id]);
+        $this->normalTariff = \App\Models\Tariff::whereAbbreviation('NRML')->firstOrFail();
+        $this->socialTariff = \App\Models\Tariff::whereAbbreviation('SCL')->firstOrFail();
+        $this->ageGroup612 = \App\Models\AgeGroup::whereAbbreviation('6-12')->firstOrFail();
+        $this->ageGroupKls = \App\Models\AgeGroup::whereAbbreviation('KLS')->firstOrFail();
+        $this->existingFamily = \App\Models\Family::factory()->create(['year_id' => $this->year->id, 'guardian_first_name' => 'Veronique', 'guardian_last_name' => 'Baeten', 'tariff_id' => $this->normalTariff->id]);
+        $this->existingChild = \App\Models\Child::factory()->create(['year_id' => $this->year->id, 'first_name' => 'Reinoud', 'last_name' => 'Declercq', 'age_group_id' => $this->ageGroupKls->id]);
+        $this->existingChildFamily = \App\Models\ChildFamily::factory()->create(['year_id' => $this->year->id, 'family_id' => $this->existingFamily->id, 'child_id' => $this->existingChild->id]);
     }
 
     /**
@@ -61,7 +61,7 @@ class UserJourneysTest extends DuskTestCase
                     socialContact: ''
                 )
             // TODO(fkint): split following call so we can use the actual Id after the entry has been inserted.
-                ->submitAddFamilySuccessfully(\App\Family::count() + 1)
+                ->submitAddFamilySuccessfully(\App\Models\Family::count() + 1)
                 ->assertSeeGuardianName('Joran De Wachter')
                 ->enterAddChildToFamilyFormData('Josje', 'De Wachter', 2008, null, 'Allergic to peanuts')
             // TODO(fkint): assert that age group 6-12 is selected
@@ -79,7 +79,7 @@ class UserJourneysTest extends DuskTestCase
                     lastName: 'Vandenbroucke',
                     tariffId: $this->socialTariff->id
                 )
-                ->submitAddFamilySuccessfully(\App\Family::count() + 1)
+                ->submitAddFamilySuccessfully(\App\Models\Family::count() + 1)
                 ->assertSeeGuardianName('Annelies Vandenbroucke')
                 ->enterAddChildToFamilyFormData('Rik', 'Vandenbroucke', 2012, $this->ageGroup612->id, '')
                 ->submitAddChildToFamilySuccessfully()
@@ -89,11 +89,11 @@ class UserJourneysTest extends DuskTestCase
                 ->assertSeeCurrentChildName('Joris Janssens')
                 ->assertSeeCurrentChildName('Rik Vandenbroucke')
                 ->assertDontSeeCurrentChildName('Josje De Wachter');
-            $child1 = \App\Child::where(['first_name' => 'Josje', 'last_name' => 'De Wachter'])->firstOrFail();
+            $child1 = \App\Models\Child::where(['first_name' => 'Josje', 'last_name' => 'De Wachter'])->firstOrFail();
             $this->assertEquals($this->ageGroup612->id, $child1->age_group_id);
-            $child2 = \App\Child::where(['first_name' => 'Joris', 'last_name' => 'Janssens'])->firstOrFail();
+            $child2 = \App\Models\Child::where(['first_name' => 'Joris', 'last_name' => 'Janssens'])->firstOrFail();
             $this->assertEquals($this->ageGroupKls->id, $child2->age_group_id);
-            $child3 = \App\Child::where(['first_name' => 'Rik', 'last_name' => 'Vandenbroucke'])->firstOrFail();
+            $child3 = \App\Models\Child::where(['first_name' => 'Rik', 'last_name' => 'Vandenbroucke'])->firstOrFail();
             $this->assertEquals($this->ageGroup612->id, $child3->age_group_id);
         });
     }
@@ -105,7 +105,7 @@ class UserJourneysTest extends DuskTestCase
      */
     public function testEditFamily()
     {
-        $newFamily = \App\Family::factory()->for($this->year)->for($this->normalTariff)->create(['guardian_first_name' => 'Erica', 'guardian_last_name' => 'Van Heulen']);
+        $newFamily = \App\Models\Family::factory()->for($this->year)->for($this->normalTariff)->create(['guardian_first_name' => 'Erica', 'guardian_last_name' => 'Van Heulen']);
         $this->browse(function (Browser $browser) use ($newFamily) {
             $browser->loginAs($this->user)
                 ->visit(new InternalDashboardPage($this->year->id))
@@ -144,7 +144,7 @@ class UserJourneysTest extends DuskTestCase
                 ->navigateToAddNewChildDialog()
                 ->enterAddChildFormData('Sonja', 'Boonen', 2004, null, null)
                 ->submitAddChildFormSuccessfully();
-            $newChild = \App\Child::where(['first_name' => 'Sonja', 'last_name' => 'Boonen'])->first();
+            $newChild = \App\Models\Child::where(['first_name' => 'Sonja', 'last_name' => 'Boonen'])->first();
             $this->assertNotNull($newChild);
             $browser->assertSeeChildEntryInTable($newChild->id, 'Sonja', 'Boonen')
                 ->assertSeeEditChildDialogTabFamilies()
@@ -191,8 +191,8 @@ class UserJourneysTest extends DuskTestCase
      */
     public function testEditChild()
     {
-        $child2 = \App\Child::factory()->for($this->year)->for($this->ageGroup612)->create(['first_name' => 'Jan', 'last_name' => 'Cornelis']);
-        $child3 = \App\Child::factory()->for($this->year)->for($this->ageGroup612)->create(['first_name' => 'Piet', 'last_name' => 'Declercq']);
+        $child2 = \App\Models\Child::factory()->for($this->year)->for($this->ageGroup612)->create(['first_name' => 'Jan', 'last_name' => 'Cornelis']);
+        $child3 = \App\Models\Child::factory()->for($this->year)->for($this->ageGroup612)->create(['first_name' => 'Piet', 'last_name' => 'Declercq']);
 
         $this->browse(function (Browser $browser) use ($child2, $child3) {
             $browser->loginAs($this->user)
@@ -224,8 +224,8 @@ class UserJourneysTest extends DuskTestCase
     public function testCreateActivityList()
     {
         $this->browse(function (Browser $browser) {
-            $child2 = \App\Child::factory()->for($this->year)->for($this->ageGroup612)->create(['first_name' => 'Jan', 'last_name' => 'Cornelis']);
-            $family2 = \App\Family::factory()->for($this->year)->for($this->normalTariff)->create(['guardian_first_name' => 'Arnold', 'guardian_last_name' => 'Coucke']);
+            $child2 = \App\Models\Child::factory()->for($this->year)->for($this->ageGroup612)->create(['first_name' => 'Jan', 'last_name' => 'Cornelis']);
+            $family2 = \App\Models\Family::factory()->for($this->year)->for($this->normalTariff)->create(['guardian_first_name' => 'Arnold', 'guardian_last_name' => 'Coucke']);
             $child2->families()->syncWithoutDetaching([$family2->id => ['year_id' => $this->year->id]]);
 
             $browser->loginAs($this->user)
@@ -234,7 +234,7 @@ class UserJourneysTest extends DuskTestCase
                 ->navigateToAddNewActivityListPage()
                 ->enterAddActivityListFormData('Kid Rock', '3.50', new \DateTimeImmutable('2018-07-23'), true, true)
                 ->submitAddActivityListFormSuccessfully();
-            $activityListKidRock = \App\ActivityList::where(['name' => 'Kid Rock'])->first();
+            $activityListKidRock = \App\Models\ActivityList::where(['name' => 'Kid Rock'])->first();
             $this->assertNotNull($activityListKidRock);
             $browser->assertOnActivityListPage($activityListKidRock->id)
                 ->assertSeeActivityListDetails('Kid Rock', '3.50', '2018-07-23', true, true)
@@ -244,7 +244,7 @@ class UserJourneysTest extends DuskTestCase
                 ->navigateToAddNewActivityListPage()
                 ->enterAddActivityListFormData('Need medication', null, null, false, true)
                 ->submitAddActivityListFormSuccessfully();
-            $activityListMedication = \App\ActivityList::where(['name' => 'Need medication'])->first();
+            $activityListMedication = \App\Models\ActivityList::where(['name' => 'Need medication'])->first();
             $this->assertNotNull($activityListMedication);
             $browser->assertOnActivityListPage($activityListMedication->id)
                 ->assertSeeActivityListDetails('Need medication', '', '', false, true)
@@ -257,7 +257,7 @@ class UserJourneysTest extends DuskTestCase
                 ->navigateToAddNewActivityListPage()
                 ->enterAddActivityListFormData('Past activity', '1.00', new \DateTimeImmutable('2018-07-02'), false, false)
                 ->submitAddActivityListFormSuccessfully();
-            $activityListPast = \App\ActivityList::where(['name' => 'Past activity'])->first();
+            $activityListPast = \App\Models\ActivityList::where(['name' => 'Past activity'])->first();
             $this->assertNotNull($activityListPast);
             $browser->assertOnActivityListPage($activityListPast->id)
                 ->assertSeeActivityListDetails('Past activity', '1.00', '2018-07-02', false, false)
@@ -288,13 +288,13 @@ class UserJourneysTest extends DuskTestCase
     public function testRegistrationsFlow()
     {
         $this->browse(function (Browser $browser) {
-            $child2 = \App\Child::factory()->create(['year_id' => $this->year->id, 'first_name' => 'Jan', 'last_name' => 'Cornelis', 'age_group_id' => $this->ageGroup612->id]);
-            $family2 = \App\Family::factory()->create(['year_id' => $this->year->id, 'guardian_first_name' => 'Arnold', 'guardian_last_name' => 'Coucke', 'tariff_id' => $this->normalTariff->id]);
+            $child2 = \App\Models\Child::factory()->create(['year_id' => $this->year->id, 'first_name' => 'Jan', 'last_name' => 'Cornelis', 'age_group_id' => $this->ageGroup612->id]);
+            $family2 = \App\Models\Family::factory()->create(['year_id' => $this->year->id, 'guardian_first_name' => 'Arnold', 'guardian_last_name' => 'Coucke', 'tariff_id' => $this->normalTariff->id]);
             $child2->families()->syncWithoutDetaching([$this->existingFamily->id => ['year_id' => $this->year->id]]);
             $child2Family1 = $child2->child_families()->firstOrFail();
             $child2->families()->syncWithoutDetaching([$family2->id => ['year_id' => $this->year->id]]);
             $child2Family2 = $family2->child_families()->firstOrFail();
-            $child3 = \App\Child::factory()->create(['year_id' => $this->year->id, 'first_name' => 'Wouter', 'last_name' => 'Sanders', 'age_group_id' => $this->ageGroupKls->id]);
+            $child3 = \App\Models\Child::factory()->create(['year_id' => $this->year->id, 'first_name' => 'Wouter', 'last_name' => 'Sanders', 'age_group_id' => $this->ageGroupKls->id]);
             $child3->families()->syncWithoutDetaching([$family2->id => ['year_id' => $this->year->id]]);
 
             $lastDate = $this->year->playground_days()->get()->map(function ($playgroundDay) {
@@ -353,8 +353,8 @@ class UserJourneysTest extends DuskTestCase
             $this->assertNotNull($mondayRegistrationExistingChild);
             $this->assertFalse((bool) $mondayRegistrationExistingChild->attended);
 
-            $activityList = \App\ActivityList::factory()->create(['year_id' => $this->year->id, 'name' => 'Kid Rock', 'show_on_attendance_form' => true, 'price' => '0.89']);
-            $activityList2 = \App\ActivityList::factory()->create(['year_id' => $this->year->id, 'name' => 'Swimming', 'show_on_attendance_form' => false]);
+            $activityList = \App\Models\ActivityList::factory()->create(['year_id' => $this->year->id, 'name' => 'Kid Rock', 'show_on_attendance_form' => true, 'price' => '0.89']);
+            $activityList2 = \App\Models\ActivityList::factory()->create(['year_id' => $this->year->id, 'name' => 'Swimming', 'show_on_attendance_form' => false]);
 
             $browser->enterFindFamilyFormData('Wouter Sanders')
                 ->selectFindFamilySuggestion('Arnold Coucke')
@@ -383,7 +383,7 @@ class UserJourneysTest extends DuskTestCase
                 ->closeAdminSession()
                 ->enterCloseAdminSessionFormData('The Admin', '55.00', "Dropped some coins and didn't find all of them.")
                 ->submitCloseAdminSessionFormSuccessfully();
-            $adminSession = \App\AdminSession::where('responsible_name', 'The Admin')->first();
+            $adminSession = \App\Models\AdminSession::where('responsible_name', 'The Admin')->first();
             $this->assertNotNull($adminSession);
             $this->assertEquals('55.00', number_format($adminSession->counted_cash, 2));
             $this->assertEquals(2, $adminSession->transactions()->count());

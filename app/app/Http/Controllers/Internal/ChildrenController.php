@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers\Internal;
 
-use App\Child;
-use App\Family;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\SaveChildRequest;
 use App\Http\Requests\UpdateFamilyInfoRequest;
-use App\Year;
+use App\Models\Child;
+use App\Models\Family;
+use App\Models\Year;
 use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables;
 

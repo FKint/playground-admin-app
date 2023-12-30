@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers\Internal;
 
-use App\AdminSession;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\SaveAdminSessionRequest;
-use App\Year;
+use App\Models\AdminSession;
+use App\Models\Year;
 use Carbon\Carbon;
 use Yajra\DataTables\DataTables;
 

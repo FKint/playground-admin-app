@@ -2,7 +2,7 @@
 
 namespace App\Console\Commands;
 
-use App\Year;
+use App\Models\Year;
 use Carbon\CarbonImmutable;
 use Illuminate\Console\Command;
 

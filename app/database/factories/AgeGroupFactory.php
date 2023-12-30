@@ -2,7 +2,7 @@
 
 namespace Database\Factories;
 
-use App\AgeGroup;
+use App\Models\AgeGroup;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class AgeGroupFactory extends Factory

@@ -2,7 +2,7 @@
 
 namespace Database\Factories;
 
-use App\PlaygroundDay;
+use App\Models\PlaygroundDay;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class PlaygroundDayFactory extends Factory

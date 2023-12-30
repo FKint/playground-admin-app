@@ -2,7 +2,7 @@
 
 namespace Database\Factories;
 
-use App\DayPart;
+use App\Models\DayPart;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class DayPartFactory extends Factory

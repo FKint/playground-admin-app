@@ -2,15 +2,15 @@
 
 namespace App\Http\Controllers\Internal;
 
-use App\ChildFamilyDayRegistration;
-use App\ChildFamilyWeekRegistration;
-use App\Family;
-use App\FamilyWeekRegistration;
 use App\Http\Controllers\Controller;
-use App\PlaygroundDay;
-use App\Transaction;
-use App\Week;
-use App\Year;
+use App\Models\ChildFamilyDayRegistration;
+use App\Models\ChildFamilyWeekRegistration;
+use App\Models\Family;
+use App\Models\FamilyWeekRegistration;
+use App\Models\PlaygroundDay;
+use App\Models\Transaction;
+use App\Models\Week;
+use App\Models\Year;
 use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables;
 

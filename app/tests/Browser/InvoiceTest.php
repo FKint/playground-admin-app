@@ -20,13 +20,13 @@ class InvoiceTest extends DuskTestCase
         parent::setUp();
         app(DatabaseSeeder::class)->call(InitialDataSeeder::class);
 
-        $this->year = \App\Year::firstOrFail();
-        $this->user = \App\User::factory()->create(['organization_id' => $this->year->organization_id]);
+        $this->year = \App\Models\Year::firstOrFail();
+        $this->user = \App\Models\User::factory()->create(['organization_id' => $this->year->organization_id]);
 
-        $this->normalTariff = \App\Tariff::whereAbbreviation('NRML')->firstOrFail();
-        $this->socialTariff = \App\Tariff::whereAbbreviation('SCL')->firstOrFail();
-        $this->ageGroup612 = \App\AgeGroup::whereAbbreviation('6-12')->firstOrFail();
-        $this->ageGroupKls = \App\AgeGroup::whereAbbreviation('KLS')->firstOrFail();
+        $this->normalTariff = \App\Models\Tariff::whereAbbreviation('NRML')->firstOrFail();
+        $this->socialTariff = \App\Models\Tariff::whereAbbreviation('SCL')->firstOrFail();
+        $this->ageGroup612 = \App\Models\AgeGroup::whereAbbreviation('6-12')->firstOrFail();
+        $this->ageGroupKls = \App\Models\AgeGroup::whereAbbreviation('KLS')->firstOrFail();
     }
 
     /**
@@ -68,12 +68,12 @@ class InvoiceTest extends DuskTestCase
                 ->selectAddExistingChildSuggestion('Piet Declercq');
 
             // set up 2 families A, B
-            $familyVeroniqueBaeten = \App\Family::where(['guardian_first_name' => 'Veronique'])->firstOrFail();
-            $familyEricaVanHeulen = \App\Family::where(['guardian_first_name' => 'Erica'])->firstOrFail();
+            $familyVeroniqueBaeten = \App\Models\Family::where(['guardian_first_name' => 'Veronique'])->firstOrFail();
+            $familyEricaVanHeulen = \App\Models\Family::where(['guardian_first_name' => 'Erica'])->firstOrFail();
             // x,y,z children
-            $childReinoudDeclercq = \App\Child::where(['first_name' => 'Reinoud'])->firstOrFail();
-            $childPietDeclercq = \App\Child::where(['first_name' => 'Piet'])->firstOrFail();
-            $childJanCornelis = \App\Child::where(['first_name' => 'Jan'])->firstOrFail();
+            $childReinoudDeclercq = \App\Models\Child::where(['first_name' => 'Reinoud'])->firstOrFail();
+            $childPietDeclercq = \App\Models\Child::where(['first_name' => 'Piet'])->firstOrFail();
+            $childJanCornelis = \App\Models\Child::where(['first_name' => 'Jan'])->firstOrFail();
             // child families Ax, Ay, By, Bz
 
             // activity 1,2 subscriptions Ax1 (during week signup), Ay1 (during day signup), Ay2 (no date)
@@ -81,13 +81,13 @@ class InvoiceTest extends DuskTestCase
                 ->navigateToAddNewActivityListPage()
                 ->enterAddActivityListFormData('Kid Rock', '0.89', \Illuminate\Support\Carbon::create(2018, 7, 23), true, true)
                 ->submitAddActivityListFormSuccessfully();
-            $activityListWithDate = \App\ActivityList::where(['name' => 'Kid Rock'])->firstOrFail();
+            $activityListWithDate = \App\Models\ActivityList::where(['name' => 'Kid Rock'])->firstOrFail();
             $browser->assertOnActivityListPage($activityListWithDate->id)
                 ->navigateToActivityListsPage()
                 ->navigateToAddNewActivityListPage()
                 ->enterAddActivityListFormData('T-shirt', '5.21', null, true, true)
                 ->submitAddActivityListFormSuccessfully();
-            $activityListNoDate = \App\ActivityList::where(['name' => 'T-shirt'])->firstOrFail();
+            $activityListNoDate = \App\Models\ActivityList::where(['name' => 'T-shirt'])->firstOrFail();
             $browser->assertOnActivityListPage($activityListNoDate->id);
 
             $lastDate = $this->year->playground_days()->get()->map(function ($playgroundDay) {

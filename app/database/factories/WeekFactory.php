@@ -2,7 +2,7 @@
 
 namespace Database\Factories;
 
-use App\Week;
+use App\Models\Week;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class WeekFactory extends Factory

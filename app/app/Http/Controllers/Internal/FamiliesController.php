@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers\Internal;
 
-use App\Child;
-use App\Family;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\SaveChildRequest;
 use App\Http\Requests\UpdateFamilyInfoRequest;
-use App\Year;
+use App\Models\Child;
+use App\Models\Family;
+use App\Models\Year;
 use Carbon\CarbonImmutable;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
@@ -175,7 +175,7 @@ class FamiliesController extends Controller
         $invoicedActivities = array_fill_keys(array_keys($activities), false);
         $tariff = $family->tariff;
         foreach ($year->weeks as $week) {
-            $familyRegistrationData = \App\FamilyWeekRegistration::getRegistrationDataArray($week, $family);
+            $familyRegistrationData = \App\Models\FamilyWeekRegistration::getRegistrationDataArray($week, $family);
             $childRegistrationData = $familyRegistrationData['children'][$child->id];
             if ($childRegistrationData['whole_week_registered']) {
                 $weekEntry = [

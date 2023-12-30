@@ -2,17 +2,17 @@
 
 namespace Tests\Console;
 
-use App\ActivityList;
-use App\AdminSession;
-use App\AgeGroup;
-use App\DayPart;
-use App\Family;
-use App\Organization;
-use App\Supplement;
-use App\Tariff;
-use App\Week;
-use App\WeekDay;
-use App\Year;
+use App\Models\ActivityList;
+use App\Models\AdminSession;
+use App\Models\AgeGroup;
+use App\Models\DayPart;
+use App\Models\Family;
+use App\Models\Organization;
+use App\Models\Supplement;
+use App\Models\Tariff;
+use App\Models\Week;
+use App\Models\WeekDay;
+use App\Models\Year;
 use Carbon\CarbonImmutable;
 use Tests\TestCase;
 

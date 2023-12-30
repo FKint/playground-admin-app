@@ -2,7 +2,7 @@
 
 namespace Database\Factories;
 
-use App\AdminSession;
+use App\Models\AdminSession;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class AdminSessionFactory extends Factory

@@ -2,7 +2,7 @@
 
 namespace Database\Factories;
 
-use App\Child;
+use App\Models\Child;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class ChildFactory extends Factory
