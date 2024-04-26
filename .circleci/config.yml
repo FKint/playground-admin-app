@@ -9,7 +9,6 @@ jobs:
   php-linter:
     docker:
       - image: cimg/php:8.3.0
-    resource_class: small
     steps:
       - checkout
       - run: 
@@ -75,7 +74,6 @@ jobs:
             - docker-prod.tar
   publish-latest:
     executor: docker-publisher
-    resource_class: small
     steps:
       - attach_workspace:
           at: /tmp/workspace
@@ -98,7 +96,6 @@ jobs:
             docker push $IMAGE_NAME:nginx-prod-$CIRCLE_BRANCH-$CIRCLE_SHA1
   test:
     executor: docker-publisher
-    resource_class: small
     steps:
       - attach_workspace:
           at: /tmp/workspace
@@ -124,7 +121,6 @@ jobs:
           destination: phpunit-data
   test-dusk:
     executor: docker-publisher
-    resource_class: small
     steps:
       - attach_workspace:
           at: /tmp/workspace
