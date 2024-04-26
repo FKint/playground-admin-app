@@ -4,7 +4,7 @@ executors:
     environment:
       IMAGE_NAME: fkint/playground-php-app
     docker:
-      - image: cimg/base:stable
+      - image: ubuntu-2204:current 
 jobs:
   php-linter:
     docker:
