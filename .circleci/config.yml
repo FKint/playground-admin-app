@@ -4,12 +4,11 @@ executors:
     environment:
       IMAGE_NAME: fkint/playground-php-app
     docker:
-      - image: cimg/base:stable
+      - image: cimg/base:current
 jobs:
   php-linter:
     docker:
       - image: cimg/php:8.3.0
-    resource_class: small
     steps:
       - checkout
       - run: 
@@ -22,10 +21,9 @@ jobs:
             tools/php-cs-fixer/vendor/bin/php-cs-fixer fix --dry-run --diff app
   build-docker-images:
     executor: docker-publisher
-    resource_class: small
     steps:
       - setup_remote_docker:
-          version: 20.10.11
+          version: docker24
       - checkout
       - run:
           name: Prepare Circle CI cache
@@ -76,12 +74,11 @@ jobs:
             - docker-prod.tar
   publish-latest:
     executor: docker-publisher
-    resource_class: small
     steps:
       - attach_workspace:
           at: /tmp/workspace
       - setup_remote_docker:
-          version: 20.10.11
+          version: docker24
       - run:
           name: Load archived Docker images
           command: docker load -i /tmp/workspace/docker-prod.tar
@@ -99,12 +96,11 @@ jobs:
             docker push $IMAGE_NAME:nginx-prod-$CIRCLE_BRANCH-$CIRCLE_SHA1
   test:
     executor: docker-publisher
-    resource_class: small
     steps:
       - attach_workspace:
           at: /tmp/workspace
       - setup_remote_docker:
-          version: 20.10.11
+          version: docker24
       - run:
           name: Load archived Docker images
           command: docker load -i /tmp/workspace/docker-app-test.tar
@@ -125,12 +121,11 @@ jobs:
           destination: phpunit-data
   test-dusk:
     executor: docker-publisher
-    resource_class: small
     steps:
       - attach_workspace:
           at: /tmp/workspace
       - setup_remote_docker:
-          version: 20.10.11
+          version: docker24
       - run:
           name: Load archived Docker images
           command: docker load -i /tmp/workspace/docker-app-test.tar
