@@ -4,7 +4,7 @@ executors:
     environment:
       IMAGE_NAME: fkint/playground-php-app
     docker:
-      - image: ubuntu-2204:current 
+      - image: cimg/base:current
 jobs:
   php-linter:
     docker:
@@ -22,7 +22,6 @@ jobs:
             tools/php-cs-fixer/vendor/bin/php-cs-fixer fix --dry-run --diff app
   build-docker-images:
     executor: docker-publisher
-    resource_class: small
     steps:
       - setup_remote_docker:
           version: docker24
@@ -81,7 +80,7 @@ jobs:
       - attach_workspace:
           at: /tmp/workspace
       - setup_remote_docker:
-          version: 20.10.11
+          version: docker24
       - run:
           name: Load archived Docker images
           command: docker load -i /tmp/workspace/docker-prod.tar
@@ -104,7 +103,7 @@ jobs:
       - attach_workspace:
           at: /tmp/workspace
       - setup_remote_docker:
-          version: 20.10.11
+          version: docker24
       - run:
           name: Load archived Docker images
           command: docker load -i /tmp/workspace/docker-app-test.tar
@@ -130,7 +129,7 @@ jobs:
       - attach_workspace:
           at: /tmp/workspace
       - setup_remote_docker:
-          version: 20.10.11
+          version: docker24
       - run:
           name: Load archived Docker images
           command: docker load -i /tmp/workspace/docker-app-test.tar
