@@ -23,6 +23,7 @@ services:
   nginx:
     image: fkint/playground-php-app:nginx-prod
     volumes:
+      - ./nginx/vhost.conf.production:/etc/nginx/conf.d/default.conf
       - "${LE_DIR}:/etc/letsencrypt:ro"
     ports:
       - 80:80
