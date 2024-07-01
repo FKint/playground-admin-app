@@ -28,6 +28,8 @@ services:
       context: .
       dockerfile: docker/Dockerfile
       target: nginx-dev
+    volumes:
+      - ./nginx/vhost.conf.development:/etc/nginx/conf.d/default.conf
     working_dir: /var/www
     ports:
       - 21000:80
