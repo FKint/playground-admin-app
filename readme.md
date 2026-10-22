@@ -64,7 +64,7 @@
 
 ### MySQL password authentication
 * New accounts use `caching_sha2_password` (the app's `pdo_mysql`/mysqlnd supports it natively; no app config needed).
-* Migrate an existing `mysql_native_password` account: `ALTER USER 'user'@'%' IDENTIFIED WITH caching_sha2_password BY 'password';`
+* Migrate an existing `mysql_native_password` account with `deployment-scripts/migrate-mysql-auth.sh [compose-file] [user] [host]` (defaults: production compose file, the app account, `%`). It is idempotent; set `NEW_PASSWORD` to migrate an account other than the app account. Manual equivalent: `ALTER USER 'user'@'%' IDENTIFIED WITH caching_sha2_password BY 'password';`
 
 ## Dev recommendations
 
