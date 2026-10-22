@@ -88,12 +88,20 @@ jobs:
       - run:
           name: Publish Docker images to Docker Hub
           command: |
+            push() {
+              for i in 1 2 3 4; do
+                docker push "$1" && return 0
+                echo "Push of $1 failed (attempt $i), retrying..."
+                sleep $((i * 5))
+              done
+              return 1
+            }
             docker tag $IMAGE_NAME:app-prod "$IMAGE_NAME:app-prod-$CIRCLE_BRANCH-$CIRCLE_SHA1"
-            docker push $IMAGE_NAME:app-prod
-            docker push $IMAGE_NAME:app-prod-$CIRCLE_BRANCH-$CIRCLE_SHA1
+            push $IMAGE_NAME:app-prod
+            push $IMAGE_NAME:app-prod-$CIRCLE_BRANCH-$CIRCLE_SHA1
             docker tag $IMAGE_NAME:nginx-prod "$IMAGE_NAME:nginx-prod-$CIRCLE_BRANCH-$CIRCLE_SHA1"
-            docker push $IMAGE_NAME:nginx-prod
-            docker push $IMAGE_NAME:nginx-prod-$CIRCLE_BRANCH-$CIRCLE_SHA1
+            push $IMAGE_NAME:nginx-prod
+            push $IMAGE_NAME:nginx-prod-$CIRCLE_BRANCH-$CIRCLE_SHA1
   test:
     executor: docker-publisher
     steps:
