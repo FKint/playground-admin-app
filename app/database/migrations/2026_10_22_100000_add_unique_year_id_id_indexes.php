@@ -56,5 +56,7 @@ class AddUniqueYearIdIdIndexes extends Migration
      * Intentionally empty: for databases created after add_organizations was changed, these indexes belong to
      * that migration and the foreign keys depend on them, so dropping them here would fail (or break the schema).
      */
-    public function down() {}
+    public function down()
+    {
+    }
 }
