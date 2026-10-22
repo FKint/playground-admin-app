@@ -15,7 +15,8 @@ class ForcedChoiceRadio extends Component
         public string $displayName,
         public array $choices,
         public bool $readonly = false,
-    ) {}
+    ) {
+    }
 
     /**
      * Get the view / contents that represent the component.

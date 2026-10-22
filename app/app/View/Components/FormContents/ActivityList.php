@@ -14,7 +14,8 @@ class ActivityList extends Component
         public bool $readonly = false,
         public string $submitText = 'Opslaan',
         public bool $withId = false,
-    ) {}
+    ) {
+    }
 
     /**
      * Get the view / contents that represent the component.

@@ -14,17 +14,17 @@ trait ReplaceSqliteDropForeignWithNoop
     protected function hotfixSqlite()
     {
         \Illuminate\Database\Connection::resolverFor('sqlite', function ($connection, $database, $prefix, $config) {
-            return new class($connection, $database, $prefix, $config) extends \Illuminate\Database\SQLiteConnection {
+            return new class ($connection, $database, $prefix, $config) extends \Illuminate\Database\SQLiteConnection {
                 public function getSchemaBuilder()
                 {
                     if (null === $this->schemaGrammar) {
                         $this->useDefaultSchemaGrammar();
                     }
 
-                    return new class($this) extends \Illuminate\Database\Schema\SQLiteBuilder {
+                    return new class ($this) extends \Illuminate\Database\Schema\SQLiteBuilder {
                         protected function createBlueprint($table, ?\Closure $callback = null)
                         {
-                            return new class($this->connection, $table, $callback) extends \Illuminate\Database\Schema\Blueprint {
+                            return new class ($this->connection, $table, $callback) extends \Illuminate\Database\Schema\Blueprint {
                                 public function dropForeign($index)
                                 {
                                     if (is_string($index)) {

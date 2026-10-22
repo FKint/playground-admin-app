@@ -16,7 +16,8 @@ class Dropdown extends Component
         public array $choices,
         public ?string $value = null,
         public bool $readonly = false,
-    ) {}
+    ) {
+    }
 
     /**
      * Get the view / contents that represent the component.
