@@ -8,7 +8,7 @@ executors:
 jobs:
   php-linter:
     docker:
-      - image: cimg/php:8.3.36
+      - image: cimg/php:8.5.12
     steps:
       - checkout
       - run: 

@@ -35,7 +35,8 @@ services:
 
   # Database
   database:
-    image: mysql:8.2.0
+    image: mysql:8.4.13
+    command: --mysql-native-password=ON # MySQL 8.4 disables this plugin by default; existing accounts may still use it
     volumes:
       - dev_dbdata:/var/lib/mysql
     environment:
