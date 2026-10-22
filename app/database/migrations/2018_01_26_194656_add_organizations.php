@@ -11,6 +11,10 @@ class AddOrganizations extends Migration
      */
     public function up()
     {
+        // The composite foreign keys below, (year_id, <relation>_id) -> <table>(year_id, id), reference a column pair,
+        // so the referenced table needs a unique index on that pair. MySQL 8.0 tolerated a non-unique one, but MySQL 8.4
+        // (restrict_fk_on_non_standard_key) and SQLite do not. Each referenced table therefore gets its unique index
+        // before the first foreign key that points at it.
         Schema::create('organizations', function (Blueprint $table) {
             $table->increments('id');
             $table->string('full_name', 100)->unique();
@@ -29,6 +33,7 @@ class AddOrganizations extends Migration
         Schema::table('activity_lists', function (Blueprint $table) {
             $table->integer('year_id')->unsigned()->index()->default(1);
             $table->foreign('year_id')->references('id')->on('years');
+            $table->unique(['year_id', 'id']);
         });
         Schema::table('activity_lists', function (Blueprint $table) {
             $table->decimal('price', 5, 2)->nullable(false)->default(0)->change();
@@ -36,38 +41,47 @@ class AddOrganizations extends Migration
         Schema::table('admin_sessions', function (Blueprint $table) {
             $table->integer('year_id')->unsigned()->index()->default(1);
             $table->foreign('year_id')->references('id')->on('years');
+            $table->unique(['year_id', 'id']);
         });
         Schema::table('age_groups', function (Blueprint $table) {
             $table->integer('year_id')->unsigned()->index()->default(1);
             $table->foreign('year_id')->references('id')->on('years');
+            $table->unique(['year_id', 'id']);
         });
         Schema::table('children', function (Blueprint $table) {
             $table->integer('year_id')->unsigned()->index()->default(1);
             $table->foreign('year_id')->references('id')->on('years');
             $table->foreign(['year_id', 'age_group_id'])->references(['year_id', 'id'])->on('age_groups');
-            $table->index(['year_id', 'id']);
+            $table->unique(['year_id', 'id']);
         });
         Schema::table('day_parts', function (Blueprint $table) {
             $table->integer('year_id')->unsigned()->index()->default(1);
             $table->foreign('year_id')->references('id')->on('years');
+            $table->unique(['year_id', 'id']);
         });
         Schema::table('tariffs', function (Blueprint $table) {
             $table->integer('year_id')->unsigned()->index()->default(1);
             $table->foreign('year_id')->references('id')->on('years');
+            $table->unique(['year_id', 'id']);
         });
         Schema::table('families', function (Blueprint $table) {
             $table->integer('year_id')->unsigned()->index()->default(1);
             $table->foreign('year_id')->references('id')->on('years');
             $table->foreign(['year_id', 'tariff_id'])->references(['year_id', 'id'])->on('tariffs');
-            $table->index(['year_id', 'id']);
+            $table->unique(['year_id', 'id']);
         });
         Schema::table('supplements', function (Blueprint $table) {
             $table->integer('year_id')->unsigned()->index()->default(1);
             $table->foreign('year_id')->references('id')->on('years');
+            $table->unique(['year_id', 'id']);
         });
         Schema::table('week_days', function (Blueprint $table) {
             $table->integer('year_id')->unsigned()->index()->default(1);
             $table->foreign('year_id')->references('id')->on('years');
+            $table->unique(['year_id', 'id']);
+        });
+        Schema::table('weeks', function (Blueprint $table) {
+            $table->unique(['year_id', 'id']);
         });
         Schema::table('playground_days', function (Blueprint $table) {
             $table->integer('year_id')->unsigned()->index()->default(1);
@@ -84,7 +98,7 @@ class AddOrganizations extends Migration
             $table->foreign('year_id')->references('id')->on('years');
             $table->foreign(['year_id', 'child_id'])->references(['year_id', 'id'])->on('children');
             $table->foreign(['year_id', 'family_id'])->references(['year_id', 'id'])->on('families');
-            $table->index(['year_id', 'id']);
+            $table->unique(['year_id', 'id']);
         });
         Schema::table('activity_list_child_families', function (Blueprint $table) {
             $table->integer('year_id')->unsigned()->index()->default(1);
@@ -108,7 +122,7 @@ class AddOrganizations extends Migration
             $table->foreign(['year_id', 'week_day_id'])->references(['year_id', 'id'])->on('week_days');
             $table->foreign(['year_id', 'day_part_id'])->references(['year_id', 'id'])->on('day_parts');
             $table->foreign(['year_id', 'age_group_id'])->references(['year_id', 'id'])->on('age_groups');
-            $table->index(['year_id', 'id']);
+            $table->unique(['year_id', 'id']);
         });
         Schema::table('child_family_day_registration_supplements', function (Blueprint $table) {
             $table->integer('year_id')->unsigned()->index()->default(1);
