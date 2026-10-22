@@ -58,7 +58,7 @@
     "preferred-install": "dist",
     "sort-packages": true,
     "platform": {
-      "php": "8.3.36"
+      "php": "8.5.12"
     },
     "allow-plugins": {
       "composer/package-versions-deprecated": true

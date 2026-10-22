@@ -12,7 +12,8 @@ class AdminSession extends Component
      */
     public function __construct(
         public bool $readonly = false,
-    ) {}
+    ) {
+    }
 
     /**
      * Get the view / contents that represent the component.
