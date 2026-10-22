@@ -19,7 +19,7 @@ $.extend(true, $.fn.dataTable.defaults, {
 
 const pdfMake = require('pdfmake/build/pdfmake.js');
 const pdfFonts = require('pdfmake/build/vfs_fonts.js');
-pdfMake.vfs = pdfFonts.pdfMake.vfs;
+pdfMake.addVirtualFileSystem(pdfFonts);
 
 window.Bloodhound = require('bloodhound-js');
 require('corejs-typeahead');

@@ -49,7 +49,7 @@ RUN composer install --no-interaction --no-progress --optimize-autoloader --no-s
 ##############################
 # NPM package Assets builder #
 ##############################
-FROM node:21.5.0-alpine3.18 as npm-builder
+FROM node:24.22.1-alpine3.24 as npm-builder
 RUN apk add yarn
 WORKDIR /root/app
 COPY app/yarn.lock /root/app/yarn.lock
