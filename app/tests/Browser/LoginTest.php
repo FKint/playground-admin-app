@@ -45,7 +45,8 @@ class LoginTest extends DuskTestCase
         $this->browse(function (Browser $browser) {
             $browser->visit(new LoginPage())
                 ->submitLoginForm('play2@ground.com', 'invalid-password')
-                ->waitForText('These credentials do not match our records')
+                ->waitFor('.has-error .help-block')
+                ->assertSeeIn('.has-error .help-block', 'These credentials do not match our records')
                 ->on(new LoginPage());
         });
     }
@@ -55,7 +56,8 @@ class LoginTest extends DuskTestCase
         $this->browse(function (Browser $browser) {
             $browser->visit(new LoginPage())
                 ->submitLoginForm('no-such-user@ground.com', 'longer-password')
-                ->waitForText('These credentials do not match our records')
+                ->waitFor('.has-error .help-block')
+                ->assertSeeIn('.has-error .help-block', 'These credentials do not match our records')
                 ->on(new LoginPage());
         });
     }

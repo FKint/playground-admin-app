@@ -2,6 +2,7 @@
 
 namespace Tests\Browser\Pages;
 
+use Facebook\WebDriver\Exception\StaleElementReferenceException;
 use Laravel\Dusk\Browser;
 use Laravel\Dusk\Page as BasePage;
 
@@ -45,8 +46,22 @@ class LoginPage extends BasePage
      */
     public function submitLoginForm(Browser $browser, $emailAddress, $password)
     {
-        $browser->type('email', $emailAddress)
-            ->type('password', $password)
-            ->press('Login');
+        // The page can still be settling (or re-rendering) right after the visit;
+        // retry the whole interaction if an element goes stale underneath us.
+        $browser->waitFor('#email')->waitFor('#password');
+        for ($attempt = 1;; ++$attempt) {
+            try {
+                $browser->type('email', $emailAddress)
+                    ->type('password', $password)
+                    ->press('Login');
+
+                return;
+            } catch (StaleElementReferenceException $e) {
+                if ($attempt >= 3) {
+                    throw $e;
+                }
+                $browser->pause(200);
+            }
+        }
     }
 }
