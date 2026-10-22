@@ -45,7 +45,7 @@ class LoginTest extends DuskTestCase
         $this->browse(function (Browser $browser) {
             $browser->visit(new LoginPage())
                 ->submitLoginForm('play2@ground.com', 'invalid-password')
-                ->assertSee('These credentials do not match our records')
+                ->waitForText('These credentials do not match our records')
                 ->on(new LoginPage());
         });
     }
@@ -55,7 +55,7 @@ class LoginTest extends DuskTestCase
         $this->browse(function (Browser $browser) {
             $browser->visit(new LoginPage())
                 ->submitLoginForm('no-such-user@ground.com', 'longer-password')
-                ->assertSee('These credentials do not match our records')
+                ->waitForText('These credentials do not match our records')
                 ->on(new LoginPage());
         });
     }
