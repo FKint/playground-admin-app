@@ -52,7 +52,7 @@ services:
 
   # PHPMyAdmin
   phpmyadmin:
-    image: phpmyadmin/phpmyadmin:5.2.1
+    image: phpmyadmin/phpmyadmin:5.2.3
     environment:
       - "PMA_HOST=database"
     depends_on:
