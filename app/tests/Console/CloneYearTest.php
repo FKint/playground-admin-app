@@ -2,7 +2,6 @@
 
 namespace Tests\Console;
 
-use PHPUnit\Framework\Attributes\CoversNothing;
 use App\Models\ActivityList;
 use App\Models\AdminSession;
 use App\Models\AgeGroup;
@@ -15,10 +14,13 @@ use App\Models\Week;
 use App\Models\WeekDay;
 use App\Models\Year;
 use Carbon\CarbonImmutable;
+use PHPUnit\Framework\Attributes\CoversNothing;
 use Tests\TestCase;
 
 /**
  * @internal
+ *
+ * @coversNothing
  */
 #[CoversNothing]
 class CloneYearTest extends TestCase

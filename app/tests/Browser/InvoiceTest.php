@@ -2,15 +2,17 @@
 
 namespace Tests\Browser;
 
-use PHPUnit\Framework\Attributes\CoversNothing;
 use Database\Seeders\DatabaseSeeder;
 use Database\Seeders\InitialDataSeeder;
 use Laravel\Dusk\Browser;
+use PHPUnit\Framework\Attributes\CoversNothing;
 use Tests\Browser\Pages\InternalDashboardPage;
 use Tests\DuskTestCase;
 
 /**
  * @internal
+ *
+ * @coversNothing
  */
 #[CoversNothing]
 class InvoiceTest extends DuskTestCase

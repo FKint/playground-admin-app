@@ -2,8 +2,6 @@
 
 namespace Tests\Feature;
 
-use PHPUnit\Framework\Attributes\CoversNothing;
-use PHPUnit\Framework\Attributes\DataProvider;
 use App\Models\ActivityList;
 use App\Models\AgeGroup;
 use App\Models\Child;
@@ -17,10 +15,14 @@ use App\Models\User;
 use App\Models\Week;
 use App\Models\WeekDay;
 use App\Models\Year;
+use PHPUnit\Framework\Attributes\CoversNothing;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Tests\TestCase;
 
 /**
  * @internal
+ *
+ * @coversNothing
  */
 #[CoversNothing]
 class OrganizationAuthenticationTest extends TestCase

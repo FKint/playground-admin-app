@@ -7,6 +7,8 @@ use Tests\TestCase;
 
 /**
  * @internal
+ *
+ * @coversNothing
  */
 #[CoversNothing]
 class ExampleTest extends TestCase

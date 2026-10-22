@@ -2,15 +2,17 @@
 
 namespace Tests\Browser;
 
-use PHPUnit\Framework\Attributes\CoversNothing;
 use App\Models\User;
 use Laravel\Dusk\Browser;
+use PHPUnit\Framework\Attributes\CoversNothing;
 use Tests\Browser\Pages\LoginPage;
 use Tests\Browser\Pages\UserDashboardPage;
 use Tests\DuskTestCase;
 
 /**
  * @internal
+ *
+ * @coversNothing
  */
 #[CoversNothing]
 class HomeTest extends DuskTestCase

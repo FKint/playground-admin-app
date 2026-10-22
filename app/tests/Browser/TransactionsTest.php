@@ -2,17 +2,19 @@
 
 namespace Tests\Browser;
 
-use PHPUnit\Framework\Attributes\CoversNothing;
 use Database\Seeders\DatabaseSeeder;
 use Database\Seeders\InitialDataSeeder;
 use Illuminate\Support\Carbon;
 use Laravel\Dusk\Browser;
+use PHPUnit\Framework\Attributes\CoversNothing;
 use Tests\Browser\Pages\InternalDashboardPage;
 use Tests\Browser\Pages\InternalTransactionHistoryPage;
 use Tests\DuskTestCase;
 
 /**
  * @internal
+ *
+ * @coversNothing
  */
 #[CoversNothing]
 class TransactionsTest extends DuskTestCase
