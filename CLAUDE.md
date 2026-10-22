@@ -30,11 +30,13 @@ Source of truth is `readme.md` / CI; entries marked `(untested)` have not been r
 ### MySQL
 - Dev DB runs via `docker/docker-compose.yml.development`; PHPMyAdmin on host port 21001, app on 21000.
 - `php artisan migrate:refresh --seed` builds schema + seed data (in the app container). Migrations must work on MySQL 8.4.
-- No `mysql`/`mysqld` binary in the cloud sandbox as of first check; record here how (if) it was made to work.
+- Docker works in the sandbox if the daemon is started by hand: `(containerd &); (dockerd --containerd=/run/containerd/containerd.sock &)`, wait ~10s, then `docker pull mysql:8.4.13` works through the proxy. (`dockerd` alone times out waiting for its managed containerd.)
+- Verified: `deployment-scripts/migrate-mysql-auth.sh <compose-file> [user] [host]` against `mysql:8.4.13` started with `--mysql-native-password=ON --authentication-policy=mysql_native_password` and a native account: migrates to `caching_sha2_password`, is idempotent, login works afterwards, and `NEW_PASSWORD` with quotes/backslashes works. It needs a compose file with a `database` service; MySQL's image entrypoint itself breaks on a `'` in `MYSQL_PASSWORD`.
+- No `mysql`/`mysqld` binary on the sandbox host; use the container (`docker compose ... exec -T database mysql -uroot -p...`).
 
 ### Lint
 - `composer install --working-dir=tools/php-cs-fixer && tools/php-cs-fixer/vendor/bin/php-cs-fixer fix --dry-run --diff app` (CI runs this; untested here)
 
 ## Sandbox notes
-- Present: `php` 8.3.6 (project targets 8.5.12 in Docker, `^8.3` in composer.json; works fine), `composer`, `node`/`yarn`, `chromedriver`, Playwright Chromium. `docker` CLI exists but the daemon is not running (`Cannot connect to the Docker daemon`).
+- Present: `php` 8.3.6 (project targets 8.5.12 in Docker, `^8.3` in composer.json; works fine), `composer`, `node`/`yarn`, `chromedriver`, Playwright Chromium. `docker` CLI exists; the daemon is not running by default (see MySQL section for starting it).
 - `app/vendor` and `node_modules` are not installed by default; run `composer install` / `yarn install --frozen-lockfile` in `app/`.
