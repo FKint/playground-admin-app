@@ -32,7 +32,8 @@ class InternalAddActivityListPage extends InternalPage
 
     public function submitaddActivityListFormSuccessfully(Browser $browser)
     {
-        $browser->click('@submit');
+        $browser->click('@submit')
+            ->waitUntilMissing('@new-list-form');
     }
 
     public function assertOnActivityListPage(Browser $browser, $activityListId)

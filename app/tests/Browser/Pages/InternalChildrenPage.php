@@ -92,7 +92,8 @@ class InternalChildrenPage extends InternalPage
 
     public function submitAddNewFamilySuccessfully(Browser $browser, $guardianFullName)
     {
-        $browser->click('[dusk="link-new-family"] [dusk=submit]')
+        $browser->scrollIntoView('[dusk="link-new-family"] [dusk=submit]')
+            ->click('[dusk="link-new-family"] [dusk=submit]')
             ->waitForText($guardianFullName);
         // TODO(fkint): find a better way to wait until the request has returned and the content can be updated.
         // Ideas: use a spinning loading icon that can be used for tests as well as for improve UX.
