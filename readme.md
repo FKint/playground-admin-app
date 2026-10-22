@@ -66,6 +66,10 @@
 * `ssh root@admin.jokkebrok.be -L 22306:localhost:21306 -N`
 * Connect to MySQL at `localhost:22306`
 
+### MySQL password authentication
+* New accounts use `caching_sha2_password` (the app's `pdo_mysql`/mysqlnd supports it natively; no app config needed).
+* Migrate an existing `mysql_native_password` account: `ALTER USER 'user'@'%' IDENTIFIED WITH caching_sha2_password BY 'password';`
+
 ## Dev recommendations
 
 ### PHP Formatting
