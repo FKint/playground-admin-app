@@ -3,7 +3,7 @@
 ##################
 # Based on: https://github.com/laradock/php-fpm/blob/master/Dockerfile-74
 # and https://github.com/laradock/laradock/blob/master/php-fpm/Dockerfile
-FROM php:8.3.36-fpm as php-fpm
+FROM php:8.5.12-fpm as php-fpm
 ENV DEBIAN_FRONTEND noninteractive
 RUN apt-get update && \
     pecl channel-update pecl.php.net && \
@@ -30,7 +30,7 @@ RUN docker-php-ext-install pdo_mysql && \
 #################################
 # Composer PHP packages builder #
 #################################
-FROM composer:2.6.6 as composer-builder
+FROM composer:2.10.3 as composer-builder
 WORKDIR /root/app 
 COPY app/composer.json /root/app/composer.json
 COPY app/composer.lock /root/app/composer.lock
@@ -78,7 +78,7 @@ COPY --chown=www-data:www-data --from=npm-builder /root/app/public ./public
 ##############
 # Nginx PROD #
 ##############
-FROM nginx:1.25.3-alpine as nginx-prod
+FROM nginx:1.30.6-alpine as nginx-prod
 WORKDIR /var/www
 COPY --chown=nginx:nginx app/public ./public
 COPY --chown=nginx:nginx --from=npm-builder /root/app/public ./public
@@ -86,7 +86,7 @@ COPY --chown=nginx:nginx --from=npm-builder /root/app/public ./public
 #############
 # Nginx DEV #
 #############
-FROM nginx:1.25.3-alpine as nginx-dev
+FROM nginx:1.30.6-alpine as nginx-dev
 WORKDIR /var/www
 COPY --chown=nginx:nginx app/public ./public
 COPY --chown=nginx:nginx --from=npm-builder /root/app/public ./public
