@@ -15,3 +15,4 @@ yarn-error.log
 version_sha1
 version_timestamp
 version_github_link
+/.phpunit.cache
