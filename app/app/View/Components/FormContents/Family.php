@@ -14,7 +14,8 @@ class Family extends Component
         public bool $readonly = false,
         public bool $withId = false,
         public string $submitText = 'Opslaan'
-    ) {}
+    ) {
+    }
 
     /**
      * Get the view / contents that represent the component.
