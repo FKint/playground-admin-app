@@ -53,7 +53,11 @@ class InternalFamiliesPage extends InternalPage
     public function navigateToEditFamily(Browser $browser, $familyId)
     {
         $selector = 'a.btn-edit-family[data-family-id="'.$familyId.'"]';
-        $browser->click($selector);
+        // Bootstrap moves focus to the modal once its slide-in transition ends, which drops keystrokes typed
+        // before that. Wait for the modal to be fully shown before interacting with the form.
+        $browser->script("window.editFamilyModalShown = false; $('#edit-family-modal').one('shown.bs.modal', function () { window.editFamilyModalShown = true; });");
+        $browser->click($selector)
+            ->waitUntil('window.editFamilyModalShown === true');
     }
 
     public function enterEditFamilyFormData(Browser $browser, $guardianFirstName, $guardianLastName, $tariffId, $remarks = null, $contact = null, $socialContact = null, $needsInvoice = false, $email = null)

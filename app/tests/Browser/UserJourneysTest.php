@@ -100,8 +100,6 @@ class UserJourneysTest extends DuskTestCase
 
     /**
      * Test for editing a family.
-     *
-     * @group flaky
      */
     public function testEditFamily()
     {
@@ -218,8 +216,6 @@ class UserJourneysTest extends DuskTestCase
 
     /**
      * Test for creating activity lists.
-     *
-     * @group flaky
      */
     public function testCreateActivityList()
     {
@@ -282,8 +278,6 @@ class UserJourneysTest extends DuskTestCase
 
     /**
      * Test for updating registrations.
-     *
-     * @group flaky
      */
     public function testRegistrationsFlow()
     {

@@ -49,7 +49,10 @@ class InternalAddChildToFamilyPage extends InternalPage
 
     public function submitAddChildToFamilySuccessfully(Browser $browser)
     {
-        $browser->click('@submit');
+        // Mark the button so we can wait until the page has re-rendered, rather than asserting on stale elements.
+        $browser->script("document.querySelector('[dusk=\"submit\"]').setAttribute('data-submitted', '1');");
+        $browser->click('@submit')
+            ->waitUntil("!document.querySelector('[dusk=\"submit\"][data-submitted]')");
     }
 
     public function assertSeeCurrentChildName(Browser $browser, $childName)
@@ -78,9 +81,11 @@ class InternalAddChildToFamilyPage extends InternalPage
 
     public function selectAddExistingChildSuggestion(Browser $browser, $childName)
     {
-        $browser->within(new TypeaheadComponent('@child-search-typeahead'), function ($browser) use ($childName) {
-            $browser->selectSuggestion($childName)
-                ->waitForReload();
+        // Do the click inside the callback so the reload marker is set before the page can reload.
+        $browser->waitForReload(function ($browser) use ($childName) {
+            $browser->within(new TypeaheadComponent('@child-search-typeahead'), function ($browser) use ($childName) {
+                $browser->selectSuggestion($childName);
+            });
         });
     }
 

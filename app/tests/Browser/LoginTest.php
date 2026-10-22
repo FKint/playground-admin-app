@@ -35,6 +35,7 @@ class LoginTest extends DuskTestCase
             // TODO(fkint): add visual diff
             $browser->visit(new LoginPage())
                 ->submitLoginForm('play2@ground.com', 'longer-password')
+                ->waitForLocation('/internal')
                 ->on(new UserDashboardPage());
         });
     }
