@@ -46,6 +46,10 @@
 * In the container: run `php artisan cache:clear`.
 * (Not supported yet) In the container: run `php artisan route:cache`.
 
+## Update (docker compose production): script
+* `./deploy_prod.sh` (or `./deploy_prod.sh update`): pulls the images, recreates changed containers, runs migrations and caches, then verifies and lists whether every service runs the latest image (`UP-TO-DATE`, `STALE-CONTAINER`, `OUTDATED`, `REGISTRY-ERROR`, `NOT-RUNNING`).
+* `./deploy_prod.sh verify`: read-only check only. Exits non-zero if any service is not up to date.
+
 ## Update (docker compose production) with longer downtime
 * `git pull`: This only affects the docker-compose.yml.production file. The images are pulled from Docker Hub.
 * `docker compose -f docker/docker-compose.yml.production --project-name playgroundadminapp --project-directory . pull`
@@ -61,6 +65,10 @@
 ## Access MySQL
 * `ssh root@admin.jokkebrok.be -L 22306:localhost:21306 -N`
 * Connect to MySQL at `localhost:22306`
+
+### MySQL password authentication
+* New accounts use `caching_sha2_password` (the app's `pdo_mysql`/mysqlnd supports it natively; no app config needed).
+* Migrate an existing `mysql_native_password` account with `deployment-scripts/migrate-mysql-auth.sh [compose-file] [user] [host]` (defaults: production compose file, the app account, `%`). It is idempotent; set `NEW_PASSWORD` to migrate an account other than the app account. Manual equivalent: `ALTER USER 'user'@'%' IDENTIFIED WITH caching_sha2_password BY 'password';`
 
 ## Dev recommendations
 
