@@ -5,6 +5,7 @@ namespace Tests\Browser;
 use Database\Seeders\DatabaseSeeder;
 use Database\Seeders\InitialDataSeeder;
 use Laravel\Dusk\Browser;
+use PHPUnit\Framework\Attributes\CoversNothing;
 use Tests\Browser\Pages\InternalDashboardPage;
 use Tests\Browser\Pages\InternalEditFamilyRegistrationPage;
 use Tests\DuskTestCase;
@@ -14,6 +15,7 @@ use Tests\DuskTestCase;
  *
  * @coversNothing
  */
+#[CoversNothing]
 class UserJourneysTest extends DuskTestCase
 {
     private $user;

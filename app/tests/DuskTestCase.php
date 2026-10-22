@@ -6,6 +6,7 @@ use Facebook\WebDriver\Chrome\ChromeOptions;
 use Facebook\WebDriver\Remote\DesiredCapabilities;
 use Facebook\WebDriver\Remote\RemoteWebDriver;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
+use Illuminate\Foundation\Testing\RefreshDatabaseState;
 use Laravel\Dusk\Concerns\ProvidesBrowser;
 use Laravel\Dusk\TestCase as BaseTestCase;
 
@@ -16,10 +17,10 @@ abstract class DuskTestCase extends BaseTestCase
     use ProvidesBrowser;
     use ReplaceSqliteDropForeignWithNoop;
 
-    public function __construct(?string $name = null, array $data = [], string $dataName = '')
+    protected function setUp(): void
     {
-        parent::__construct($name, $data, $dataName);
         $this->hotfixSqlite();
+        parent::setUp();
     }
 
     public function tearDown(): void
@@ -30,11 +31,20 @@ abstract class DuskTestCase extends BaseTestCase
     }
 
     /**
-     * Prepare for Dusk test execution.
-     *
-     * @beforeClass
+     * Same as the DatabaseMigrations trait, but without rolling back after every test: each test starts with
+     * migrate:fresh anyway, and rolling back runs our historical down() migrations, which SQLite (without
+     * Doctrine DBAL since Laravel 11) cannot always execute, such as dropping a column that is still indexed.
      */
-    public static function prepare() {}
+    public function runDatabaseMigrations()
+    {
+        $this->beforeRefreshingDatabase();
+        $this->refreshTestDatabase();
+        $this->afterRefreshingDatabase();
+
+        $this->beforeApplicationDestroyed(function () {
+            RefreshDatabaseState::$migrated = false;
+        });
+    }
 
     /**
      * Create the RemoteWebDriver instance.

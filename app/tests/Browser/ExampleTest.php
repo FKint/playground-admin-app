@@ -3,6 +3,7 @@
 namespace Tests\Browser;
 
 use Laravel\Dusk\Browser;
+use PHPUnit\Framework\Attributes\CoversNothing;
 use Tests\DuskTestCase;
 
 /**
@@ -10,6 +11,7 @@ use Tests\DuskTestCase;
  *
  * @coversNothing
  */
+#[CoversNothing]
 class ExampleTest extends DuskTestCase
 {
     /**

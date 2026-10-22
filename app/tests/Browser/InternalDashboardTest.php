@@ -3,6 +3,7 @@
 namespace Tests\Browser;
 
 use Laravel\Dusk\Browser;
+use PHPUnit\Framework\Attributes\CoversNothing;
 use Tests\Browser\Pages\InternalDashboardPage;
 use Tests\DuskTestCase;
 
@@ -11,6 +12,7 @@ use Tests\DuskTestCase;
  *
  * @coversNothing
  */
+#[CoversNothing]
 class InternalDashboardTest extends DuskTestCase
 {
     // TODO(fkint): today's registrations

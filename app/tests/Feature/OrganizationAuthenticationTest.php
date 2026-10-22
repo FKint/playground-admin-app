@@ -15,6 +15,8 @@ use App\Models\User;
 use App\Models\Week;
 use App\Models\WeekDay;
 use App\Models\Year;
+use PHPUnit\Framework\Attributes\CoversNothing;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Tests\TestCase;
 
 /**
@@ -22,6 +24,7 @@ use Tests\TestCase;
  *
  * @coversNothing
  */
+#[CoversNothing]
 class OrganizationAuthenticationTest extends TestCase
 {
     private $actualUser;
@@ -242,10 +245,9 @@ class OrganizationAuthenticationTest extends TestCase
     }
 
     /**
-     * @dataProvider readOnlyApiRoutes
-     *
      * @param mixed $routeFunction
      */
+    #[DataProvider('readOnlyApiRoutes')]
     public function testApiNotLoggedInReadOnly($routeFunction)
     {
         $this->assertGuest();
@@ -254,10 +256,9 @@ class OrganizationAuthenticationTest extends TestCase
     }
 
     /**
-     * @dataProvider writeAPIRoutes
-     *
      * @param mixed $routeFunction
      */
+    #[DataProvider('writeAPIRoutes')]
     public function testApiNotLoggedInWrite($routeFunction)
     {
         $this->assertGuest();
@@ -266,10 +267,9 @@ class OrganizationAuthenticationTest extends TestCase
     }
 
     /**
-     * @dataProvider readOnlyApiRoutes
-     *
      * @param mixed $routeFunction
      */
+    #[DataProvider('readOnlyApiRoutes')]
     public function testApiNotAuthorizedReadOnly($routeFunction)
     {
         $this->actingAs(User::factory()->create());
@@ -278,10 +278,9 @@ class OrganizationAuthenticationTest extends TestCase
     }
 
     /**
-     * @dataProvider writeAPIRoutes
-     *
      * @param mixed $routeFunction
      */
+    #[DataProvider('writeAPIRoutes')]
     public function testApiNotAuthorizedWrite($routeFunction)
     {
         $this->actingAs(User::factory()->create());
@@ -290,10 +289,9 @@ class OrganizationAuthenticationTest extends TestCase
     }
 
     /**
-     * @dataProvider readOnlyApiRoutes
-     *
      * @param mixed $routeFunction
      */
+    #[DataProvider('readOnlyApiRoutes')]
     public function testApiAuthorizedReadOnly($routeFunction)
     {
         $this->actingAs($this->actualUser);
@@ -302,10 +300,9 @@ class OrganizationAuthenticationTest extends TestCase
     }
 
     /**
-     * @dataProvider writeAPIRoutes
-     *
      * @param mixed $routeFunction
      */
+    #[DataProvider('writeAPIRoutes')]
     public function testApiAuthorizedWrite($routeFunction)
     {
         $this->actingAs($this->actualUser);

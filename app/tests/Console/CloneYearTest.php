@@ -14,6 +14,7 @@ use App\Models\Week;
 use App\Models\WeekDay;
 use App\Models\Year;
 use Carbon\CarbonImmutable;
+use PHPUnit\Framework\Attributes\CoversNothing;
 use Tests\TestCase;
 
 /**
@@ -21,6 +22,7 @@ use Tests\TestCase;
  *
  * @coversNothing
  */
+#[CoversNothing]
 class CloneYearTest extends TestCase
 {
     protected $year;

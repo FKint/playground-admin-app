@@ -31,6 +31,7 @@ class ChangeTransactionReferenceToFamily extends Migration
             $table->index('family_id');
 
             $table->dropForeign(['child_family_id']);
+            $table->dropIndex(['child_family_id']);
             $table->dropColumn('child_family_id');
         });
     }
@@ -43,6 +44,7 @@ class ChangeTransactionReferenceToFamily extends Migration
         DB::table('transactions')->truncate();
         Schema::table('transactions', function (Blueprint $table) {
             $table->dropForeign(['family_id']);
+            $table->dropIndex(['family_id']);
             $table->dropColumn('family_id');
             $table->integer('child_family_id')->unsigned()->index()->default(0);
             $table->foreign('child_family_id')->references('id')->on('child_families');

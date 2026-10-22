@@ -18,7 +18,7 @@ class Kernel extends HttpKernel
      * @var array
      */
     protected $middleware = [
-        \Illuminate\Foundation\Http\Middleware\CheckForMaintenanceMode::class,
+        \Illuminate\Foundation\Http\Middleware\PreventRequestsDuringMaintenance::class,
         \Illuminate\Foundation\Http\Middleware\ValidatePostSize::class,
         Middleware\TrimStrings::class,
         // \Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull::class,
@@ -27,7 +27,7 @@ class Kernel extends HttpKernel
         \Illuminate\Session\Middleware\StartSession::class,
         // \Illuminate\Session\Middleware\AuthenticateSession::class,
         \Illuminate\View\Middleware\ShareErrorsFromSession::class,
-        Middleware\VerifyCsrfToken::class,
+        Middleware\PreventRequestForgery::class,
         // \Illuminate\Routing\Middleware\SubstituteBindings::class,
         Middleware\ShareAppVersion::class,
     ];
@@ -54,7 +54,7 @@ class Kernel extends HttpKernel
      *
      * @var array
      */
-    protected $routeMiddleware = [
+    protected $middlewareAliases = [
         'add_year_variable_to_templates' => AddYearVariableToTemplates::class,
         'api_auth' => ApiAuthenticationCheck::class,
         'model_same_year' => CheckModelSameYear::class,

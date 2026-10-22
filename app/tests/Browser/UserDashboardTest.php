@@ -3,6 +3,7 @@
 namespace Tests\Browser;
 
 use Laravel\Dusk\Browser;
+use PHPUnit\Framework\Attributes\CoversNothing;
 use Tests\Browser\Pages\InternalDashboardPage;
 use Tests\Browser\Pages\UserDashboardPage;
 use Tests\DuskTestCase;
@@ -12,6 +13,7 @@ use Tests\DuskTestCase;
  *
  * @coversNothing
  */
+#[CoversNothing]
 class UserDashboardTest extends DuskTestCase
 {
     private $user1;

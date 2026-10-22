@@ -6,6 +6,7 @@ use Database\Seeders\DatabaseSeeder;
 use Database\Seeders\InitialDataSeeder;
 use Illuminate\Support\Carbon;
 use Laravel\Dusk\Browser;
+use PHPUnit\Framework\Attributes\CoversNothing;
 use Tests\Browser\Pages\InternalEditFamilyRegistrationPage;
 use Tests\DuskTestCase;
 
@@ -14,6 +15,7 @@ use Tests\DuskTestCase;
  *
  * @coversNothing
  */
+#[CoversNothing]
 class RegistrationsTest extends DuskTestCase
 {
     private $user;

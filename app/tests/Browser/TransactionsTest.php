@@ -6,6 +6,7 @@ use Database\Seeders\DatabaseSeeder;
 use Database\Seeders\InitialDataSeeder;
 use Illuminate\Support\Carbon;
 use Laravel\Dusk\Browser;
+use PHPUnit\Framework\Attributes\CoversNothing;
 use Tests\Browser\Pages\InternalDashboardPage;
 use Tests\Browser\Pages\InternalTransactionHistoryPage;
 use Tests\DuskTestCase;
@@ -15,6 +16,7 @@ use Tests\DuskTestCase;
  *
  * @coversNothing
  */
+#[CoversNothing]
 class TransactionsTest extends DuskTestCase
 {
     private $user;

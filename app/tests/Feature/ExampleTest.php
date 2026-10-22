@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use PHPUnit\Framework\Attributes\CoversNothing;
 use Tests\TestCase;
 
 /**
@@ -9,6 +10,7 @@ use Tests\TestCase;
  *
  * @coversNothing
  */
+#[CoversNothing]
 class ExampleTest extends TestCase
 {
     /**
