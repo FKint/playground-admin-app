@@ -2,6 +2,7 @@
 
 namespace Tests\Console;
 
+use PHPUnit\Framework\Attributes\CoversNothing;
 use App\Models\ActivityList;
 use App\Models\AdminSession;
 use App\Models\AgeGroup;
@@ -18,9 +19,8 @@ use Tests\TestCase;
 
 /**
  * @internal
- *
- * @coversNothing
  */
+#[CoversNothing]
 class CloneYearTest extends TestCase
 {
     protected $year;

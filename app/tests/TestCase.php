@@ -11,9 +11,9 @@ abstract class TestCase extends BaseTestCase
     use RefreshDatabase;
     use ReplaceSqliteDropForeignWithNoop;
 
-    public function __construct(?string $name = null, array $data = [], string $dataName = '')
+    protected function setUp(): void
     {
-        parent::__construct($name, $data, $dataName);
         $this->hotfixSqlite();
+        parent::setUp();
     }
 }

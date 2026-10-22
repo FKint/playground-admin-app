@@ -16,10 +16,10 @@ abstract class DuskTestCase extends BaseTestCase
     use ProvidesBrowser;
     use ReplaceSqliteDropForeignWithNoop;
 
-    public function __construct(?string $name = null, array $data = [], string $dataName = '')
+    protected function setUp(): void
     {
-        parent::__construct($name, $data, $dataName);
         $this->hotfixSqlite();
+        parent::setUp();
     }
 
     public function tearDown(): void
@@ -28,13 +28,6 @@ abstract class DuskTestCase extends BaseTestCase
         // Close browser to remove session
         static::closeAll();
     }
-
-    /**
-     * Prepare for Dusk test execution.
-     *
-     * @beforeClass
-     */
-    public static function prepare() {}
 
     /**
      * Create the RemoteWebDriver instance.

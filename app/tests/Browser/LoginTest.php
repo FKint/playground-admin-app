@@ -2,6 +2,7 @@
 
 namespace Tests\Browser;
 
+use PHPUnit\Framework\Attributes\CoversNothing;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Laravel\Dusk\Browser;
@@ -11,9 +12,8 @@ use Tests\DuskTestCase;
 
 /**
  * @internal
- *
- * @coversNothing
  */
+#[CoversNothing]
 class LoginTest extends DuskTestCase
 {
     protected $user;
