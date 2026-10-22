@@ -11,14 +11,14 @@ Where the dependency and runtime updates stand after the Laravel 13 upgrade, wha
 | JS | DataTables 3.1 / Buttons 4.1, pdfmake 0.3, `less-loader` 13, `cross-env` 10, `webpack-cli` 6; `vue-template-compiler` removed |
 | JS advisories | 20 (5 low, 9 moderate, 6 high, 0 critical; was 185 with 20 critical), all in laravel-mix 6 build tooling |
 | Docker asset build | node 24 LTS |
-| PHP / base images | PHP 8.3.36, phpMyAdmin 5.2.3 |
-| Database | `UNIQUE (year_id, id)` indexes for the composite foreign keys (#193) |
-
-## In review
-
-- **PHP 8.5.12, composer 2.10, nginx 1.30, MySQL 8.4 LTS, Redis 8, php-cs-fixer 3.95** (#200). Merge #202 first: on MySQL 8.4 a new database cannot be created from the current migrations.
-- **MySQL 8.4 migrations** (#202): `restrict_fk_on_non_standard_key` is ON by default in 8.4, so the composite foreign keys need unique parent keys when they are created.
-- **Re-enable foreign key enforcement for the PHPUnit SQLite connection** (#201): reverts the workaround from the Laravel 13 upgrade now that the unique indexes exist (one test data bug, `CloneYearTest`, surfaced).
+| Runtime / images (#200) | PHP 8.5.12 (Dockerfile and CircleCI), composer 2.10.3, nginx 1.30.6, MySQL 8.4.13 LTS, Redis 8.10.2, phpMyAdmin 5.2.3 |
+| Linter | php-cs-fixer 3.95 (CI job on `cimg/php:8.5.12`) |
+| Database indexes | `UNIQUE (year_id, id)` for the composite foreign keys (#193, #203); redundant indexes dropped (#203, #207) |
+| MySQL 8.4 migrations (#202) | a new database can be created under 8.4's default `restrict_fk_on_non_standard_key` |
+| PHPUnit SQLite connection (#201) | foreign key enforcement re-enabled; `CloneYearTest` data bug fixed |
+| MySQL authentication (#204, #209) | compose files start MySQL with `--authentication-policy=caching_sha2_password` (plus `--mysql-native-password=ON`); `deployment-scripts/migrate-mysql-auth.sh` converts an existing account (documented in the readme) |
+| Deploy helper (#205) | `deploy_prod.sh update` / `verify` check that running containers use the latest images |
+| Dev tooling (#208) | `CLAUDE.md` and `scripts/dusk-sandbox.sh` (Dusk without Docker) |
 
 ## Not adopted, and why
 
@@ -33,23 +33,37 @@ All four are blocked by laravel-mix 6 or Bootstrap 3. Replacing laravel-mix (for
 
 ## Not verified yet
 
-- An in-place data-directory upgrade of the real MySQL 8.2 database to 8.4 (only a fresh 8.4 data directory was tested).
+- An in-place data-directory upgrade of the real MySQL 8.2 database to 8.4 (only a fresh 8.4 data directory was tested). 8.4 data directories cannot be downgraded: take a backup first.
 - PHP 8.5 beyond what CircleCI covers (no PHP 8.5 binary in the sandbox where this was developed).
+- Whether production still has `mysql_native_password` accounts (step 1 below needs the production database).
 
 ## Plan: stop using `mysql_native_password`
 
-**Why.** MySQL 8.4 disables the `mysql_native_password` plugin by default and MySQL 9 removes it. The 8.4 bump (#200) therefore starts the server with `--mysql-native-password=ON`. That flag is a bridge: it keeps accounts that were created long ago working. If the production data directory was first created by an older MySQL (the project dates from 2017), the app user and root may still be on the old plugin; that is unverified and is what step 1 checks. The goal is to move every account to `caching_sha2_password`, the 8.4 default, and then delete the flag.
+**Why.** MySQL 8.4 disables the `mysql_native_password` plugin by default and MySQL 9 removes it. The compose files therefore start the server with `--mysql-native-password=ON`. That flag is a bridge: it keeps accounts that were created long ago working. If the production data directory was first created by an older MySQL (the project dates from 2017), the app user and root may still be on the old plugin; that is unverified and is what step 1 checks. The goal is to move every account to `caching_sha2_password`, the 8.4 default, and then delete the flag.
 
-**What is already known.**
-- The image entrypoint creates `MYSQL_USER` / `MYSQL_ROOT_PASSWORD` only when the data directory is first initialised, so existing accounts keep their old plugin across upgrades. New environments (a fresh dev volume) get the default plugin and need nothing.
-- Passwords come from the environment: `DB_USERNAME` / `DB_PASSWORD` (app), `MYSQL_ROOT_PASSWORD` (production root), `DEV_DB_*` (dev app user, also used by phpMyAdmin via `PMA_USER` / `PMA_PASSWORD`).
-- The clients are fine: PHP 8.3 PDO and mysqli (the same mysqlnd that Laravel and phpMyAdmin 5.2.3 use) connect to MySQL 8.4.13 with a `caching_sha2_password` account over plain TCP, on the first and second connection, with no TLS or extra options.
+**Already in place.**
+- New accounts use `caching_sha2_password` (`--authentication-policy`, #204). The image entrypoint creates `MYSQL_USER` / `MYSQL_ROOT_PASSWORD` only when the data directory is first initialised, so existing accounts keep their old plugin across upgrades; a fresh dev volume needs nothing.
+- `deployment-scripts/migrate-mysql-auth.sh [compose-file] [user] [host]` (#209) converts an account with the same password, is idempotent, and reads credentials inside the container. Verified against `mysql:8.4.13`: converts, can be re-run, login works afterwards, passwords with quotes/backslashes work. Set `NEW_PASSWORD` for accounts other than the app account (e.g. root).
+- Clients are fine: PHP 8.3 PDO and mysqli (same mysqlnd as Laravel and phpMyAdmin 5.2.3) connect to MySQL 8.4.13 with a `caching_sha2_password` account over plain TCP, with no TLS or extra options.
 
-**Steps.**
-1. **Inventory** (production, still on 8.2, read-only): `SELECT user, host, plugin FROM mysql.user;`. If every account is already `caching_sha2_password`, skip to step 5.
-2. **Convert** each account on the old plugin, keeping the same password so no env file changes: `ALTER USER '<user>'@'<host>' IDENTIFIED WITH caching_sha2_password BY '<password>';`. Do root last. Feed the SQL through stdin (or `MYSQL_PWD` / a `--defaults-extra-file`), not as `-p<password>` on the command line, so the passwords stay out of the process list and shell history.
-3. **Verify while still on 8.2:** the app loads and `php artisan migrate:status` works, phpMyAdmin logs in, a `mysqldump` with the app account succeeds. Reverting is another `ALTER USER ... IDENTIFIED WITH mysql_native_password ...`.
-4. **Back up, then upgrade to 8.4** (#200). Keep `--mysql-native-password=ON` for this first deploy as a safety net (it is harmless), confirm everything works. MySQL 8.4 data directories cannot be downgraded: the rollback is the backup.
-5. **Remove the flag** from both compose files in a second change, once `SELECT user, host, plugin FROM mysql.user;` shows no native accounts.
+**Steps remaining (production access needed).**
+1. **Inventory** (production): `SELECT user, host, plugin FROM mysql.user;`. If no account is on `mysql_native_password`, skip to step 4.
+2. **Convert** each such account with the script (or `ALTER USER ... IDENTIFIED WITH caching_sha2_password BY '<password>'`), root last. Passwords stay unchanged, so no env file changes. Revert with `IDENTIFIED WITH mysql_native_password`.
+3. **Verify:** the app loads and `php artisan migrate:status` works, phpMyAdmin logs in, `mysqldump` with the app account succeeds. Back up before the 8.2 to 8.4 upgrade; keep the flag for that first deploy as a safety net.
+4. **Remove `--mysql-native-password=ON`** from both compose files in a second change, once the inventory shows no native accounts.
 
-**What cannot be done from here.** Steps 1 to 4 need access to the production database. A small idempotent script (`deployment-scripts/`) that converts only the accounts still on the old plugin and prints before and after, plus the compose change for step 5, can be prepared in advance.
+## Open work
+
+### Known gaps
+- Replace laravel-mix 6 (for example with Vite): unblocks webpack 5.95+, `webpack-cli` 7, Babel 8 and the remaining 20 `yarn audit` advisories. Not started. Bootstrap 3 (end-of-life) is the reason for jQuery 3.
+- Production steps of the MySQL plan above, and the 8.2 to 8.4 upgrade.
+- `readme.md` (Certbot section) still says "TODO: update the docker-compose script" for the certbot pre/post hooks.
+
+### Code TODOs
+Only the first two touch application code:
+
+| Where | TODO |
+|---|---|
+| `app/app/Http/Controllers/Internal/RegistrationsController.php:187` | check other registrations of the child in the same week (e.g. through other families); the only one that could change behaviour |
+| `app/app/Models/FamilyWeekRegistration.php:173` | verify that the `'registered' = false` default is needed |
+| `app/tests/Browser/` (Dusk, 20 TODOs in 9 files) | more precise selectors and row-scoped assertions (`within`), waiting instead of fixed delays, a date picker in tests, a visual diff in `LoginTest`, a test for today's registrations in `InternalDashboardTest` |
