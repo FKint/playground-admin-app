@@ -19,7 +19,8 @@ $.extend(true, $.fn.dataTable.defaults, {
 
 const pdfMake = require('pdfmake/build/pdfmake.js');
 const pdfFonts = require('pdfmake/build/vfs_fonts.js');
-pdfMake.vfs = pdfFonts.pdfMake.vfs;
+// Newer pdfmake releases export the font files directly instead of under `pdfMake.vfs`.
+pdfMake.vfs = pdfFonts.pdfMake ? pdfFonts.pdfMake.vfs : pdfFonts;
 
 window.Bloodhound = require('bloodhound-js');
 require('corejs-typeahead');
