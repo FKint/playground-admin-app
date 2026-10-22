@@ -12,7 +12,8 @@ class Submit extends Component
      */
     public function __construct(
         public string $text = 'Opslaan',
-    ) {}
+    ) {
+    }
 
     /**
      * Get the view / contents that represent the component.
