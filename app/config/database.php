@@ -47,10 +47,7 @@ return [
             'driver' => 'sqlite',
             'database' => storage_path('testing/testing.sqlite'),
             'prefix' => '',
-            // Foreign keys are enforced by MySQL in production. Since Laravel 11 SQLite really creates the composite
-            // foreign keys added by our older migrations, and those reference non-unique parent keys, which SQLite
-            // (unlike MySQL) rejects when enforcement is on.
-            'foreign_key_constraints' => false,
+            'foreign_key_constraints' => true,
         ],
 
         'mysql' => [

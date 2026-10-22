@@ -31,7 +31,7 @@ class CloneYearTest extends TestCase
     public function setUp(): void
     {
         parent::setUp();
-        $this->year = Year::factory()->create();
+        $this->year = Year::factory()->for(Organization::factory()->create())->create();
         $this->other_organization = Organization::factory()->create();
         ActivityList::factory()->for($this->year)->create();
         $tariffs = Tariff::factory()->count(2)->for($this->year)->create();
