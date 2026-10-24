@@ -91,7 +91,8 @@ Transacties voor {{ $date->format('d-m-Y') }}
             processing: true,
             serverSide: false,
             ajax: '{!! route('api.datatables.transactions_for_date', ['date'=>$date->toDateString()]) !!}',
-            buttons: ['pdfHtml5'],
+            dom: 'Blfrtip',
+            buttons: ['pdfHtml5', 'csv', 'excelHtml5'],
             order: [[1, "desc"]],
             columns: [
                 {data: 'id', name: 'id'},
