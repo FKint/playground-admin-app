@@ -106,7 +106,7 @@ Voogden
             buttons: [{
                 extend: 'pdfHtml5',
                 exportOptions: {
-                    columns: ':visible.export'
+                    columns: function (idx, data, node) { return $(node).hasClass('export') && table.column(idx).visible(); }
                 },
                 title: "Gezinnen",
                 orientation: 'landscape',
@@ -135,13 +135,13 @@ Voogden
             }, {
                 extend: 'csv',   
                 exportOptions: {
-                    columns: ':visible.export',
+                    columns: function (idx, data, node) { return $(node).hasClass('export') && table.column(idx).visible(); },
                     orthogonal: 'export'
                 },
             }, {
                 extend: 'excelHtml5',
                 exportOptions: {
-                    columns: ':visible.export',
+                    columns: function (idx, data, node) { return $(node).hasClass('export') && table.column(idx).visible(); },
                     orthogonal: 'export'
                 }
             }, 'colvis'],
