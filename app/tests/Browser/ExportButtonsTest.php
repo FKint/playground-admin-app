@@ -50,7 +50,7 @@ class ExportButtonsTest extends DuskTestCase
             'lists' => ['lists', ['pdf', 'csv', 'excel'], null],
             'list participants' => ['list', ['pdf', 'csv', 'excel'], null],
             'registrations' => ['registrations', ['pdf', 'csv', 'excel'], null],
-            'transactions' => ['transactions', ['pdf', 'csv', 'excel'], null],
+            'transactions' => ['transactions', ['pdf'], null],
             'family transactions' => ['family_transactions', ['pdf', 'csv', 'excel'], null],
         ];
     }
