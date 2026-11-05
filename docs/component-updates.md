@@ -1,22 +1,18 @@
-# Open component and maintenance work (2026-10-22)
+# Open component and maintenance work (2026-11-05)
 
-Only what is still to do, each item checked against `master` on 2026-10-22. Everything else (Laravel 13, PHP 8.5.12, MySQL 8.4, dependency majors, index cleanups, the account migration script, ...) is merged and not listed.
+Only what is still to do, each item checked against `master` on 2026-11-05. Everything else (Laravel 13, PHP 8.5.12, MySQL 8.4.13, dependency majors, index cleanups, the account migration script, ...) is merged and not listed.
+
+Production has run the current versions (PHP 8.5.12, MySQL 8.4, Redis 8) since 2026-11-04 with no detected issues. That confirms the in-place MySQL 8.2 to 8.4 upgrade and PHP 8.5.12 outside CircleCI, so they are no longer open.
 
 ## 1. Stop using `mysql_native_password` (needs production access)
 
-`master` still starts MySQL with `--mysql-native-password=ON` in `docker/docker-compose.yml.development` and `docker/docker-compose.yml.production`. MySQL 9 removes the plugin. New accounts already use `caching_sha2_password`, and `deployment-scripts/migrate-mysql-auth.sh` converts existing ones, so what remains is running it:
+`master` still starts MySQL with `--mysql-native-password=ON` in `docker/docker-compose.yml.development` and `docker/docker-compose.yml.production`. MySQL 9 removes the plugin. New accounts already use `caching_sha2_password`, and `deployment-scripts/migrate-mysql-auth.sh` converts existing ones. Whether production accounts were converted is not recorded here; what remains:
 
-1. **Inventory** (production, still on 8.2): `SELECT user, host, plugin FROM mysql.user;`. If no account is on `mysql_native_password`, skip to step 4.
-2. **Convert** each such account, root last: `deployment-scripts/migrate-mysql-auth.sh [compose-file] [user] [host]` (set `NEW_PASSWORD` for accounts other than the app account). Passwords stay unchanged.
-3. **Verify:** the app loads, `php artisan migrate:status` works, phpMyAdmin logs in, `mysqldump` with the app account works. Back up before the 8.2 to 8.4 upgrade (8.4 data directories cannot be downgraded); keep the flag for that first deploy.
-4. **Remove `--mysql-native-password=ON`** from both compose files.
+1. **Inventory** (production, now on 8.4): `SELECT user, host, plugin FROM mysql.user;`. If no account is on `mysql_native_password`, skip to step 3.
+2. **Convert** each such account, root last: `deployment-scripts/migrate-mysql-auth.sh [compose-file] [user] [host]` (set `NEW_PASSWORD` for accounts other than the app account). Passwords stay unchanged. Verify: the app loads, `php artisan migrate:status` works, phpMyAdmin logs in, `mysqldump` with the app account works.
+3. **Remove `--mysql-native-password=ON`** from both compose files and deploy.
 
-## 2. Verify the production upgrade path
-
-- In-place upgrade of the real MySQL 8.2 data directory to 8.4: only a fresh 8.4 data directory has been tested.
-- PHP 8.5.12 beyond CircleCI: the sandbox has PHP 8.3.6 only.
-
-## 3. Replace laravel-mix 6 (not started)
+## 2. Replace laravel-mix 6 (not started)
 
 `app/package.json` pins `webpack ~5.94.0` (also in `resolutions`) and still depends on `laravel-mix ^6.0.39`, `@babel/* ^7`, `jquery ^3`. These cannot move while laravel-mix 6 and Bootstrap 3 are in use:
 
@@ -29,7 +25,7 @@ Only what is still to do, each item checked against `master` on 2026-10-22. Ever
 
 Replacing laravel-mix (for example with Vite) lifts the first three and should clear the `yarn audit` advisories that remain in the build tooling (20 when last measured; not re-measured, `yarn audit` could not run here).
 
-## 4. Code and docs TODOs
+## 3. Code and docs TODOs
 
 | Where | TODO |
 |---|---|
