@@ -6,9 +6,9 @@ Production has run the current versions (PHP 8.5.12, MySQL 8.4, Redis 8) since 2
 
 ## 1. Stop using `mysql_native_password` (needs production access)
 
-`master` still starts MySQL with `--mysql-native-password=ON` in `docker/docker-compose.yml.development` and `docker/docker-compose.yml.production`. MySQL 9 removes the plugin. New accounts already use `caching_sha2_password`, and `deployment-scripts/migrate-mysql-auth.sh` converts existing ones. Whether production accounts were converted is not recorded here; what remains:
+`master` still starts MySQL with `--mysql-native-password=ON` in `docker/docker-compose.yml.development` and `docker/docker-compose.yml.production`. MySQL 9 removes the plugin. New accounts already use `caching_sha2_password`, and `deployment-scripts/migrate-mysql-auth.sh` converts existing ones. The production accounts have not been converted yet, so the flag must stay until they are. What remains:
 
-1. **Inventory** (production, now on 8.4): `SELECT user, host, plugin FROM mysql.user;`. If no account is on `mysql_native_password`, skip to step 3.
+1. **Inventory** (production, now on 8.4): `SELECT user, host, plugin FROM mysql.user;`. Expect the existing accounts to be on `mysql_native_password`; if none is, skip to step 3.
 2. **Convert** each such account, root last: `deployment-scripts/migrate-mysql-auth.sh [compose-file] [user] [host]` (set `NEW_PASSWORD` for accounts other than the app account). Passwords stay unchanged. Verify: the app loads, `php artisan migrate:status` works, phpMyAdmin logs in, `mysqldump` with the app account works.
 3. **Remove `--mysql-native-password=ON`** from both compose files and deploy.
 
