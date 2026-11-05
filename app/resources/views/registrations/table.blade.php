@@ -76,7 +76,7 @@
                     {
                         extend: 'pdfHtml5',
                         exportOptions: {
-                            columns: ':visible.export'
+                            columns: function (idx, data, node) { return $(node).hasClass('export') && table.column(idx).visible(); }
                         },
                         title: "Registraties {{ $playground_day->date()->format('d-m-Y') }}",
                         customize: function (doc) {
@@ -108,7 +108,7 @@
                             if ($('#select-attended').val() !== 'all') {
                                 filter_text += "Aanwezig: " + $('#select-attended option:selected').text().trim() + "\n";
                             }
-                            const search_query = $('#registrations-table').siblings('div.dataTables_filter').find('input').val().trim();
+                            const search_query = table.search().trim();
                             if (search_query.length > 0) {
                                 filter_text += "Filter: " + search_query + "\n";
                             }
@@ -120,12 +120,12 @@
                     }, {
                         extend: 'csv',   
                         exportOptions: {
-                            columns: ':visible.export'
+                            columns: function (idx, data, node) { return $(node).hasClass('export') && table.column(idx).visible(); }
                         },
                     }, {
                         extend: 'excelHtml5',
                         exportOptions: {
-                            columns: ':visible.export'
+                            columns: function (idx, data, node) { return $(node).hasClass('export') && table.column(idx).visible(); }
                         }
                     }, 'colvis'
                 ],

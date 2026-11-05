@@ -34,6 +34,7 @@ Transactiegeschiedenis voor voogd {{ $family->id }} ({{ $family->guardian_full_n
             processing: true,
             serverSide: false,
             ajax: '{!! route('api.datatables.family_transactions', ['family'=>$family]) !!}',
+            dom: 'Blfrtip',
             buttons: ['pdfHtml5', 'csv', 'excelHtml5'],
             columns: [
                 {
