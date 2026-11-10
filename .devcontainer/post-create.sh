@@ -6,6 +6,9 @@ cd "$(dirname "$0")/../app"
 
 # The vendor/node_modules volumes are created as root.
 sudo chown "$(id -u):$(id -g)" vendor node_modules
+# Claude Code's config/login lives in a named volume (see devcontainer.json "mounts") so it survives rebuilds
+# and is shared by all checkouts.
+sudo chown -R "$(id -u):$(id -g)" ~/.claude
 
 if [ ! -f .env ]; then
   sed 's#^APP_URL=.*#APP_URL=http://localhost:8000#' ../.laravel.env.development.example > .env
@@ -25,6 +28,8 @@ mkdir -p storage/testing && touch storage/testing/testing.sqlite
 
 composer install --no-interaction
 composer install --no-interaction --working-dir=../tools/php-cs-fixer
+# Corepack (which provides yarn) asks before its first download, which blocks a non-interactive build.
+export COREPACK_ENABLE_DOWNLOAD_PROMPT=0
 yarn install --frozen-lockfile
 yarn dev
 

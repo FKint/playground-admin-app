@@ -1,4 +1,7 @@
-name: playground-admin-devcontainer
+# No fixed `name:`: Dev Containers then uses `<folder>_devcontainer` as the project name, so every
+# checkout or worktree gets its own containers and volumes. With a shared name, opening a second
+# checkout attaches to the first checkout's container.
+# WORKSPACE and GIT_COMMON_DIR come from .devcontainer/.env, written by initialize.sh.
 
 services:
   # Workspace container: VS Code attaches here. Run `php artisan serve`, composer, yarn and tests in it.
@@ -8,10 +11,13 @@ services:
       dockerfile: Dockerfile
     command: sleep infinity
     volumes:
-      - ..:/workspaces/playground-admin-app:cached
+      # Same paths as on the host, so the absolute paths in a worktree's .git (and in the shared .git's
+      # worktree metadata) resolve. In the main checkout the second mount is already inside the first.
+      - ${WORKSPACE:?run .devcontainer/initialize.sh}:${WORKSPACE}:cached
+      - ${GIT_COMMON_DIR:?run .devcontainer/initialize.sh}:${GIT_COMMON_DIR}
       # Keep dependencies in volumes: faster than a bind mount on macOS and keeps the host tree clean.
-      - vendor:/workspaces/playground-admin-app/app/vendor
-      - node_modules:/workspaces/playground-admin-app/app/node_modules
+      - vendor:${WORKSPACE}/app/vendor
+      - node_modules:${WORKSPACE}/app/node_modules
     networks:
       default:
         # tests/DuskTestCase.php and .laravel.env.dusk.example expect the app at http://app-container:8000.
