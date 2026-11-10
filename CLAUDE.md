@@ -25,6 +25,7 @@ Source of truth is `readme.md` / CI; entries marked `(untested)` have not been r
 - What it does: builds assets if missing (`yarn install --frozen-lockfile && yarn dev`, needed or pages lack JS/CSS), copies `.laravel.env.dusk.example` to `app/.env`, adds `selenium`/`app-container` to `/etc/hosts` (hardcoded in `tests/DuskTestCase.php` and the env file), runs `php artisan serve --host=app-container`, and runs chromedriver on :4444 with `--url-base=/wd/hub`.
 - Gotcha: the preinstalled `chromedriver` (v147) does not match Playwright's Chromium (v141) -> "session not created". The script downloads the matching driver from `storage.googleapis.com/chrome-for-testing-public/<version>/linux64/chromedriver-linux64.zip` (reachable through the proxy). Chromium is `/opt/pw-browsers/chromium`; chromedriver finds it via a `/usr/bin/google-chrome` symlink.
 - Export buttons (PDF/CSV/Excel) are client-side DataTables buttons; `tests/Browser/ExportButtonsTest.php` clicks each and checks the generated blob (intercepts `URL.createObjectURL`, so it works with a remote selenium too). DataTables 3: `:visible.export` is an invalid column selector (use a function), the search box is `div.dt-search` (use `table.search()`), and `dom: 'Blfrtip'` is required for buttons to render.
+- Verified in the dev container (selenium + `app-container` already resolve, no docker CLI): `cd app && (php artisan serve --host=0.0.0.0 --port=8000 &) ; php artisan dusk` -> 30 tests OK, ~2 min. Check `curl http://selenium:4444/wd/hub/status` first; kill the server afterwards.
 - CI/Docker equivalent (untested here): selenium container + `docker exec -it dusk-tests-app-container-1 php artisan dusk`; see the `test-dusk` job in `.circleci/config.yml`.
 - `app/.env`, `public/js`, `public/css`, `vendor`, `node_modules` are generated/ignored; check `git status` before committing.
 
@@ -34,6 +35,9 @@ Source of truth is `readme.md` / CI; entries marked `(untested)` have not been r
 - Docker works in the sandbox if the daemon is started by hand: `(containerd &); (dockerd --containerd=/run/containerd/containerd.sock &)`, wait ~10s, then `docker pull mysql:8.4.13` works through the proxy. (`dockerd` alone times out waiting for its managed containerd.)
 - Verified: `deployment-scripts/migrate-mysql-auth.sh <compose-file> [user] [host]` against `mysql:8.4.13` started with `--mysql-native-password=ON --authentication-policy=mysql_native_password` and a native account: migrates to `caching_sha2_password`, is idempotent, login works afterwards, and `NEW_PASSWORD` with quotes/backslashes works. It needs a compose file with a `database` service; MySQL's image entrypoint itself breaks on a `'` in `MYSQL_PASSWORD`.
 - No `mysql`/`mysqld` binary on the sandbox host; use the container (`docker compose ... exec -T database mysql -uroot -p...`).
+
+### Dev container
+- `.devcontainer/` (compose: app + mysql 8.4.13 + phpmyadmin + selenium), setup in `.devcontainer/post-create.sh`; the app service has network alias `app-container` so Dusk works unchanged. Don't set `DB_*` as container env vars: they would override the Dusk `.env` swap. Verified: container builds and Dusk passes inside it (see Dusk section). `.devcontainer/devcontainer-lock.json` pins the feature versions; commit it when it changes.
 
 ### Lint
 - `composer install --working-dir=tools/php-cs-fixer && tools/php-cs-fixer/vendor/bin/php-cs-fixer fix --dry-run --diff app` (CI runs this; untested here)

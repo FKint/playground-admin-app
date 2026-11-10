@@ -4,6 +4,18 @@
 
 ## Development
 
+### Dev container (VS Code / Codespaces)
+
+* Open the repository in VS Code and run **Dev Containers: Reopen in Container**. This starts the workspace container (PHP 8.5, Composer, Node 24, Yarn), MySQL 8.4, phpMyAdmin and Selenium (`.devcontainer/`).
+* On first creation, `.devcontainer/post-create.sh` installs the Composer and Yarn dependencies, builds the assets, writes `app/.env` (MySQL) and `app/.env.dusk.local` (Dusk), and migrates and seeds the database (it seeds only when the database is empty).
+* Commands below run in the `app/` folder of the container terminal:
+    * Web app: `php artisan serve --host=0.0.0.0 --port=8000`, then open `http://localhost:8000`. Use `yarn watch` to rebuild the assets on change.
+    * Unit tests: `vendor/bin/phpunit`
+    * Dusk tests: keep `php artisan serve --host=0.0.0.0 --port=8000` running, then run `php artisan dusk`. During the run, Dusk swaps in `.env.dusk.local` (SQLite). The browser is visible through the forwarded Selenium noVNC port 7900 (password `secret`).
+    * Linting: `../tools/php-cs-fixer/vendor/bin/php-cs-fixer fix --dry-run --diff .`
+* phpMyAdmin is available on the forwarded `phpmyadmin:80` port.
+* `vendor`, `node_modules` and the database are stored in Docker volumes. To start over, rebuild the container and delete the `playground-admin-devcontainer_*` volumes.
+
 ### Local development instance
 
 * Copy `.env.example` to `.env` and `.laravel.env.development.example` to `.laravel.env.development`.
