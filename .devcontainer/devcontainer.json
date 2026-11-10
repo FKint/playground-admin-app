@@ -3,7 +3,8 @@
   "dockerComposeFile": "docker-compose.yml",
   "service": "app",
   "runServices": ["app", "database", "phpmyadmin", "selenium"],
-  "workspaceFolder": "/workspaces/playground-admin-app",
+  "workspaceFolder": "${localWorkspaceFolder}",
+  "initializeCommand": "bash .devcontainer/initialize.sh",
   "shutdownAction": "stopCompose",
   "features": {
     "ghcr.io/devcontainers/features/common-utils:2": {
