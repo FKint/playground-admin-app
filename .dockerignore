@@ -1,5 +1,5 @@
 docker
-.circleci
+.github
 .vscode
 deployment-scripts
 .dockerignore

@@ -1,0 +1,164 @@
+name: CI
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  IMAGE_NAME: fkint/playground-php-app
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.5'
+          tools: composer
+      - name: Install PHP-CS-Fixer
+        run: composer install --working-dir=tools/php-cs-fixer
+      - name: Run PHP-CS-Fixer
+        run: tools/php-cs-fixer/vendor/bin/php-cs-fixer fix --dry-run --diff app
+
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Write version files
+        env:
+          SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+        run: |
+          echo "https://github.com/$GITHUB_REPOSITORY/tree/$SHA" > ./app/version_github_link
+          echo "$SHA" > ./app/version_sha1
+          date '+%s' > ./app/version_timestamp
+      - uses: docker/setup-buildx-action@v3
+      - uses: crazy-max/ghaction-github-runtime@v3
+      - name: Build Docker layers
+        run: |
+          BuildStages=("php-fpm" "composer-builder" "composer-builder-test" "npm-builder" "composer-installer-test" "app-test" "nginx-prod" "nginx-dev" "composer-installer" "app-prod")
+          for stage in "${BuildStages[@]}"; do
+            docker buildx build --target "$stage" \
+              --cache-from "type=gha,scope=docker-images" \
+              --cache-to "type=gha,scope=docker-images,mode=max" \
+              --load -t "$IMAGE_NAME:$stage" -f docker/Dockerfile .
+          done
+          docker save -o /tmp/docker-app-test.tar "$IMAGE_NAME:app-test"
+          docker save -o /tmp/docker-prod.tar "$IMAGE_NAME:app-prod" "$IMAGE_NAME:nginx-prod"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: docker-app-test
+          path: /tmp/docker-app-test.tar
+          retention-days: 1
+      - uses: actions/upload-artifact@v4
+        with:
+          name: docker-prod
+          path: /tmp/docker-prod.tar
+          retention-days: 1
+
+  test:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: docker-app-test
+          path: /tmp/workspace
+      - name: Load archived Docker images
+        run: docker load -i /tmp/workspace/docker-app-test.tar
+      - name: Run PHP Unit tests
+        run: docker run --name app-test "$IMAGE_NAME:app-test" vendor/bin/phpunit --log-junit /tmp/phpunit.xml
+      - name: Collect artifacts
+        if: always()
+        run: |
+          mkdir -p /tmp/test-results/phpunit
+          docker cp app-test:/tmp/phpunit.xml /tmp/test-results/phpunit/results.xml
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: phpunit-data
+          path: /tmp/test-results
+
+  test-dusk:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: docker-app-test
+          path: /tmp/workspace
+      - name: Load archived Docker images
+        run: docker load -i /tmp/workspace/docker-app-test.tar
+      - name: Prepare setup for Dusk tests
+        run: |
+          docker network create tmp-dusk-network
+          docker run -d --name app-container --network tmp-dusk-network "$IMAGE_NAME:app-test" php artisan serve --host=app-container
+          docker run -d --name selenium --network tmp-dusk-network --shm-size=2g selenium/standalone-chrome:155.0.8059.79-20261010
+          docker exec app-container curl --retry 10 --retry-connrefused http://app-container:8000 > /dev/null
+          docker exec app-container curl --retry 10 --retry-connrefused http://selenium:4444 > /dev/null
+      - name: Run Dusk tests
+        run: docker exec app-container php artisan dusk --log-junit /tmp/dusk.phpunit.xml
+      - name: Collect artifacts
+        if: always()
+        run: |
+          mkdir -p /tmp/dusk /tmp/test-results/dusk /tmp/logs
+          docker logs app-container > /tmp/logs/dusk-logs 2>&1 || true
+          docker logs selenium > /tmp/logs/selenium-logs 2>&1 || true
+          docker cp app-container:/var/www/tests/Browser/screenshots /tmp/dusk/screenshots || true
+          docker cp app-container:/var/www/tests/Browser/console /tmp/dusk/console || true
+          docker cp app-container:/tmp/dusk.phpunit.xml /tmp/test-results/dusk/results.xml || true
+          docker cp app-container:/var/www/storage/logs /tmp/dusk/logs || true
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: dusk-results
+          path: /tmp/test-results
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: dusk-data
+          path: /tmp/dusk
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: dusk-logs
+          path: /tmp/logs
+
+  publish:
+    needs: [lint, test, test-dusk]
+    if: github.ref == 'refs/heads/master' && github.event_name == 'push'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: docker-prod
+          path: /tmp/workspace
+      - name: Load archived Docker images
+        run: docker load -i /tmp/workspace/docker-prod.tar
+      - uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_HUB_USERNAME }}
+          password: ${{ secrets.DOCKER_HUB_PASSWORD }}
+      - name: Publish Docker images to Docker Hub
+        run: |
+          push() {
+            for i in 1 2 3 4; do
+              docker push "$1" && return 0
+              echo "Push of $1 failed (attempt $i), retrying..."
+              sleep $((i * 5))
+            done
+            return 1
+          }
+          BRANCH=$(echo "$GITHUB_REF_NAME" | tr -c 'A-Za-z0-9_.\n-' '-')
+          SUFFIX="$BRANCH-$GITHUB_SHA"
+          docker tag "$IMAGE_NAME:app-prod" "$IMAGE_NAME:app-prod-$SUFFIX"
+          push "$IMAGE_NAME:app-prod"
+          push "$IMAGE_NAME:app-prod-$SUFFIX"
+          docker tag "$IMAGE_NAME:nginx-prod" "$IMAGE_NAME:nginx-prod-$SUFFIX"
+          push "$IMAGE_NAME:nginx-prod"
+          push "$IMAGE_NAME:nginx-prod-$SUFFIX"

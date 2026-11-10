@@ -1,6 +1,6 @@
 # Playground admin app (Laravel)
 
-Laravel app in `app/`; Docker setup in `docker/`; CI in `.circleci/config.yml`. See `readme.md` for full dev/prod docs.
+Laravel app in `app/`; Docker setup in `docker/`; CI in `.github/workflows/ci.yml`. See `readme.md` for full dev/prod docs.
 
 ## Maintaining this file
 
@@ -26,7 +26,7 @@ Source of truth is `readme.md` / CI; entries marked `(untested)` have not been r
 - Gotcha: the preinstalled `chromedriver` (v147) does not match Playwright's Chromium (v141) -> "session not created". The script downloads the matching driver from `storage.googleapis.com/chrome-for-testing-public/<version>/linux64/chromedriver-linux64.zip` (reachable through the proxy). Chromium is `/opt/pw-browsers/chromium`; chromedriver finds it via a `/usr/bin/google-chrome` symlink.
 - Export buttons (PDF/CSV/Excel) are client-side DataTables buttons; `tests/Browser/ExportButtonsTest.php` clicks each and checks the generated blob (intercepts `URL.createObjectURL`, so it works with a remote selenium too). DataTables 3: `:visible.export` is an invalid column selector (use a function), the search box is `div.dt-search` (use `table.search()`), and `dom: 'Blfrtip'` is required for buttons to render.
 - Verified in the dev container (selenium + `app-container` already resolve, no docker CLI): `cd app && (php artisan serve --host=0.0.0.0 --port=8000 &) ; php artisan dusk` -> 30 tests OK, ~2 min. Check `curl http://selenium:4444/wd/hub/status` first; kill the server afterwards.
-- CI/Docker equivalent (untested here): selenium container + `docker exec -it dusk-tests-app-container-1 php artisan dusk`; see the `test-dusk` job in `.circleci/config.yml`.
+- CI/Docker equivalent (untested here): selenium container + `docker exec -it dusk-tests-app-container-1 php artisan dusk`; see the `test-dusk` job in `.github/workflows/ci.yml`.
 - `app/.env`, `public/js`, `public/css`, `vendor`, `node_modules` are generated/ignored; check `git status` before committing.
 
 ### MySQL
@@ -41,6 +41,10 @@ Source of truth is `readme.md` / CI; entries marked `(untested)` have not been r
 
 ### Lint
 - `composer install --working-dir=tools/php-cs-fixer && tools/php-cs-fixer/vendor/bin/php-cs-fixer fix --dry-run --diff app` (CI runs this; untested here)
+
+## CI
+- GitHub Actions (`.github/workflows/ci.yml`): lint, build, test, test-dusk, publish (master push only). Publish needs repo secrets `DOCKER_HUB_USERNAME` and `DOCKER_HUB_PASSWORD`. (untested until first run on GitHub)
+- The main checkout's local `.git` can be a broken worktree pointer (host paths); use the GitHub API (`gh api`) for remote info (default branch is `master`).
 
 ## Sandbox notes
 - macOS Claude sandbox: `gh`/Go TLS fails (`x509: OSStatus -26276`) unless `sandbox.enableWeakerNetworkIsolation: true` is set (see untracked `.claude/settings.local.json`); also list github/registry hosts in `sandbox.network.allowedDomains`.
