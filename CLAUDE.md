@@ -39,5 +39,8 @@ Source of truth is `readme.md` / CI; entries marked `(untested)` have not been r
 - `composer install --working-dir=tools/php-cs-fixer && tools/php-cs-fixer/vendor/bin/php-cs-fixer fix --dry-run --diff app` (CI runs this; untested here)
 
 ## Sandbox notes
+- macOS Claude sandbox: `gh`/Go TLS fails (`x509: OSStatus -26276`) unless `sandbox.enableWeakerNetworkIsolation: true` is set (see untracked `.claude/settings.local.json`); also list github/registry hosts in `sandbox.network.allowedDomains`.
+- macOS sandbox + yarn 1: the proxy randomly truncates registry JSON (~60KB) -> "malformed response from registry"; and writes to `.idea/` dirs are denied (EPERM when linking `iconv-lite`). Workaround that worked: run a patched copy of yarn's `cli.js` that retries when `params.json` body is a string, and `find <yarn cache>/v6 -name .idea -prune -exec rm -rf {} +` before install. Plain `yarn install` works outside the sandbox.
+- `webpack`/`yarn dev` prints "Compiled successfully" but the process may not exit; wrap in `timeout`.
 - Present: `php` 8.3.6 (project targets 8.5.12 in Docker, `^8.3` in composer.json; works fine), `composer`, `node`/`yarn`, `chromedriver`, Playwright Chromium. `docker` CLI exists; the daemon is not running by default (see MySQL section for starting it).
 - `app/vendor` and `node_modules` are not installed by default; run `composer install` / `yarn install --frozen-lockfile` in `app/`.
