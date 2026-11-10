@@ -16,6 +16,9 @@
     }
   },
   "remoteUser": "vscode",
+  "mounts": [
+    "source=claude-config-${devcontainerId},target=/home/vscode/.claude,type=volume"
+  ],
   "postCreateCommand": "bash .devcontainer/post-create.sh",
   "forwardPorts": [8000, "phpmyadmin:80", "selenium:7900"],
   "portsAttributes": {
@@ -28,7 +31,8 @@
       "extensions": [
         "bmewburn.vscode-intelephense-client",
         "onecentlin.laravel-blade",
-        "mikestead.dotenv"
+        "mikestead.dotenv",
+        "anthropic.claude-code"
       ]
     }
   }
