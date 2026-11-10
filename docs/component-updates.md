@@ -19,11 +19,12 @@ Production has run the current versions (PHP 8.5.12, MySQL 8.4, Redis 8) since 2
 | Held back | Blocker |
 |---|---|
 | `webpack` > 5.104 | laravel-mix 6 nests its own copy: 5.107+ removed `lib/SizeFormatHelpers` (5.95+ broke its progress plugin; the 5.104 pin is what `master` builds with) |
-| `webpack-cli` 7 | needs webpack >= 5.101; `master` has webpack 5.104 now, so this may be possible, but it has not been tried |
 | `@babel/*` 8 | laravel-mix 6 passes a `helpers` option to plugin-transform-runtime that Babel 8 removed |
 | jQuery 4 | Bootstrap 3's JS, bootstrap-datepicker and corejs-typeahead use APIs jQuery 4 removed (Bootstrap 3 is end-of-life) |
 
-Replacing laravel-mix (for example with Vite) lifts the first three and should clear the `yarn audit` advisories that remain in the build tooling (20 when last measured, before the 2026-11 build-tooling upgrade; not re-measured).
+Replacing laravel-mix (for example with Vite) lifts the first three and should clear the 3 `yarn audit` advisories that remain (1 high `body-parser`, 1 moderate `minimatch`, 1 low `elliptic`, all reached through laravel-mix; measured 2026-11-10).
+
+`webpack-cli` 7 is not blocked: with `webpack-cli@7.3.1`, `yarn dev` and `yarn production` both compiled successfully (tried 2026-11-10, then reverted). It is a plain bump that has not been made.
 
 ## 3. Code and docs TODOs
 
