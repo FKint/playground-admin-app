@@ -1,8 +1,8 @@
-# Open component and maintenance work (2026-11-05)
+# Open component and maintenance work (2026-11-10)
 
-Only what is still to do, each item checked against `master` on 2026-11-05. Everything else (Laravel 13, PHP 8.5.12, MySQL 8.4.13, dependency majors, index cleanups, the account migration script, ...) is merged and not listed.
+Only what is still to do, each item checked against `master` on 2026-11-10. Everything else (Laravel 13, PHP 8.5.12, MySQL 8.4.13, dependency majors, index cleanups, the account migration script, the move from CircleCI to GitHub Actions, the webpack 5.104 and build-tooling security upgrade, ...) is merged and not listed.
 
-Production has run the current versions (PHP 8.5.12, MySQL 8.4, Redis 8) since 2026-11-04 with no detected issues. That confirms the in-place MySQL 8.2 to 8.4 upgrade and PHP 8.5.12 outside CircleCI, so they are no longer open.
+Production has run the current versions (PHP 8.5.12, MySQL 8.4, Redis 8) since 2026-11-04 with no detected issues. That confirms the in-place MySQL 8.2 to 8.4 upgrade and PHP 8.5.12 in production, so they are no longer open.
 
 ## 1. Stop using `mysql_native_password` (needs production access)
 
@@ -14,16 +14,16 @@ Production has run the current versions (PHP 8.5.12, MySQL 8.4, Redis 8) since 2
 
 ## 2. Replace laravel-mix 6 (not started)
 
-`app/package.json` pins `webpack ~5.94.0` (also in `resolutions`) and still depends on `laravel-mix ^6.0.39`, `@babel/* ^7`, `jquery ^3`. These cannot move while laravel-mix 6 and Bootstrap 3 are in use:
+`app/package.json` pins `webpack ~5.104.1` (also in `resolutions`) and still depends on `laravel-mix ^6.0.39`, `@babel/* ^7`, `jquery ^3`. These cannot move while laravel-mix 6 and Bootstrap 3 are in use:
 
 | Held back | Blocker |
 |---|---|
-| `webpack` > 5.94 | laravel-mix 6 nests its own copy: 5.95+ breaks its progress plugin, 5.107+ removed `lib/SizeFormatHelpers` |
-| `webpack-cli` 7 | needs webpack >= 5.101 |
+| `webpack` > 5.104 | laravel-mix 6 nests its own copy: 5.107+ removed `lib/SizeFormatHelpers` (5.95+ broke its progress plugin; the 5.104 pin is what `master` builds with) |
+| `webpack-cli` 7 | needs webpack >= 5.101; `master` has webpack 5.104 now, so this may be possible, but it has not been tried |
 | `@babel/*` 8 | laravel-mix 6 passes a `helpers` option to plugin-transform-runtime that Babel 8 removed |
 | jQuery 4 | Bootstrap 3's JS, bootstrap-datepicker and corejs-typeahead use APIs jQuery 4 removed (Bootstrap 3 is end-of-life) |
 
-Replacing laravel-mix (for example with Vite) lifts the first three and should clear the `yarn audit` advisories that remain in the build tooling (20 when last measured; not re-measured, `yarn audit` could not run here).
+Replacing laravel-mix (for example with Vite) lifts the first three and should clear the `yarn audit` advisories that remain in the build tooling (20 when last measured, before the 2026-11 build-tooling upgrade; not re-measured).
 
 ## 3. Code and docs TODOs
 
