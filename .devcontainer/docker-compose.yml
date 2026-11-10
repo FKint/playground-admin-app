@@ -1,0 +1,67 @@
+# No fixed `name:`: Dev Containers then uses `<folder>_devcontainer` as the project name, so every
+# checkout or worktree gets its own containers and volumes. With a shared name, opening a second
+# checkout attaches to the first checkout's container.
+# WORKSPACE and GIT_COMMON_DIR come from .devcontainer/.env, written by initialize.sh.
+
+services:
+  # Workspace container: VS Code attaches here. Run `php artisan serve`, composer, yarn and tests in it.
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: sleep infinity
+    volumes:
+      # Same paths as on the host, so the absolute paths in a worktree's .git (and in the shared .git's
+      # worktree metadata) resolve. In the main checkout the second mount is already inside the first.
+      - ${WORKSPACE:?run .devcontainer/initialize.sh}:${WORKSPACE}:cached
+      - ${GIT_COMMON_DIR:?run .devcontainer/initialize.sh}:${GIT_COMMON_DIR}
+      # Keep dependencies in volumes: faster than a bind mount on macOS and keeps the host tree clean.
+      - vendor:${WORKSPACE}/app/vendor
+      - node_modules:${WORKSPACE}/app/node_modules
+    networks:
+      default:
+        # tests/DuskTestCase.php and .laravel.env.dusk.example expect the app at http://app-container:8000.
+        aliases:
+          - app-container
+    depends_on:
+      database:
+        condition: service_healthy
+      selenium:
+        condition: service_started
+
+  database:
+    image: mysql:8.4.13
+    command: --authentication-policy=caching_sha2_password
+    volumes:
+      - dbdata:/var/lib/mysql
+    environment:
+      # Local development credentials only; app/.env is generated with the same values.
+      - "MYSQL_DATABASE=playground"
+      - "MYSQL_USER=playground"
+      - "MYSQL_PASSWORD=playground"
+      - "MYSQL_ROOT_PASSWORD=root"
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "127.0.0.1", "-uroot", "-proot"]
+      interval: 5s
+      timeout: 5s
+      retries: 30
+      start_period: 20s
+
+  phpmyadmin:
+    image: phpmyadmin:5.2.3
+    environment:
+      - "PMA_HOST=database"
+      - "PMA_USER=playground"
+      - "PMA_PASSWORD=playground"
+    depends_on:
+      - database
+
+  # Same image as the CI test-dusk job. noVNC on port 7900 (password: secret) shows the browser.
+  selenium:
+    image: selenium/standalone-chrome:155.0.8059.79-20261010
+    shm_size: 2gb
+
+volumes:
+  vendor:
+  node_modules:
+  dbdata:
