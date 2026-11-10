@@ -1,0 +1,35 @@
+{
+  "name": "Playground admin app",
+  "dockerComposeFile": "docker-compose.yml",
+  "service": "app",
+  "runServices": ["app", "database", "phpmyadmin", "selenium"],
+  "workspaceFolder": "/workspaces/playground-admin-app",
+  "shutdownAction": "stopCompose",
+  "features": {
+    "ghcr.io/devcontainers/features/common-utils:2": {
+      "username": "vscode",
+      "installZsh": true,
+      "upgradePackages": false
+    },
+    "ghcr.io/devcontainers/features/node:1": {
+      "version": "24.22.1"
+    }
+  },
+  "remoteUser": "vscode",
+  "postCreateCommand": "bash .devcontainer/post-create.sh",
+  "forwardPorts": [8000, "phpmyadmin:80", "selenium:7900"],
+  "portsAttributes": {
+    "8000": { "label": "Laravel (php artisan serve)" },
+    "phpmyadmin:80": { "label": "phpMyAdmin" },
+    "selenium:7900": { "label": "Selenium noVNC (password: secret)" }
+  },
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "bmewburn.vscode-intelephense-client",
+        "onecentlin.laravel-blade",
+        "mikestead.dotenv"
+      ]
+    }
+  }
+}

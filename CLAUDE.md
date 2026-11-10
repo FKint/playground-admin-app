@@ -35,6 +35,9 @@ Source of truth is `readme.md` / CI; entries marked `(untested)` have not been r
 - Verified: `deployment-scripts/migrate-mysql-auth.sh <compose-file> [user] [host]` against `mysql:8.4.13` started with `--mysql-native-password=ON --authentication-policy=mysql_native_password` and a native account: migrates to `caching_sha2_password`, is idempotent, login works afterwards, and `NEW_PASSWORD` with quotes/backslashes works. It needs a compose file with a `database` service; MySQL's image entrypoint itself breaks on a `'` in `MYSQL_PASSWORD`.
 - No `mysql`/`mysqld` binary on the sandbox host; use the container (`docker compose ... exec -T database mysql -uroot -p...`).
 
+### Dev container
+- `.devcontainer/` (compose: app + mysql 8.4.13 + phpmyadmin + selenium), setup in `.devcontainer/post-create.sh`; the app service has network alias `app-container` so Dusk works unchanged. Don't set `DB_*` as container env vars: they would override the Dusk `.env` swap. (untested: no Docker daemon was available when it was written; only `docker compose config` was run)
+
 ### Lint
 - `composer install --working-dir=tools/php-cs-fixer && tools/php-cs-fixer/vendor/bin/php-cs-fixer fix --dry-run --diff app` (CI runs this; untested here)
 

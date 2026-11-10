@@ -1,0 +1,61 @@
+name: playground-admin-devcontainer
+
+services:
+  # Workspace container: VS Code attaches here. Run `php artisan serve`, composer, yarn and tests in it.
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: sleep infinity
+    volumes:
+      - ..:/workspaces/playground-admin-app:cached
+      # Keep dependencies in volumes: faster than a bind mount on macOS and keeps the host tree clean.
+      - vendor:/workspaces/playground-admin-app/app/vendor
+      - node_modules:/workspaces/playground-admin-app/app/node_modules
+    networks:
+      default:
+        # tests/DuskTestCase.php and .laravel.env.dusk.example expect the app at http://app-container:8000.
+        aliases:
+          - app-container
+    depends_on:
+      database:
+        condition: service_healthy
+      selenium:
+        condition: service_started
+
+  database:
+    image: mysql:8.4.13
+    command: --authentication-policy=caching_sha2_password
+    volumes:
+      - dbdata:/var/lib/mysql
+    environment:
+      # Local development credentials only; app/.env is generated with the same values.
+      - "MYSQL_DATABASE=playground"
+      - "MYSQL_USER=playground"
+      - "MYSQL_PASSWORD=playground"
+      - "MYSQL_ROOT_PASSWORD=root"
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "127.0.0.1", "-uroot", "-proot"]
+      interval: 5s
+      timeout: 5s
+      retries: 30
+      start_period: 20s
+
+  phpmyadmin:
+    image: phpmyadmin:5.2.3
+    environment:
+      - "PMA_HOST=database"
+      - "PMA_USER=playground"
+      - "PMA_PASSWORD=playground"
+    depends_on:
+      - database
+
+  # Same image as the CI test-dusk job. noVNC on port 7900 (password: secret) shows the browser.
+  selenium:
+    image: selenium/standalone-chrome:155.0.8059.79-20261010
+    shm_size: 2gb
+
+volumes:
+  vendor:
+  node_modules:
+  dbdata:
