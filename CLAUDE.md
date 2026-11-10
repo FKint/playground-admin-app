@@ -38,6 +38,7 @@ Source of truth is `readme.md` / CI; entries marked `(untested)` have not been r
 
 ### Dev container
 - `.devcontainer/` (compose: app + mysql 8.4.13 + phpmyadmin + selenium), setup in `.devcontainer/post-create.sh`; the app service has network alias `app-container` so Dusk works unchanged. Don't set `DB_*` as container env vars: they would override the Dusk `.env` swap. Verified: container builds and Dusk passes inside it (see Dusk section). `.devcontainer/devcontainer-lock.json` pins the feature versions; commit it when it changes.
+- Gotcha: never give the compose file a fixed `name:`. Dev Containers finds containers by compose project + service, so a shared name made a second checkout attach to the first checkout's container (wrong files, broken git in worktrees). `initialize.sh` (host-side) writes `.devcontainer/.env` so the checkout and the shared `.git` are mounted at their host paths; a worktree's `.git` file holds absolute host paths. (untested in a container: written without Docker access)
 
 ### Lint
 - `composer install --working-dir=tools/php-cs-fixer && tools/php-cs-fixer/vendor/bin/php-cs-fixer fix --dry-run --diff app` (CI runs this; untested here)
