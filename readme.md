@@ -1,4 +1,4 @@
-[![CircleCI](https://circleci.com/gh/FKint/playground-admin-app/tree/master.svg?style=svg)](https://circleci.com/gh/FKint/playground-admin-app/tree/master)
+[![CI](https://github.com/FKint/playground-admin-app/actions/workflows/ci.yml/badge.svg?branch=master)](https://github.com/FKint/playground-admin-app/actions/workflows/ci.yml?query=branch%3Amaster)
 
 # Playground admin web app using Laravel
 
