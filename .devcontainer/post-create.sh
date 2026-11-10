@@ -6,7 +6,8 @@ cd "$(dirname "$0")/../app"
 
 # The vendor/node_modules volumes are created as root.
 sudo chown "$(id -u):$(id -g)" vendor node_modules
-# Claude Code's config/login lives in a named volume (see devcontainer.json "mounts") so it survives rebuilds.
+# Claude Code's config/login lives in a named volume (see devcontainer.json "mounts") so it survives rebuilds
+# and is shared by all checkouts.
 sudo chown -R "$(id -u):$(id -g)" ~/.claude
 
 if [ ! -f .env ]; then

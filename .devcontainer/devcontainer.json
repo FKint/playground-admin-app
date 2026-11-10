@@ -14,11 +14,18 @@
     },
     "ghcr.io/devcontainers/features/node:1": {
       "version": "24.22.1"
-    }
+    },
+    "ghcr.io/devcontainers/features/github-cli:1": {}
   },
   "remoteUser": "vscode",
+  // Claude Code keeps its login in ~/.claude/.credentials.json and its account/onboarding state in
+  // ~/.claude.json, which is outside that directory. CLAUDE_CONFIG_DIR moves both into the volume, so
+  // the login survives rebuilds. The volume name is fixed, so every checkout shares one login.
+  "containerEnv": {
+    "CLAUDE_CONFIG_DIR": "/home/vscode/.claude"
+  },
   "mounts": [
-    "source=claude-config-${devcontainerId},target=/home/vscode/.claude,type=volume"
+    "source=playground-claude-config,target=/home/vscode/.claude,type=volume"
   ],
   "postCreateCommand": "bash .devcontainer/post-create.sh",
   "forwardPorts": [8000, "phpmyadmin:80", "selenium:7900"],
