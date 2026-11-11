@@ -3,7 +3,7 @@
 namespace Tests\Browser\Pages;
 
 use Laravel\Dusk\Browser;
-use Tests\Browser\Components\TypeaheadComponent;
+use Tests\Browser\Components\AutocompleteComponent;
 
 class InternalAddChildToFamilyPage extends InternalPage
 {
@@ -74,7 +74,7 @@ class InternalAddChildToFamilyPage extends InternalPage
 
     public function enterAddExistingChildFormData(Browser $browser, $input)
     {
-        $browser->within(new TypeaheadComponent('@child-search-typeahead'), function ($browser) use ($input) {
+        $browser->within(new AutocompleteComponent('@child-search-autocomplete'), function ($browser) use ($input) {
             $browser->typeQuery($input);
         });
     }
@@ -83,7 +83,7 @@ class InternalAddChildToFamilyPage extends InternalPage
     {
         // Do the click inside the callback so the reload marker is set before the page can reload.
         $browser->waitForReload(function ($browser) use ($childName) {
-            $browser->within(new TypeaheadComponent('@child-search-typeahead'), function ($browser) use ($childName) {
+            $browser->within(new AutocompleteComponent('@child-search-autocomplete'), function ($browser) use ($childName) {
                 $browser->selectSuggestion($childName);
             });
         });

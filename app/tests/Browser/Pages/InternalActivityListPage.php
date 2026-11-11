@@ -3,7 +3,7 @@
 namespace Tests\Browser\Pages;
 
 use Laravel\Dusk\Browser;
-use Tests\Browser\Components\TypeaheadComponent;
+use Tests\Browser\Components\AutocompleteComponent;
 
 class InternalActivityListPage extends InternalPage
 {
@@ -66,14 +66,14 @@ class InternalActivityListPage extends InternalPage
 
     public function enterAddParticipantFormData(Browser $browser, $input)
     {
-        $browser->within(new TypeaheadComponent('@child-family-search-typeahead'), function (Browser $browser) use ($input) {
+        $browser->within(new AutocompleteComponent('@child-family-search-autocomplete'), function (Browser $browser) use ($input) {
             $browser->typeQuery($input);
         });
     }
 
     public function selectAddParticipantSuggestion(Browser $browser, $participantName)
     {
-        $browser->within(new TypeaheadComponent('@child-family-search-typeahead'), function (Browser $browser) use ($participantName) {
+        $browser->within(new AutocompleteComponent('@child-family-search-autocomplete'), function (Browser $browser) use ($participantName) {
             $browser->selectSuggestion($participantName);
         })->waitUsing(5, 1, function () use ($browser, $participantName) {
             return false !== strpos($browser->text('@participants-table'), $participantName);

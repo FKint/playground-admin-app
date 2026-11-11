@@ -152,13 +152,13 @@
                     {
                         data: {
                             '_': function (data, type, full, meta) {
-                                const mapped = _.map(data.supplements, function (d) {
+                                const mapped = data.supplements.map(function (d) {
                                     return d.id;
                                 });
                                 return mapped.join();
                             },
                             'display': function (data, type, full, meta) {
-                                const mapped = _.map(data.supplements, function (d) {
+                                const mapped = data.supplements.map(function (d) {
                                     return d.name;
                                 });
                                 return mapped.join(", ");
@@ -229,11 +229,11 @@
             };
             function filterSupplement(data){
                 const selected_supplement = $('#select-supplement').val();
-                const data_supplement_ids = _.map(data.supplements, d =>  d.id);
+                const data_supplement_ids = data.supplements.map(d =>  d.id);
                 if (selected_supplement === 'all') {
                     return true;
                 }
-                return _.includes(data_supplement_ids, parseInt(selected_supplement));
+                return data_supplement_ids.includes(parseInt(selected_supplement));
             };
             function filterAttended(data){
                 const selected_attended = $('#select-attended').val();

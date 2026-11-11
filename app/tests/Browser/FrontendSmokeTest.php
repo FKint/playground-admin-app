@@ -81,7 +81,7 @@ class FrontendSmokeTest extends DuskTestCase
                     dataTable: typeof window.jQuery.fn.DataTable,
                     modal: typeof window.jQuery.fn.modal,
                     datepicker: typeof window.jQuery.fn.datepicker,
-                    autocomplete: typeof window.jQuery.fn.typeahead,
+                    autocomplete: typeof window.autocomplete,
                 };
 JS)[0];
             $this->assertStringStartsWith('3.', $globals['jquery']);
@@ -167,11 +167,11 @@ JS)[0];
     {
         $this->browse(function (Browser $browser) {
             $browser->loginAs($this->user)->visit($this->url('internal.show_find_family_registration', ['week' => $this->week]))
-                ->waitFor('#family-search')
-                ->type('#family-search', 'Baeten')
-                ->waitFor('.tt-menu a.list-group-item')
-                ->assertSeeIn('.tt-menu', 'Baeten')
-                ->click('.tt-menu a.list-group-item')
+                ->waitFor('#family-search-ts-control')
+                ->type('#family-search-ts-control', 'Baeten')
+                ->waitFor('.ts-dropdown .option')
+                ->assertSeeIn('.ts-dropdown', 'Baeten')
+                ->click('.ts-dropdown .option')
                 ->waitForLocation(parse_url($this->url('internal.show_edit_registration', ['week' => $this->week, 'family' => $this->family->id]), PHP_URL_PATH));
         });
     }
@@ -180,9 +180,9 @@ JS)[0];
     {
         $this->browse(function (Browser $browser) {
             $browser->loginAs($this->user)->visit($this->url('internal.show_find_family_registration', ['week' => $this->week]))
-                ->type('#family-search', 'Zzzzzz')
+                ->type('#family-search-ts-control', 'Zzzzzz')
                 ->waitForText('Nothing found.')
-                ->keys('#family-search', '{escape}')
+                ->keys('#family-search-ts-control', '{escape}')
                 ->waitUntilMissingText('Nothing found.');
         });
     }

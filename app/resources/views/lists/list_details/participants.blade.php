@@ -1,9 +1,8 @@
 <div class="row">
     <h2>Deelnemer toevoegen</h2>
-    <form class="typeahead" role="search">
-        <div class="form-group" dusk="child-family-search-typeahead">
-            <input type="search" id="child-family-search" name="q" class="form-control" placeholder="Search"
-                   autocomplete="off">
+    <form class="autocomplete" role="search">
+        <div class="form-group" dusk="child-family-search-autocomplete">
+            <select id="child-family-search" name="q" class="form-control" placeholder="Search"></select>
         </div>
     </form>
 </div>
@@ -86,45 +85,20 @@
                     alert("Failed!");
                 });
             });
-            const engine = new Bloodhound({
-                remote: {
-                    url: '{!! route('api.typeahead.child_family_suggestions_for_list', ['list' => $list]) !!}?q=%QUERY%',
-                    wildcard: '%QUERY%',
-                    cache: false
-                },
-                datumTokenizer: Bloodhound.tokenizers.whitespace('q'),
-                queryTokenizer: Bloodhound.tokenizers.whitespace,
-                limit: 10
-            });
-            $('#child-family-search').typeahead({
-                hint: true,
-                highlight: true,
-                minLength: 1
-            }, {
-                source: engine.ttAdapter(),
-                name: 'child-family-list',
-                display: function (data) {
-                    return data.child.full_name + " (Voogd " + data.family.id + ": " + data.family.guardian_full_name + ")";
-                },
-                templates: {
-                    empty: [
-                        '<div class="list-group search-results-dropdown"><div class="list-group-item">Nothing found.</div></div>'
-                    ],
-                    suggestion: function (data) {
-                        const label = data.child.full_name + " (Voogd " + data.family.id + ": " + data.family.guardian_full_name + ")";
-                        return '<a class="list-group-item" href="#">' + label + '</a>';
-                    }
+            const participant_search = autocomplete(document.getElementById('child-family-search'), {
+                url: '{!! route('api.typeahead.child_family_suggestions_for_list', ['list' => $list]) !!}',
+                render: (data, esc) => esc(data.child.full_name + " (Voogd " + data.family.id + ": " + data.family.guardian_full_name + ")"),
+                onSelect: suggestion => {
+                    $.post('{!! route('api.add_participant_to_list', ['activity_list' => $list, 'child_family' => 'CHILD_FAMILY_ID']) !!}'
+                        .replace('CHILD_FAMILY_ID', suggestion.id)
+                    ).done(function () {
+                        table.ajax.reload();
+                    }).fail(function () {
+                        alert('Adding child family failed!');
+                    });
                 }
-            }).on('typeahead:selected', function (event, suggestion) {
-                $.post('{!! route('api.add_participant_to_list', ['activity_list' => $list, 'child_family' => 'CHILD_FAMILY_ID']) !!}'
-                    .replace('CHILD_FAMILY_ID', suggestion.id)
-                ).done(function () {
-                    $('#child-family-search').typeahead('val', '');
-                    table.ajax.reload();
-                }).fail(function () {
-                    alert('Adding child family failed!');
-                });
-            }).focus();
+            });
+            participant_search.focus();
         });
     </script>
 @endpush
