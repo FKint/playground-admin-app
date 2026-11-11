@@ -60,6 +60,9 @@ abstract class DuskTestCase extends BaseTestCase
             '--verbose',
             '--dns-prefetch-disable',
             '--no-proxy-server',
+            // Only the app itself is reachable, so any external resource (CDN font/stylesheet) fails the smoke test and cannot make
+            // the visual baselines depend on the network of whoever runs the tests (CI has internet, sandboxes do not).
+            '--host-resolver-rules=MAP * ~NOTFOUND, EXCLUDE app-container, EXCLUDE selenium, EXCLUDE localhost',
             '--no-sandbox',
         ]);
 

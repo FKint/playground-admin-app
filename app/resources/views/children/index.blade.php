@@ -62,6 +62,7 @@ Kinderen
                 createdRow(row, data, dataIndex){
                     $(row).attr('data-child-id', data.id);
                 },
+                // TODO: exports include the filter <select> option texts in the headers; fix with exportOptions.format.header.
                 buttons: [
                     {
                         extend: 'pdfHtml5',

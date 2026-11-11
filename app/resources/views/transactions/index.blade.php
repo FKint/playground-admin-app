@@ -92,6 +92,7 @@ Transacties voor {{ $date->format('d-m-Y') }}
             serverSide: false,
             ajax: '{!! route('api.datatables.transactions_for_date', ['date'=>$date->toDateString()]) !!}',
             dom: 'Blfrtip',
+            // TODO: exports include the filter <select> option texts in the headers; fix with exportOptions.format.header.
             buttons: ['pdfHtml5'],
             order: [[1, "desc"]],
             columns: [

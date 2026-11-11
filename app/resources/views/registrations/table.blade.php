@@ -72,6 +72,7 @@
                 serverSide: false,
                 ajax: '{!! route('api.datatables.registrations', ['playground_day'=> $playground_day]) !!}',
                 dom: 'Blfrtip',
+                // TODO: exports include the filter <select> option texts in the headers; fix with exportOptions.format.header.
                 buttons: [
                     {
                         extend: 'pdfHtml5',
