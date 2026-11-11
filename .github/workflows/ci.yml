@@ -16,7 +16,7 @@ jobs:
   lint:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - uses: shivammathur/setup-php@v2
         with:
           php-version: '8.5'
@@ -29,9 +29,9 @@ jobs:
   build-test:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: docker/setup-buildx-action@v3
-      - uses: crazy-max/ghaction-github-runtime@v3
+      - uses: actions/checkout@v6
+      - uses: docker/setup-buildx-action@v4
+      - uses: crazy-max/ghaction-github-runtime@v4
       - name: Build Docker images
         env:
           SHA: ${{ github.event.pull_request.head.sha || github.sha }}
@@ -39,7 +39,7 @@ jobs:
           export VERSION_SHA1="$SHA" VERSION_GITHUB_LINK="https://github.com/$GITHUB_REPOSITORY/tree/$SHA" VERSION_TIMESTAMP="$(date '+%s')"
           docker buildx bake -f docker/docker-bake.hcl test
           docker save -o /tmp/docker-app-test.tar "$IMAGE_NAME:app-test"
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v6
         with:
           name: docker-app-test
           path: /tmp/docker-app-test.tar
@@ -48,9 +48,9 @@ jobs:
   build-prod:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: docker/setup-buildx-action@v3
-      - uses: crazy-max/ghaction-github-runtime@v3
+      - uses: actions/checkout@v6
+      - uses: docker/setup-buildx-action@v4
+      - uses: crazy-max/ghaction-github-runtime@v4
       - name: Build Docker images
         env:
           SHA: ${{ github.event.pull_request.head.sha || github.sha }}
@@ -58,7 +58,7 @@ jobs:
           export VERSION_SHA1="$SHA" VERSION_GITHUB_LINK="https://github.com/$GITHUB_REPOSITORY/tree/$SHA" VERSION_TIMESTAMP="$(date '+%s')"
           docker buildx bake -f docker/docker-bake.hcl prod
           docker save -o /tmp/docker-prod.tar "$IMAGE_NAME:app-prod" "$IMAGE_NAME:nginx-prod"
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v6
         with:
           name: docker-prod
           path: /tmp/docker-prod.tar
@@ -68,7 +68,7 @@ jobs:
     needs: build-test
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@v7
         with:
           name: docker-app-test
           path: /tmp/workspace
@@ -81,7 +81,7 @@ jobs:
         run: |
           mkdir -p /tmp/test-results/phpunit
           docker cp app-test:/tmp/phpunit.xml /tmp/test-results/phpunit/results.xml
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v6
         if: always()
         with:
           name: phpunit-data
@@ -91,7 +91,7 @@ jobs:
     needs: build-test
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@v7
         with:
           name: docker-app-test
           path: /tmp/workspace
@@ -119,17 +119,17 @@ jobs:
           docker cp app-container:/var/www/tests/Browser/console /tmp/dusk/console || true
           docker cp app-container:/tmp/dusk.phpunit.xml /tmp/test-results/dusk/results.xml || true
           docker cp app-container:/var/www/storage/logs /tmp/dusk/logs || true
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v6
         if: always()
         with:
           name: dusk-results
           path: /tmp/test-results
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v6
         if: always()
         with:
           name: dusk-data
           path: /tmp/dusk
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v6
         if: always()
         with:
           name: dusk-logs
@@ -141,13 +141,13 @@ jobs:
     runs-on: ubuntu-latest
     environment: Docker Publishing
     steps:
-      - uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@v7
         with:
           name: docker-prod
           path: /tmp/workspace
       - name: Load archived Docker images
         run: docker load -i /tmp/workspace/docker-prod.tar
-      - uses: docker/login-action@v3
+      - uses: docker/login-action@v4
         with:
           username: ${{ secrets.DOCKER_HUB_USERNAME }}
           password: ${{ secrets.DOCKER_HUB_PASSWORD }}
