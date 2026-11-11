@@ -24,6 +24,9 @@
     "pdfmake": "^0.3.12",
     "vite": "^8.3.8"
   },
-  "dependencies": {},
+  "dependencies": {
+    "@fontsource/raleway": "^5.3.0",
+    "font-awesome": "4.7.0"
+  },
   "type": "module"
 }
