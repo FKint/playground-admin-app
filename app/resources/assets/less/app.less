@@ -10,3 +10,17 @@
 @import (css) "datatables.net-buttons-bs/css/buttons.bootstrap.css";
 
 @import (less) "_variables";
+
+// Autocomplete dropdown (replaces typeahead.js)
+.autocomplete {
+    position: relative;
+
+    .autocomplete-menu {
+        position: absolute;
+        z-index: 1000;
+        width: 100%;
+        max-height: 20rem;
+        overflow-y: auto;
+        box-shadow: 0 6px 12px rgba(0, 0, 0, .175);
+    }
+}

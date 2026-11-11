@@ -81,7 +81,7 @@ class FrontendSmokeTest extends DuskTestCase
                     dataTable: typeof window.jQuery.fn.DataTable,
                     modal: typeof window.jQuery.fn.modal,
                     datepicker: typeof window.jQuery.fn.datepicker,
-                    autocomplete: typeof window.jQuery.fn.typeahead,
+                    autocomplete: typeof window.autocomplete,
                 };
 JS)[0];
             $this->assertStringStartsWith('3.', $globals['jquery']);
@@ -169,9 +169,9 @@ JS)[0];
             $browser->loginAs($this->user)->visit($this->url('internal.show_find_family_registration', ['week' => $this->week]))
                 ->waitFor('#family-search')
                 ->type('#family-search', 'Baeten')
-                ->waitFor('.tt-menu a.list-group-item')
-                ->assertSeeIn('.tt-menu', 'Baeten')
-                ->click('.tt-menu a.list-group-item')
+                ->waitFor('.autocomplete-menu a.list-group-item')
+                ->assertSeeIn('.autocomplete-menu', 'Baeten')
+                ->click('.autocomplete-menu a.list-group-item')
                 ->waitForLocation(parse_url($this->url('internal.show_edit_registration', ['week' => $this->week, 'family' => $this->family->id]), PHP_URL_PATH));
         });
     }

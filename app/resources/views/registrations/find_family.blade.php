@@ -20,7 +20,7 @@
         <div class="form-group" dusk="family-search-typeahead">
             <label for="q" class="col-sm-2 control-label">Zoek familie: </label>
             <div class="col-sm-10">
-                <input type="search" id="family-search" name="q" class="typeahead form-control" placeholder="Search"
+                <input type="search" id="family-search" name="q" class="form-control" placeholder="Search"
                        autocomplete="off" spellcheck="false">
             </div>
         </div>
@@ -29,46 +29,24 @@
     @push('scripts')
         <script type="module">
             $(function () {
-                let engine = new Bloodhound({
-                    remote: {
-                        url: '{!! route('api.typeahead.family_suggestions') !!}?q=%QUERY%',
-                        wildcard: '%QUERY%'
-                    },
-                    datumTokenizer: Bloodhound.tokenizers.whitespace('q'),
-                    queryTokenizer: Bloodhound.tokenizers.whitespace
-                });
-                $('#family-search').typeahead({
-                    hint: true,
-                    highlight: true,
-                    minLength: 1
-                }, {
-                    source: engine.ttAdapter(),
-                    name: 'family-list',
-                    display: function (data) {
-                        return data.id + ': ' + data.guardian_first_name + ' ' + data.guardian_last_name;
-                    },
-                    templates: {
-                        empty: [
-                            '<div class="list-group search-results-dropdown"><div class="list-group-item">Nothing found.</div></div>'
-                        ],
-                        suggestion: function (data) {
-                            let label = "Familie " + data.id + ": " + data.guardian_first_name + " " + data.guardian_last_name;
-                            if (data.children.length > 0) {
-                                const children_names = _.map(data.children, function (c) {
-                                    return c.first_name + " " + c.last_name;
-                                }).join(", ");
-                                label += " (Kinderen: " + children_names + ")";
-                            }
-                            return '<a class="list-group-item" href="#">' + label + '</a>';
+                autocomplete(document.getElementById('family-search'), {
+                    url: '{!! route('api.typeahead.family_suggestions') !!}',
+                    display: data => data.id + ': ' + data.guardian_first_name + ' ' + data.guardian_last_name,
+                    render: (data, esc) => {
+                        let label = "Familie " + data.id + ": " + data.guardian_first_name + " " + data.guardian_last_name;
+                        if (data.children.length > 0) {
+                            label += " (Kinderen: " + data.children.map(c => c.first_name + " " + c.last_name).join(", ") + ")";
                         }
+                        return esc(label);
+                    },
+                    onSelect: suggestion => {
+                        const week_id = $('#week').val();
+                        window.location.href = '{{ route('internal.show_edit_registration', ['week' => 'WEEK_ID', 'family' => 'FAMILY_ID']) }}'
+                            .replace('WEEK_ID', week_id)
+                            .replace('FAMILY_ID', suggestion.id);
                     }
-                }).on('typeahead:selected', function (ev, suggestion) {
-                    const week_id = $('#week').val();
-                    window.location.href = '{{ route('internal.show_edit_registration', ['week' => 'WEEK_ID', 'family' => 'FAMILY_ID']) }}'
-                        .replace('WEEK_ID', week_id)
-                        .replace('FAMILY_ID', suggestion.id);
-                }).focus();
-                $(".tt-hint").addClass("form-control");
+                });
+                $('#family-search').focus();
             });
         </script>
     @endpush

@@ -135,7 +135,7 @@ class VisualRegressionTest extends DuskTestCase
             $this->scene($b, 'children-new-modal-validation', fn () => $b->click('#new-child-modal [dusk=submit]')->waitFor('#new-child-errors-div:not(.hidden)')->pause(300));
             $this->scene($b, 'children-edit-modal', fn () => $b->visit($children)->waitFor('#children-table .btn-edit-child')->click('#children-table .btn-edit-child')->waitFor('[dusk="edit-child-form"]')->pause(800));
             $this->scene($b, 'children-edit-modal-families-tab', fn () => $b->click('#edit-child-tablist li[data-tag="families"] > a')->waitFor('#edit-child-families-div.active')->waitFor('#family-search')->pause(800));
-            $this->scene($b, 'children-edit-modal-autocomplete', fn () => $b->type('#family-search', 'Bot')->waitFor('.tt-menu a.list-group-item')->pause(300));
+            $this->scene($b, 'children-edit-modal-autocomplete', fn () => $b->type('#family-search', 'Bot')->waitFor('.autocomplete-menu a.list-group-item')->pause(300));
             $this->scene($b, 'children-info-modal', fn () => $b->visit($children)->waitFor('#children-table .btn-show-child-info')->click('#children-table .btn-show-child-info')->waitFor('#info-child-modal.in form')->pause(800));
             $this->scene($b, 'children-info-modal-families-tab', fn () => $b->click('#info-child-tablist a[href="#info-child-families-div"]')->waitFor('#info-child-families-div.active')->pause(500));
 
@@ -148,8 +148,8 @@ class VisualRegressionTest extends DuskTestCase
             $this->scene($b, 'family-add-child', fn () => $b->visit($this->url('internal.show_add_child_to_family', ['family' => $this->family->id]))->waitFor('#child-search'));
             $this->scene($b, 'family-add-child-autocomplete', function () use ($b) {
                 $b->script('document.getElementById("child-search").scrollIntoView({block: "center"})');
-                $b->type('#child-search', 'Verm')->waitFor('.tt-menu .list-group-item')->pause(300);
-            }, keepScroll: true);
+                $b->type('#child-search', 'Verm')->waitFor('.autocomplete-menu .list-group-item')->pause(300);
+            });
             $this->scene($b, 'family-transactions', fn () => $b->visit($this->url('internal.show_family_transactions', ['family' => $this->family->id]))->waitFor('table')->pause(500));
 
             // Lists: DataTable, forms with datepicker, participants autocomplete
@@ -157,7 +157,7 @@ class VisualRegressionTest extends DuskTestCase
             $this->scene($b, 'list-new', fn () => $b->visit($this->url('internal.show_create_new_list'))->waitFor('#txt-list-date'));
             $this->scene($b, 'list-new-datepicker', fn () => $b->click('#txt-list-date')->waitFor('.datepicker-dropdown')->pause(500));
             $this->scene($b, 'list-details', fn () => $b->visit($this->url('internal.show_list', ['list' => $this->list->id]))->waitFor('#child-family-search'));
-            $this->scene($b, 'list-details-autocomplete', fn () => $b->type('#child-family-search', 'Declercq')->waitFor('.tt-menu .list-group-item')->pause(300));
+            $this->scene($b, 'list-details-autocomplete', fn () => $b->type('#child-family-search', 'Declercq')->waitFor('.autocomplete-menu .list-group-item')->pause(300));
             $this->scene($b, 'list-details-datepicker', fn () => $b->click('#txt-list-date')->waitFor('.datepicker-dropdown')->pause(500));
 
             // Registrations
@@ -166,7 +166,7 @@ class VisualRegressionTest extends DuskTestCase
             $this->scene($b, 'registrations-datepicker', fn () => $b->click('#registration-datepicker input')->waitFor('.datepicker-dropdown')->pause(500));
             $this->scene($b, 'registrations-no-playground-day', fn () => $b->visit($this->url('internal.registrations_for_date', ['date' => '2018-01-01']))->waitFor('.alert'));
             $this->scene($b, 'registrations-find-family', fn () => $b->visit($this->url('internal.show_find_family_registration', ['week' => $this->week]))->waitFor('#family-search'));
-            $this->scene($b, 'registrations-find-family-autocomplete', fn () => $b->type('#family-search', 'Baeten')->waitFor('.tt-menu .list-group-item')->pause(300));
+            $this->scene($b, 'registrations-find-family-autocomplete', fn () => $b->type('#family-search', 'Baeten')->waitFor('.autocomplete-menu .list-group-item')->pause(300));
             $this->scene($b, 'registrations-find-family-no-results', fn () => $b->visit($this->url('internal.show_find_family_registration', ['week' => $this->week]))->type('#family-search', 'Zzzzz')->waitForText('Nothing found.')->pause(300));
             $edit = $this->url('internal.show_edit_registration', ['week' => $this->week, 'family' => $this->family->id]);
             $this->scene($b, 'registration-edit', fn () => $b->visit($edit)->waitUntilMissing('#loading-indicator:not([style*="display: none"])')->waitForText('Kid Rock')->pause(1000));

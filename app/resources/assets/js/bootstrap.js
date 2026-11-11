@@ -14,13 +14,10 @@ import dutch from 'datatables.net-plugins/i18n/nl-NL.json';
 import pdfMake from 'pdfmake/build/pdfmake.js';
 import pdfFonts from 'pdfmake/build/vfs_fonts.js';
 
-import Bloodhound from 'bloodhound-js';
-import 'corejs-typeahead';
+import autocomplete from './autocomplete';
 
 import 'bootstrap-datepicker';
 import 'bootstrap-datepicker/js/locales/bootstrap-datepicker.nl-BE.js';
-
-import moment from 'moment/moment';
 
 $.extend(true, $.fn.dataTable.defaults, {
     "language": dutch,
@@ -28,7 +25,7 @@ $.extend(true, $.fn.dataTable.defaults, {
 
 pdfMake.addVirtualFileSystem(pdfFonts);
 
-window.Bloodhound = Bloodhound;
+window.autocomplete = autocomplete;
 
 $.fn.datepicker.defaults.language = "nl-BE";
 $.fn.datepicker.defaults.format = "yyyy-mm-dd";
@@ -37,4 +34,3 @@ $.fn.datepicker.defaults.todayBtn = "linked";
 $.fn.datepicker.defaults.todayHighlight = true;
 $.fn.datepicker.defaults.weekStart = 1;
 
-window.moment = moment;

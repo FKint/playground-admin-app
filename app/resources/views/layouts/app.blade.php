@@ -20,10 +20,6 @@
             padding-top: 60px;
         }
 
-        .twitter-typeahead {
-            width: 100%;
-        }
-
         #top-navbar {
             background-color: {{ env('ENVIRONMENT_COLOR') }};
         }

@@ -66,8 +66,16 @@ Transacties voor {{ $date->format('d-m-Y') }}
 @push('scripts')
 <script type="module">
     $(function () {
-        function goToMoment(m) {
-            window.location.href = "{{ route('internal.show_transactions_for_date', ['date' => 'DATE']) }}".replace('DATE', m.format('YYYY-MM-DD'));
+        function goToDate(d) {
+            const pad = n => String(n).padStart(2, '0');
+            const formatted = d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate());
+            window.location.href = "{{ route('internal.show_transactions_for_date', ['date' => 'DATE']) }}".replace('DATE', formatted);
+        }
+
+        function addDays(d, days) {
+            const result = new Date(d);
+            result.setDate(result.getDate() + days);
+            return result;
         }
 
         const default_date = new Date('{{ $date->format('Y-m-d') }}T00:00:00');
@@ -75,13 +83,13 @@ Transacties voor {{ $date->format('d-m-Y') }}
             .datepicker('update', default_date)
             .on('changeDate', function (event) {
                 console.log(event.date);
-                goToMoment(moment(event.date));
+                goToDate(event.date);
             });
         $('#btn-prev-day').click(function () {
-            goToMoment(moment(default_date).subtract(1, 'days'));
+            goToDate(addDays(default_date, -1));
         });
         $('#btn-next-day').click(function () {
-            goToMoment(moment(default_date).add(1, 'days'));
+            goToDate(addDays(default_date, 1));
         });
     });
 
