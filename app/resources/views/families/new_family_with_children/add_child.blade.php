@@ -2,7 +2,7 @@
 
 @section('content')
 
-    <h1>Kind toevoegen</h1>
+    <h1 class="mt-4">Kind toevoegen</h1>
     <p>
         Voogd: <b>{{$family->guardian_first_name}} {{$family->guardian_last_name}}</b>
     </p>

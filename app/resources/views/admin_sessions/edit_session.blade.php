@@ -3,7 +3,7 @@
     Kassasessie wijzigen
 @endsection
 @section('content')
-    <h1>Kassasessie wijzigen</h1>
+    <h1 class="mt-4">Kassasessie wijzigen</h1>
     {{ html()->modelForm($admin_session)->open() }}
     <x-form-contents.admin-session />
     {{ html()->closeModelForm() }}

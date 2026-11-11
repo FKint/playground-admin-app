@@ -5,7 +5,7 @@ Transacties voor {{ $date->format('d-m-Y') }}
 @endsection
 @section('content')
 
-<h1>Transacties voor {{ $date->format('d-m-Y') }}</h1>
+<h1 class="mt-4">Transacties voor {{ $date->format('d-m-Y') }}</h1>
 <div class="row">
     <div class="col-1 col-lg-1">
         <button class="btn btn-outline-secondary float-end">

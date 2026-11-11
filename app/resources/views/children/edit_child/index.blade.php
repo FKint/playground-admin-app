@@ -5,7 +5,7 @@
 @endsection
 @section('content')
 
-    <h1>Kind bijwerken</h1>
+    <h1 class="mt-4">Kind bijwerken</h1>
     @include('children.edit_child.content')
 
 @endsection

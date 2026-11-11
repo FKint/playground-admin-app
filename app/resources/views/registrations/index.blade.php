@@ -4,7 +4,7 @@
     Registraties {{ $date->format('d-m-Y') }}
 @endsection
 @section('content')
-    <h1>Registraties</h1>
+    <h1 class="mt-4">Registraties</h1>
 
     <div class="row">
         <div class="col-1 col-lg-1">

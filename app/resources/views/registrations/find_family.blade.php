@@ -1,7 +1,7 @@
 @extends('layouts.internal')
 
 @section('content')
-    <h1>Registreren</h1>
+    <h1 class="mt-4">Registreren</h1>
 
     <form>
         <div class="row mb-3">

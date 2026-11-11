@@ -28,20 +28,6 @@ $list-group-bg: #fff;
 $link-decoration: none;
 $link-hover-decoration: underline;
 
-// Bootstrap 3 alert colours (Bootstrap 5 derives paler/saturated tints from the theme colours).
-$success-bg-subtle: #dff0d8;
-$success-border-subtle: #d6e9c6;
-$success-text-emphasis: #3c763d;
-$info-bg-subtle: #d9edf7;
-$info-border-subtle: #bce8f1;
-$info-text-emphasis: #31708f;
-$warning-bg-subtle: #fcf8e3;
-$warning-border-subtle: #faebcc;
-$warning-text-emphasis: #8a6d3b;
-$danger-bg-subtle: #f2dede;
-$danger-border-subtle: #ebccd1;
-$danger-text-emphasis: #a94442;
-
 // Bootstrap 3 inverse navbar: 50px high, 15px link padding, grey links, active link on a darker block.
 $navbar-padding-y: 0;
 $nav-link-padding-y: .875rem;
@@ -62,11 +48,6 @@ body {
     padding-top: 60px;
 }
 
-// Default navbar colour; the layout overrides it per environment with an inline style.
-#top-navbar {
-    background-color: #222;
-}
-
 // Bootstrap 3 tables were transparent; keep it so <col> backgrounds (alternating child columns) show through.
 .table {
     --bs-table-bg: transparent;
@@ -79,17 +60,6 @@ body {
 // Bootstrap 5 only greys out :disabled fields; give read-only fields the same background so they stay distinguishable.
 .form-control[readonly] {
     background-color: var(--bs-secondary-bg);
-}
-
-// Bootstrap 3 gave h1-h3 room above them (not inside cards and modals).
-h1, h2, h3,
-.h1, .h2, .h3 {
-    margin-top: 1.25rem;
-}
-
-.card-title,
-.modal-title {
-    margin-top: 0;
 }
 
 @include media-breakpoint-up(md) {

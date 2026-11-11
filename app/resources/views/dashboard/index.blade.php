@@ -4,7 +4,7 @@
     Dashboard
 @endsection
 @section('content')
-    <h1>Dashboard</h1>
+    <h1 class="mt-4">Dashboard</h1>
     <div class="row">
         <div class="col-12">
             <div class="card mb-3">

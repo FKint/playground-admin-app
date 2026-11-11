@@ -4,7 +4,7 @@
 Transactiegeschiedenis voor voogd {{ $family->id }} ({{ $family->guardian_full_name() }})
 @endsection
 @section('content')
-<h1>Transactiegeschiedenis voor voogd {{ $family->id }} ({{ $family->guardian_full_name() }})</h1>
+<h1 class="mt-4">Transactiegeschiedenis voor voogd {{ $family->id }} ({{ $family->guardian_full_name() }})</h1>
 <div class="row">
     <div class="col-12">
         Saldo: <b><span id="family-saldo">{{ $family->getCurrentSaldo() }}</span></b>

@@ -22,7 +22,7 @@
 @endpush
 
 @section('content')
-<h1>Wijzig registratie voor familie {{ $family->id }}: {{$family->guardian_full_name}}</h1>
+<h1 class="mt-4">Wijzig registratie voor familie {{ $family->id }}: {{$family->guardian_full_name}}</h1>
 <div class="row">
     <div class="col-9" id="registration-table-div">
         <table id="registration-table" class="table table-sm" data-populating="0" data-nb-requests="0">
