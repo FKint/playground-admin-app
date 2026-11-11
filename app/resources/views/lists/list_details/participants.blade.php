@@ -1,5 +1,5 @@
 <div class="row">
-    <h2>Deelnemer toevoegen</h2>
+    <h2 class="mt-4">Deelnemer toevoegen</h2>
     <form class="autocomplete" role="search">
         <div class="row mb-3" dusk="child-family-search-autocomplete">
             <select id="child-family-search" name="q" class="form-control" placeholder="Search"></select>
@@ -7,7 +7,7 @@
     </form>
 </div>
 <div class="row">
-    <h2>Huidige deelnemers</h2>
+    <h2 class="mt-4">Huidige deelnemers</h2>
     <table class="table table-bordered" id="participants-table" dusk="participants-table">
         <thead>
         <tr>

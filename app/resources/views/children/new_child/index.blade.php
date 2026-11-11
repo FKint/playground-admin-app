@@ -5,7 +5,7 @@
 @endsection
 @section('content')
 
-    <h1>Nieuw kind toevoegen</h1>
+    <h1 class="mt-4">Nieuw kind toevoegen</h1>
     @if ($errors->any())
         <div class="alert alert-danger">
             <ul>

@@ -22,7 +22,7 @@
 @endpush
 
 @section('content')
-<h1>Wijzig registratie voor familie {{ $family->id }}: {{$family->guardian_full_name}}</h1>
+<h1 class="mt-4">Wijzig registratie voor familie {{ $family->id }}: {{$family->guardian_full_name}}</h1>
 <div class="row">
     <div class="col-9" id="registration-table-div">
         <table id="registration-table" class="table table-sm" data-populating="0" data-nb-requests="0">
@@ -159,11 +159,11 @@
             <span class="spinner-border spinner-border-sm" role="status" style="width:24px;height:24px"></span> Loading...
         </span>
 
-        <div id="invalid-received-money-cash-help" class="row mb-3 hidden">
+        <div id="invalid-received-money-cash-help" class="row mb-3 d-none">
             <span class="text-danger">Deze familie betaalt cash. Het ontvangen bedrag is niet gelijk aan het verwachte
                 bedrag. Vul een verklaring in bij "Opmerkingen".
         </div>
-        <div id="invalid-received-money-invoice-help" class="row mb-3 hidden">
+        <div id="invalid-received-money-invoice-help" class="row mb-3 d-none">
             <span class="text-danger">Deze familie betaalt met factuur. Het ontvangen bedrag is niet 0. Vul een
                 verklaring in bij "Opmerkingen".
         </div>
@@ -245,11 +245,11 @@
         }
 
         function showInvalidReceivedMoneyCash(show){
-            $('#invalid-received-money-cash-help').closest('.row').toggleClass('hidden', !show);
+            $('#invalid-received-money-cash-help').closest('.row').toggleClass('d-none', !show);
             $('#remarks').toggleClass('is-invalid', show);
         }
         function showInvalidReceivedMoneyInvoice(show){
-            $('#invalid-received-money-invoice-help').closest('.row').toggleClass('hidden', !show);
+            $('#invalid-received-money-invoice-help').closest('.row').toggleClass('d-none', !show);
             $('#remarks').toggleClass('is-invalid', show);
         }
 

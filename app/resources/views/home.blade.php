@@ -7,7 +7,7 @@
     <div class="container">
         <div class="row">
             <div class="col-md-8 offset-md-2">
-                <div class="card">
+                <div class="card mb-3">
                     <div class="card-header">Start</div>
 
                     <div class="card-body">

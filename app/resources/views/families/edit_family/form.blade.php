@@ -1,7 +1,7 @@
-<div class="alert alert-success hidden" id="family-details-success-div">
+<div class="alert alert-success d-none" id="family-details-success-div">
     Wijzigingen opgeslagen.
 </div>
-<div class="alert alert-danger hidden" id="family-details-error-div">
+<div class="alert alert-danger d-none" id="family-details-error-div">
     Failure: <span id="family-details-error-summary"></span>
     <ul id="family-details-error-list">
     </ul>
@@ -19,19 +19,19 @@
         const family_details_error_list = $('#family-details-error-list');
         form.submit(function (event) {
             event.preventDefault();
-            family_update_fail.addClass('hidden');
-            family_update_success.addClass('hidden');
+            family_update_fail.addClass('d-none');
+            family_update_success.addClass('d-none');
             family_details_error_summary.empty();
             family_details_error_list.empty();
             $.post(
                 '{!! route('api.update_family', ['family'=>$family]) !!}',
                 form.serialize()
             ).done(function (resp) {
-                family_update_success.removeClass('hidden');
+                family_update_success.removeClass('d-none');
                 $(window).trigger('families:updated');
             }).fail(function (resp) {
                 const response = resp.responseJSON;
-                family_update_fail.removeClass('hidden');
+                family_update_fail.removeClass('d-none');
                 family_details_error_summary.text(response.message);
                 Object.values(response.errors).forEach(field_errors => {
                     Object.values(field_errors).forEach(error_message => {

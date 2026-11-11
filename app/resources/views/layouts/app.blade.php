@@ -15,11 +15,6 @@
     </title>
 
     @vite('resources/assets/js/app.js')
-    <style>
-        #top-navbar {
-            background-color: {{ env('ENVIRONMENT_COLOR') }};
-        }
-    </style>
     @stack('styles')
 
 </head>
@@ -27,7 +22,7 @@
 <body>
 
 <!-- Fixed navbar -->
-<nav class="navbar navbar-expand-md navbar-dark fixed-top" id="top-navbar">
+<nav class="navbar navbar-expand-md navbar-dark fixed-top{{ env('ENVIRONMENT_COLOR') ? '' : ' bg-dark' }}" id="top-navbar"@if (env('ENVIRONMENT_COLOR')) style="background-color: {{ env('ENVIRONMENT_COLOR') }}"@endif>
     <div class="container">
         <a class="navbar-brand"
            href="{{route('home')}}">@yield('year-descriptor', env('ENVIRONMENT_DESCRIPTION'))</a>

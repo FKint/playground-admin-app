@@ -13,7 +13,7 @@
 @section('content')
     <div class="row">
         <div class="col-12 col-lg-6">
-            <h2>Details</h2>
+            <h2 class="mt-4">Details</h2>
             @include('lists.list_details.settings')
         </div>
         <div class="col-12 col-lg-6">

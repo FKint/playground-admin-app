@@ -6,17 +6,17 @@
     <div class="container">
         <div class="row">
             <div class="col-md-8 offset-md-2">
-                <div class="card">
+                <div class="card mb-3">
                     <div class="card-header">Login</div>
                     <div class="card-body">
                         <form role="form" method="POST" action="{{ route('login') }}">
                             {{ csrf_field() }}
 
-                            <div class="row mb-3{{ $errors->has('email') ? ' has-error' : '' }}">
+                            <div class="row mb-3">
                                 <label for="email" class="col-md-4 col-form-label text-md-end fw-bold">E-Mail Address</label>
 
                                 <div class="col-md-6">
-                                    <input id="email" type="email" class="form-control" name="email"
+                                    <input id="email" type="email" class="form-control{{ $errors->has('email') ? ' is-invalid' : '' }}" name="email"
                                            value="{{ old('email') }}" required autofocus>
 
                                     @if ($errors->has('email'))
@@ -27,11 +27,11 @@
                                 </div>
                             </div>
 
-                            <div class="row mb-3{{ $errors->has('password') ? ' has-error' : '' }}">
+                            <div class="row mb-3">
                                 <label for="password" class="col-md-4 col-form-label text-md-end fw-bold">Password</label>
 
                                 <div class="col-md-6">
-                                    <input id="password" type="password" class="form-control" name="password" required>
+                                    <input id="password" type="password" class="form-control{{ $errors->has('password') ? ' is-invalid' : '' }}" name="password" required>
 
                                     @if ($errors->has('password'))
                                         <span class="invalid-feedback d-block">
