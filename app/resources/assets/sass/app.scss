@@ -17,7 +17,6 @@ $danger: #bf5329;
 
 // Bootstrap 5 derives these backgrounds from $body-bg; keep them white like Bootstrap 3 (only the page is tinted).
 $input-bg: #fff;
-$input-disabled-bg: #eee;
 $dropdown-bg: #fff;
 $pagination-bg: #fff;
 $card-bg: #fff;
@@ -77,9 +76,9 @@ body {
     padding-top: 1rem;
 }
 
-// Bootstrap 3 greyed out read-only fields; Bootstrap 5 does not, so editable and read-only fields look the same.
+// Bootstrap 5 only greys out :disabled fields; give read-only fields the same background so they stay distinguishable.
 .form-control[readonly] {
-    background-color: $input-disabled-bg;
+    background-color: var(--bs-secondary-bg);
 }
 
 // Bootstrap 3 gave h1-h3 room above them (not inside cards and modals).
