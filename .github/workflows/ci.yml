@@ -26,35 +26,38 @@ jobs:
       - name: Run PHP-CS-Fixer
         run: tools/php-cs-fixer/vendor/bin/php-cs-fixer fix --dry-run --diff app
 
-  build:
+  build-test:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Write version files
+      - uses: docker/setup-buildx-action@v3
+      - uses: crazy-max/ghaction-github-runtime@v3
+      - name: Build Docker images
         env:
           SHA: ${{ github.event.pull_request.head.sha || github.sha }}
         run: |
-          echo "https://github.com/$GITHUB_REPOSITORY/tree/$SHA" > ./app/version_github_link
-          echo "$SHA" > ./app/version_sha1
-          date '+%s' > ./app/version_timestamp
-      - uses: docker/setup-buildx-action@v3
-      - uses: crazy-max/ghaction-github-runtime@v3
-      - name: Build Docker layers
-        run: |
-          BuildStages=("php-fpm" "composer-builder" "composer-builder-test" "npm-builder" "composer-installer-test" "app-test" "nginx-prod" "nginx-dev" "composer-installer" "app-prod")
-          for stage in "${BuildStages[@]}"; do
-            docker buildx build --target "$stage" \
-              --cache-from "type=gha,scope=docker-images" \
-              --cache-to "type=gha,scope=docker-images,mode=max" \
-              --load -t "$IMAGE_NAME:$stage" -f docker/Dockerfile .
-          done
+          export VERSION_SHA1="$SHA" VERSION_GITHUB_LINK="https://github.com/$GITHUB_REPOSITORY/tree/$SHA" VERSION_TIMESTAMP="$(date '+%s')"
+          docker buildx bake -f docker/docker-bake.hcl test
           docker save -o /tmp/docker-app-test.tar "$IMAGE_NAME:app-test"
-          docker save -o /tmp/docker-prod.tar "$IMAGE_NAME:app-prod" "$IMAGE_NAME:nginx-prod"
       - uses: actions/upload-artifact@v4
         with:
           name: docker-app-test
           path: /tmp/docker-app-test.tar
           retention-days: 1
+
+  build-prod:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: docker/setup-buildx-action@v3
+      - uses: crazy-max/ghaction-github-runtime@v3
+      - name: Build Docker images
+        env:
+          SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+        run: |
+          export VERSION_SHA1="$SHA" VERSION_GITHUB_LINK="https://github.com/$GITHUB_REPOSITORY/tree/$SHA" VERSION_TIMESTAMP="$(date '+%s')"
+          docker buildx bake -f docker/docker-bake.hcl prod
+          docker save -o /tmp/docker-prod.tar "$IMAGE_NAME:app-prod" "$IMAGE_NAME:nginx-prod"
       - uses: actions/upload-artifact@v4
         with:
           name: docker-prod
@@ -62,7 +65,7 @@ jobs:
           retention-days: 1
 
   test:
-    needs: build
+    needs: build-test
     runs-on: ubuntu-latest
     steps:
       - uses: actions/download-artifact@v4
@@ -85,15 +88,18 @@ jobs:
           path: /tmp/test-results
 
   test-dusk:
-    needs: build
+    needs: build-test
     runs-on: ubuntu-latest
     steps:
       - uses: actions/download-artifact@v4
         with:
           name: docker-app-test
           path: /tmp/workspace
-      - name: Load archived Docker images
-        run: docker load -i /tmp/workspace/docker-app-test.tar
+      - name: Load archived Docker images (and pre-pull selenium in parallel)
+        run: |
+          docker pull selenium/standalone-chrome:155.0.8059.79-20261010 > /dev/null &
+          docker load -i /tmp/workspace/docker-app-test.tar
+          wait
       - name: Prepare setup for Dusk tests
         run: |
           docker network create tmp-dusk-network
@@ -130,7 +136,7 @@ jobs:
           path: /tmp/logs
 
   publish:
-    needs: [lint, test, test-dusk]
+    needs: [lint, build-prod, test, test-dusk]
     if: github.ref == 'refs/heads/master' && github.event_name == 'push'
     runs-on: ubuntu-latest
     environment: Docker Publishing

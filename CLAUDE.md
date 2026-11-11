@@ -45,6 +45,7 @@ Source of truth is `readme.md` / CI; entries marked `(untested)` have not been r
 
 ## CI
 - GitHub Actions (`.github/workflows/ci.yml`): lint, build, test, test-dusk, publish (master push only). Publish uses the "Docker Publishing" environment (job has `environment: Docker Publishing`), which must hold secrets `DOCKER_HUB_USERNAME` and `DOCKER_HUB_PASSWORD` (if they are environment variables rather than secrets, use `vars.` instead of `secrets.`). (untested until first run on GitHub)
+- CI images are built via `docker/docker-bake.hcl` (`docker buildx bake -f docker/docker-bake.hcl test|prod`); `build-test` and `build-prod` jobs run in parallel, separate GHA cache scopes (`docker-test`/`docker-prod`, each reads both). Version files (`version_sha1` etc.) are NOT written into `app/` in CI: they come from `VERSION_*` build args into a tiny last `version` Dockerfile stage, so a new commit does not bust the composer/COPY layers; empty args (local builds) create no files. The source stage runs `composer dump-autoload` (not `install`) after `COPY app .`. `bake --print` validates the file locally; real builds only run in CI.
 - The main checkout's local `.git` can be a broken worktree pointer (host paths); use the GitHub API (`gh api`) for remote info (default branch is `master`).
 
 ## Sandbox notes
