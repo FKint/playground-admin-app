@@ -37,6 +37,12 @@ window.bootstrap = bootstrap;
 window.Datepicker = class extends Datepicker {
     constructor(element, options = {}) {
         super(element, {...datepickerDefaults, ...options});
+        // Close the popup as soon as a complete date has been typed, so it doesn't cover the form.
+        element.addEventListener('input', () => {
+            if (/^\d{4}-\d{2}-\d{2}$/.test(element.value)) {
+                this.hide();
+            }
+        });
     }
 };
 window.autocomplete = autocomplete;

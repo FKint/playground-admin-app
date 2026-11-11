@@ -26,7 +26,7 @@
             if (!start_tab) {
                 start_tab = "info";
             }
-            $('#edit-child-tablist').find('li[data-tag="' + start_tab + '"]:first > a').click();
+            $('#edit-child-tablist').find('li[data-tag="' + start_tab + '"]:first > a')[0].click();
             $('#edit-child-modal').modal('show');
             const edit_child_form_url = '{!! route('internal.edit_child_form', ['child' => 'CHILD_ID']) !!}'
                 .replace('CHILD_ID', child_id);

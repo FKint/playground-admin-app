@@ -245,16 +245,16 @@
         }
 
         function showInvalidReceivedMoneyCash(show){
-            const help_text = $('#invalid-received-money-cash-help').closest('.row mb-3');
-            const remarks_input = $('#remarks').closest('.row mb-3');
+            const help_text = $('#invalid-received-money-cash-help').closest('.row');
+            const remarks_input = $('#remarks').closest('.row');
             help_text.toggleClass('hidden', !show);
-            remarks_input.toggleClass('has-error', show);
+            remarks_input.find('#remarks').toggleClass('is-invalid', show);
         }
         function showInvalidReceivedMoneyInvoice(show){
-            const help_text = $('#invalid-received-money-invoice-help').closest('.row mb-3');
-            const remarks_input = $('#remarks').closest('.row mb-3');
+            const help_text = $('#invalid-received-money-invoice-help').closest('.row');
+            const remarks_input = $('#remarks').closest('.row');
             help_text.toggleClass('hidden', !show);
-            remarks_input.toggleClass('has-error', show);
+            remarks_input.find('#remarks').toggleClass('is-invalid', show);
         }
 
         function clearRegistrationData() {
