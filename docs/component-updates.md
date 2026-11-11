@@ -1,6 +1,6 @@
 # Open component and maintenance work (2026-11-11)
 
-Only what is still to do, each item checked against `master` on 2026-11-11. Everything else (Laravel 13, PHP 8.5.12, MySQL 8.4.13, dependency majors, index cleanups, the account migration script, the move from CircleCI to GitHub Actions, the webpack 5.104 and build-tooling security upgrade, the webpack-cli 7.3.1 bump, ...) is merged and not listed.
+Only what is still to do, each item checked against `master` on 2026-11-11. Everything else (Laravel 13, PHP 8.5.12, MySQL 8.4.13, dependency majors, index cleanups, the account migration script, the move from CircleCI to GitHub Actions, the webpack 5.104 and build-tooling security upgrade, the webpack-cli 7.3.1 bump, the full in-range Composer and Yarn update with PHP `^8.5` and Symfony 8.1 (#224), ...) is merged and not listed.
 
 Production has run the current versions (PHP 8.5.12, MySQL 8.4, Redis 8) since 2026-11-04 with no detected issues. That confirms the in-place MySQL 8.2 to 8.4 upgrade and PHP 8.5.12 in production, so they are no longer open.
 
@@ -22,11 +22,17 @@ Production has run the current versions (PHP 8.5.12, MySQL 8.4, Redis 8) since 2
 | `@babel/*` 8 | laravel-mix 6 passes a `helpers` option to plugin-transform-runtime that Babel 8 removed |
 | jQuery 4 | Bootstrap 3's JS, bootstrap-datepicker and corejs-typeahead use APIs jQuery 4 removed (Bootstrap 3 is end-of-life) |
 
-Replacing laravel-mix (for example with Vite) lifts the first three and should clear the 3 `yarn audit` advisories that remain (1 high `body-parser`, 1 moderate `minimatch`, 1 low `elliptic`, all reached through laravel-mix; measured 2026-11-10).
+Replacing laravel-mix (for example with Vite) lifts the first three and would let the `webpack-dev-server` 6 and `webpack-dev-middleware` 8 resolutions move. The only `yarn audit` advisory left is 1 low (`elliptic`, no patch available; measured 2026-11-11).
 
 `webpack-cli` 7.3.1 is already merged and is not blocked by laravel-mix.
 
-## 3. Code and docs TODOs
+## 3. Other updates
+
+- **`phpunit` 13** (12.5.43 installed, 13.4.6 available): `laravel/laravel` requires `^12.5`, so wait for the skeleton or override it. Not tried.
+- **Docker, CI and image pins** (`php:8.5.12`, `composer:2.10.3`, `node:24.22.1`, `nginx:1.30.6`, `mysql:8.4.13`, `redis:8.10.2`, `phpmyadmin:5.2.3`, `selenium/standalone-chrome:155`, `actions/*@v4`, `docker/*@v3`): not checked against the registries.
+- `readme.md` still tells you to use a `node:21.5.0-alpine3.18` container for yarn updates; the Dockerfile uses Node 24.
+
+## 4. Code and docs TODOs
 
 | Where | TODO |
 |---|---|
