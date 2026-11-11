@@ -1,6 +1,6 @@
 # Open component and maintenance work (2026-11-10)
 
-Only what is still to do, each item checked against `master` on 2026-11-10. Everything else (Laravel 13, PHP 8.5.12, MySQL 8.4.13, dependency majors, index cleanups, the account migration script, the move from CircleCI to GitHub Actions, the webpack 5.104 and build-tooling security upgrade, ...) is merged and not listed.
+Only what is still to do, each item checked against `master` on 2026-11-10. Everything else (Laravel 13, PHP 8.5.12, MySQL 8.4.13, dependency majors, index cleanups, the account migration script, the move from CircleCI to GitHub Actions, the webpack 5.104 and build-tooling security upgrade, the webpack-cli 7.3.1 bump, ...) is merged and not listed.
 
 Production has run the current versions (PHP 8.5.12, MySQL 8.4, Redis 8) since 2026-11-04 with no detected issues. That confirms the in-place MySQL 8.2 to 8.4 upgrade and PHP 8.5.12 in production, so they are no longer open.
 
@@ -24,7 +24,7 @@ Production has run the current versions (PHP 8.5.12, MySQL 8.4, Redis 8) since 2
 
 Replacing laravel-mix (for example with Vite) lifts the first three and should clear the 3 `yarn audit` advisories that remain (1 high `body-parser`, 1 moderate `minimatch`, 1 low `elliptic`, all reached through laravel-mix; measured 2026-11-10).
 
-`webpack-cli` 7 is not blocked: with `webpack-cli@7.3.1`, `yarn dev` and `yarn production` both compiled successfully (tried 2026-11-10, then reverted). It is a plain bump that has not been made.
+`webpack-cli` 7.3.1 is already merged and is not blocked by laravel-mix.
 
 ## 3. Code and docs TODOs
 
