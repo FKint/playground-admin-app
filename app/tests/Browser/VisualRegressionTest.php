@@ -82,6 +82,8 @@ class VisualRegressionTest extends DuskTestCase
         $this->week = $this->year->playground_days()->firstOrFail()->week_id;
         $this->list = \App\Models\ActivityList::factory()->create([
             'year_id' => $this->year->id, 'name' => 'Kid Rock', 'price' => 5, 'date' => $this->date,
+            // The factory randomizes these flags; the list only shows on the attendance form/dashboard when they are true.
+            'show_on_attendance_form' => true, 'show_on_dashboard' => true,
         ]);
 
         $switch = Carbon::create(2020, 12, 1, 12, 0, 0)->toImmutable();
@@ -149,7 +151,7 @@ class VisualRegressionTest extends DuskTestCase
             $this->scene($b, 'family-add-child-autocomplete', function () use ($b) {
                 $b->script('document.getElementById("child-search").scrollIntoView({block: "center"})');
                 $b->type('#child-search', 'Verm')->waitFor('.tt-menu .list-group-item')->pause(300);
-            });
+            }, keepScroll: true);
             $this->scene($b, 'family-transactions', fn () => $b->visit($this->url('internal.show_family_transactions', ['family' => $this->family->id]))->waitFor('table')->pause(500));
 
             // Lists: DataTable, forms with datepicker, participants autocomplete
@@ -170,7 +172,7 @@ class VisualRegressionTest extends DuskTestCase
             $this->scene($b, 'registrations-find-family-no-results', fn () => $b->visit($this->url('internal.show_find_family_registration', ['week' => $this->week]))->type('#family-search', 'Zzzzz')->waitForText('Nothing found.')->pause(300));
             $edit = $this->url('internal.show_edit_registration', ['week' => $this->week, 'family' => $this->family->id]);
             $this->scene($b, 'registration-edit', fn () => $b->visit($edit)->waitUntilMissing('#loading-indicator:not([style*="display: none"])')->waitForText('Kid Rock')->pause(1000));
-            $this->scene($b, 'registration-edit-checked', fn () => $b->check('.day-registration .registration-checkbox')->check('.whole-week-registration .registration-checkbox')->pause(800));
+            $this->scene($b, 'registration-edit-checked', fn () => $b->check('.day-registration .registration-checkbox')->check('.whole-week-registration .registration-checkbox')->waitForText('Kid Rock')->pause(800));
 
             // Transactions, settings, admin sessions
             $transactions = $this->url('internal.show_transactions_for_date', ['date' => '2020-12-01']);
@@ -184,23 +186,26 @@ class VisualRegressionTest extends DuskTestCase
         $this->assertEmpty($this->failures, "Visual differences (see tests/Browser/screenshots/visual/diff):\n".implode("\n", $this->failures));
     }
 
-    private function scene(Browser $browser, string $name, \Closure $setup): void
+    private function scene(Browser $browser, string $name, \Closure $setup, bool $keepScroll = false): void
     {
         try {
             $setup();
-            $this->check($browser, $name);
+            $this->check($browser, $name, $keepScroll);
         } catch (\Throwable $e) {
             $browser->screenshot('visual/failed-'.$name);
             $this->failures[] = "$name: scene could not be set up: ".strtok($e->getMessage(), "\n");
         }
     }
 
-    private function check(Browser $browser, string $name): void
+    private function check(Browser $browser, string $name, bool $keepScroll = false): void
     {
         // TODO: replace the fixed pauses and waitForText() calls in the scenes by waiting on explicit readiness markers.
         // Root causes: the pages render DataTables/registration rows asynchronously without a 'ready' signal (e.g. a
         // data-ready attribute on the table), and modal/tab transitions have no completion hook. A flaky scene (the
         // registration form's list rows) was caused by exactly this.
+        if (!$keepScroll) {
+            $browser->script('window.scrollTo(0, 0);');
+        }
         $browser->pause(300)->script(<<<'JS'
             document.querySelectorAll('.container').forEach(e => { if (e.textContent.includes('Version info')) e.style.visibility = 'hidden'; });
             document.querySelectorAll('.today, .focused').forEach(e => e.classList.remove('today', 'focused'));
