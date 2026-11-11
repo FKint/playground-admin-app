@@ -13,7 +13,7 @@
 </x-form-helpers.base-form-content>
 
 @push('scripts')
-    <script>
+    <script type="module">
         $(function () {
             const datepicker = $('#txt-list-date').datepicker({format: "yyyy-mm-dd"});
         });

@@ -13,7 +13,7 @@
 
 
 @push('scripts')
-<script>
+<script type="module">
     $(function () {
         $('#tariffs-table').DataTable({
             processing: true,

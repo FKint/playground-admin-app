@@ -20,7 +20,7 @@
 @endpush
 
 @push('scripts')
-    <script>
+    <script type="module">
         function showFamilyChildrenModal(family_id) {
             closeAllModals();
             // TODO: show spinning cog on modal while waiting for the form to load
@@ -32,6 +32,7 @@
                 .data('url', family_children_url)
                 .load(family_children_url);
         }
+        window.showFamilyChildrenModal = showFamilyChildrenModal;
 
     </script>
 @endpush

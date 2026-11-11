@@ -56,8 +56,8 @@ COPY app/yarn.lock /root/app/yarn.lock
 COPY app/package.json /root/app/package.json
 RUN yarn
 COPY app/resources/assets /root/app/resources/assets
-COPY app/webpack.mix.js /root/app/webpack.mix.js
-RUN yarn run production
+COPY app/vite.config.js /root/app/vite.config.js
+RUN yarn build
 
 ##########################################################################
 # Run install scripts using cached vendor folder and current source code #

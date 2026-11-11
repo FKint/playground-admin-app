@@ -180,7 +180,7 @@
 @endsection
 
 @push('scripts')
-<script>
+<script type="module">
     const today = new Date('{{ $today->format('Y-m-d') }}');
         // TODO(fkint): Improve asynchronous behavior (e.g. by using Promises)
     $(function () {

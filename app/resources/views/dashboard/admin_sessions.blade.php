@@ -27,7 +27,7 @@
 
 @push('scripts')
 
-<script>
+<script type="module">
     $(function () {
         $('#admin-sessions-table').DataTable({
             processing: true,

@@ -24,7 +24,7 @@
 </div>
 
 @push('scripts')
-    <script>
+    <script type="module">
         $(function () {
             const table_element = $('#participants-table');
             const table = table_element.DataTable({

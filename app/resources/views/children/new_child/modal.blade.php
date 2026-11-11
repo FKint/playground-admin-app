@@ -26,7 +26,7 @@
 @endpush
 
 @push('scripts')
-<script>
+<script type="module">
     function showNewChildModal(done_callback) {
         closeAllModals();
         $('#new-child-form')[0].reset();
@@ -35,6 +35,7 @@
             $('#new-child-form').off('children:updated').on('children:updated', done_callback);
         }
     }
+    window.showNewChildModal = showNewChildModal;
     $(function () {
         const new_child_fail = $('#new-child-errors-div');
         const new_child_errors_list = $('#new-child-errors-list');

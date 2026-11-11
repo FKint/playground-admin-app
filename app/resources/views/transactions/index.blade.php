@@ -64,13 +64,13 @@ Transacties voor {{ $date->format('d-m-Y') }}
 @endsection
 
 @push('scripts')
-<script>
+<script type="module">
     $(function () {
         function goToMoment(m) {
             window.location.href = "{{ route('internal.show_transactions_for_date', ['date' => 'DATE']) }}".replace('DATE', m.format('YYYY-MM-DD'));
         }
 
-        const default_date = new Date({{ $date->format('Y') }}, {{ $date->format('m') }} - 1, {{ $date->format('d') }});
+        const default_date = new Date('{{ $date->format('Y-m-d') }}T00:00:00');
         $('#transactions-datepicker').datepicker()
             .datepicker('update', default_date)
             .on('changeDate', function (event) {

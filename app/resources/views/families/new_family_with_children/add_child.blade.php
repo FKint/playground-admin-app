@@ -29,7 +29,7 @@
         </div>
     </form>
     @push('scripts')
-        <script>
+        <script type="module">
             $(function () {
                 const age_groups = {!! $year->age_groups !!};
                 const new_child_form = $('#new-child-form');

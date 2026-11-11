@@ -18,7 +18,7 @@
     @endif
 @endsection
 @push('scripts')
-    <script>
+    <script type="module">
         $(function () {
             $('#txt-list-date').datepicker({format: "yyyy-mm-dd"});
         });

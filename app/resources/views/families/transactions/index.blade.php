@@ -27,7 +27,7 @@ Transactiegeschiedenis voor voogd {{ $family->id }} ({{ $family->guardian_full_n
 @endsection
 
 @push('scripts')
-<script>
+<script type="module">
     $(function () {
         const table_element = $('#transactions-table');
         const table = table_element.DataTable({

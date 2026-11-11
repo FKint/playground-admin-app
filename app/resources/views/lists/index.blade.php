@@ -25,7 +25,7 @@
 @endsection
 @push('scripts')
 
-<script>
+<script type="module">
     $(function () {
         const table_element = $('#lists-table');
         const table = table_element.DataTable({

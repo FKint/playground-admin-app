@@ -14,7 +14,7 @@
         @yield('title', 'Home') - Playground Administration
     </title>
 
-    <link href="{{mix('/css/app.css')}}" rel="stylesheet">
+    @vite('resources/assets/js/app.js')
     <style>
         body {
             padding-top: 60px;
@@ -79,23 +79,22 @@
         'csrfToken' => csrf_token(),
     ])  !!};
 </script>
-<script src="{{mix('/js/manifest.js')}}"></script>
-<script src="{{mix('/js/vendor.js')}}"></script>
-<script src="{{mix('/js/app.js')}}"></script>
-<script>
+
+
+<script type="module">
     $.ajaxSetup({
         headers: {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         }
     });
 
-    function formatPriceWithoutSign(val) {
+    window.formatPriceWithoutSign = function (val) {
         return parseFloat(val).toFixed(2);
-    }
+    };
 
-    function formatPrice(val) {
-        return "€&nbsp;" + formatPriceWithoutSign(val);
-    }
+    window.formatPrice = function (val) {
+        return "€&nbsp;" + window.formatPriceWithoutSign(val);
+    };
 </script>
 @stack('scripts')
 </body>

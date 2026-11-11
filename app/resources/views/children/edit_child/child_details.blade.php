@@ -10,7 +10,7 @@
 <x-form-contents.child />
 {{ html()->closeModelForm() }}
 
-<script>
+<script type="module">
     $(function () {
         const child_update_success = $('#child-details-success-div');
         const child_update_fail = $('#child-details-error-div');

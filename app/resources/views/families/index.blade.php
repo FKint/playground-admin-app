@@ -90,7 +90,7 @@ Voogden
 @endsection
 
 @push('scripts')
-<script>
+<script type="module">
     // subtable: https://datatables.net/examples/api/row_details.html
     $(function () {
         const table_element = $('#families-table');

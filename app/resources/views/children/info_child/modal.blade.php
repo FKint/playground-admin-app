@@ -19,7 +19,7 @@
 @endpush
 
 @push('scripts')
-    <script>
+    <script type="module">
         function showChildInfoModal(child_id) {
             closeAllModals();
             $('#info-child-modal').modal('show');
@@ -28,5 +28,6 @@
                 .replace('CHILD_ID', child_id);
             $('#info-child-modal-body').load(info_child_url);
         }
+        window.showChildInfoModal = showChildInfoModal;
     </script>
 @endpush

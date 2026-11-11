@@ -11,7 +11,7 @@
 
 
 @push('scripts')
-<script>
+<script type="module">
     $(function () {
         $('#age-groups-table').DataTable({
             processing: true,

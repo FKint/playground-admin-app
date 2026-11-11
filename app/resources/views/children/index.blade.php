@@ -51,7 +51,7 @@ Kinderen
 @endsection
 
 @push('scripts')
-<script>
+<script type="module">
     $(function () {
             const table_element = $('#children-table');
             const table = table_element.DataTable({
