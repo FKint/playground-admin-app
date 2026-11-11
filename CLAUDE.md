@@ -54,8 +54,9 @@ Source of truth is `readme.md` / CI; entries marked `(untested)` have not been r
 - `app/vendor` and `node_modules` are not installed by default; run `composer install` / `yarn install --frozen-lockfile` in `app/`.
 
 ## Frontend build (Vite)
-- Vite 8 + `laravel-vite-plugin` (`app/vite.config.js`); `yarn build` (also `yarn dev`/`yarn watch`) writes `public/build` and `manifest.json`. Verified: build ~1.5s, Dusk 30 tests OK.
-- Blade views have inline scripts that use `$`/`moment`/`Bloodhound` synchronously, so the JS is built as a classic IIFE (not `@vite` module tags) and linked with `\Illuminate\Support\Facades\Vite::asset('resources/assets/js/app.js')`; CSS is one `style.css` manifest entry (`cssCodeSplit: false`, Less imported from `app.js`). The `Vite` facade has no alias in this app, use the full class name.
-- Vite 8 (Rolldown) cannot build an IIFE with several entries, so keep a single JS entry.
+- Vite 8 + `laravel-vite-plugin` (`app/vite.config.js`); `yarn build` writes `public/build` + `manifest.json`, `yarn watch` = `vite build --watch`, `yarn dev` = Vite dev server (`public/hot`, HMR). Verified: build ~1.5s, Dusk 30 tests OK; `yarn dev` starts and serves the entry (not tried in a browser).
+- The layout loads the bundle with `@vite('resources/assets/js/app.js')` (module script; CSS comes from the Less import in `app.js`). Module scripts are deferred, so the inline scripts in the views are `<script type="module">` too (they then run after the bundle, in document order).
+- Gotchas of module scripts: strict mode (a server-rendered `08` is a syntax error: use `new Date('{{ $date->format('Y-m-d') }}T00:00:00')`, not `{{ format('m') }}` as a number) and no implicit globals: a function used from another view's script must be set on `window` (`window.formatPrice`, `closeAllModals`, `show*Modal`).
 - jQuery plugins (DataTables 3, bootstrap-datepicker, typeahead) must load after `window.jQuery` is set: `globals.js` is imported first and the plugins are ES imports; `require()` of `datatables.net-buttons` broke (`undefined.Buttons`).
 - Less: no `~` prefix for package imports (`bootstrap-less/...`); `@icon-font-path` is `bootstrap-less/fonts/`. The Dutch DataTables language JSON is imported into the bundle (no copy step).
+- Dusk writes browser console logs to `app/tests/Browser/console/*.log`; grep them for `Uncaught` after a failing run.

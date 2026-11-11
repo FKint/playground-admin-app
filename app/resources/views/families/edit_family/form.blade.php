@@ -10,7 +10,7 @@
 <x-form-contents.family submit-text="Opslaan" />
 {{ html()->closeModelForm() }}
 
-<script>
+<script type="module">
     $(document).ready(function () {
         const form = $('#edit-family-form');
         const family_update_success = $('#family-details-success-div');

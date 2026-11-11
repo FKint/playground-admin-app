@@ -14,7 +14,7 @@
         @yield('title', 'Home') - Playground Administration
     </title>
 
-    <link href="{{ \Illuminate\Support\Facades\Vite::asset('style.css') }}" rel="stylesheet">
+    @vite('resources/assets/js/app.js')
     <style>
         body {
             padding-top: 60px;
@@ -81,21 +81,20 @@
 </script>
 
 
-<script src="{{ \Illuminate\Support\Facades\Vite::asset('resources/assets/js/app.js') }}"></script>
-<script>
+<script type="module">
     $.ajaxSetup({
         headers: {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         }
     });
 
-    function formatPriceWithoutSign(val) {
+    window.formatPriceWithoutSign = function (val) {
         return parseFloat(val).toFixed(2);
-    }
+    };
 
-    function formatPrice(val) {
-        return "€&nbsp;" + formatPriceWithoutSign(val);
-    }
+    window.formatPrice = function (val) {
+        return "€&nbsp;" + window.formatPriceWithoutSign(val);
+    };
 </script>
 @stack('scripts')
 </body>

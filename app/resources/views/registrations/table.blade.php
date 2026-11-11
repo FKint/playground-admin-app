@@ -64,7 +64,7 @@
 </table>
 
 @push('scripts')
-<script>
+<script type="module">
     $(function () {
             const table_element = $('#registrations-table');
             const table = table_element.DataTable({

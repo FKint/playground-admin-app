@@ -11,7 +11,7 @@
 @endsection
 
 @push('scripts')
-<script>
+<script type="module">
     $(function () {
         const edit_child_form_url = '{!! route('edit_child_form') !!}' + '?child_id={{ $child->id }}';
         $('#edit-child-info-div')

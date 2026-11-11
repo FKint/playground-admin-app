@@ -27,7 +27,7 @@
     </form>
 
     @push('scripts')
-        <script>
+        <script type="module">
             $(function () {
                 let engine = new Bloodhound({
                     remote: {

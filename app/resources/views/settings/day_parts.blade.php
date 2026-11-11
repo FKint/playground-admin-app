@@ -9,7 +9,7 @@
 
 
 @push('scripts')
-<script>
+<script type="module">
     $(function () {
         $('#day-parts-table').DataTable({
             processing: true,

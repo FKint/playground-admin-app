@@ -9,7 +9,7 @@
 * Open the repository in VS Code and run **Dev Containers: Reopen in Container**. This starts the workspace container (PHP 8.5, Composer, Node 24, Yarn), MySQL 8.4, phpMyAdmin and Selenium (`.devcontainer/`).
 * On first creation, `.devcontainer/post-create.sh` installs the Composer and Yarn dependencies, builds the assets, writes `app/.env` (MySQL) and `app/.env.dusk.local` (Dusk), and migrates and seeds the database (it seeds only when the database is empty).
 * Commands below run in the `app/` folder of the container terminal:
-    * Web app: `php artisan serve --host=0.0.0.0 --port=8000`, then open `http://localhost:8000`. Use `yarn watch` (`vite build --watch`) to rebuild the assets on change.
+    * Web app: `php artisan serve --host=0.0.0.0 --port=8000`, then open `http://localhost:8000`. Use `yarn watch` (`vite build --watch`) to rebuild the assets on change, or `yarn dev` for the Vite dev server with hot reload.
     * Unit tests: `vendor/bin/phpunit`
     * Dusk tests: keep `php artisan serve --host=0.0.0.0 --port=8000` running, then run `php artisan dusk`. During the run, Dusk swaps in `.env.dusk.local` (SQLite). The browser is visible through the forwarded Selenium noVNC port 7900 (password `secret`).
     * Linting: `../tools/php-cs-fixer/vendor/bin/php-cs-fixer fix --dry-run --diff .`

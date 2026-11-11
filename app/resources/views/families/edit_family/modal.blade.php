@@ -20,7 +20,7 @@
 @endpush
 
 @push('scripts')
-    <script>
+    <script type="module">
         function showEditFamilyModal(family_id, update_callback) {
             closeAllModals();
             const form_parent = $('#edit-family-modal-body');
@@ -34,5 +34,6 @@
                 .data('url', edit_family_url)
                 .load(edit_family_url);
         }
+        window.showEditFamilyModal = showEditFamilyModal;
     </script>
 @endpush

@@ -44,7 +44,7 @@
     {{ html()->form()->close() }}
 </div>
 
-<script>
+<script type="module">
     function reloadEditChildFamiliesDiv() {
         const container = $('#existing-child-families').parent();
         container.load(container.data('url'));

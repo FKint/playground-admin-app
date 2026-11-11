@@ -22,7 +22,7 @@
 @endpush
 
 @push('scripts')
-    <script>
+    <script type="module">
         function showEditChildModal(child_id, start_tab) {
             closeAllModals();
             if (!start_tab) {
@@ -42,5 +42,6 @@
                 .data('url', edit_child_families_form_url)
                 .load(edit_child_families_form_url);
         }
+        window.showEditChildModal = showEditChildModal;
     </script>
 @endpush

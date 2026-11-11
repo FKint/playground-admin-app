@@ -9,7 +9,7 @@
 
 
 @push('scripts')
-<script>
+<script type="module">
     $(function () {
         $('#supplements-table').DataTable({
             processing: true,
