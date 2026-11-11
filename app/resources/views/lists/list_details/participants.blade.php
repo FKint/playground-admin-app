@@ -2,8 +2,7 @@
     <h2>Deelnemer toevoegen</h2>
     <form class="typeahead" role="search">
         <div class="form-group" dusk="child-family-search-typeahead">
-            <input type="search" id="child-family-search" name="q" class="form-control" placeholder="Search"
-                   autocomplete="off">
+            <select id="child-family-search" name="q" class="form-control" placeholder="Search"></select>
         </div>
     </form>
 </div>
@@ -86,8 +85,7 @@
                     alert("Failed!");
                 });
             });
-            const participant_search = document.getElementById('child-family-search');
-            autocomplete(participant_search, {
+            const participant_search = autocomplete(document.getElementById('child-family-search'), {
                 url: '{!! route('api.typeahead.child_family_suggestions_for_list', ['list' => $list]) !!}',
                 display: data => data.child.full_name + " (Voogd " + data.family.id + ": " + data.family.guardian_full_name + ")",
                 render: (data, esc) => esc(data.child.full_name + " (Voogd " + data.family.id + ": " + data.family.guardian_full_name + ")"),
@@ -95,7 +93,6 @@
                     $.post('{!! route('api.add_participant_to_list', ['activity_list' => $list, 'child_family' => 'CHILD_FAMILY_ID']) !!}'
                         .replace('CHILD_FAMILY_ID', suggestion.id)
                     ).done(function () {
-                        participant_search.value = '';
                         table.ajax.reload();
                     }).fail(function () {
                         alert('Adding child family failed!');

@@ -24,8 +24,7 @@
     <h3>Bestaand kind toevoegen</h3>
     <form class="typeahead" role="search">
         <div class="form-group" dusk="child-search-typeahead">
-            <input type="search" id="child-search" name="q" class="form-control" placeholder="Search"
-                   autocomplete="off">
+            <select id="child-search" name="q" class="form-control" placeholder="Search"></select>
         </div>
     </form>
     @push('scripts')

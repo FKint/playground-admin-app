@@ -20,8 +20,7 @@
         <div class="form-group" dusk="family-search-typeahead">
             <label for="q" class="col-sm-2 control-label">Zoek familie: </label>
             <div class="col-sm-10">
-                <input type="search" id="family-search" name="q" class="form-control" placeholder="Search"
-                       autocomplete="off" spellcheck="false">
+                <select id="family-search" name="q" class="form-control" placeholder="Search"></select>
             </div>
         </div>
     </form>
@@ -29,7 +28,7 @@
     @push('scripts')
         <script type="module">
             $(function () {
-                autocomplete(document.getElementById('family-search'), {
+                const family_search = autocomplete(document.getElementById('family-search'), {
                     url: '{!! route('api.typeahead.family_suggestions') !!}',
                     display: data => data.id + ': ' + data.guardian_first_name + ' ' + data.guardian_last_name,
                     render: (data, esc) => {
@@ -46,7 +45,7 @@
                             .replace('FAMILY_ID', suggestion.id);
                     }
                 });
-                $('#family-search').focus();
+                family_search.focus();
             });
         </script>
     @endpush

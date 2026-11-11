@@ -1,72 +1,54 @@
+import TomSelect from 'tom-select';
+
 /**
- * Minimal remote autocomplete (replaces typeahead.js + Bloodhound).
+ * Remote search box built on Tom Select. Picking a suggestion calls onSelect(item) and resets the box.
  *
- * autocomplete(input, {
+ * autocomplete(selectElement, {
  *   url: base url, the query is sent as ?q=...
- *   display(item): string put in the input
  *   render(item, escape): html string for a suggestion
  *   onSelect(item)
  * })
+ * Returns the TomSelect instance (e.g. to call .focus()).
  */
-export default function autocomplete(input, {url, display, render, onSelect, minLength = 1, delay = 150}) {
-    const wrapper = document.createElement('div');
-    wrapper.className = 'autocomplete';
-    input.parentNode.insertBefore(wrapper, input);
-    wrapper.appendChild(input);
-    const menu = document.createElement('div');
-    menu.className = 'autocomplete-menu list-group shadow hidden';
-    wrapper.appendChild(menu);
-
-    let timer = null;
-    let counter = 0;
-
-    const close = () => menu.classList.add('hidden');
-    const escape = (s) => String(s).replace(/[&<>"']/g, c => ({'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'}[c]));
-
-    function show(items) {
-        menu.innerHTML = '';
-        if (items.length === 0) {
-            menu.innerHTML = '<div class="list-group-item">Nothing found.</div>';
-        }
-        items.forEach(item => {
-            const a = document.createElement('a');
-            a.href = '#';
-            a.className = 'list-group-item list-group-item-action';
-            a.innerHTML = render(item, escape);
-            a.addEventListener('mousedown', e => e.preventDefault()); // keep focus in the input
-            a.addEventListener('click', e => {
-                e.preventDefault();
-                input.value = display(item);
-                close();
-                onSelect(item);
-            });
-            menu.appendChild(a);
-        });
-        menu.classList.remove('hidden');
-    }
-
-    async function search() {
-        const q = input.value.trim();
-        if (q.length < minLength) {
-            close();
-            return;
-        }
-        const id = ++counter;
-        const response = await fetch(`${url}?q=${encodeURIComponent(q)}`, {headers: {'Accept': 'application/json'}});
-        if (!response.ok || id !== counter) {
-            return; // failed or a newer query is already pending
-        }
-        show(await response.json());
-    }
-
-    input.addEventListener('input', () => {
-        clearTimeout(timer);
-        timer = setTimeout(search, delay);
-    });
-    input.addEventListener('blur', close);
-    input.addEventListener('keydown', e => {
-        if (e.key === 'Escape') {
-            close();
-        }
+export default function autocomplete(select, {url, render, onSelect, minLength = 1, delay = 150}) {
+    let latest = 0;
+    return new TomSelect(select, {
+        maxItems: 1,
+        valueField: 'id',
+        labelField: 'id',
+        searchField: [],
+        create: false,
+        persist: false,
+        openOnFocus: false,
+        loadThrottle: delay,
+        shouldLoad: query => query.trim().length >= minLength,
+        // The server already filters the suggestions.
+        score: () => () => 1,
+        load(query, callback) {
+            const request = ++latest;
+            fetch(`${url}?q=${encodeURIComponent(query.trim())}`, {headers: {'Accept': 'application/json'}})
+                .then(response => (response.ok ? response.json() : []))
+                .then(items => {
+                    if (request === latest) {
+                        this.clearOptions();
+                        callback(items);
+                    } else {
+                        callback();
+                    }
+                })
+                .catch(() => callback());
+        },
+        render: {
+            option: (item, escape) => `<div>${render(item, escape)}</div>`,
+            item: () => '<div></div>',
+            no_results: () => '<div class="no-results">Nothing found.</div>',
+        },
+        onItemAdd(value) {
+            const item = this.options[value];
+            this.clear(true);
+            this.clearOptions();
+            this.close();
+            onSelect(item);
+        },
     });
 }
