@@ -68,27 +68,6 @@ body {
     background-color: #222;
 }
 
-
-.hidden {
-    // TODO: replace the 'hidden' class toggled from JS in the views by Bootstrap's d-none and delete this.
-    display: none !important;
-}
-
-// Keep the look of the former Bootstrap 3 table link buttons and validation states.
-.btn-link {
-    text-decoration: none;
-}
-
-.has-error {
-    .form-control, .form-select {
-        border-color: $danger;
-    }
-
-    .col-form-label {
-        color: $danger;
-    }
-}
-
 // Bootstrap 3 tables were transparent; keep it so <col> backgrounds (alternating child columns) show through.
 .table {
     --bs-table-bg: transparent;
@@ -98,23 +77,9 @@ body {
     padding-top: 1rem;
 }
 
-// TODO: compatibility shims below (.hidden, .has-error, .btn-link, .col-form-label, .card, h1) keep the Bootstrap 3 look while the
-// markup still uses Bootstrap 3 idioms. Fix at the root: use d-none/is-invalid/utility classes in the views and
-// put label alignment into the form components, then delete the shims.
-
 // Bootstrap 3 greyed out read-only fields; Bootstrap 5 does not, so editable and read-only fields look the same.
 .form-control[readonly] {
     background-color: $input-disabled-bg;
-}
-
-// Bootstrap 3 look of panels (now cards): white header with a small title and a gap between stacked panels.
-.card {
-    margin-bottom: 1.25rem;
-}
-
-.card-title {
-    font-size: 1.15rem;
-    margin: 0;
 }
 
 // Bootstrap 3 gave h1-h3 room above them (not inside cards and modals).

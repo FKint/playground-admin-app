@@ -1,8 +1,8 @@
 <h3>Details kind</h3>
-<div class="alert alert-success hidden" id="child-details-success-div">
+<div class="alert alert-success d-none" id="child-details-success-div">
     Wijzigingen opgeslagen.
 </div>
-<div class="alert alert-danger hidden" id="child-details-error-div">
+<div class="alert alert-danger d-none" id="child-details-error-div">
     Failure: <span id="child-details-error-summary"></span>
     <ul id="child-details-error-list"></ul>
 </div>
@@ -19,19 +19,19 @@
         const form = $('#edit-child-form');
         form.submit(function (event) {
             child_details_error_list.empty();
-            child_update_fail.addClass('hidden');
-            child_update_success.addClass('hidden');
+            child_update_fail.addClass('d-none');
+            child_update_success.addClass('d-none');
             event.preventDefault();
             const form = $('#edit-child-form');
             $.post(
                 '{!! route('internal.update_child_details', ['child'=>$child]) !!}',
                 form.serialize()
             ).done(function (resp) {
-                child_update_success.removeClass('hidden');
+                child_update_success.removeClass('d-none');
                 $(window).trigger('children:updated');
             }).fail(function (resp) {
                 const response = resp.responseJSON;
-                child_update_fail.removeClass('hidden');
+                child_update_fail.removeClass('d-none');
                 child_details_error_summary.text(response.message);
                 Object.values(response.errors).forEach(field_errors => {
                     Object.values(field_errors).forEach(error_message => {

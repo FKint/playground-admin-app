@@ -36,7 +36,7 @@
 <div id="link-new-child-family">
     <h4>Kind aan een nieuwe voogd linken</h4>
     {{ html()->form()->id('link-new-family')->attributes(['dusk' => 'link-new-family'])->open() }}
-    <div id="link-new-family-error" class="row mb-3 hidden alert alert-danger">
+    <div id="link-new-family-error" class="row mb-3 d-none alert alert-danger">
         <span class="text-danger" id="link-new-family-error-text"></span>
     </div>
     <x-form-contents.family submit-text="Voogd toevoegen" />
@@ -90,7 +90,7 @@
         const form = $('#link-new-family');
         form.submit(function (event) {
             event.preventDefault();
-            $('#link-new-family-error').addClass('hidden');
+            $('#link-new-family-error').addClass('d-none');
             $.post(
                 '{!! route('internal.submit_link_new_child_family_form', ['child' => $child]) !!}',
                 form.serializeArray()
@@ -102,7 +102,7 @@
                     error_message += " " + data.responseJSON.errors[error];
                 }
             $('#link-new-family-error-text').text('Fout! ' + error_message);
-            $('#link-new-family-error').removeClass('hidden');
+            $('#link-new-family-error').removeClass('d-none');
             });
         });
     });
