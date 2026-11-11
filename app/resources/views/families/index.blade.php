@@ -13,7 +13,7 @@ Voogden
 @endpush
 @section('content')
 <div class="row">
-    <div class="col-xs-12">
+    <div class="col-12">
         <a href="{!! route('internal.show_new_family_with_children') !!}" class="btn btn-primary">
             Nieuwe voogd toevoegen
         </a>
@@ -52,7 +52,7 @@ Voogden
                 <td>
                     {{-- Needs Invoice --}}
                     <select id="families-table-needs-invoice-filter" aria-controls="families-table"
-                        class="form-control input-xs families-table-filter">
+                        class="form-select form-select-sm families-table-filter">
                         <option value="">Alles</option>
                         <option value="1">Factuur</option>
                         <option value="0">Cash</option>
@@ -63,7 +63,7 @@ Voogden
                 <td>
                     {{-- Email --}}
                     <select id="families-table-email-filter" aria-controls="families-table"
-                        class="form-control input-xs families-table-filter">
+                        class="form-select form-select-sm families-table-filter">
                         <option value="">Alles</option>
                         <option value="empty">Leeg</option>
                     </select>
@@ -71,7 +71,7 @@ Voogden
                 <td>
                     {{-- Saldo --}}
                     <select id="families-table-saldo-filter" aria-controls="families-table"
-                        class="form-control input-xs families-table-filter">
+                        class="form-select form-select-sm families-table-filter">
                         <option value="">Alles</option>
                         <option value="nonzero">Niet-nul</option>
                         <option value="zero">Nul</option>
@@ -214,7 +214,7 @@ Voogden
                     name: 'children',
                     data: 'id',
                     render: function (data, type, full, meta) {
-                        return '<a class="btn btn-xs btn-show-family-children" href="#" data-family-id="' + data + '">Kinderen</a>';
+                        return '<a class="btn btn-sm btn-link btn-show-family-children" href="#" data-family-id="' + data + '">Kinderen</a>';
                     }
                 },
                 {
@@ -222,7 +222,7 @@ Voogden
                     name: 'edit',
                     data: 'id',
                     render: function (data, type, full, meta) {
-                        return '<a class="btn btn-xs btn-edit-family" href="#" data-family-id="' + data + '">Wijzig</a>';
+                        return '<a class="btn btn-sm btn-link btn-edit-family" href="#" data-family-id="' + data + '">Wijzig</a>';
                     }
                 }
             ]

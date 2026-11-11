@@ -2,7 +2,7 @@
     <div class="alert alert-danger">Geen kassa actief!</div>
 @endif
 
-<div class="row">
+<div>
     <a href="{{ route('internal.close_admin_session') }}" class="btn btn-primary">Huidige kassa afsluiten</a>
     <a href="{{ route('internal.show_transactions_for_date') }}" class="btn btn-primary">Transacties vandaag</a>
 </div>

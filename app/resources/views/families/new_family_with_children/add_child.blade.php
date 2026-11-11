@@ -11,19 +11,19 @@
         @foreach($family->children as $child)
             <li>
                 {{$child->first_name}} {{$child->last_name}} &nbsp;
-                <a class="btn btn-xs btn-remove-child-family"
+                <a class="btn btn-sm btn-link btn-remove-child-family"
                    href="{{ route('internal.show_remove_child_from_new_family_with_children',
                    ['child'=>$child, 'family' => $family]) }}">Verwijder</a>
             </li>
         @endforeach
     </ul>
     <h3>Nieuw kind toevoegen</h3>
-    {{ html()->form()->class('form-horizontal')->id('new-child-form')->attributes(['dusk' => 'new-child-form'])->open() }}
+    {{ html()->form()->id('new-child-form')->attributes(['dusk' => 'new-child-form'])->open() }}
     <x-form-contents.child />
     {{ html()->form()->close() }}
     <h3>Bestaand kind toevoegen</h3>
     <form class="autocomplete" role="search">
-        <div class="form-group" dusk="child-search-autocomplete">
+        <div class="row mb-3" dusk="child-search-autocomplete">
             <select id="child-search" name="q" class="form-control" placeholder="Search"></select>
         </div>
     </form>

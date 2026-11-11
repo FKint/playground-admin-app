@@ -3,16 +3,14 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
-                                aria-hidden="true">&times;</span>
-                    </button>
-                    <h4 class="modal-title">Kind wijzigen</h4>
+                    <h4 class="modal-title fs-5">Kind wijzigen</h4>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body" id="edit-child-modal-body">
                     @include('children.edit_child.content')
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal" id="btn-close-edit-child" dusk="btn-close-edit-child">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal" id="btn-close-edit-child" dusk="btn-close-edit-child">
                         Sluiten
                     </button>
                 </div>
@@ -28,7 +26,7 @@
             if (!start_tab) {
                 start_tab = "info";
             }
-            $('#edit-child-tablist').find('li[data-tag="' + start_tab + '"]:first > a').click();
+            $('#edit-child-tablist').find('li[data-tag="' + start_tab + '"]:first > a')[0].click(); // TODO: use bootstrap.Tab.getOrCreateInstance(link).show() instead of clicking the link (jQuery .click() does not follow links)
             $('#edit-child-modal').modal('show');
             const edit_child_form_url = '{!! route('internal.edit_child_form', ['child' => 'CHILD_ID']) !!}'
                 .replace('CHILD_ID', child_id);

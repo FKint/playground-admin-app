@@ -6,7 +6,7 @@
     Failure: <span id="child-details-error-summary"></span>
     <ul id="child-details-error-list"></ul>
 </div>
-{{ html()->modelForm($child)->class('form-horizontal')->id('edit-child-form')->attributes(['dusk' => 'edit-child-form'])->open() }}
+{{ html()->modelForm($child)->id('edit-child-form')->attributes(['dusk' => 'edit-child-form'])->open() }}
 <x-form-contents.child />
 {{ html()->closeModelForm() }}
 
@@ -40,6 +40,7 @@
                 });
             });
         });
+        // TODO: pre-existing bug: the selector lacks the dot ('.form-control'), so this handler never fires. Fix or remove it.
         form.on('change', 'form-control', function () {
             success_div.hide();
         });

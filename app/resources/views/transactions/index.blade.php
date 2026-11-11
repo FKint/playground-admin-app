@@ -7,23 +7,22 @@ Transacties voor {{ $date->format('d-m-Y') }}
 
 <h1>Transacties voor {{ $date->format('d-m-Y') }}</h1>
 <div class="row">
-    <div class="col-xs-1 col-lg-1">
-        <button class="btn btn-default pull-right">
-            <span class="glyphicon glyphicon-backward" id="btn-prev-day" dusk="navigate-to-previous-day"></span>
+    <div class="col-1 col-lg-1">
+        <button class="btn btn-outline-secondary float-end">
+            <span class="bi bi-skip-backward-fill" id="btn-prev-day" dusk="navigate-to-previous-day"></span>
         </button>
     </div>
-    <div class="col-xs-3 col-lg-3">
-        <div class="input-group date" data-provide="datepicker" data-date-format="yyyy/mm/dd"
-            id="transactions-datepicker" dusk="transactions-datepicker">
-            <input type="text" class="form-control">
-            <div class="input-group-addon">
-                <span class="glyphicon glyphicon-th"></span>
+    <div class="col-3 col-lg-3">
+        <div class="input-group" id="transactions-datepicker" dusk="transactions-datepicker">
+                <input type="text" class="form-control">
+            <div class="input-group-text" role="button">
+                <span class="bi bi-calendar3"></span>
             </div>
         </div>
     </div>
-    <div class="col-xs-1 col-lg-1">
-        <button class="btn btn-default pull-left" id="btn-next-day">
-            <span class="glyphicon glyphicon-forward"></span>
+    <div class="col-1 col-lg-1">
+        <button class="btn btn-outline-secondary float-start" id="btn-next-day">
+            <span class="bi bi-skip-forward-fill"></span>
         </button>
     </div>
 </div>
@@ -51,7 +50,7 @@ Transacties voor {{ $date->format('d-m-Y') }}
                 <th>
                     {{-- Remarks --}}
                     <select id="transactions-table-remarks-filter" aria-controls="transactions-table"
-                        class="form-control input-xs transactions-table-filter">
+                        class="form-select form-select-sm transactions-table-filter">
                         <option value="0">Alles</option>
                         <option value="1">Met Opmerking</option>
                     </select>
@@ -71,12 +70,15 @@ Transacties voor {{ $date->format('d-m-Y') }}
         }
 
         const default_date = new Date('{{ $date->format('Y-m-d') }}T00:00:00');
-        $('#transactions-datepicker').datepicker()
-            .datepicker('update', default_date)
-            .on('changeDate', function (event) {
-                console.log(event.date);
-                goToDate(event.date);
-            });
+        const datepicker_input = $('#transactions-datepicker input')[0];
+        const datepicker = new Datepicker(datepicker_input);
+        datepicker.setDate(default_date);
+        $('#transactions-datepicker .input-group-text').on('click', () => datepicker.show());
+        datepicker_input.addEventListener('changeDate', function (event) {
+            if (event.detail.date && event.detail.date.getTime() !== default_date.getTime()) {
+                goToDate(event.detail.date);
+            }
+        });
         $('#btn-prev-day').click(function () {
             goToDate(addDays(default_date, -1));
         });

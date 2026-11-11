@@ -121,9 +121,9 @@ class VisualRegressionTest extends DuskTestCase
 
             // Dashboard
             $this->scene($b, 'dashboard', fn () => $b->visit($this->url('internal.dashboard'))->waitFor('#top-navbar'));
-            $this->scene($b, 'navbar-dropdown', fn () => $b->visit($this->url('internal.dashboard'))->clickLink('Extra')->waitFor('.open .dropdown-menu'));
-            $this->scene($b, 'navbar-mobile-collapsed', fn () => $b->resize(500, 900)->visit($this->url('internal.dashboard'))->waitFor('.navbar-toggle'));
-            $this->scene($b, 'navbar-mobile-expanded', fn () => $b->click('.navbar-toggle')->waitFor('#navbar.in')->pause(500));
+            $this->scene($b, 'navbar-dropdown', fn () => $b->visit($this->url('internal.dashboard'))->clickLink('Extra')->waitFor('.dropdown-menu.show'));
+            $this->scene($b, 'navbar-mobile-collapsed', fn () => $b->resize(500, 900)->visit($this->url('internal.dashboard'))->waitFor('.navbar-toggler'));
+            $this->scene($b, 'navbar-mobile-expanded', fn () => $b->click('.navbar-toggler')->waitFor('#navbar.show')->pause(500));
             $b->resize(1280, 900);
 
             // Children: DataTable, filtering, modals (new / edit with tabs / info with tabs)
@@ -131,19 +131,19 @@ class VisualRegressionTest extends DuskTestCase
             $this->scene($b, 'children-table', fn () => $b->visit($children)->waitFor('#children-table tbody tr'));
             $this->scene($b, 'children-table-filtered', fn () => $b->type('.dt-search input', 'Declercq')->waitUntilMissingText('Andries'));
             $this->scene($b, 'children-table-sorted', fn () => $b->visit($children)->waitFor('#children-table tbody tr')->click('#children-table thead th:nth-child(2)')->pause(300));
-            $this->scene($b, 'children-new-modal', fn () => $b->visit($children)->waitFor('#btn-new-child')->click('#btn-new-child')->waitFor('#new-child-modal.in [dusk=first_name]')->pause(800));
+            $this->scene($b, 'children-new-modal', fn () => $b->visit($children)->waitFor('#btn-new-child')->click('#btn-new-child')->waitFor('#new-child-modal.show [dusk=first_name]')->pause(800));
             $this->scene($b, 'children-new-modal-validation', fn () => $b->click('#new-child-modal [dusk=submit]')->waitFor('#new-child-errors-div:not(.hidden)')->pause(300));
             $this->scene($b, 'children-edit-modal', fn () => $b->visit($children)->waitFor('#children-table .btn-edit-child')->click('#children-table .btn-edit-child')->waitFor('[dusk="edit-child-form"]')->pause(800));
-            $this->scene($b, 'children-edit-modal-families-tab', fn () => $b->click('#edit-child-tablist li[data-tag="families"] > a')->waitFor('#edit-child-families-div.active')->waitFor('#family-search-ts-control')->pause(800));
+            $this->scene($b, 'children-edit-modal-families-tab', fn () => $b->click('#edit-child-tablist li[data-tag="families"] > a')->waitFor('#edit-child-families-div.show.active')->waitFor('#family-search-ts-control')->pause(800));
             $this->scene($b, 'children-edit-modal-autocomplete', fn () => $b->type('#family-search-ts-control', 'Bot')->waitFor('.ts-dropdown .option')->pause(300));
-            $this->scene($b, 'children-info-modal', fn () => $b->visit($children)->waitFor('#children-table .btn-show-child-info')->click('#children-table .btn-show-child-info')->waitFor('#info-child-modal.in form')->pause(800));
-            $this->scene($b, 'children-info-modal-families-tab', fn () => $b->click('#info-child-tablist a[href="#info-child-families-div"]')->waitFor('#info-child-families-div.active')->pause(500));
+            $this->scene($b, 'children-info-modal', fn () => $b->visit($children)->waitFor('#children-table .btn-show-child-info')->click('#children-table .btn-show-child-info')->waitFor('#info-child-modal.show form')->pause(800));
+            $this->scene($b, 'children-info-modal-families-tab', fn () => $b->click('#info-child-tablist a[href="#info-child-families-div"]')->waitFor('#info-child-families-div.show.active')->pause(500));
 
             // Families: DataTable, modals
             $families = $this->url('internal.families');
             $this->scene($b, 'families-table', fn () => $b->visit($families)->waitFor('#families-table tbody tr'));
             $this->scene($b, 'families-edit-modal', fn () => $b->visit($families)->waitFor('.btn-edit-family')->click('.btn-edit-family')->waitFor('[dusk="edit-family-form"]')->pause(800));
-            $this->scene($b, 'families-children-modal', fn () => $b->visit($families)->waitFor('.btn-show-family-children')->click('.btn-show-family-children')->waitFor('#family-children-modal.in table')->pause(800));
+            $this->scene($b, 'families-children-modal', fn () => $b->visit($families)->waitFor('.btn-show-family-children')->click('.btn-show-family-children')->waitFor('#family-children-modal.show table')->pause(800));
             $this->scene($b, 'family-new', fn () => $b->visit($this->url('internal.show_new_family_with_children'))->waitFor('[dusk="new-family-form"]'));
             $this->scene($b, 'family-add-child', fn () => $b->visit($this->url('internal.show_add_child_to_family', ['family' => $this->family->id]))->waitFor('#child-search-ts-control'));
             $this->scene($b, 'family-add-child-autocomplete', function () use ($b) {
@@ -155,15 +155,15 @@ class VisualRegressionTest extends DuskTestCase
             // Lists: DataTable, forms with datepicker, participants autocomplete
             $this->scene($b, 'lists-table', fn () => $b->visit($this->url('internal.lists'))->waitFor('table'));
             $this->scene($b, 'list-new', fn () => $b->visit($this->url('internal.show_create_new_list'))->waitFor('#txt-list-date'));
-            $this->scene($b, 'list-new-datepicker', fn () => $b->click('#txt-list-date')->waitFor('.datepicker-dropdown')->pause(500));
+            $this->scene($b, 'list-new-datepicker', fn () => $b->click('#txt-list-date')->waitFor('.datepicker-picker')->pause(500));
             $this->scene($b, 'list-details', fn () => $b->visit($this->url('internal.show_list', ['list' => $this->list->id]))->waitFor('#child-family-search-ts-control'));
             $this->scene($b, 'list-details-autocomplete', fn () => $b->type('#child-family-search-ts-control', 'Declercq')->waitFor('.ts-dropdown .option')->pause(300));
-            $this->scene($b, 'list-details-datepicker', fn () => $b->click('#txt-list-date')->waitFor('.datepicker-dropdown')->pause(500));
+            $this->scene($b, 'list-details-datepicker', fn () => $b->click('#txt-list-date')->waitFor('.datepicker-picker')->pause(500));
 
             // Registrations
             $registrations = $this->url('internal.registrations_for_date', ['date' => $this->date->format('Y-m-d')]);
             $this->scene($b, 'registrations', fn () => $b->visit($registrations)->waitFor('#registration-datepicker'));
-            $this->scene($b, 'registrations-datepicker', fn () => $b->click('#registration-datepicker input')->waitFor('.datepicker-dropdown')->pause(500));
+            $this->scene($b, 'registrations-datepicker', fn () => $b->click('#registration-datepicker input')->waitFor('.datepicker-picker')->pause(500));
             $this->scene($b, 'registrations-no-playground-day', fn () => $b->visit($this->url('internal.registrations_for_date', ['date' => '2018-01-01']))->waitFor('.alert'));
             $this->scene($b, 'registrations-find-family', fn () => $b->visit($this->url('internal.show_find_family_registration', ['week' => $this->week]))->waitFor('#family-search-ts-control'));
             $this->scene($b, 'registrations-find-family-autocomplete', fn () => $b->type('#family-search-ts-control', 'Baeten')->waitFor('.ts-dropdown .option')->pause(300));
@@ -175,7 +175,7 @@ class VisualRegressionTest extends DuskTestCase
             // Transactions, settings, admin sessions
             $transactions = $this->url('internal.show_transactions_for_date', ['date' => '2020-12-01']);
             $this->scene($b, 'transactions', fn () => $b->visit($transactions)->waitFor('#transactions-table tbody tr'));
-            $this->scene($b, 'transactions-datepicker', fn () => $b->click('#transactions-datepicker input')->waitFor('.datepicker-dropdown')->pause(500));
+            $this->scene($b, 'transactions-datepicker', fn () => $b->click('#transactions-datepicker input')->waitFor('.datepicker-picker')->pause(500));
             $this->scene($b, 'settings', fn () => $b->visit($this->url('internal.settings'))->waitFor('#top-navbar')->pause(500));
             $this->scene($b, 'admin-session-close', fn () => $b->visit($this->url('internal.close_admin_session'))->waitFor('form'));
             $this->scene($b, 'admin-session-edit', fn () => $b->visit($this->url('internal.show_edit_admin_session', ['admin_session' => $this->adminSession->id]))->waitFor('form'));

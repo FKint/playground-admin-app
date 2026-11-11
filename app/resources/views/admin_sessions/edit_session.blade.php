@@ -4,7 +4,7 @@
 @endsection
 @section('content')
     <h1>Kassasessie wijzigen</h1>
-    {{ html()->modelForm($admin_session)->class('form-horizontal')->open() }}
+    {{ html()->modelForm($admin_session)->open() }}
     <x-form-contents.admin-session />
     {{ html()->closeModelForm() }}
 @endsection
