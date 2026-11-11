@@ -27,10 +27,9 @@
 
 <div id="link-existing-child-family">
     <h4>Kind aan een bestaande voogd linken</h4>
-    <form class="typeahead" role="search">
-        <div class="row mb-3" dusk="family-search-typeahead">
-            <input type="search" id="family-search" name="q" class="form-control" placeholder="Search"
-                autocomplete="off">
+    <form class="autocomplete" role="search">
+        <div class="row mb-3" dusk="family-search-autocomplete">
+            <select id="family-search" name="q" class="form-control" placeholder="Search"></select>
         </div>
     </form>
 </div>
@@ -61,6 +60,7 @@
 
         const family_search = autocomplete(document.getElementById('family-search'), {
             url: '{!! route('api.typeahead.family_suggestions_for_child', ['child' => $child]) !!}',
+            display: data => data.id + ': ' + data.guardian_first_name + ' ' + data.guardian_last_name,
             render: (data, esc) => {
                 let label = "Familie " + data.id + ": " + data.guardian_first_name + " " + data.guardian_last_name;
                 if (data.children.length > 0) {

@@ -16,6 +16,7 @@ import {Datepicker} from 'vanillajs-datepicker';
 import nl from 'vanillajs-datepicker/locales/nl-BE';
 
 import autocomplete from './autocomplete';
+import {addDays, formatIsoDate} from './dates';
 
 $.extend(true, $.fn.dataTable.defaults, {
     "language": dutch,
@@ -51,3 +52,5 @@ window.Datepicker = class extends Datepicker {
     }
 };
 window.autocomplete = autocomplete;
+window.addDays = addDays;
+window.formatIsoDate = formatIsoDate;

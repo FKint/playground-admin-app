@@ -134,8 +134,8 @@ class VisualRegressionTest extends DuskTestCase
             $this->scene($b, 'children-new-modal', fn () => $b->visit($children)->waitFor('#btn-new-child')->click('#btn-new-child')->waitFor('#new-child-modal.show [dusk=first_name]')->pause(800));
             $this->scene($b, 'children-new-modal-validation', fn () => $b->click('#new-child-modal [dusk=submit]')->waitFor('#new-child-errors-div:not(.hidden)')->pause(300));
             $this->scene($b, 'children-edit-modal', fn () => $b->visit($children)->waitFor('#children-table .btn-edit-child')->click('#children-table .btn-edit-child')->waitFor('[dusk="edit-child-form"]')->pause(800));
-            $this->scene($b, 'children-edit-modal-families-tab', fn () => $b->click('#edit-child-tablist li[data-tag="families"] > a')->waitFor('#edit-child-families-div.show.active')->waitFor('#family-search')->pause(800));
-            $this->scene($b, 'children-edit-modal-autocomplete', fn () => $b->type('#family-search', 'Bot')->waitFor('.autocomplete-menu a')->pause(300));
+            $this->scene($b, 'children-edit-modal-families-tab', fn () => $b->click('#edit-child-tablist li[data-tag="families"] > a')->waitFor('#edit-child-families-div.show.active')->waitFor('#family-search-ts-control')->pause(800));
+            $this->scene($b, 'children-edit-modal-autocomplete', fn () => $b->type('#family-search-ts-control', 'Bot')->waitFor('.ts-dropdown .option')->pause(300));
             $this->scene($b, 'children-info-modal', fn () => $b->visit($children)->waitFor('#children-table .btn-show-child-info')->click('#children-table .btn-show-child-info')->waitFor('#info-child-modal.show form')->pause(800));
             $this->scene($b, 'children-info-modal-families-tab', fn () => $b->click('#info-child-tablist a[href="#info-child-families-div"]')->waitFor('#info-child-families-div.show.active')->pause(500));
 
@@ -156,8 +156,8 @@ class VisualRegressionTest extends DuskTestCase
             $this->scene($b, 'lists-table', fn () => $b->visit($this->url('internal.lists'))->waitFor('table'));
             $this->scene($b, 'list-new', fn () => $b->visit($this->url('internal.show_create_new_list'))->waitFor('#txt-list-date'));
             $this->scene($b, 'list-new-datepicker', fn () => $b->click('#txt-list-date')->waitFor('.datepicker-picker')->pause(500));
-            $this->scene($b, 'list-details', fn () => $b->visit($this->url('internal.show_list', ['list' => $this->list->id]))->waitFor('#child-family-search'));
-            $this->scene($b, 'list-details-autocomplete', fn () => $b->type('#child-family-search', 'Declercq')->waitFor('.autocomplete-menu .list-group-item')->pause(300));
+            $this->scene($b, 'list-details', fn () => $b->visit($this->url('internal.show_list', ['list' => $this->list->id]))->waitFor('#child-family-search-ts-control'));
+            $this->scene($b, 'list-details-autocomplete', fn () => $b->type('#child-family-search-ts-control', 'Declercq')->waitFor('.ts-dropdown .option')->pause(300));
             $this->scene($b, 'list-details-datepicker', fn () => $b->click('#txt-list-date')->waitFor('.datepicker-picker')->pause(500));
 
             // Registrations

@@ -1,4 +1,7 @@
-@import url('https://fonts.googleapis.com/css?family=Raleway:300,400,600');
+// Fonts are bundled, not loaded from a CDN, so the pages work offline and render identically everywhere.
+@import '@fontsource/raleway/300.css';
+@import '@fontsource/raleway/400.css';
+@import '@fontsource/raleway/600.css';
 
 // Theme overrides (must come before Bootstrap)
 $body-bg: #f5f8fa;
@@ -54,6 +57,7 @@ $navbar-dark-active-color: #fff;
 @import 'vanillajs-datepicker/sass/datepicker-bs5';
 @import 'datatables.net-bs5/css/dataTables.bootstrap5.css';
 @import 'datatables.net-buttons-bs5/css/buttons.bootstrap5.css';
+@import 'tom-select/dist/css/tom-select.bootstrap5.css';
 
 body {
     padding-top: 60px;
@@ -64,18 +68,6 @@ body {
     background-color: #222;
 }
 
-// Autocomplete dropdown (replaces typeahead.js)
-.autocomplete {
-    position: relative;
-
-    .autocomplete-menu {
-        position: absolute;
-        z-index: 1000;
-        width: 100%;
-        max-height: 20rem;
-        overflow-y: auto;
-    }
-}
 
 .hidden {
     // TODO: replace the 'hidden' class toggled from JS in the views by Bootstrap's d-none and delete this.

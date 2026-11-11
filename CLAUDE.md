@@ -37,9 +37,6 @@ Source of truth is `readme.md` / CI; entries marked `(untested)` have not been r
 - `FrontendSmokeTest` checks JS console errors, globals (jQuery 4, DataTables, bootstrap, Datepicker, autocomplete) and widget behaviour on every page.
 - `app/.env`, `public/build`, `vendor`, `node_modules` are generated/ignored; check `git status` before committing.
 
-- Remote search boxes use Tom Select via `autocomplete(select, {url, render, onSelect})` (`resources/assets/js/autocomplete.js`; the element must be a `<select>`). Dusk: type into `#<id>-ts-control`, suggestions are `.ts-dropdown .option` (divs, not links; `AutocompleteComponent::selectSuggestion` clicks them with JS). Failed requests show "Search failed, please try again.", empty results "Nothing found.".
-- Visual baselines must come from the CI selenium image, not the sandbox Chromium (1-4% differences per scene); regenerating all baselines also rewrites a few unrelated ones with sub-threshold noise: revert those and commit only the scenes that actually failed.
-
 ### MySQL
 - Dev DB runs via `docker/docker-compose.yml.development`; PHPMyAdmin on host port 21001, app on 21000.
 - `php artisan migrate:refresh --seed` builds schema + seed data (in the app container). Migrations must work on MySQL 8.4.
