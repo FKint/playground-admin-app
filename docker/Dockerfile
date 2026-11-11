@@ -40,8 +40,11 @@ RUN composer install --no-interaction --no-progress --no-dev --optimize-autoload
 #############################################
 # Composer PHP packages builder for testing #
 #############################################
-FROM composer-builder as composer-builder-test
+FROM composer:2.10.3 as composer-builder-test
 WORKDIR /root/app
+COPY app/composer.json /root/app/composer.json
+COPY app/composer.lock /root/app/composer.lock
+COPY app/database /root/app/database
 COPY .laravel.env.dusk.example .env
 RUN mkdir -p ./storage/testing && touch ./storage/testing/testing.sqlite
 RUN composer install --no-interaction --no-progress --optimize-autoloader --no-scripts
