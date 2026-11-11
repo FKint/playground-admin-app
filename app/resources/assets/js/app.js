@@ -24,15 +24,19 @@ $.extend(true, $.fn.dataTable.defaults, {
 pdfMake.addVirtualFileSystem(pdfFonts);
 
 Object.assign(Datepicker.locales, nl);
-Object.assign(Datepicker.defaults, {
+const datepickerDefaults = {
     language: 'nl-BE',
     format: 'yyyy-mm-dd',
     autohide: true,
     todayButton: true,
     todayHighlight: true,
     weekStart: 1,
-});
+};
 
 window.bootstrap = bootstrap;
-window.Datepicker = Datepicker;
+window.Datepicker = class extends Datepicker {
+    constructor(element, options = {}) {
+        super(element, {...datepickerDefaults, ...options});
+    }
+};
 window.autocomplete = autocomplete;
