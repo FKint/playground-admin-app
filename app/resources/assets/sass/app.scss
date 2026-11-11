@@ -58,3 +58,12 @@ body {
         color: $danger;
     }
 }
+
+// Bootstrap 3 tables were transparent; keep it so <col> backgrounds (alternating child columns) show through.
+.table {
+    --bs-table-bg: transparent;
+}
+
+.tab-content {
+    padding-top: 1rem;
+}

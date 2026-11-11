@@ -33,6 +33,7 @@ const datepickerDefaults = {
     todayButton: true,
     todayHighlight: true,
     weekStart: 1,
+    buttonClass: 'btn',
 };
 
 window.bootstrap = bootstrap;
