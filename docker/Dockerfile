@@ -74,7 +74,7 @@ RUN composer dump-autoload --optimize
 # Version files: built last so a new commit only invalidates this  #
 # tiny layer. Empty build args (local builds) produce no files.    #
 ####################################################################
-FROM alpine:3.22 AS version
+FROM alpine:3.24 AS version
 ARG VERSION_SHA1=
 ARG VERSION_GITHUB_LINK=
 ARG VERSION_TIMESTAMP=
