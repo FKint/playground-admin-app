@@ -22,6 +22,33 @@ $card-cap-bg: #fff;
 $modal-content-bg: #fff;
 $list-group-bg: #fff;
 
+// Bootstrap 3 links were not underlined (only on hover).
+$link-decoration: none;
+$link-hover-decoration: underline;
+
+// Bootstrap 3 alert colours (Bootstrap 5 derives paler/saturated tints from the theme colours).
+$success-bg-subtle: #dff0d8;
+$success-border-subtle: #d6e9c6;
+$success-text-emphasis: #3c763d;
+$info-bg-subtle: #d9edf7;
+$info-border-subtle: #bce8f1;
+$info-text-emphasis: #31708f;
+$warning-bg-subtle: #fcf8e3;
+$warning-border-subtle: #faebcc;
+$warning-text-emphasis: #8a6d3b;
+$danger-bg-subtle: #f2dede;
+$danger-border-subtle: #ebccd1;
+$danger-text-emphasis: #a94442;
+
+// Bootstrap 3 inverse navbar: 50px high, 15px link padding, grey links, active link on a darker block.
+$navbar-padding-y: 0;
+$nav-link-padding-y: .875rem;
+$navbar-nav-link-padding-x: .9375rem;
+$navbar-brand-font-size: 1.125rem;
+$navbar-dark-color: #9d9d9d;
+$navbar-dark-hover-color: #fff;
+$navbar-dark-active-color: #fff;
+
 @import 'bootstrap/scss/bootstrap';
 @import 'bootstrap-icons/font/bootstrap-icons.css';
 @import 'vanillajs-datepicker/sass/datepicker-bs5';
@@ -98,10 +125,21 @@ body {
     margin: 0;
 }
 
-// Bootstrap 3 gave headings room above them.
-h1,
-.h1 {
+// Bootstrap 3 gave h1-h3 room above them (not inside cards and modals).
+h1, h2, h3,
+.h1, .h2, .h3 {
     margin-top: 1.25rem;
+}
+
+.card-title,
+.modal-title {
+    margin-top: 0;
+}
+
+@include media-breakpoint-up(md) {
+    #top-navbar .nav-link.active {
+        background-color: #080808;
+    }
 }
 
 // Bootstrap 3 (form-horizontal) right-aligned and bolded the labels next to the fields.
