@@ -15,7 +15,7 @@
 @push('scripts')
     <script type="module">
         $(function () {
-            const datepicker = $('#txt-list-date').datepicker({format: "yyyy-mm-dd"});
+            new Datepicker(document.getElementById('txt-list-date'));
         });
     </script>
 @endpush

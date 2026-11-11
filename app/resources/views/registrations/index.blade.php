@@ -7,29 +7,28 @@
     <h1>Registraties</h1>
 
     <div class="row">
-        <div class="col-xs-1 col-lg-1">
-            <button class="btn btn-default pull-right">
-                <span class="glyphicon glyphicon-backward" id="btn-prev-day"></span>
+        <div class="col-1 col-lg-1">
+            <button class="btn btn-outline-secondary float-end">
+                <span class="bi bi-skip-backward-fill" id="btn-prev-day"></span>
             </button>
         </div>
-        <div class="col-xs-3 col-lg-3">
-            <div class="input-group date" data-provide="datepicker" data-date-format="yyyy/mm/dd"
-                 id="registration-datepicker" dusk="registration-datepicker">
+        <div class="col-3 col-lg-3">
+            <div class="input-group" id="registration-datepicker" dusk="registration-datepicker">
                 <input type="text" class="form-control">
-                <div class="input-group-addon">
-                    <span class="glyphicon glyphicon-th"></span>
+                <div class="input-group-text">
+                    <span class="bi bi-calendar3"></span>
                 </div>
             </div>
         </div>
-        <div class="col-xs-1 col-lg-1">
-            <button class="btn btn-default pull-left" id="btn-next-day">
-                <span class="glyphicon glyphicon-forward"></span>
+        <div class="col-1 col-lg-1">
+            <button class="btn btn-outline-secondary float-start" id="btn-next-day">
+                <span class="bi bi-skip-forward-fill"></span>
             </button>
         </div>
     </div>
     <div class="row">&nbsp;</div>
     @if(!empty($playground_day))
-        <div class="row">
+        <div>
             <a href="{{ route('internal.show_find_family_registration', ['week' => $playground_day->week]) }}"
                class="btn btn-primary">Registreer betalingen/aanwezigheid</a>
         </div>
@@ -52,12 +51,14 @@
         }
 
         const default_date = new Date('{{ $date->format('Y-m-d') }}T00:00:00');
-        $('#registration-datepicker').datepicker()
-            .datepicker('update', default_date)
-            .on('changeDate', function (event) {
-                console.log(event.date);
-                goToDate(event.date);
-            });
+        const datepicker_input = $('#registration-datepicker input')[0];
+        const datepicker = new Datepicker(datepicker_input);
+        datepicker.setDate(default_date);
+        datepicker_input.addEventListener('changeDate', function (event) {
+            if (event.detail.date && event.detail.date.getTime() !== default_date.getTime()) {
+                goToDate(event.detail.date);
+            }
+        });
         $('#btn-prev-day').click(function () {
             goToDate(addDays(default_date, -1));
         });

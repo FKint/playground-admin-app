@@ -1,8 +1,51 @@
-/**
- * First we will load all of this project's JavaScript dependencies which
- * includes Vue and other libraries. It is a great starting point when
- * building robust, powerful web applications using Vue and Laravel.
- */
+import './globals';
 
-import './bootstrap';
-import '../less/app.less';
+import * as bootstrap from 'bootstrap';
+import '../sass/app.scss';
+
+import 'datatables.net-bs5';
+import 'datatables.net-buttons-bs5';
+import 'datatables.net-buttons/js/buttons.html5';
+import 'datatables.net-buttons/js/buttons.colVis';
+import dutch from 'datatables.net-plugins/i18n/nl-NL.json';
+
+import pdfMake from 'pdfmake/build/pdfmake.js';
+import pdfFonts from 'pdfmake/build/vfs_fonts.js';
+
+import {Datepicker} from 'vanillajs-datepicker';
+import nl from 'vanillajs-datepicker/locales/nl-BE';
+
+import autocomplete from './autocomplete';
+
+$.extend(true, $.fn.dataTable.defaults, {
+    "language": dutch,
+});
+
+$.fn.dataTable.Buttons.defaults.dom.button.className = 'btn btn-outline-secondary';
+
+pdfMake.addVirtualFileSystem(pdfFonts);
+
+Object.assign(Datepicker.locales, nl);
+const datepickerDefaults = {
+    language: 'nl-BE',
+    format: 'yyyy-mm-dd',
+    autohide: true,
+    todayButton: true,
+    todayHighlight: true,
+    weekStart: 1,
+    buttonClass: 'btn',
+};
+
+window.bootstrap = bootstrap;
+window.Datepicker = class extends Datepicker {
+    constructor(element, options = {}) {
+        super(element, {...datepickerDefaults, ...options});
+        // Close the popup as soon as a complete date has been typed, so it doesn't cover the form.
+        element.addEventListener('input', () => {
+            if (/^\d{4}-\d{2}-\d{2}$/.test(element.value)) {
+                this.hide();
+            }
+        });
+    }
+};
+window.autocomplete = autocomplete;

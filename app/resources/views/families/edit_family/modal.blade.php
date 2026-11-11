@@ -3,16 +3,14 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
-                                aria-hidden="true">&times;</span>
-                    </button>
-                    <h4 class="modal-title">Wijzig voogd</h4>
+                    <h4 class="modal-title fs-5">Wijzig voogd</h4>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body" id="edit-family-modal-body">
 
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal" dusk="btn-close-edit-family">Sluiten</button>
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal" dusk="btn-close-edit-family">Sluiten</button>
                 </div>
             </div><!-- /.modal-content -->
         </div><!-- /.modal-dialog -->

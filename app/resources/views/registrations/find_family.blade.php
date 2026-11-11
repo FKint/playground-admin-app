@@ -3,11 +3,11 @@
 @section('content')
     <h1>Registreren</h1>
 
-    <form class="form-horizontal">
-        <div class="form-group">
-            <label for="week" class="col-sm-2 control-label">Selecteer week: </label>
+    <form class="">
+        <div class="row mb-3">
+            <label for="week" class="col-sm-2 col-form-label">Selecteer week: </label>
             <div class="col-sm-10">
-                <select id="week" name="week" class="form-control" dusk="week">
+                <select id="week" name="week" class="form-select" dusk="week">
                     @foreach($year->weeks as $w)
                         <option value="{{ $w->id }}" @if($w->id == $week->id) selected @endif>
                             Week {{ $w->id }}: {{ $w->first_day()->date()->format('d-m-Y') }}
@@ -17,8 +17,8 @@
                 </select>
             </div>
         </div>
-        <div class="form-group" dusk="family-search-autocomplete">
-            <label for="q" class="col-sm-2 control-label">Zoek familie: </label>
+        <div class="row mb-3" dusk="family-search-typeahead">
+            <label for="q" class="col-sm-2 col-form-label">Zoek familie: </label>
             <div class="col-sm-10">
                 <select id="family-search" name="q" class="form-control" placeholder="Search"></select>
             </div>

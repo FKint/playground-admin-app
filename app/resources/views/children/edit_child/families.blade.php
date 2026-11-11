@@ -13,10 +13,10 @@
             <td>{{ $child_family->family->id }}</td>
             <td>{{ $child_family->family->guardian_full_name() }}</td>
             <td>
-                <button class="btn btn-xs btn-edit-family" data-family-id="{{ $child_family->family->id }}">
+                <button class="btn btn-sm btn-link btn-edit-family" data-family-id="{{ $child_family->family->id }}">
                     Wijzigen
                 </button>
-                <button class="btn btn-xs btn-remove-family" data-family-id="{{$child_family->family->id}}">
+                <button class="btn btn-sm btn-link btn-remove-family" data-family-id="{{$child_family->family->id}}">
                     Verwijderen
                 </button>
             </td>
@@ -27,16 +27,17 @@
 
 <div id="link-existing-child-family">
     <h4>Kind aan een bestaande voogd linken</h4>
-    <form class="autocomplete" role="search">
-        <div class="form-group" dusk="family-search-autocomplete">
-            <select id="family-search" name="q" class="form-control" placeholder="Search"></select>
+    <form class="typeahead" role="search">
+        <div class="row mb-3" dusk="family-search-typeahead">
+            <input type="search" id="family-search" name="q" class="form-control" placeholder="Search"
+                autocomplete="off">
         </div>
     </form>
 </div>
 <div id="link-new-child-family">
     <h4>Kind aan een nieuwe voogd linken</h4>
-    {{ html()->form()->class('form-horizontal')->id('link-new-family')->attributes(['dusk' => 'link-new-family'])->open() }}
-    <div id="link-new-family-error" class="form-group hidden alert alert-danger">
+    {{ html()->form()->class('')->id('link-new-family')->attributes(['dusk' => 'link-new-family'])->open() }}
+    <div id="link-new-family-error" class="row mb-3 hidden alert alert-danger">
         <span class="text-danger" id="link-new-family-error-text"></span>
     </div>
     <x-form-contents.family submit-text="Voogd toevoegen" />

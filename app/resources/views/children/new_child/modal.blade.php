@@ -3,21 +3,20 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
-                </button>
-                <h4 class="modal-title">Nieuw kind</h4>
+                <h4 class="modal-title fs-5">Nieuw kind</h4>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body" id="new-child-modal-body">
                 <div class="alert alert-danger hidden" id="new-child-errors-div">
                     Failure: <span id="new-child-error-summary"></span>
                     <ul id="new-child-errors-list"></ul>
                 </div>
-                {{ html()->form()->class('form-horizontal')->id('new-child-form')->open() }}
+                {{ html()->form()->class('')->id('new-child-form')->open() }}
                 <x-form-contents.child />
                 {{ html()->form()->close() }}
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal" id="btn-cancel-new-child">Sluiten
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal" id="btn-cancel-new-child">Sluiten
                 </button>
             </div>
         </div><!-- /.modal-content -->

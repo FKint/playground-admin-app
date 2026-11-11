@@ -6,7 +6,7 @@
     <ul id="family-details-error-list">
     </ul>
 </div>
-{{ html()->modelForm($family)->class('form-horizontal')->id('edit-family-form')->attributes(['dusk' => 'edit-family-form'])->open() }}
+{{ html()->modelForm($family)->class('')->id('edit-family-form')->attributes(['dusk' => 'edit-family-form'])->open() }}
 <x-form-contents.family submit-text="Opslaan" />
 {{ html()->closeModelForm() }}
 

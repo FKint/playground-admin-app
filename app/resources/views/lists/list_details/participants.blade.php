@@ -1,8 +1,9 @@
 <div class="row">
     <h2>Deelnemer toevoegen</h2>
-    <form class="autocomplete" role="search">
-        <div class="form-group" dusk="child-family-search-autocomplete">
-            <select id="child-family-search" name="q" class="form-control" placeholder="Search"></select>
+    <form class="typeahead" role="search">
+        <div class="row mb-3" dusk="child-family-search-typeahead">
+            <input type="search" id="child-family-search" name="q" class="form-control" placeholder="Search"
+                   autocomplete="off">
         </div>
     </form>
 </div>

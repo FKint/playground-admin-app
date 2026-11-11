@@ -79,12 +79,12 @@ class FrontendSmokeTest extends DuskTestCase
                 return {
                     jquery: window.jQuery && window.jQuery.fn.jquery,
                     dataTable: typeof window.jQuery.fn.DataTable,
-                    modal: typeof window.jQuery.fn.modal,
-                    datepicker: typeof window.jQuery.fn.datepicker,
+                    modal: typeof (window.bootstrap && window.bootstrap.Modal),
+                    datepicker: typeof window.Datepicker,
                     autocomplete: typeof window.autocomplete,
                 };
 JS)[0];
-            $this->assertStringStartsWith('3.', $globals['jquery']);
+            $this->assertStringStartsWith('4.', $globals['jquery']);
             $this->assertSame('function', $globals['dataTable']);
             $this->assertSame('function', $globals['modal']);
             $this->assertSame('function', $globals['datepicker']);
@@ -103,7 +103,7 @@ JS)[0];
             $browser->loginAs($this->user)->visit($this->url('internal.children'))
                 ->waitFor('#children-table tbody tr')
                 ->assertSee('Declercq')->assertSee('Andries')
-                ->assertPresent('.pagination')
+                ->assertPresent('.dt-paging')
                 ->type('.dt-search input', 'Declercq')
                 ->waitUntilMissingText('Andries')
                 ->assertSee('Declercq')
@@ -121,14 +121,14 @@ JS)[0];
             $browser->loginAs($this->user)->visit($this->url('internal.children'))
                 ->waitFor('#children-table .btn-edit-child')
                 ->click('#children-table .btn-edit-child')
-                ->waitFor('#edit-child-modal.in')
+                ->waitFor('#edit-child-modal.show')
                 ->assertVisible('#edit-child-info-div')
-                ->click('#edit-child-tablist [data-toggle="tab"][href="#edit-child-families-div"]')
-                ->waitFor('#edit-child-families-div.active')
+                ->click('#edit-child-tablist [data-bs-toggle="tab"][href="#edit-child-families-div"]')
+                ->waitFor('#edit-child-families-div.show.active')
                 ->assertVisible('#edit-child-families-div')
                 ->assertMissing('#edit-child-info-div.active')
                 ->click('#btn-close-edit-child')
-                ->waitUntilMissing('#edit-child-modal.in');
+                ->waitUntilMissing('#edit-child-modal.show');
         });
     }
 
@@ -136,9 +136,9 @@ JS)[0];
     {
         $this->browse(function (Browser $browser) {
             $browser->loginAs($this->user)->visit($this->url('internal.dashboard'))
-                ->assertMissing('.open .dropdown-menu')
+                ->assertMissing('.dropdown-menu.show')
                 ->clickLink('Extra')
-                ->waitFor('.open .dropdown-menu')
+                ->waitFor('.dropdown-menu.show')
                 ->assertSeeLink('Uitloggen');
         });
     }
@@ -150,13 +150,14 @@ JS)[0];
         $other = $date->copy()->addDay()->month === $date->month ? $date->copy()->addDay() : $date->copy()->subDay();
         $this->browse(function (Browser $browser) use ($date, $other) {
             $browser->loginAs($this->user)->visit($this->url('internal.registrations_for_date', ['date' => $date->format('Y-m-d')]))
-                ->assertInputValue('#registration-datepicker input', $date->format('Y/m/d'))
+                ->assertInputValue('#registration-datepicker input', $date->format('Y-m-d'))
                 ->click('#registration-datepicker input')
-                ->waitFor('.datepicker-dropdown')
-                ->assertVisible('.datepicker-dropdown td.day.active');
-            $browser->script('[...document.querySelectorAll(".datepicker-dropdown td.day:not(.old):not(.new)")].find(e => e.textContent.trim() === "'.$other->day.'").click()');
-            $browser->waitUntilMissing('.datepicker-dropdown')
-                ->waitForLocation(parse_url($this->url('internal.registrations_for_date', ['date' => $other->format('Y-m-d')]), PHP_URL_PATH));
+                ->waitFor('.datepicker-picker')
+                ->assertVisible('.datepicker-picker .datepicker-cell.selected')
+                // Pick the following day in the calendar.
+                ->click('.datepicker-picker .datepicker-cell.selected + .datepicker-cell')
+                ->waitUntilMissing('.datepicker-picker')
+                ->waitForLocation(parse_url($this->url('internal.registrations_for_date', ['date' => $date->copy()->addDay()->format('Y-m-d')]), PHP_URL_PATH));
             // The previous/next day buttons navigate as well.
             $browser->click($other > $date ? '#btn-prev-day' : '#btn-next-day')
                 ->waitForLocation(parse_url($this->url('internal.registrations_for_date', ['date' => $date->format('Y-m-d')]), PHP_URL_PATH));
