@@ -27,7 +27,7 @@ use Tests\DuskTestCase;
 #[CoversNothing]
 class VisualRegressionTest extends DuskTestCase
 {
-    private const CHANNEL_TOLERANCE = 24;
+    private const CHANNEL_TOLERANCE = 6;
     private const MAX_DIFFERENT_RATIO = 0.005;
 
     private $user;
@@ -49,7 +49,9 @@ class VisualRegressionTest extends DuskTestCase
         $this->year = \App\Models\Year::firstOrFail();
         $this->user = \App\Models\User::factory()->create(['organization_id' => $this->year->organization_id, 'name' => 'Visual Tester', 'email' => 'visual@example.com']);
 
-        // The seeder stamps the age groups with the current time of day; pin it so the pages are deterministic.
+        // TODO: fix at the root: InitialDataSeeder stamps the age group dates with the current time of day (they even show up in
+        // the settings table as '2003-01-01 14:53:18'). Store plain dates there and drop this workaround.
+        // Until then, pin the time so the pages are deterministic.
         foreach (\App\Models\AgeGroup::all() as $group) {
             $group->update(['start_date' => Carbon::parse($group->start_date)->startOfDay(), 'end_date' => Carbon::parse($group->end_date)->startOfDay()]);
         }
@@ -167,7 +169,7 @@ class VisualRegressionTest extends DuskTestCase
             $this->scene($b, 'registrations-find-family-autocomplete', fn () => $b->type('#family-search', 'Baeten')->waitFor('.tt-menu .list-group-item')->pause(300));
             $this->scene($b, 'registrations-find-family-no-results', fn () => $b->visit($this->url('internal.show_find_family_registration', ['week' => $this->week]))->type('#family-search', 'Zzzzz')->waitForText('Nothing found.')->pause(300));
             $edit = $this->url('internal.show_edit_registration', ['week' => $this->week, 'family' => $this->family->id]);
-            $this->scene($b, 'registration-edit', fn () => $b->visit($edit)->waitUntilMissing('#loading-indicator:not([style*="display: none"])')->pause(1000));
+            $this->scene($b, 'registration-edit', fn () => $b->visit($edit)->waitUntilMissing('#loading-indicator:not([style*="display: none"])')->waitForText('Kid Rock')->pause(1000));
             $this->scene($b, 'registration-edit-checked', fn () => $b->check('.day-registration .registration-checkbox')->check('.whole-week-registration .registration-checkbox')->pause(800));
 
             // Transactions, settings, admin sessions
@@ -195,6 +197,10 @@ class VisualRegressionTest extends DuskTestCase
 
     private function check(Browser $browser, string $name): void
     {
+        // TODO: replace the fixed pauses and waitForText() calls in the scenes by waiting on explicit readiness markers.
+        // Root causes: the pages render DataTables/registration rows asynchronously without a 'ready' signal (e.g. a
+        // data-ready attribute on the table), and modal/tab transitions have no completion hook. A flaky scene (the
+        // registration form's list rows) was caused by exactly this.
         $browser->pause(300)->script(<<<'JS'
             document.querySelectorAll('.container').forEach(e => { if (e.textContent.includes('Version info')) e.style.visibility = 'hidden'; });
             document.querySelectorAll('.today, .focused').forEach(e => e.classList.remove('today', 'focused'));
