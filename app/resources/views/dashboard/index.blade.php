@@ -9,7 +9,7 @@
         <div class="col-12">
             <div class="card mb-3">
                 <div class="card-header">
-                    <h5 class="card-title">Kassa</h5>
+                    <h5 class="card-title mb-0">Kassa</h5>
                 </div>
                 <div class="card-body">
                     @include('dashboard.admin_sessions')
@@ -21,7 +21,7 @@
         <div class="col-lg-6">
             <div class="card mb-3">
                 <div class="card-header">
-                    <h5 class="card-title">Registraties vandaag</h5>
+                    <h5 class="card-title mb-0">Registraties vandaag</h5>
                 </div>
                 <div class="card-body">
                     @include('dashboard.day_overview')
@@ -29,7 +29,7 @@
             </div>
             <div class="card mb-3">
                 <div class="card-header">
-                    <h5 class="card-title">Lijsten</h5>
+                    <h5 class="card-title mb-0">Lijsten</h5>
                 </div>
                 <div class="card-body">
                     @include('dashboard.lists_overview')
@@ -39,7 +39,7 @@
         <div class="col-lg-6">
             <div class="card mb-3">
                 <div class="card-header">
-                    <h5 class="card-title">Registraties overzicht</h5>
+                    <h5 class="card-title mb-0">Registraties overzicht</h5>
                 </div>
                 <div class="card-body">
                     @include('dashboard.summer_overview')
