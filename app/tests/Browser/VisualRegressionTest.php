@@ -186,6 +186,52 @@ class VisualRegressionTest extends DuskTestCase
         $this->assertEmpty($this->failures, "Visual differences (see tests/Browser/screenshots/visual/diff):\n".implode("\n", $this->failures));
     }
 
+    /**
+     * The exported PDFs (client-side DataTables/pdfmake exports and the server-side dompdf invoice), first page, rendered
+     * by the browser's PDF viewer. Guards the pdfmake bundle/chunking and the export column/row selection.
+     */
+    public function testPdfsMatchBaselines()
+    {
+        $this->browse(function (Browser $b) {
+            $b->resize(1280, 900)->loginAs($this->user);
+            $day = $this->date->format('Y-m-d');
+            $pages = [
+                'pdf-children' => $this->url('internal.children'),
+                'pdf-families' => $this->url('internal.families'),
+                'pdf-lists' => $this->url('internal.lists'),
+                'pdf-list-participants' => $this->url('internal.show_list', ['list' => $this->list->id]),
+                'pdf-registrations' => $this->url('internal.registrations_for_date', ['date' => $day]),
+                'pdf-transactions' => $this->url('internal.show_transactions_for_date', ['date' => '2020-12-01']),
+                'pdf-family-transactions' => $this->url('internal.show_family_transactions', ['family' => $this->family->id]),
+            ];
+            foreach ($pages as $name => $url) {
+                $this->scene($b, $name, function () use ($b, $url) {
+                    $b->visit($url)->waitFor('.buttons-pdf');
+                    $b->script('window.__pdfs = []; const original = URL.createObjectURL.bind(URL); URL.createObjectURL = blob => { const url = original(blob); window.__pdfs.push({url, type: blob.type}); return url; };');
+                    $b->click('.buttons-pdf')->waitUsing(10, 200, fn () => $b->script('return window.__pdfs.filter(p => p.type === "application/pdf").length')[0] > 0);
+                    $this->showPdf($b, 'window.__pdfs.find(p => p.type === "application/pdf").url');
+                }, keepScroll: true);
+            }
+
+            $invoice = route('internal.show_child_family_invoice_pdf', ['year' => $this->year->id, 'family' => $this->family->id, 'child' => $this->child->id]);
+            $this->scene($b, 'pdf-invoice', function () use ($b, $invoice) {
+                $b->visit($this->url('internal.dashboard'))->waitFor('#top-navbar');
+                $b->script('fetch('.json_encode($invoice).').then(r => r.blob()).then(blob => { window.__invoice = URL.createObjectURL(blob); });');
+                $b->waitUsing(10, 200, fn () => $b->script('return !!window.__invoice')[0]);
+                $this->showPdf($b, 'window.__invoice');
+            }, keepScroll: true);
+        });
+
+        $this->assertEmpty($this->failures, "Visual differences (see tests/Browser/screenshots/visual/diff):\n".implode("\n", $this->failures));
+    }
+
+    /** Opens a blob URL in the browser's PDF viewer (without toolbar and side panels). */
+    private function showPdf(Browser $browser, string $urlExpression): void
+    {
+        $browser->script('location.href = '.$urlExpression.' + "#toolbar=0&navpanes=0&scrollbar=0&view=FitH";');
+        $browser->pause(2500);
+    }
+
     private function scene(Browser $browser, string $name, \Closure $setup, bool $keepScroll = false): void
     {
         try {

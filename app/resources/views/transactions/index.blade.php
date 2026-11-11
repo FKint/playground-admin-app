@@ -92,6 +92,9 @@ Transacties voor {{ $date->format('d-m-Y') }}
             serverSide: false,
             ajax: '{!! route('api.datatables.transactions_for_date', ['date'=>$date->toDateString()]) !!}',
             dom: 'Blfrtip',
+            // TODO: the exports take the header text from the <th>, which also contains the filter <select>, so the option texts
+            // ('Alle', 'Met opmerking', ...) end up in the PDF/CSV/Excel column headers (see the pdf-* visual baselines). Fix at the
+            // root with exportOptions.format.header (or by moving the filters out of the header cells).
             buttons: ['pdfHtml5'],
             order: [[1, "desc"]],
             columns: [
