@@ -18,6 +18,7 @@ $input-disabled-bg: #eee;
 $dropdown-bg: #fff;
 $pagination-bg: #fff;
 $card-bg: #fff;
+$card-cap-bg: #fff;
 $modal-content-bg: #fff;
 $list-group-bg: #fff;
 
@@ -50,6 +51,7 @@ body {
 }
 
 .hidden {
+    // TODO: replace the 'hidden' class toggled from JS in the views by Bootstrap's d-none and delete this.
     display: none !important;
 }
 
@@ -77,7 +79,38 @@ body {
     padding-top: 1rem;
 }
 
+// TODO: compatibility shims below (.hidden, .has-error, .btn-link, .col-form-label, .card, h1) keep the Bootstrap 3 look while the
+// markup still uses Bootstrap 3 idioms. Fix at the root: use d-none/is-invalid/utility classes in the views and
+// put label alignment into the form components, then delete the shims.
+
 // Bootstrap 3 greyed out read-only fields; Bootstrap 5 does not, so editable and read-only fields look the same.
 .form-control[readonly] {
     background-color: $input-disabled-bg;
+}
+
+// Bootstrap 3 look of panels (now cards): white header with a small title and a gap between stacked panels.
+.card {
+    margin-bottom: 1.25rem;
+}
+
+.card-title {
+    font-size: 1.15rem;
+    margin: 0;
+}
+
+// Bootstrap 3 gave headings room above them.
+h1,
+.h1 {
+    margin-top: 1.25rem;
+}
+
+// Bootstrap 3 (form-horizontal) right-aligned and bolded the labels next to the fields.
+.col-form-label {
+    font-weight: 700;
+}
+
+@include media-breakpoint-up(md) {
+    .col-form-label {
+        text-align: right;
+    }
 }

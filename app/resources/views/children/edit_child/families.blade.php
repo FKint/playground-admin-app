@@ -12,11 +12,11 @@
         <tr>
             <td>{{ $child_family->family->id }}</td>
             <td>{{ $child_family->family->guardian_full_name() }}</td>
-            <td>
-                <button class="btn btn-sm btn-link btn-edit-family" data-family-id="{{ $child_family->family->id }}">
+            <td class="text-nowrap">
+                <button class="btn btn-sm btn-outline-secondary btn-edit-family" data-family-id="{{ $child_family->family->id }}">
                     Wijzigen
                 </button>
-                <button class="btn btn-sm btn-link btn-remove-family" data-family-id="{{$child_family->family->id}}">
+                <button class="btn btn-sm btn-outline-secondary btn-remove-family" data-family-id="{{$child_family->family->id}}">
                     Verwijderen
                 </button>
             </td>

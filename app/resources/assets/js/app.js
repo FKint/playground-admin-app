@@ -26,6 +26,8 @@ $.fn.dataTable.Buttons.defaults.dom.button.className = 'btn btn-outline-secondar
 pdfMake.addVirtualFileSystem(pdfFonts);
 
 Object.assign(Datepicker.locales, nl);
+// TODO: the registrations and transactions date pickers used to show 'yyyy/mm/dd' (data-date-format); all pickers now share the
+// ISO format below. Confirm that this is wanted, or pass {format: 'yyyy/mm/dd'} to those two pickers.
 const datepickerDefaults = {
     language: 'nl-BE',
     format: 'yyyy-mm-dd',

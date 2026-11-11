@@ -40,6 +40,7 @@
                 });
             });
         });
+        // TODO: pre-existing bug: the selector lacks the dot ('.form-control'), so this handler never fires. Fix or remove it.
         form.on('change', 'form-control', function () {
             success_div.hide();
         });
