@@ -62,9 +62,7 @@ Kinderen
                 createdRow(row, data, dataIndex){
                     $(row).attr('data-child-id', data.id);
                 },
-                // TODO: the exports take the header text from the <th>, which also contains the filter <select>, so the option texts
-                // ('Alle', 'Met opmerking', ...) end up in the PDF/CSV/Excel column headers (see the pdf-* visual baselines). Fix at the
-                // root with exportOptions.format.header (or by moving the filters out of the header cells).
+                // TODO: exports include the filter <select> option texts in the headers; fix with exportOptions.format.header.
                 buttons: [
                     {
                         extend: 'pdfHtml5',

@@ -38,9 +38,7 @@ class VisualRegressionTest extends DuskTestCase
     private $week;
     private $date;
     private $adminSession;
-    private $activeAdminSession;
     private array $failures = [];
-    private array $scenes = [];
 
     public function setUp(): void
     {
@@ -89,10 +87,10 @@ class VisualRegressionTest extends DuskTestCase
         $switch = Carbon::create(2020, 12, 1, 12, 0, 0)->toImmutable();
         $this->adminSession = $this->year->getActiveAdminSession();
         $this->adminSession->update(['responsible_name' => 'Closer', 'counted_cash' => 1000, 'session_end' => $switch, 'remarks' => '']);
-        $this->activeAdminSession = new \App\Models\AdminSession();
-        $this->activeAdminSession->year()->associate($this->year);
-        $this->activeAdminSession->created_at = $switch;
-        $this->activeAdminSession->save(['timestamps' => false]);
+        $activeAdminSession = new \App\Models\AdminSession();
+        $activeAdminSession->year()->associate($this->year);
+        $activeAdminSession->created_at = $switch;
+        $activeAdminSession->save(['timestamps' => false]);
         foreach ([[$this->family, $switch->subHour(), 3.5, 3.5, 'Normal transaction'], [$second, $switch->subMinutes(30), 3, 10, 'Not enough cash']] as [$family, $at, $paid, $expected, $remarks]) {
             $transaction = \App\Models\Transaction::factory()->create([
                 'year_id' => $this->year->id, 'family_id' => $family->id, 'admin_session_id' => $this->adminSession->id,
@@ -183,7 +181,7 @@ class VisualRegressionTest extends DuskTestCase
             $this->scene($b, 'admin-session-edit', fn () => $b->visit($this->url('internal.show_edit_admin_session', ['admin_session' => $this->adminSession->id]))->waitFor('form'));
         });
 
-        $this->assertEmpty($this->failures, "Visual differences (see tests/Browser/screenshots/visual/diff):\n".implode("\n", $this->failures));
+        $this->assertNoVisualDifferences();
     }
 
     /**
@@ -222,6 +220,11 @@ class VisualRegressionTest extends DuskTestCase
             }, keepScroll: true);
         });
 
+        $this->assertNoVisualDifferences();
+    }
+
+    private function assertNoVisualDifferences(): void
+    {
         $this->assertEmpty($this->failures, "Visual differences (see tests/Browser/screenshots/visual/diff):\n".implode("\n", $this->failures));
     }
 
