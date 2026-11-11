@@ -1,6 +1,6 @@
-# Open component and maintenance work (2026-11-10)
+# Open component and maintenance work (2026-11-11)
 
-Only what is still to do, each item checked against `master` on 2026-11-10. Everything else (Laravel 13, PHP 8.5.12, MySQL 8.4.13, dependency majors, index cleanups, the account migration script, the move from CircleCI to GitHub Actions, the webpack 5.104 and build-tooling security upgrade, the webpack-cli 7.3.1 bump, ...) is merged and not listed.
+Only what is still to do, each item checked against `master` on 2026-11-11. Everything else (Laravel 13, PHP 8.5.12, MySQL 8.4.13, dependency majors, index cleanups, the account migration script, the move from CircleCI to GitHub Actions, the webpack 5.104 and build-tooling security upgrade, the webpack-cli 7.3.1 bump, ...) is merged and not listed.
 
 Production has run the current versions (PHP 8.5.12, MySQL 8.4, Redis 8) since 2026-11-04 with no detected issues. That confirms the in-place MySQL 8.2 to 8.4 upgrade and PHP 8.5.12 in production, so they are no longer open.
 
@@ -32,5 +32,5 @@ Replacing laravel-mix (for example with Vite) lifts the first three and should c
 |---|---|
 | `app/app/Http/Controllers/Internal/RegistrationsController.php:187` | check other registrations of the child in the same week (e.g. through other families); the only one that could change behaviour |
 | `app/app/Models/FamilyWeekRegistration.php:173` | verify that the `'registered' = false` default is needed |
-| `readme.md:34` | "update the docker-compose script" (certbot hooks) |
+| `readme.md:49` | "update the docker-compose script" (certbot hooks) |
 | `app/tests/Browser/` (20 TODOs in 9 files) | row-scoped assertions (`within`) and more precise selectors, waiting instead of fixed delays, date picker in tests, visual diff in `LoginTest`, a test for today's registrations in `InternalDashboardTest` |
