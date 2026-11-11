@@ -242,7 +242,7 @@ class VisualRegressionTest extends DuskTestCase
             $this->check($browser, $name, $keepScroll);
         } catch (\Throwable $e) {
             $browser->screenshot('visual/failed-'.$name);
-            $this->failures[] = "$name: scene could not be set up: ".strtok($e->getMessage(), "\n");
+            $this->failures[] = "$name: scene could not be set up: ".get_class($e).': '.strtok($e->getMessage(), "\n");
         }
     }
 
@@ -278,14 +278,14 @@ JS);
 
             return;
         }
-        $result = $browser->driver->executeAsyncScript($this->compareScript(), [base64_encode(file_get_contents($baseline)), base64_encode($png), self::CHANNEL_TOLERANCE]);
+        $result = $browser->driver->executeAsyncScript($this->compareScript(), [base64_encode(file_get_contents($baseline)), base64_encode($png), self::CHANNEL_TOLERANCE, self::MAX_DIFFERENT_RATIO]);
         if (isset($result['error'])) {
             $this->failures[] = "$name: comparison failed: {$result['error']}";
         } elseif (isset($result['sizeMismatch'])) {
             $this->failures[] = "$name: size differs from baseline: ".json_encode($result['sizeMismatch']);
         } else {
             $ratio = $result['different'] / max(1, $result['total']);
-            if ($ratio > self::MAX_DIFFERENT_RATIO) {
+            if (isset($result['diff'])) {
                 file_put_contents("$dir/diff/$name.png", base64_decode($result['diff']));
                 $this->failures[] = sprintf('%s: %.2f%% of the pixels differ', $name, $ratio * 100);
             }
@@ -298,6 +298,7 @@ JS);
             const args = arguments;
             const done = args[args.length - 1];
             const tolerance = args[2];
+            const maxRatio = args[3];
             const load = b64 => new Promise((resolve, reject) => {
                 const image = new Image();
                 image.onload = () => resolve(image);
@@ -327,11 +328,15 @@ JS);
                     out.data[i + 2] = isDifferent ? 0 : y.data[i + 2] * 0.3 + 178;
                     out.data[i + 3] = 255;
                 }
+                const total = a.width * a.height;
+                if (different / total <= maxRatio) {
+                    return done({different, total});
+                }
                 const canvas = document.createElement('canvas');
                 canvas.width = a.width;
                 canvas.height = a.height;
                 canvas.getContext('2d').putImageData(out, 0, 0);
-                done({different, total: a.width * a.height, diff: canvas.toDataURL('image/png').split(',')[1]});
+                done({different, total, diff: canvas.toDataURL('image/png').split(',')[1]});
             }).catch(e => done({error: String(e)}));
 JS;
     }

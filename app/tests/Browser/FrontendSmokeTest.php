@@ -67,7 +67,11 @@ class FrontendSmokeTest extends DuskTestCase
     #[DataProvider('pages')]
     public function testPagesLoadWithoutJavascriptErrors(string $route, array $params = [])
     {
-        $params = array_map(fn ($p) => is_string($p) && isset($this->$p) ? (is_object($this->$p) ? $this->$p->id : $this->$p) : $p, $params);
+        $params = array_map(fn ($p) => match ($p) {
+            'activityList' => $this->activityList->id,
+            'week' => $this->week,
+            default => $p,
+        }, $params);
         $url = $this->url($route, $params);
         $this->browse(function (Browser $browser) use ($url) {
             $browser->loginAs($this->user)->visit($url)->waitFor('#top-navbar');
@@ -142,18 +146,19 @@ JS)[0];
     public function testDatepickerOpensAndNavigatesToTheChosenDate()
     {
         $date = $this->year->playground_days()->firstOrFail()->date();
-        $this->browse(function (Browser $browser) use ($date) {
+        // Pick another day of the same month by its text (the cell next to the active one may be in another row).
+        $other = $date->copy()->addDay()->month === $date->month ? $date->copy()->addDay() : $date->copy()->subDay();
+        $this->browse(function (Browser $browser) use ($date, $other) {
             $browser->loginAs($this->user)->visit($this->url('internal.registrations_for_date', ['date' => $date->format('Y-m-d')]))
                 ->assertInputValue('#registration-datepicker input', $date->format('Y/m/d'))
                 ->click('#registration-datepicker input')
                 ->waitFor('.datepicker-dropdown')
-                ->assertVisible('.datepicker-dropdown td.day.active')
-                // Pick the following day in the calendar.
-                ->click('.datepicker-dropdown td.day.active + td.day')
-                ->waitUntilMissing('.datepicker-dropdown')
-                ->waitForLocation(parse_url($this->url('internal.registrations_for_date', ['date' => $date->copy()->addDay()->format('Y-m-d')]), PHP_URL_PATH));
+                ->assertVisible('.datepicker-dropdown td.day.active');
+            $browser->script('[...document.querySelectorAll(".datepicker-dropdown td.day:not(.old):not(.new)")].find(e => e.textContent.trim() === "'.$other->day.'").click()');
+            $browser->waitUntilMissing('.datepicker-dropdown')
+                ->waitForLocation(parse_url($this->url('internal.registrations_for_date', ['date' => $other->format('Y-m-d')]), PHP_URL_PATH));
             // The previous/next day buttons navigate as well.
-            $browser->click('#btn-prev-day')
+            $browser->click($other > $date ? '#btn-prev-day' : '#btn-next-day')
                 ->waitForLocation(parse_url($this->url('internal.registrations_for_date', ['date' => $date->format('Y-m-d')]), PHP_URL_PATH));
         });
     }
