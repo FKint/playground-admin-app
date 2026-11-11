@@ -8,7 +8,7 @@
 
     <div class="row">
         <div class="col-1 col-lg-1">
-            <button class="btn btn-secondary float-end">
+            <button class="btn btn-outline-secondary float-end">
                 <span class="bi bi-skip-backward-fill" id="btn-prev-day"></span>
             </button>
         </div>
@@ -21,14 +21,14 @@
             </div>
         </div>
         <div class="col-1 col-lg-1">
-            <button class="btn btn-secondary float-start" id="btn-next-day">
+            <button class="btn btn-outline-secondary float-start" id="btn-next-day">
                 <span class="bi bi-skip-forward-fill"></span>
             </button>
         </div>
     </div>
     <div class="row">&nbsp;</div>
     @if(!empty($playground_day))
-        <div class="row">
+        <div>
             <a href="{{ route('internal.show_find_family_registration', ['week' => $playground_day->week]) }}"
                class="btn btn-primary">Registreer betalingen/aanwezigheid</a>
         </div>

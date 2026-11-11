@@ -21,6 +21,8 @@ $.extend(true, $.fn.dataTable.defaults, {
     "language": dutch,
 });
 
+$.fn.dataTable.Buttons.defaults.dom.button.className = 'btn btn-outline-secondary';
+
 pdfMake.addVirtualFileSystem(pdfFonts);
 
 Object.assign(Datepicker.locales, nl);

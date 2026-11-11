@@ -10,7 +10,7 @@
 
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" dusk="btn-close-edit-family">Sluiten</button>
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal" dusk="btn-close-edit-family">Sluiten</button>
                 </div>
             </div><!-- /.modal-content -->
         </div><!-- /.modal-dialog -->

@@ -11,7 +11,7 @@
         @foreach($family->children as $child)
             <li>
                 {{$child->first_name}} {{$child->last_name}} &nbsp;
-                <a class="btn btn-sm btn-remove-child-family"
+                <a class="btn btn-sm btn-link btn-remove-child-family"
                    href="{{ route('internal.show_remove_child_from_new_family_with_children',
                    ['child'=>$child, 'family' => $family]) }}">Verwijder</a>
             </li>

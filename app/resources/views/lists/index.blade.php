@@ -4,7 +4,7 @@
     Lijsten
 @endsection
 @section('content')
-    <div class="row">
+    <div>
         <a class="btn btn-primary" href="{{ route('internal.show_create_new_list') }}">Nieuwe lijst aanmaken</a>
     </div>
     <div class="row">
@@ -73,7 +73,7 @@
                     name: 'details',
                     data: 'id',
                     render: function (data, type, full, meta) {
-                        return '<a class="btn btn-sm btn-list-details" data-list-id="' + data + '">Details</a>';
+                        return '<a class="btn btn-sm btn-link btn-list-details" data-list-id="' + data + '">Details</a>';
                     }
                 }
             ]

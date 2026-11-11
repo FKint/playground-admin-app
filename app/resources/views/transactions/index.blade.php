@@ -8,7 +8,7 @@ Transacties voor {{ $date->format('d-m-Y') }}
 <h1>Transacties voor {{ $date->format('d-m-Y') }}</h1>
 <div class="row">
     <div class="col-1 col-lg-1">
-        <button class="btn btn-secondary float-end">
+        <button class="btn btn-outline-secondary float-end">
             <span class="bi bi-skip-backward-fill" id="btn-prev-day" dusk="navigate-to-previous-day"></span>
         </button>
     </div>
@@ -21,7 +21,7 @@ Transacties voor {{ $date->format('d-m-Y') }}
         </div>
     </div>
     <div class="col-1 col-lg-1">
-        <button class="btn btn-secondary float-start" id="btn-next-day">
+        <button class="btn btn-outline-secondary float-start" id="btn-next-day">
             <span class="bi bi-skip-forward-fill"></span>
         </button>
     </div>
@@ -50,7 +50,7 @@ Transacties voor {{ $date->format('d-m-Y') }}
                 <th>
                     {{-- Remarks --}}
                     <select id="transactions-table-remarks-filter" aria-controls="transactions-table"
-                        class="form-control input-xs transactions-table-filter">
+                        class="form-select form-select-sm transactions-table-filter">
                         <option value="0">Alles</option>
                         <option value="1">Met Opmerking</option>
                     </select>

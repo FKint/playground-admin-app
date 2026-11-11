@@ -22,6 +22,11 @@ body {
     padding-top: 60px;
 }
 
+// Default navbar colour; the layout overrides it per environment with an inline style.
+#top-navbar {
+    background-color: #222;
+}
+
 // Autocomplete dropdown (replaces typeahead.js)
 .autocomplete {
     position: relative;
@@ -37,4 +42,19 @@ body {
 
 .hidden {
     display: none !important;
+}
+
+// Keep the look of the former Bootstrap 3 table link buttons and validation states.
+.btn-link {
+    text-decoration: none;
+}
+
+.has-error {
+    .form-control, .form-select {
+        border-color: $danger;
+    }
+
+    .col-form-label {
+        color: $danger;
+    }
 }

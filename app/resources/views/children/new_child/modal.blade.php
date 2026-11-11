@@ -16,7 +16,7 @@
                 {{ html()->form()->close() }}
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="btn-cancel-new-child">Sluiten
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal" id="btn-cancel-new-child">Sluiten
                 </button>
             </div>
         </div><!-- /.modal-content -->

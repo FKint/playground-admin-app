@@ -70,14 +70,14 @@
                     <span class="price">€ 0.00</span>
                 </td>
                 <td class="day-age-group" data-child-id="{{$child->id}}">
-                    <select class="age-group registration-setting" title="Werking">
+                    <select class="form-select form-select-sm age-group registration-setting" title="Werking">
                         @foreach($year->age_groups as $age_group)
                         <option value="{{ $age_group->id }}">{{ $age_group->abbreviation }}</option>
                         @endforeach
                     </select>
                 </td>
                 <td class="day-day-part" data-child-id="{{$child->id}}">
-                    <select class="day-part registration-setting" title="Dagdeel">
+                    <select class="form-select form-select-sm day-part registration-setting" title="Dagdeel">
                         @foreach($year->day_parts as $day_part)
                         <option value="{{ $day_part->id }}">{{ $day_part->name }}</option>
                         @endforeach
@@ -137,7 +137,7 @@
         {{ html()->form()->id('register-payment-form')->class('')->open() }}
         <x-form-elements.dropdown name="tariff_id" display-name="Tarief" 
             :choices="$year->getAllTariffsById()->all()" readonly disabled />
-        <div class="{{$family->needs_invoice?" bg-info":"bg-danger"}}">
+        <div class="{{$family->needs_invoice?" bg-info-subtle":"bg-danger-subtle"}}">
             <x-form-elements.dropdown name="needs_invoice" display-name="Betaal&shy;wijze" 
                 :choices="['0' => 'Cash', '1' => 'Factuur']" readonly disabled :value="$family->needs_invoice" />
         </div>
@@ -152,7 +152,7 @@
             pattern="[0-9]+([\\.,][0-9]+)?" step="0.01" readonly />
         {{ html()->form()->close() }}
 
-        <button class="btn btn-secondary" id="btn-set-all-attending-today"
+        <button class="btn btn-outline-secondary" id="btn-set-all-attending-today"
             dusk="btn-set-all-attending-today">Inchecken</button>
 
         <span id="loading-indicator" dusk="loading-indicator">
@@ -172,9 +172,9 @@
         <button class="btn btn-primary" id="submit-registration-data" dusk="submit-registration-data">Opslaan</button>
         <button class="btn btn-primary" id="submit-registration-data-and-next"
             dusk="submit-registration-data-and-next">Opslaan en volgende</button><br>
-        <button class="btn btn-secondary" id="btn-cancel">Annuleren</button><br><br>
+        <button class="btn btn-outline-secondary" id="btn-cancel">Annuleren</button><br><br>
         <a href="{{ route('internal.show_family_transactions', ['family' => $family]) }}"
-            class="btn btn-secondary">Transactiegeschiedenis</a>
+            class="btn btn-outline-secondary">Transactiegeschiedenis</a>
     </div>
 </div>
 @endsection

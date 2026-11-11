@@ -37,7 +37,7 @@ Kinderen
                 <td></td>
                 <td></td>
                 <td>
-                    <select class="form-control input-sm children-table-filter" id="select-remarks">
+                    <select class="form-select form-select-sm children-table-filter" id="select-remarks">
                         <option value="all">Alle</option>
                         <option value="yes">Met opmerking</option>
                     </select>
@@ -102,7 +102,7 @@ Kinderen
                     {
                         data: 'id',
                         render: function (data) {
-                            return '<a class="btn btn-sm btn-show-child-info" data-child-id="' + data + '">Info</a>';
+                            return '<a class="btn btn-sm btn-link btn-show-child-info" data-child-id="' + data + '">Info</a>';
                         }
                     },
                     {
@@ -110,7 +110,7 @@ Kinderen
                         name: 'edit',
                         data: 'id',
                         render: function (data, type, full, meta) {
-                            return '<a class="btn btn-sm btn-edit-child" data-child-id="' + data + '">Wijzig</a>';
+                            return '<a class="btn btn-sm btn-link btn-edit-child" data-child-id="' + data + '">Wijzig</a>';
                         }
                     }
                 ]

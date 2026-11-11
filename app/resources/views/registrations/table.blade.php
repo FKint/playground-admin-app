@@ -15,7 +15,7 @@
             <td></td>
             <td></td>
             <td>
-                <select class="form-control input-sm registrations-table-filter" id="select-age-group">
+                <select class="form-select form-select-sm registrations-table-filter" id="select-age-group">
                     <option value="all">Alle</option>
                     @foreach($year->age_groups as $age_group)
                     <option value="{{ $age_group->id }}" @if(isset($filter['age_group_id']) &&
@@ -26,7 +26,7 @@
                 </select>
             </td>
             <td>
-                <select class="form-control input-sm registrations-table-filter" id="select-daypart">
+                <select class="form-select form-select-sm registrations-table-filter" id="select-daypart">
                     <option value="all">Alle</option>
                     @foreach($year->day_parts as $day_part)
                     <option value="{{ $day_part->id }}" @if(isset($filter['day_part_id']) &&
@@ -37,7 +37,7 @@
                 </select>
             </td>
             <td>
-                <select class="form-control input-sm registrations-table-filter" id="select-supplement">
+                <select class="form-select form-select-sm registrations-table-filter" id="select-supplement">
                     <option value="all">Alle</option>
                     @foreach($year->supplements as $supplement)
                     <option value="{{ $supplement->id }}" @if(isset($filter['supplement_id']) &&
@@ -48,7 +48,7 @@
                 </select>
             </td>
             <td>
-                <select class="form-control input-sm registrations-table-filter" id="select-attended">
+                <select class="form-select form-select-sm registrations-table-filter" id="select-attended">
                     <option value="all">Alle</option>
                     <option value="1" @if(isset($filter['present']) && $filter['present']=="yes" ) selected @endif>Ja
                     </option>
@@ -183,7 +183,7 @@
                         name: 'child_details',
                         data: 'child_id',
                         render: function (data, type, full, meta) {
-                            return '<a class="btn btn-sm btn-show-child-info" href="#" data-child-id="' + data + '">Kind</a>';
+                            return '<a class="btn btn-sm btn-link btn-show-child-info" href="#" data-child-id="' + data + '">Kind</a>';
                         }
                     },
                     {
@@ -192,7 +192,7 @@
                         name: 'family_details',
                         data: 'family_id',
                         render: function (data, type, full, meta) {
-                            return '<a class="btn btn-sm btn-show-family" href="#" data-family-id="' + data + '">Familie</a>';
+                            return '<a class="btn btn-sm btn-link btn-show-family" href="#" data-family-id="' + data + '">Familie</a>';
                         }
                     },
                     {
@@ -201,7 +201,7 @@
                         name: 'family_week_registration',
                         data: 'family_id',
                         render: function (data, type, full, meta) {
-                            return ('<a class="btn btn-sm btn-family-week-registration" href="{{
+                            return ('<a class="btn btn-sm btn-link btn-family-week-registration" href="{{
                             route('internal.show_edit_registration', [
                                 'week'=>$playground_day->week,
                                 'family' => 'FAMILY_ID'

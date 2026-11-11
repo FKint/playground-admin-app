@@ -10,7 +10,7 @@
                     @include('children.edit_child.content')
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="btn-close-edit-child" dusk="btn-close-edit-child">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal" id="btn-close-edit-child" dusk="btn-close-edit-child">
                         Sluiten
                     </button>
                 </div>
