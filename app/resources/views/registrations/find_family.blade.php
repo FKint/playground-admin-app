@@ -17,7 +17,7 @@
                 </select>
             </div>
         </div>
-        <div class="form-group" dusk="family-search-typeahead">
+        <div class="form-group" dusk="family-search-autocomplete">
             <label for="q" class="col-sm-2 control-label">Zoek familie: </label>
             <div class="col-sm-10">
                 <select id="family-search" name="q" class="form-control" placeholder="Search"></select>
@@ -30,7 +30,6 @@
             $(function () {
                 const family_search = autocomplete(document.getElementById('family-search'), {
                     url: '{!! route('api.typeahead.family_suggestions') !!}',
-                    display: data => data.id + ': ' + data.guardian_first_name + ' ' + data.guardian_last_name,
                     render: (data, esc) => {
                         let label = "Familie " + data.id + ": " + data.guardian_first_name + " " + data.guardian_last_name;
                         if (data.children.length > 0) {

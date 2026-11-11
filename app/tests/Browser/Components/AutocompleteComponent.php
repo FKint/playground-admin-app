@@ -5,7 +5,7 @@ namespace Tests\Browser\Components;
 use Laravel\Dusk\Browser;
 use Laravel\Dusk\Component as BaseComponent;
 
-class TypeaheadComponent extends BaseComponent
+class AutocompleteComponent extends BaseComponent
 {
     protected $selector;
 

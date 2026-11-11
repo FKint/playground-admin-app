@@ -3,7 +3,7 @@
 namespace Tests\Browser\Pages;
 
 use Laravel\Dusk\Browser;
-use Tests\Browser\Components\TypeaheadComponent;
+use Tests\Browser\Components\AutocompleteComponent;
 
 class InternalChildrenPage extends InternalPage
 {
@@ -113,14 +113,14 @@ class InternalChildrenPage extends InternalPage
 
     public function enterAddExistingFamilyFormData(Browser $browser, $input)
     {
-        $browser->within(new TypeaheadComponent('@family-search-typeahead'), function ($browser) use ($input) {
+        $browser->within(new AutocompleteComponent('@family-search-autocomplete'), function ($browser) use ($input) {
             $browser->typeQuery($input);
         });
     }
 
     public function selectaddExistingFamilySuggestion(Browser $browser, $guardianFullName)
     {
-        $browser->within(new TypeaheadComponent('@family-search-typeahead'), function ($browser) use ($guardianFullName) {
+        $browser->within(new AutocompleteComponent('@family-search-autocomplete'), function ($browser) use ($guardianFullName) {
             $browser->selectSuggestion($guardianFullName);
         })->waitUsing(5, 1, function () use ($browser, $guardianFullName) {
             return false !== strpos($browser->text('@current-families'), $guardianFullName);

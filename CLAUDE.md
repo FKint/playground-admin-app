@@ -29,6 +29,9 @@ Source of truth is `readme.md` / CI; entries marked `(untested)` have not been r
 - CI/Docker equivalent (untested here): selenium container + `docker exec -it dusk-tests-app-container-1 php artisan dusk`; see the `test-dusk` job in `.github/workflows/ci.yml`.
 - `app/.env`, `public/build`, `vendor`, `node_modules` are generated/ignored; check `git status` before committing.
 
+- Remote search boxes use Tom Select via `autocomplete(select, {url, render, onSelect})` (`resources/assets/js/autocomplete.js`; the element must be a `<select>`). Dusk: type into `#<id>-ts-control`, suggestions are `.ts-dropdown .option` (divs, not links; `AutocompleteComponent::selectSuggestion` clicks them with JS). Failed requests show "Search failed, please try again.", empty results "Nothing found.".
+- Visual baselines must come from the CI selenium image, not the sandbox Chromium (1-4% differences per scene); regenerating all baselines also rewrites a few unrelated ones with sub-threshold noise: revert those and commit only the scenes that actually failed.
+
 ### MySQL
 - Dev DB runs via `docker/docker-compose.yml.development`; PHPMyAdmin on host port 21001, app on 21000.
 - `php artisan migrate:refresh --seed` builds schema + seed data (in the app container). Migrations must work on MySQL 8.4.
@@ -58,6 +61,6 @@ Source of truth is `readme.md` / CI; entries marked `(untested)` have not been r
 - Vite 8 + `laravel-vite-plugin` (`app/vite.config.js`); `yarn build` writes `public/build` + `manifest.json`, `yarn watch` = `vite build --watch`, `yarn dev` = Vite dev server (`public/hot`, HMR). Verified: build ~1.5s, Dusk 30 tests OK; `yarn dev` starts and serves the entry (not tried in a browser).
 - The layout loads the bundle with `@vite('resources/assets/js/app.js')` (module script; CSS comes from the Less import in `app.js`). Module scripts are deferred, so the inline scripts in the views are `<script type="module">` too (they then run after the bundle, in document order).
 - Gotchas of module scripts: strict mode (a server-rendered `08` is a syntax error: use `new Date('{{ $date->format('Y-m-d') }}T00:00:00')`, not `{{ format('m') }}` as a number) and no implicit globals: a function used from another view's script must be set on `window` (`window.formatPrice`, `closeAllModals`, `show*Modal`).
-- jQuery plugins (DataTables 3, bootstrap-datepicker, typeahead) must load after `window.jQuery` is set: `globals.js` is imported first and the plugins are ES imports; `require()` of `datatables.net-buttons` broke (`undefined.Buttons`).
+- jQuery plugins (DataTables 3, bootstrap-datepicker) must load after `window.jQuery` is set: `globals.js` is imported first and the plugins are ES imports; `require()` of `datatables.net-buttons` broke (`undefined.Buttons`).
 - Less: no `~` prefix for package imports (`bootstrap-less/...`); `@icon-font-path` is `bootstrap-less/fonts/`. The Dutch DataTables language JSON is imported into the bundle (no copy step).
 - Dusk writes browser console logs to `app/tests/Browser/console/*.log`; grep them for `Uncaught` after a failing run.

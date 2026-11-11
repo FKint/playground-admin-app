@@ -3,7 +3,7 @@
 namespace Tests\Browser\Pages;
 
 use Laravel\Dusk\Browser;
-use Tests\Browser\Components\TypeaheadComponent;
+use Tests\Browser\Components\AutocompleteComponent;
 
 class InternalRegisterFindFamilyPage extends InternalPage
 {
@@ -27,14 +27,14 @@ class InternalRegisterFindFamilyPage extends InternalPage
 
     public function enterFindFamilyFormData(Browser $browser, $input)
     {
-        $browser->within(new TypeaheadComponent('@family-search-typeahead'), function ($browser) use ($input) {
+        $browser->within(new AutocompleteComponent('@family-search-autocomplete'), function ($browser) use ($input) {
             $browser->typeQuery($input);
         });
     }
 
     public function selectFindFamilySuggestion(Browser $browser, $guardianName)
     {
-        $browser->within(new TypeaheadComponent('@family-search-typeahead'), function ($browser) use ($guardianName) {
+        $browser->within(new AutocompleteComponent('@family-search-autocomplete'), function ($browser) use ($guardianName) {
             $browser->selectSuggestion($guardianName);
         });
     }

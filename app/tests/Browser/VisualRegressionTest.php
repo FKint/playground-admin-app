@@ -149,7 +149,7 @@ class VisualRegressionTest extends DuskTestCase
             $this->scene($b, 'family-add-child-autocomplete', function () use ($b) {
                 $b->script('document.getElementById("child-search").scrollIntoView({block: "center"})');
                 $b->type('#child-search-ts-control', 'Verm')->waitFor('.ts-dropdown .option')->pause(300);
-            });
+            }, keepScroll: true);
             $this->scene($b, 'family-transactions', fn () => $b->visit($this->url('internal.show_family_transactions', ['family' => $this->family->id]))->waitFor('table')->pause(500));
 
             // Lists: DataTable, forms with datepicker, participants autocomplete

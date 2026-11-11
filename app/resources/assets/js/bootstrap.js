@@ -15,6 +15,7 @@ import pdfMake from 'pdfmake/build/pdfmake.js';
 import pdfFonts from 'pdfmake/build/vfs_fonts.js';
 
 import autocomplete from './autocomplete';
+import {addDays, formatIsoDate} from './dates';
 
 import 'bootstrap-datepicker';
 import 'bootstrap-datepicker/js/locales/bootstrap-datepicker.nl-BE.js';
@@ -26,6 +27,8 @@ $.extend(true, $.fn.dataTable.defaults, {
 pdfMake.addVirtualFileSystem(pdfFonts);
 
 window.autocomplete = autocomplete;
+window.addDays = addDays;
+window.formatIsoDate = formatIsoDate;
 
 $.fn.datepicker.defaults.language = "nl-BE";
 $.fn.datepicker.defaults.format = "yyyy-mm-dd";

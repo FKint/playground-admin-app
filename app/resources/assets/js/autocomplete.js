@@ -11,7 +11,8 @@ import TomSelect from 'tom-select';
  * Returns the TomSelect instance (e.g. to call .focus()).
  */
 export default function autocomplete(select, {url, render, onSelect, minLength = 1, delay = 150}) {
-    let latest = 0;
+    let controller = null;
+    let failed = false;
     return new TomSelect(select, {
         maxItems: 1,
         valueField: 'id',
@@ -25,23 +26,31 @@ export default function autocomplete(select, {url, render, onSelect, minLength =
         // The server already filters the suggestions.
         score: () => () => 1,
         load(query, callback) {
-            const request = ++latest;
-            fetch(`${url}?q=${encodeURIComponent(query.trim())}`, {headers: {'Accept': 'application/json'}})
-                .then(response => (response.ok ? response.json() : []))
-                .then(items => {
-                    if (request === latest) {
-                        this.clearOptions();
-                        callback(items);
-                    } else {
-                        callback();
-                    }
+            // Cancel the previous request: only the latest query may update the suggestions.
+            if (controller) controller.abort();
+            const own = controller = new AbortController();
+            failed = false;
+            fetch(`${url}?q=${encodeURIComponent(query.trim())}`, {headers: {'Accept': 'application/json'}, signal: own.signal})
+                .then(response => {
+                    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+                    return response.json();
                 })
-                .catch(() => callback());
+                .then(items => {
+                    this.clearOptions();
+                    callback(items);
+                })
+                .catch(error => {
+                    // An aborted request is superseded by a newer one that will report its own result.
+                    if (error.name !== 'AbortError') failed = true;
+                    callback();
+                });
         },
         render: {
             option: (item, escape) => `<div>${render(item, escape)}</div>`,
             item: () => '<div></div>',
-            no_results: () => '<div class="no-results">Nothing found.</div>',
+            no_results: () => (failed
+                ? '<div class="no-results">Search failed, please try again.</div>'
+                : '<div class="no-results">Nothing found.</div>'),
         },
         onItemAdd(value) {
             const item = this.options[value];

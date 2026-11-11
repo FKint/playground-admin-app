@@ -48,15 +48,7 @@
 <script type="module">
     $(function () {
         function goToDate(d) {
-            const pad = n => String(n).padStart(2, '0');
-            const formatted = d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate());
-            window.location.href = "{{ route('internal.registrations_for_date', ['date' => 'DATE']) }}".replace('DATE', formatted);
-        }
-
-        function addDays(d, days) {
-            const result = new Date(d);
-            result.setDate(result.getDate() + days);
-            return result;
+            window.location.href = "{{ route('internal.registrations_for_date', ['date' => 'DATE']) }}".replace('DATE', formatIsoDate(d));
         }
 
         const default_date = new Date('{{ $date->format('Y-m-d') }}T00:00:00');
