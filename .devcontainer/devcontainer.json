@@ -22,10 +22,14 @@
   // ~/.claude.json, which is outside that directory. CLAUDE_CONFIG_DIR moves both into the volume, so
   // the login survives rebuilds. The volume name is fixed, so every checkout shares one login.
   "containerEnv": {
-    "CLAUDE_CONFIG_DIR": "/home/vscode/.claude"
+    "CLAUDE_CONFIG_DIR": "/home/vscode/.claude",
+    // gh keeps its login in hosts.yml here (no keyring in the container, so it is stored as plain text
+    // in the volume). Same fixed-name volume approach as Claude Code: shared by all checkouts.
+    "GH_CONFIG_DIR": "/home/vscode/.config/gh"
   },
   "mounts": [
-    "source=playground-claude-config,target=/home/vscode/.claude,type=volume"
+    "source=playground-claude-config,target=/home/vscode/.claude,type=volume",
+    "source=playground-gh-config,target=/home/vscode/.config/gh,type=volume"
   ],
   "postCreateCommand": "bash .devcontainer/post-create.sh",
   "forwardPorts": [8000, "phpmyadmin:80", "selenium:7900"],
