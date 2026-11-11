@@ -35,7 +35,7 @@
 </div>
 <div id="link-new-child-family">
     <h4>Kind aan een nieuwe voogd linken</h4>
-    {{ html()->form()->class('')->id('link-new-family')->attributes(['dusk' => 'link-new-family'])->open() }}
+    {{ html()->form()->id('link-new-family')->attributes(['dusk' => 'link-new-family'])->open() }}
     <div id="link-new-family-error" class="row mb-3 hidden alert alert-danger">
         <span class="text-danger" id="link-new-family-error-text"></span>
     </div>
@@ -60,7 +60,6 @@
 
         const family_search = autocomplete(document.getElementById('family-search'), {
             url: '{!! route('api.typeahead.family_suggestions_for_child', ['child' => $child]) !!}',
-            display: data => data.id + ': ' + data.guardian_first_name + ' ' + data.guardian_last_name,
             render: (data, esc) => {
                 let label = "Familie " + data.id + ": " + data.guardian_first_name + " " + data.guardian_last_name;
                 if (data.children.length > 0) {

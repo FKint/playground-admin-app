@@ -15,7 +15,7 @@
             </ul>
         </div>
     @endif
-    {{ html()->form()->class('')->id('new-child-form')->open() }}
+    {{ html()->form()->id('new-child-form')->open() }}
     <x-form-contents.child />
     {{ html()->form()->close() }}
 

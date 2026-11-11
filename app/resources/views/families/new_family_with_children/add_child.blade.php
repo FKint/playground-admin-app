@@ -18,7 +18,7 @@
         @endforeach
     </ul>
     <h3>Nieuw kind toevoegen</h3>
-    {{ html()->form()->class('')->id('new-child-form')->attributes(['dusk' => 'new-child-form'])->open() }}
+    {{ html()->form()->id('new-child-form')->attributes(['dusk' => 'new-child-form'])->open() }}
     <x-form-contents.child />
     {{ html()->form()->close() }}
     <h3>Bestaand kind toevoegen</h3>
@@ -53,7 +53,6 @@
 
                 autocomplete(document.getElementById('child-search'), {
                     url: '{!! route('api.typeahead.child_suggestions_for_family', ['family' => $family]) !!}',
-                    display: data => data.id + ': ' + data.first_name + ' ' + data.last_name,
                     render: (data, esc) => esc(data.first_name + ' ' + data.last_name
                         + ' (Huidige voogd(en): ' + data.families.map(f => f.guardian_full_name).join(', ') + ')'),
                     onSelect: suggestion => {

@@ -15,7 +15,7 @@ Transacties voor {{ $date->format('d-m-Y') }}
     <div class="col-3 col-lg-3">
         <div class="input-group" id="transactions-datepicker" dusk="transactions-datepicker">
                 <input type="text" class="form-control">
-            <div class="input-group-text">
+            <div class="input-group-text" role="button">
                 <span class="bi bi-calendar3"></span>
             </div>
         </div>
@@ -73,6 +73,7 @@ Transacties voor {{ $date->format('d-m-Y') }}
         const datepicker_input = $('#transactions-datepicker input')[0];
         const datepicker = new Datepicker(datepicker_input);
         datepicker.setDate(default_date);
+        $('#transactions-datepicker .input-group-text').on('click', () => datepicker.show());
         datepicker_input.addEventListener('changeDate', function (event) {
             if (event.detail.date && event.detail.date.getTime() !== default_date.getTime()) {
                 goToDate(event.detail.date);

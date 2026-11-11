@@ -7,7 +7,7 @@
 <div class="container">
     <div class="row">
         <div class="col-md-8 offset-md-2">
-            <div class="card ">
+            <div class="card">
                 <div class="card-header">Reset Password</div>
 
                 <div class="card-body">
@@ -17,13 +17,13 @@
                         </div>
                     @endif
 
-                    <form class="" role="form" method="POST" action="{{ route('password.request') }}">
+                    <form role="form" method="POST" action="{{ route('password.request') }}">
                         {{ csrf_field() }}
 
                         <input type="hidden" name="token" value="{{ $token }}">
 
                         <div class="row mb-3{{ $errors->has('email') ? ' has-error' : '' }}">
-                            <label for="email" class="col-md-4 col-form-label">E-Mail Address</label>
+                            <label for="email" class="col-md-4 col-form-label text-md-end fw-bold">E-Mail Address</label>
 
                             <div class="col-md-6">
                                 <input id="email" type="email" class="form-control" name="email" value="{{ $email or old('email') }}" required autofocus>
@@ -37,7 +37,7 @@
                         </div>
 
                         <div class="row mb-3{{ $errors->has('password') ? ' has-error' : '' }}">
-                            <label for="password" class="col-md-4 col-form-label">Password</label>
+                            <label for="password" class="col-md-4 col-form-label text-md-end fw-bold">Password</label>
 
                             <div class="col-md-6">
                                 <input id="password" type="password" class="form-control" name="password" required>
@@ -51,7 +51,7 @@
                         </div>
 
                         <div class="row mb-3{{ $errors->has('password_confirmation') ? ' has-error' : '' }}">
-                            <label for="password-confirm" class="col-md-4 col-form-label">Confirm Password</label>
+                            <label for="password-confirm" class="col-md-4 col-form-label text-md-end fw-bold">Confirm Password</label>
                             <div class="col-md-6">
                                 <input id="password-confirm" type="password" class="form-control" name="password_confirmation" required>
 

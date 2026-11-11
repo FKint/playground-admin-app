@@ -17,7 +17,6 @@
     "jquery": "^4",
     "jszip": "^3.7.1",
     "laravel-vite-plugin": "^3.2.1",
-    "less": "^4.1.2",
     "pdfmake": "^0.3.12",
     "sass": "^1.108.2",
     "tom-select": "^2.7.0",

@@ -9,14 +9,14 @@
 
 <div class="tab-content">
     <div role="tabpanel" class="tab-pane fade show active" id="info-child-info-div">
-        {{ html()->modelForm($child)->class('')->id('info-child-form')->open() }}
+        {{ html()->modelForm($child)->id('info-child-form')->open() }}
         <x-form-contents.child readonly />
         {{ html()->closeModelForm() }}
     </div>
     <div role="tabpanel" class="tab-pane fade" id="info-child-families-div">
         @foreach($child->child_families as $child_family)
             <h4>Voogd {{ $child_family->family->guardian_full_name() }}</h4>
-            {{ html()->modelForm($child_family->family)->class('')->open() }}
+            {{ html()->modelForm($child_family->family)->open() }}
             <x-form-contents.family readonly with-id />
             {{ html()->closeModelForm() }}
         @endforeach

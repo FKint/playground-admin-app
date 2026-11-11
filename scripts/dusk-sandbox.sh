@@ -22,7 +22,7 @@ cp ../.laravel.env.dusk.example .env
 docker rm -f dusk-selenium >/dev/null 2>&1 || true
 docker run -d --name dusk-selenium --network host --shm-size=2g "$IMAGE" >/dev/null
 trap 'docker rm -f dusk-selenium >/dev/null 2>&1 || true; kill ${SERVE_PID:-} 2>/dev/null || true' EXIT
-until curl -sf http://selenium:4444/wd/hub/status >/dev/null; do sleep 1; done
+for i in $(seq 1 60); do curl -sf http://selenium:4444/wd/hub/status >/dev/null && break; [ "$i" = 60 ] && { echo "selenium did not become ready" >&2; docker logs dusk-selenium 2>&1 | tail -20 >&2; exit 1; }; sleep 1; done
 
 if php -r 'exit(PHP_VERSION_ID >= 80500 ? 0 : 1);'; then
   php artisan serve --host=app-container --port=8000 >/tmp/artisan-serve.log 2>&1 &

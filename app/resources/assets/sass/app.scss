@@ -133,14 +133,3 @@ h1, h2, h3,
         background-color: #080808;
     }
 }
-
-// Bootstrap 3 (form-horizontal) right-aligned and bolded the labels next to the fields.
-.col-form-label {
-    font-weight: 700;
-}
-
-@include media-breakpoint-up(md) {
-    .col-form-label {
-        text-align: right;
-    }
-}

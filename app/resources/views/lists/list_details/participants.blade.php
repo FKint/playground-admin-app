@@ -87,7 +87,6 @@
             });
             const participant_search = autocomplete(document.getElementById('child-family-search'), {
                 url: '{!! route('api.typeahead.child_family_suggestions_for_list', ['list' => $list]) !!}',
-                display: data => data.child.full_name + " (Voogd " + data.family.id + ": " + data.family.guardian_full_name + ")",
                 render: (data, esc) => esc(data.child.full_name + " (Voogd " + data.family.id + ": " + data.family.guardian_full_name + ")"),
                 onSelect: suggestion => {
                     $.post('{!! route('api.add_participant_to_list', ['activity_list' => $list, 'child_family' => 'CHILD_FAMILY_ID']) !!}'

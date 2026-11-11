@@ -3,9 +3,9 @@
 @section('content')
     <h1>Registreren</h1>
 
-    <form class="">
+    <form>
         <div class="row mb-3">
-            <label for="week" class="col-sm-2 col-form-label">Selecteer week: </label>
+            <label for="week" class="col-sm-2 col-form-label text-md-end fw-bold">Selecteer week: </label>
             <div class="col-sm-10">
                 <select id="week" name="week" class="form-select" dusk="week">
                     @foreach($year->weeks as $w)
@@ -18,7 +18,7 @@
             </div>
         </div>
         <div class="row mb-3" dusk="family-search-autocomplete">
-            <label for="q" class="col-sm-2 col-form-label">Zoek familie: </label>
+            <label for="q" class="col-sm-2 col-form-label text-md-end fw-bold">Zoek familie: </label>
             <div class="col-sm-10">
                 <select id="family-search" name="q" class="form-control" placeholder="Search"></select>
             </div>
@@ -30,7 +30,6 @@
             $(function () {
                 const family_search = autocomplete(document.getElementById('family-search'), {
                     url: '{!! route('api.typeahead.family_suggestions') !!}',
-                    display: data => data.id + ': ' + data.guardian_first_name + ' ' + data.guardian_last_name,
                     render: (data, esc) => {
                         let label = "Familie " + data.id + ": " + data.guardian_first_name + " " + data.guardian_last_name;
                         if (data.children.length > 0) {

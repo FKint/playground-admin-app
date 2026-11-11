@@ -134,7 +134,7 @@
         </table>
     </div>
     <div class="col-3">
-        {{ html()->form()->id('register-payment-form')->class('')->open() }}
+        {{ html()->form()->id('register-payment-form')->open() }}
         <x-form-elements.dropdown name="tariff_id" display-name="Tarief" 
             :choices="$year->getAllTariffsById()->all()" readonly disabled />
         <div class="{{$family->needs_invoice?" bg-info-subtle":"bg-danger-subtle"}}">
@@ -156,7 +156,7 @@
             dusk="btn-set-all-attending-today">Inchecken</button>
 
         <span id="loading-indicator" dusk="loading-indicator">
-            <i class="spinner-border spinner-border-sm" style="font-size:24px"></i> Loading...
+            <span class="spinner-border spinner-border-sm" role="status" style="width:24px;height:24px"></span> Loading...
         </span>
 
         <div id="invalid-received-money-cash-help" class="row mb-3 hidden">
@@ -245,16 +245,12 @@
         }
 
         function showInvalidReceivedMoneyCash(show){
-            const help_text = $('#invalid-received-money-cash-help').closest('.row');
-            const remarks_input = $('#remarks').closest('.row');
-            help_text.toggleClass('hidden', !show);
-            remarks_input.find('#remarks').toggleClass('is-invalid', show);
+            $('#invalid-received-money-cash-help').closest('.row').toggleClass('hidden', !show);
+            $('#remarks').toggleClass('is-invalid', show);
         }
         function showInvalidReceivedMoneyInvoice(show){
-            const help_text = $('#invalid-received-money-invoice-help').closest('.row');
-            const remarks_input = $('#remarks').closest('.row');
-            help_text.toggleClass('hidden', !show);
-            remarks_input.find('#remarks').toggleClass('is-invalid', show);
+            $('#invalid-received-money-invoice-help').closest('.row').toggleClass('hidden', !show);
+            $('#remarks').toggleClass('is-invalid', show);
         }
 
         function clearRegistrationData() {

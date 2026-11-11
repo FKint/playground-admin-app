@@ -11,7 +11,7 @@
                     Failure: <span id="new-child-error-summary"></span>
                     <ul id="new-child-errors-list"></ul>
                 </div>
-                {{ html()->form()->class('')->id('new-child-form')->open() }}
+                {{ html()->form()->id('new-child-form')->open() }}
                 <x-form-contents.child />
                 {{ html()->form()->close() }}
             </div>
