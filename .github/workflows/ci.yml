@@ -76,7 +76,7 @@ jobs:
     needs: build-test
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/download-artifact@v7
+      - uses: actions/download-artifact@v8
         with:
           name: docker-app-test
           path: /tmp/workspace
@@ -101,7 +101,7 @@ jobs:
     needs: build-test
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/download-artifact@v7
+      - uses: actions/download-artifact@v8
         with:
           name: docker-app-test
           path: /tmp/workspace
@@ -155,7 +155,7 @@ jobs:
     runs-on: ubuntu-latest
     environment: Docker Publishing
     steps:
-      - uses: actions/download-artifact@v7
+      - uses: actions/download-artifact@v8
         with:
           name: docker-prod
           path: /tmp/workspace
