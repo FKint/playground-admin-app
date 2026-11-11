@@ -17,7 +17,7 @@ Rules: one line per fact, put it under the matching section below, mark anything
 Source of truth is `readme.md` / CI; entries marked `(untested)` have not been run in a cloud session.
 
 ### PHPUnit (SQLite, `DB_CONNECTION=sqlite_testing_phpunit` via `app/phpunit.xml`)
-- Verified in sandbox (PHP 8.3.6, no Docker needed): `cd app && composer install --no-interaction && vendor/bin/phpunit` -> 78 tests OK, ~30s.
+- `composer.json` requires PHP `^8.5` (Symfony 8), but the sandbox PHP is 8.3.6: `composer install` needs `--ignore-platform-req=php` and PHPUnit must run in Docker. Verified: start the daemon (see MySQL section), `docker pull php:8.5.12-cli`, then `docker run --rm -v $PWD/app:/app -w /app php:8.5.12-cli vendor/bin/phpunit` -> 78 tests OK, ~30s. The container has no network, so install `vendor` on the host first. `composer:2.10.3` image: `docker cp` its `/usr/bin/composer` out if you need composer in a container.
 - Local via Docker: `docker compose -f docker/docker-compose.yml.dusk-testing --project-name dusk-tests --project-directory . up --build`, then `docker exec -it dusk-tests-app-container-1 ./vendor/phpunit/phpunit/phpunit` (untested)
 
 ### Dusk (browser tests)
@@ -51,5 +51,5 @@ Source of truth is `readme.md` / CI; entries marked `(untested)` have not been r
 - macOS Claude sandbox: `gh`/Go TLS fails (`x509: OSStatus -26276`) unless `sandbox.enableWeakerNetworkIsolation: true` is set (see untracked `.claude/settings.local.json`); also list github/registry hosts in `sandbox.network.allowedDomains`.
 - macOS sandbox + yarn 1: the proxy randomly truncates registry JSON (~60KB) -> "malformed response from registry"; and writes to `.idea/` dirs are denied (EPERM when linking `iconv-lite`). Workaround that worked: run a patched copy of yarn's `cli.js` that retries when `params.json` body is a string, and `find <yarn cache>/v6 -name .idea -prune -exec rm -rf {} +` before install. Plain `yarn install` works outside the sandbox.
 - `webpack`/`yarn dev` prints "Compiled successfully" but the process may not exit; wrap in `timeout`.
-- Present: `php` 8.3.6 (project targets 8.5.12 in Docker, `^8.3` in composer.json; works fine), `composer`, `node`/`yarn`, `chromedriver`, Playwright Chromium. `docker` CLI exists; the daemon is not running by default (see MySQL section for starting it).
+- Present: `php` 8.3.6 (project requires `^8.5` and runs 8.5.12 in Docker; the sandbox PHP is too old to run the app), `composer`, `node`/`yarn`, `chromedriver`, Playwright Chromium. `docker` CLI exists; the daemon is not running by default (see MySQL section for starting it; start containerd and dockerd once only, a second containerd locks boltdb and dockerd fails with a stale `/var/run/docker.pid`: `pkill containerd; pkill dockerd; rm -f /var/run/docker.pid /var/run/docker.sock` and start again).
 - `app/vendor` and `node_modules` are not installed by default; run `composer install` / `yarn install --frozen-lockfile` in `app/`.
