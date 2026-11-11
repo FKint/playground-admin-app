@@ -38,7 +38,7 @@ if php -r 'exit(PHP_VERSION_ID >= 80500 ? 0 : 1);'; then
   sleep 3
   php artisan dusk "$@"
 else
-  docker run --rm --network host --add-host app-container:127.0.0.1 --add-host selenium:127.0.0.1 \
+  docker run --rm --network host -e UPDATE_VISUAL_BASELINES --add-host app-container:127.0.0.1 --add-host selenium:127.0.0.1 \
     -v "$PWD:/app" -w /app php:8.5.12-cli \
     sh -c 'php artisan serve --host=0.0.0.0 --port=8000 >/tmp/serve.log 2>&1 & sleep 3; php artisan dusk "$@"' sh "$@"
 fi
