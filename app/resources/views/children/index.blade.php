@@ -14,7 +14,7 @@ Kinderen
 @endpush
 @section('content')
 <div class="row">
-    <div class="col-xs-12">
+    <div class="col-12">
         <a href="#" class="btn btn-primary" id="btn-new-child">Nieuw kind toevoegen</a>
     </div>
 </div>
@@ -102,7 +102,7 @@ Kinderen
                     {
                         data: 'id',
                         render: function (data) {
-                            return '<a class="btn btn-xs btn-show-child-info" data-child-id="' + data + '">Info</a>';
+                            return '<a class="btn btn-sm btn-show-child-info" data-child-id="' + data + '">Info</a>';
                         }
                     },
                     {
@@ -110,7 +110,7 @@ Kinderen
                         name: 'edit',
                         data: 'id',
                         render: function (data, type, full, meta) {
-                            return '<a class="btn btn-xs btn-edit-child" data-child-id="' + data + '">Wijzig</a>';
+                            return '<a class="btn btn-sm btn-edit-child" data-child-id="' + data + '">Wijzig</a>';
                         }
                     }
                 ]

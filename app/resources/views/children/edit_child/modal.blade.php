@@ -3,16 +3,14 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
-                                aria-hidden="true">&times;</span>
-                    </button>
-                    <h4 class="modal-title">Kind wijzigen</h4>
+                    <h4 class="modal-title fs-5">Kind wijzigen</h4>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body" id="edit-child-modal-body">
                     @include('children.edit_child.content')
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal" id="btn-close-edit-child" dusk="btn-close-edit-child">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="btn-close-edit-child" dusk="btn-close-edit-child">
                         Sluiten
                     </button>
                 </div>

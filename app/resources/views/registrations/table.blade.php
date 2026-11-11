@@ -151,13 +151,13 @@
                     {
                         data: {
                             '_': function (data, type, full, meta) {
-                                const mapped = _.map(data.supplements, function (d) {
+                                const mapped = data.supplements.map(function (d) {
                                     return d.id;
                                 });
                                 return mapped.join();
                             },
                             'display': function (data, type, full, meta) {
-                                const mapped = _.map(data.supplements, function (d) {
+                                const mapped = data.supplements.map(function (d) {
                                     return d.name;
                                 });
                                 return mapped.join(", ");
@@ -183,7 +183,7 @@
                         name: 'child_details',
                         data: 'child_id',
                         render: function (data, type, full, meta) {
-                            return '<a class="btn btn-xs btn-show-child-info" href="#" data-child-id="' + data + '">Kind</a>';
+                            return '<a class="btn btn-sm btn-show-child-info" href="#" data-child-id="' + data + '">Kind</a>';
                         }
                     },
                     {
@@ -192,7 +192,7 @@
                         name: 'family_details',
                         data: 'family_id',
                         render: function (data, type, full, meta) {
-                            return '<a class="btn btn-xs btn-show-family" href="#" data-family-id="' + data + '">Familie</a>';
+                            return '<a class="btn btn-sm btn-show-family" href="#" data-family-id="' + data + '">Familie</a>';
                         }
                     },
                     {
@@ -201,7 +201,7 @@
                         name: 'family_week_registration',
                         data: 'family_id',
                         render: function (data, type, full, meta) {
-                            return ('<a class="btn btn-xs btn-family-week-registration" href="{{
+                            return ('<a class="btn btn-sm btn-family-week-registration" href="{{
                             route('internal.show_edit_registration', [
                                 'week'=>$playground_day->week,
                                 'family' => 'FAMILY_ID'
@@ -228,11 +228,11 @@
             };
             function filterSupplement(data){
                 const selected_supplement = $('#select-supplement').val();
-                const data_supplement_ids = _.map(data.supplements, d =>  d.id);
+                const data_supplement_ids = data.supplements.map(d =>  d.id);
                 if (selected_supplement === 'all') {
                     return true;
                 }
-                return _.includes(data_supplement_ids, parseInt(selected_supplement));
+                return data_supplement_ids.includes(parseInt(selected_supplement));
             };
             function filterAttended(data){
                 const selected_attended = $('#select-attended').val();

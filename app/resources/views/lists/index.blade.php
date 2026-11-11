@@ -73,7 +73,7 @@
                     name: 'details',
                     data: 'id',
                     render: function (data, type, full, meta) {
-                        return '<a class="btn btn-xs btn-list-details" data-list-id="' + data + '">Details</a>';
+                        return '<a class="btn btn-sm btn-list-details" data-list-id="' + data + '">Details</a>';
                     }
                 }
             ]

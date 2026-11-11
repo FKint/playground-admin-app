@@ -13,7 +13,7 @@ Voogden
 @endpush
 @section('content')
 <div class="row">
-    <div class="col-xs-12">
+    <div class="col-12">
         <a href="{!! route('internal.show_new_family_with_children') !!}" class="btn btn-primary">
             Nieuwe voogd toevoegen
         </a>
@@ -213,7 +213,7 @@ Voogden
                     name: 'children',
                     data: 'id',
                     render: function (data, type, full, meta) {
-                        return '<a class="btn btn-xs btn-show-family-children" href="#" data-family-id="' + data + '">Kinderen</a>';
+                        return '<a class="btn btn-sm btn-show-family-children" href="#" data-family-id="' + data + '">Kinderen</a>';
                     }
                 },
                 {
@@ -221,7 +221,7 @@ Voogden
                     name: 'edit',
                     data: 'id',
                     render: function (data, type, full, meta) {
-                        return '<a class="btn btn-xs btn-edit-family" href="#" data-family-id="' + data + '">Wijzig</a>';
+                        return '<a class="btn btn-sm btn-edit-family" href="#" data-family-id="' + data + '">Wijzig</a>';
                     }
                 }
             ]

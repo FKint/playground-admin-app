@@ -24,8 +24,8 @@
 @section('content')
 <h1>Wijzig registratie voor familie {{ $family->id }}: {{$family->guardian_full_name}}</h1>
 <div class="row">
-    <div class="col-xs-9" id="registration-table-div">
-        <table id="registration-table" class="table table-condensed" data-populating="0" data-nb-requests="0">
+    <div class="col-9" id="registration-table-div">
+        <table id="registration-table" class="table table-sm" data-populating="0" data-nb-requests="0">
             <colgroup>
                 <col style="font-weight:bold" span="2">
                 @foreach($family->children as $child)
@@ -133,8 +133,8 @@
             @endforeach
         </table>
     </div>
-    <div class="col-xs-3">
-        {{ html()->form()->id('register-payment-form')->class('form-horizontal')->open() }}
+    <div class="col-3">
+        {{ html()->form()->id('register-payment-form')->class('')->open() }}
         <x-form-elements.dropdown name="tariff_id" display-name="Tarief" 
             :choices="$year->getAllTariffsById()->all()" readonly disabled />
         <div class="{{$family->needs_invoice?" bg-info":"bg-danger"}}">
@@ -152,18 +152,18 @@
             pattern="[0-9]+([\\.,][0-9]+)?" step="0.01" readonly />
         {{ html()->form()->close() }}
 
-        <button class="btn btn-default" id="btn-set-all-attending-today"
+        <button class="btn btn-secondary" id="btn-set-all-attending-today"
             dusk="btn-set-all-attending-today">Inchecken</button>
 
         <span id="loading-indicator" dusk="loading-indicator">
-            <i class="fa fa-spinner fa-spin" style="font-size:24px"></i> Loading...
+            <i class="spinner-border spinner-border-sm" style="font-size:24px"></i> Loading...
         </span>
 
-        <div id="invalid-received-money-cash-help" class="form-group hidden">
+        <div id="invalid-received-money-cash-help" class="row mb-3 hidden">
             <span class="text-danger">Deze familie betaalt cash. Het ontvangen bedrag is niet gelijk aan het verwachte
                 bedrag. Vul een verklaring in bij "Opmerkingen".
         </div>
-        <div id="invalid-received-money-invoice-help" class="form-group hidden">
+        <div id="invalid-received-money-invoice-help" class="row mb-3 hidden">
             <span class="text-danger">Deze familie betaalt met factuur. Het ontvangen bedrag is niet 0. Vul een
                 verklaring in bij "Opmerkingen".
         </div>
@@ -172,9 +172,9 @@
         <button class="btn btn-primary" id="submit-registration-data" dusk="submit-registration-data">Opslaan</button>
         <button class="btn btn-primary" id="submit-registration-data-and-next"
             dusk="submit-registration-data-and-next">Opslaan en volgende</button><br>
-        <button class="btn btn-default" id="btn-cancel">Annuleren</button><br><br>
+        <button class="btn btn-secondary" id="btn-cancel">Annuleren</button><br><br>
         <a href="{{ route('internal.show_family_transactions', ['family' => $family]) }}"
-            class="btn btn-default">Transactiegeschiedenis</a>
+            class="btn btn-secondary">Transactiegeschiedenis</a>
     </div>
 </div>
 @endsection
@@ -245,14 +245,14 @@
         }
 
         function showInvalidReceivedMoneyCash(show){
-            const help_text = $('#invalid-received-money-cash-help').closest('.form-group');
-            const remarks_input = $('#remarks').closest('.form-group');
+            const help_text = $('#invalid-received-money-cash-help').closest('.row mb-3');
+            const remarks_input = $('#remarks').closest('.row mb-3');
             help_text.toggleClass('hidden', !show);
             remarks_input.toggleClass('has-error', show);
         }
         function showInvalidReceivedMoneyInvoice(show){
-            const help_text = $('#invalid-received-money-invoice-help').closest('.form-group');
-            const remarks_input = $('#remarks').closest('.form-group');
+            const help_text = $('#invalid-received-money-invoice-help').closest('.row mb-3');
+            const remarks_input = $('#remarks').closest('.row mb-3');
             help_text.toggleClass('hidden', !show);
             remarks_input.toggleClass('has-error', show);
         }

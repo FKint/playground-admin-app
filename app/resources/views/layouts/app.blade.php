@@ -16,14 +16,6 @@
 
     @vite('resources/assets/js/app.js')
     <style>
-        body {
-            padding-top: 60px;
-        }
-
-        .twitter-typeahead {
-            width: 100%;
-        }
-
         #top-navbar {
             background-color: {{ env('ENVIRONMENT_COLOR') }};
         }
@@ -35,29 +27,24 @@
 <body>
 
 <!-- Fixed navbar -->
-<nav class="navbar navbar-inverse navbar-fixed-top" id="top-navbar">
+<nav class="navbar navbar-expand-md navbar-dark fixed-top" id="top-navbar">
     <div class="container">
-        <div class="navbar-header">
-            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar"
-                    aria-expanded="false" aria-controls="navbar">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            <a class="navbar-brand"
-               href="{{route('home')}}">@yield('year-descriptor', env('ENVIRONMENT_DESCRIPTION'))</a>
-        </div>
+        <a class="navbar-brand"
+           href="{{route('home')}}">@yield('year-descriptor', env('ENVIRONMENT_DESCRIPTION'))</a>
+        <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbar"
+                aria-expanded="false" aria-controls="navbar" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
         <div id="navbar" class="navbar-collapse collapse">
-            <ul class="nav navbar-nav">
+            <ul class="navbar-nav me-auto">
                 @section('navbar-items')
-                    <li>
-                        <a href="{{route('login')}}">Log in</a>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{route('login')}}">Log in</a>
                     </li>
                 @endsection
                 @yield('navbar-items')
             </ul>
-        </div><!--/.nav-collapse -->
+        </div>
     </div>
 </nav>
 @include('modals.helpers')

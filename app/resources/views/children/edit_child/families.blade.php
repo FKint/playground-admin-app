@@ -13,10 +13,10 @@
             <td>{{ $child_family->family->id }}</td>
             <td>{{ $child_family->family->guardian_full_name() }}</td>
             <td>
-                <button class="btn btn-xs btn-edit-family" data-family-id="{{ $child_family->family->id }}">
+                <button class="btn btn-sm btn-edit-family" data-family-id="{{ $child_family->family->id }}">
                     Wijzigen
                 </button>
-                <button class="btn btn-xs btn-remove-family" data-family-id="{{$child_family->family->id}}">
+                <button class="btn btn-sm btn-remove-family" data-family-id="{{$child_family->family->id}}">
                     Verwijderen
                 </button>
             </td>
@@ -28,7 +28,7 @@
 <div id="link-existing-child-family">
     <h4>Kind aan een bestaande voogd linken</h4>
     <form class="typeahead" role="search">
-        <div class="form-group" dusk="family-search-typeahead">
+        <div class="row mb-3" dusk="family-search-typeahead">
             <input type="search" id="family-search" name="q" class="form-control" placeholder="Search"
                 autocomplete="off">
         </div>
@@ -36,8 +36,8 @@
 </div>
 <div id="link-new-child-family">
     <h4>Kind aan een nieuwe voogd linken</h4>
-    {{ html()->form()->class('form-horizontal')->id('link-new-family')->attributes(['dusk' => 'link-new-family'])->open() }}
-    <div id="link-new-family-error" class="form-group hidden alert alert-danger">
+    {{ html()->form()->class('')->id('link-new-family')->attributes(['dusk' => 'link-new-family'])->open() }}
+    <div id="link-new-family-error" class="row mb-3 hidden alert alert-danger">
         <span class="text-danger" id="link-new-family-error-text"></span>
     </div>
     <x-form-contents.family submit-text="Voogd toevoegen" />
@@ -59,52 +59,29 @@
             });
         });
 
-        let engine = new Bloodhound({
-            remote: {
-                url: '{!! route('api.typeahead.family_suggestions_for_child', ['child' => $child]) !!}?q=%QUERY%',
-                wildcard: '%QUERY%'
-            },
-            datumTokenizer: Bloodhound.tokenizers.whitespace('q'),
-            queryTokenizer: Bloodhound.tokenizers.whitespace,
-            limit: 10
-        });
-        $('#family-search').typeahead({
-            hint: true,
-            highlight: true,
-            minLength: 1
-        }, {
-            source: engine.ttAdapter(),
-            name: 'family-list',
-            display: function (data) {
-                return data.id + ': ' + data.guardian_first_name + ' ' + data.guardian_last_name;
-            },
-            templates: {
-                empty: [
-                    '<div class="list-group search-results-dropdown"><div class="list-group-item">Nothing found.</div></div>'
-                ],
-                suggestion: function (data) {
-                    let label = "Familie " + data.id + ": " + data.guardian_first_name + " " + data.guardian_last_name;
-                    if (data.children.length > 0) {
-                        const children_names = _.map(data.children, function (c) {
-                            return c.first_name + " " + c.last_name;
-                        }).join(", ");
-                        label += " (Kinderen: " + children_names + ")";
-                    }
-                    return '<a class="list-group-item" href="#">' + label + '</a>';
+        autocomplete(document.getElementById('family-search'), {
+            url: '{!! route('api.typeahead.family_suggestions_for_child', ['child' => $child]) !!}',
+            display: data => data.id + ': ' + data.guardian_first_name + ' ' + data.guardian_last_name,
+            render: (data, esc) => {
+                let label = "Familie " + data.id + ": " + data.guardian_first_name + " " + data.guardian_last_name;
+                if (data.children.length > 0) {
+                    label += " (Kinderen: " + data.children.map(c => c.first_name + " " + c.last_name).join(", ") + ")";
                 }
+                return esc(label);
+            },
+            onSelect: suggestion => {
+                $.post('{!! route('api.add_family_to_child', ['child' => $child, 'family' => 'FAMILY_ID']) !!}'
+                    .replace('FAMILY_ID', suggestion.id), {}, function (result) {
+                    reloadEditChildFamiliesDiv();
+                }).done(function () {
+                    console.log('done');
+                }).fail(function () {
+                    alert('Adding family failed!');
+                    console.log('failed!');
+                });
             }
-        }).on('typeahead:selected', function (event, suggestion) {
-            $.post('{!! route('api.add_family_to_child', ['child' => $child, 'family' => 'FAMILY_ID']) !!}'
-                .replace('FAMILY_ID', suggestion.id), {}, function (result) {
-                reloadEditChildFamiliesDiv();
-            }).done(function () {
-                console.log('done');
-            }).fail(function () {
-                alert('Adding family failed!');
-                console.log('failed!');
-            });
-        }).focus();
-        $(".tt-hint").addClass("form-control");
+        });
+        $('#family-search').focus();
 
         child_families_table_element.on('click', '.btn-edit-family', function () {
             const family_id = $(this).data('family-id');

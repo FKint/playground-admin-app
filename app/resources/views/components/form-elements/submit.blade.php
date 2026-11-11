@@ -1,6 +1,6 @@
-<div class="form-group">
-    <div class="col-md-9 col-md-offset-3">
-        {{ html()->submit($text)->class('btn pull-right')
+<div class="row mb-3">
+    <div class="col-md-9 offset-md-3">
+        {{ html()->submit($text)->class('btn btn-primary float-end')
             ->attributes($attributes->merge(['dusk' => 'submit'])->getAttributes()) }}
     </div>
 </div>

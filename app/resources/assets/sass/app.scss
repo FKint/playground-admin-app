@@ -1,0 +1,40 @@
+@import url('https://fonts.googleapis.com/css?family=Raleway:300,400,600');
+
+// Theme overrides (must come before Bootstrap)
+$body-bg: #f5f8fa;
+$body-color: #636b6f;
+$font-family-sans-serif: 'Raleway', sans-serif;
+$font-size-base: 0.875rem;
+$line-height-base: 1.6;
+$primary: #3097d1;
+$info: #8eb4cb;
+$success: #2ab27b;
+$warning: #cbb956;
+$danger: #bf5329;
+
+@import 'bootstrap/scss/bootstrap';
+@import 'bootstrap-icons/font/bootstrap-icons.css';
+@import 'vanillajs-datepicker/sass/datepicker-bs5';
+@import 'datatables.net-bs5/css/dataTables.bootstrap5.css';
+@import 'datatables.net-buttons-bs5/css/buttons.bootstrap5.css';
+
+body {
+    padding-top: 60px;
+}
+
+// Autocomplete dropdown (replaces typeahead.js)
+.autocomplete {
+    position: relative;
+
+    .autocomplete-menu {
+        position: absolute;
+        z-index: 1000;
+        width: 100%;
+        max-height: 20rem;
+        overflow-y: auto;
+    }
+}
+
+.hidden {
+    display: none !important;
+}
