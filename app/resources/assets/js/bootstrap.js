@@ -1,31 +1,35 @@
-window._ = require('lodash');
-window.$ = window.jQuery = require('jquery');
+import './globals';
 
-require('bootstrap-less');
+import 'bootstrap-less';
 
-window.JSZip = require('jszip');
+import 'datatables.net';
+import 'datatables.net-buttons';
+import 'datatables.net-buttons/js/buttons.html5';
+import 'datatables.net-bs';
+import 'datatables.net-buttons-bs';
+import 'datatables.net-buttons/js/buttons.colVis';
+import 'datatables.net-buttons-bs/js/buttons.bootstrap';
+import dutch from 'datatables.net-plugins/i18n/nl-NL.json';
 
-require('datatables.net');
-require('datatables.net-buttons');
-require('datatables.net-buttons/js/buttons.html5');
-require('datatables.net-bs');
-require('datatables.net-buttons-bs');
-require('datatables.net-buttons/js/buttons.colVis');
-require('datatables.net-buttons-bs/js/buttons.bootstrap');
+import pdfMake from 'pdfmake/build/pdfmake.js';
+import pdfFonts from 'pdfmake/build/vfs_fonts.js';
+
+import Bloodhound from 'bloodhound-js';
+import 'corejs-typeahead';
+
+import 'bootstrap-datepicker';
+import 'bootstrap-datepicker/js/locales/bootstrap-datepicker.nl-BE.js';
+
+import moment from 'moment/moment';
 
 $.extend(true, $.fn.dataTable.defaults, {
-    "language": {"url": "/dataTables.Dutch.json"}
+    "language": dutch,
 });
 
-const pdfMake = require('pdfmake/build/pdfmake.js');
-const pdfFonts = require('pdfmake/build/vfs_fonts.js');
 pdfMake.addVirtualFileSystem(pdfFonts);
 
-window.Bloodhound = require('bloodhound-js');
-require('corejs-typeahead');
+window.Bloodhound = Bloodhound;
 
-require('bootstrap-datepicker');
-require('bootstrap-datepicker/js/locales/bootstrap-datepicker.nl-BE.js');
 $.fn.datepicker.defaults.language = "nl-BE";
 $.fn.datepicker.defaults.format = "yyyy-mm-dd";
 $.fn.datepicker.defaults.autoclose = true;
@@ -33,5 +37,4 @@ $.fn.datepicker.defaults.todayBtn = "linked";
 $.fn.datepicker.defaults.todayHighlight = true;
 $.fn.datepicker.defaults.weekStart = 1;
 
-window.moment = require('moment/moment');
-
+window.moment = moment;

@@ -21,13 +21,13 @@ Source of truth is `readme.md` / CI; entries marked `(untested)` have not been r
 - Local via Docker: `docker compose -f docker/docker-compose.yml.dusk-testing --project-name dusk-tests --project-directory . up --build`, then `docker exec -it dusk-tests-app-container-1 ./vendor/phpunit/phpunit/phpunit` (untested)
 
 ### Dusk (browser tests)
-- Verified in sandbox: `scripts/dusk-sandbox.sh` (optionally `--filter=LoginTest`) -> 23 tests OK, ~3 min. No Docker daemon exists in the sandbox (`docker` CLI only), so the script replaces the selenium container.
-- What it does: builds assets if missing (`yarn install --frozen-lockfile && yarn dev`, needed or pages lack JS/CSS), copies `.laravel.env.dusk.example` to `app/.env`, adds `selenium`/`app-container` to `/etc/hosts` (hardcoded in `tests/DuskTestCase.php` and the env file), runs `php artisan serve --host=app-container`, and runs chromedriver on :4444 with `--url-base=/wd/hub`.
+- Verified in sandbox: Docker daemon running (see MySQL section), `vendor` installed on the host, then `scripts/dusk-sandbox.sh` (optionally `--filter=LoginTest`) -> 30 tests OK, ~3 min. The script replaces the selenium container; because the sandbox PHP (8.3) is too old, it runs `artisan serve` and `artisan dusk` in `php:8.5.12-cli` with `--network host`. (The previous host-PHP path is untested since the PHP `^8.5` bump.)
+- What it does: builds assets if missing (`yarn install --frozen-lockfile && yarn build`, needed or pages lack JS/CSS), copies `.laravel.env.dusk.example` to `app/.env`, adds `selenium`/`app-container` to `/etc/hosts` (hardcoded in `tests/DuskTestCase.php` and the env file), runs `php artisan serve --host=app-container`, and runs chromedriver on :4444 with `--url-base=/wd/hub`.
 - Gotcha: the preinstalled `chromedriver` (v147) does not match Playwright's Chromium (v141) -> "session not created". The script downloads the matching driver from `storage.googleapis.com/chrome-for-testing-public/<version>/linux64/chromedriver-linux64.zip` (reachable through the proxy). Chromium is `/opt/pw-browsers/chromium`; chromedriver finds it via a `/usr/bin/google-chrome` symlink.
 - Export buttons (PDF/CSV/Excel) are client-side DataTables buttons; `tests/Browser/ExportButtonsTest.php` clicks each and checks the generated blob (intercepts `URL.createObjectURL`, so it works with a remote selenium too). DataTables 3: `:visible.export` is an invalid column selector (use a function), the search box is `div.dt-search` (use `table.search()`), and `dom: 'Blfrtip'` is required for buttons to render.
 - Verified in the dev container (selenium + `app-container` already resolve, no docker CLI): `cd app && (php artisan serve --host=0.0.0.0 --port=8000 &) ; php artisan dusk` -> 30 tests OK, ~2 min. Check `curl http://selenium:4444/wd/hub/status` first; kill the server afterwards.
 - CI/Docker equivalent (untested here): selenium container + `docker exec -it dusk-tests-app-container-1 php artisan dusk`; see the `test-dusk` job in `.github/workflows/ci.yml`.
-- `app/.env`, `public/js`, `public/css`, `vendor`, `node_modules` are generated/ignored; check `git status` before committing.
+- `app/.env`, `public/build`, `vendor`, `node_modules` are generated/ignored; check `git status` before committing.
 
 ### MySQL
 - Dev DB runs via `docker/docker-compose.yml.development`; PHPMyAdmin on host port 21001, app on 21000.
@@ -50,6 +50,12 @@ Source of truth is `readme.md` / CI; entries marked `(untested)` have not been r
 ## Sandbox notes
 - macOS Claude sandbox: `gh`/Go TLS fails (`x509: OSStatus -26276`) unless `sandbox.enableWeakerNetworkIsolation: true` is set (see untracked `.claude/settings.local.json`); also list github/registry hosts in `sandbox.network.allowedDomains`.
 - macOS sandbox + yarn 1: the proxy randomly truncates registry JSON (~60KB) -> "malformed response from registry"; and writes to `.idea/` dirs are denied (EPERM when linking `iconv-lite`). Workaround that worked: run a patched copy of yarn's `cli.js` that retries when `params.json` body is a string, and `find <yarn cache>/v6 -name .idea -prune -exec rm -rf {} +` before install. Plain `yarn install` works outside the sandbox.
-- `webpack`/`yarn dev` prints "Compiled successfully" but the process may not exit; wrap in `timeout`.
 - Present: `php` 8.3.6 (project requires `^8.5` and runs 8.5.12 in Docker; the sandbox PHP is too old to run the app), `composer`, `node`/`yarn`, `chromedriver`, Playwright Chromium. `docker` CLI exists; the daemon is not running by default (see MySQL section for starting it; start containerd and dockerd once only, a second containerd locks boltdb and dockerd fails with a stale `/var/run/docker.pid`: `pkill containerd; pkill dockerd; rm -f /var/run/docker.pid /var/run/docker.sock` and start again).
 - `app/vendor` and `node_modules` are not installed by default; run `composer install` / `yarn install --frozen-lockfile` in `app/`.
+
+## Frontend build (Vite)
+- Vite 8 + `laravel-vite-plugin` (`app/vite.config.js`); `yarn build` (also `yarn dev`/`yarn watch`) writes `public/build` and `manifest.json`. Verified: build ~1.5s, Dusk 30 tests OK.
+- Blade views have inline scripts that use `$`/`moment`/`Bloodhound` synchronously, so the JS is built as a classic IIFE (not `@vite` module tags) and linked with `\Illuminate\Support\Facades\Vite::asset('resources/assets/js/app.js')`; CSS is one `style.css` manifest entry (`cssCodeSplit: false`, Less imported from `app.js`). The `Vite` facade has no alias in this app, use the full class name.
+- Vite 8 (Rolldown) cannot build an IIFE with several entries, so keep a single JS entry.
+- jQuery plugins (DataTables 3, bootstrap-datepicker, typeahead) must load after `window.jQuery` is set: `globals.js` is imported first and the plugins are ES imports; `require()` of `datatables.net-buttons` broke (`undefined.Buttons`).
+- Less: no `~` prefix for package imports (`bootstrap-less/...`); `@icon-font-path` is `bootstrap-less/fonts/`. The Dutch DataTables language JSON is imported into the bundle (no copy step).

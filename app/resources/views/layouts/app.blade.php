@@ -14,7 +14,7 @@
         @yield('title', 'Home') - Playground Administration
     </title>
 
-    <link href="{{mix('/css/app.css')}}" rel="stylesheet">
+    <link href="{{ \Illuminate\Support\Facades\Vite::asset('style.css') }}" rel="stylesheet">
     <style>
         body {
             padding-top: 60px;
@@ -79,9 +79,9 @@
         'csrfToken' => csrf_token(),
     ])  !!};
 </script>
-<script src="{{mix('/js/manifest.js')}}"></script>
-<script src="{{mix('/js/vendor.js')}}"></script>
-<script src="{{mix('/js/app.js')}}"></script>
+
+
+<script src="{{ \Illuminate\Support\Facades\Vite::asset('resources/assets/js/app.js') }}"></script>
 <script>
     $.ajaxSetup({
         headers: {

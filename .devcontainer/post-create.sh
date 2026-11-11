@@ -34,7 +34,7 @@ composer install --no-interaction --working-dir=../tools/php-cs-fixer
 # Corepack (which provides yarn) asks before its first download, which blocks a non-interactive build.
 export COREPACK_ENABLE_DOWNLOAD_PROMPT=0
 yarn install --frozen-lockfile
-yarn dev
+yarn build
 
 grep -q '^APP_KEY=.\+' .env || php artisan key:generate
 
