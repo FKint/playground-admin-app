@@ -97,7 +97,7 @@ COPY --chown=www-data:www-data --from=version /version/ ./
 ##############
 # Nginx PROD #
 ##############
-FROM nginx:1.30.6-alpine AS nginx-prod
+FROM nginx:1.31.8-alpine AS nginx-prod
 WORKDIR /var/www
 COPY --chown=nginx:nginx app/public ./public
 COPY --chown=nginx:nginx --from=npm-builder /root/app/public ./public
@@ -105,7 +105,7 @@ COPY --chown=nginx:nginx --from=npm-builder /root/app/public ./public
 #############
 # Nginx DEV #
 #############
-FROM nginx:1.30.6-alpine AS nginx-dev
+FROM nginx:1.31.8-alpine AS nginx-dev
 WORKDIR /var/www
 COPY --chown=nginx:nginx app/public ./public
 COPY --chown=nginx:nginx --from=npm-builder /root/app/public ./public
