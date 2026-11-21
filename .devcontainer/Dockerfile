@@ -1,6 +1,6 @@
 # Development image: PHP CLI with the same version and extensions as docker/Dockerfile,
 # plus Composer. Node/Yarn and the non-root `vscode` user come from devcontainer features.
-FROM php:8.5.12-cli
+FROM php:8.5.13-cli
 
 ENV DEBIAN_FRONTEND=noninteractive
 RUN apt-get update && \
