@@ -1,7 +1,7 @@
 #!/bin/bash
 # Run the Dusk suite in a cloud sandbox (Docker daemon required: selenium and, if the host PHP is too old, PHP 8.5 run in containers).
 # Starts the CI selenium image (host network) plus `php artisan serve`, then runs Dusk.
-# The app needs PHP >= 8.5: if the host PHP is older, serve and Dusk run in a php:8.5.12-cli container
+# The app needs PHP >= 8.5: if the host PHP is older, serve and Dusk run in a php:8.5.13-cli container
 # with host networking (the Docker daemon must be running and `vendor` installed on the host).
 # Usage: scripts/dusk-sandbox.sh [dusk args, e.g. --filter=LoginTest]
 set -euo pipefail
@@ -31,6 +31,6 @@ if php -r 'exit(PHP_VERSION_ID >= 80500 ? 0 : 1);'; then
   php artisan dusk "$@"
 else
   docker run --rm --network host -e UPDATE_VISUAL_BASELINES --add-host app-container:127.0.0.1 --add-host selenium:127.0.0.1 \
-    -v "$PWD:/app" -w /app php:8.5.12-cli \
+    -v "$PWD:/app" -w /app php:8.5.13-cli \
     sh -c 'php artisan serve --host=0.0.0.0 --port=8000 >/tmp/serve.log 2>&1 & sleep 3; php artisan dusk "$@"' sh "$@"
 fi

@@ -3,7 +3,7 @@
 ##################
 # Based on: https://github.com/laradock/php-fpm/blob/master/Dockerfile-74
 # and https://github.com/laradock/laradock/blob/master/php-fpm/Dockerfile
-FROM php:8.5.12-fpm AS php-fpm
+FROM php:8.5.13-fpm AS php-fpm
 ENV DEBIAN_FRONTEND=noninteractive
 RUN apt-get update && \
     pecl channel-update pecl.php.net && \
