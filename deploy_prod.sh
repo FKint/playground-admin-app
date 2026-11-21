@@ -2,6 +2,7 @@
 # Usage: ./deploy_prod.sh [update|verify]
 #   update (default): pull images, recreate changed containers, run migrations/caches, then verify.
 #   verify:           read-only; list and check that the running containers use the latest images.
+#                     Both modes also print the versions of the software running inside the containers.
 # Exits non-zero when verification finds a service that is not running the latest image.
 
 # Works with both Compose v2 ("docker compose") and v1 ("docker-compose").
@@ -20,6 +21,30 @@ update() {
   "${COMPOSE[@]}" exec -T app php artisan cache:clear
   "${COMPOSE[@]}" exec -T app php artisan config:cache
   "${COMPOSE[@]}" exec -T app php artisan route:cache
+}
+
+# Prints the first line a command prints inside a service's container, or "unknown" (never fails the script).
+# Querying the running software, not the image tag, shows what is really serving requests.
+report() {
+  local label=$1 service=$2 out
+  shift 2
+  out=$("${COMPOSE[@]}" exec -T "$service" "$@" 2>&1) || out=unknown
+  out=${out%%$'\n'*}
+  printf '%-12s %s\n' "$label" "${out:-unknown}" | cut -c1-140
+}
+
+# phpMyAdmin has no CLI version command: read the constant from its sources (path differs between 5.x and 6.x).
+PMA_SCRIPT='v=$(grep -hoE "VERSION = .[0-9.]+" /var/www/html/libraries/classes/Version.php /var/www/html/src/Version.php 2>/dev/null | head -n1 | tr -dc "0-9."); echo "phpMyAdmin ${v:-unknown}, $(php -v | head -n1 | cut -d" " -f1-2)"'
+
+# Versions of the software running inside the containers (informational; does not affect the exit code).
+versions() {
+  echo "Software inside the running containers:"
+  report php-fpm app php-fpm -v
+  report laravel app php artisan --version
+  report nginx nginx nginx -v
+  report mysql database mysqld --version
+  report redis cache redis-server --version
+  report phpmyadmin phpmyadmin sh -c "$PMA_SCRIPT"
 }
 
 # Prints one line per service and returns 1 if any service is not on the latest image.
@@ -52,6 +77,8 @@ verify() {
   done
   echo
   echo "App version: $("${COMPOSE[@]}" exec -T app cat version_sha1 2>/dev/null || echo unknown)"
+  echo
+  versions
   return $failed
 }
 

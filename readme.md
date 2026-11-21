@@ -64,6 +64,7 @@
 ## Update (docker compose production): script
 * `./deploy_prod.sh` (or `./deploy_prod.sh update`): pulls the images, recreates changed containers, runs migrations and caches, then verifies and lists whether every service runs the latest image (`UP-TO-DATE`, `STALE-CONTAINER`, `OUTDATED`, `REGISTRY-ERROR`, `NOT-RUNNING`).
 * `./deploy_prod.sh verify`: read-only check only. Exits non-zero if any service is not up to date.
+* Both modes also print the versions of the software running inside the containers (php-fpm, Laravel, nginx, MySQL, Redis, phpMyAdmin), queried with `exec`, not taken from image tags. This part is informational and does not affect the exit code; a container that cannot be queried shows `unknown`.
 
 ## Update (docker compose production) with longer downtime
 * `git pull`: This only affects the docker-compose.yml.production file. The images are pulled from Docker Hub.
